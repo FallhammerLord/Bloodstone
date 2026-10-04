@@ -208,6 +208,23 @@ console.log('\n  By morph:');
 for (const [k, t] of group((l) => l.split(' + ')[0])) console.log(`    ${pct(t.w, t.n)}  ${k}`);
 console.log('  By stone:');
 for (const [k, t] of group((l) => l.split(' + ')[1])) console.log(`    ${pct(t.w, t.n)}  ${k}`);
+// Per stone, in the pairing bouts: how often each attack lands, what a landed hit is worth, and what the stone takes.
+const stones: Record<string, Record<string, [number, number, number]>> = {};
+for (const j of jobs.filter((x) => x.group.startsWith('pair|'))) {
+  for (const [st, attacks] of Object.entries(byId.get(j.id)!.byStone)) {
+    for (const [a, v] of Object.entries(attacks)) {
+      const t = ((stones[st] ??= {})[a] ??= [0, 0, 0]);
+      for (let i = 0; i < 3; i++) t[i] += v[i];
+    }
+  }
+}
+const cell = (v?: [number, number, number]) => (v && v[0] ? `${pct(v[1], v[0])} ×${(v[1] ? v[2] / v[1] : 0).toFixed(1)}` : '    —     ');
+console.log('  Accuracy by stone (lands, then average damage per landed hit):');
+console.log(`    ${'stone'.padEnd(6)} ${'breath'.padEnd(11)} ${'bite'.padEnd(11)} ${'claw'.padEnd(11)} │ taken: ${'breath'.padEnd(11)} ${'bite'.padEnd(11)} claw`);
+for (const st of Object.keys(stones).sort()) {
+  const s = stones[st];
+  console.log(`    ${st.padEnd(6)} ${cell(s.breath)} ${cell(s.bite)} ${cell(s.claw)} │        ${cell(s['taken-breath'])} ${cell(s['taken-bite'])} ${cell(s['taken-claw'])}`);
+}
 
 // 4.
 const crunchJobs = jobs.filter((j) => j.group.startsWith('crunch|'));

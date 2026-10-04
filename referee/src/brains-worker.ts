@@ -36,6 +36,8 @@ export interface Result {
   dealt: Record<Side, number>;
   /** per attack: [aimed, landed, damage] */
   byAttack: Record<string, [number, number, number]>;
+  /** per attacker stone, then attack: [aimed, landed, damage]; pairing bouts only (identical dragons tell nothing) */
+  byStone: Record<string, Record<string, [number, number, number]>>;
   /** [Bites right after an Approach, all Bites, Claws right after a Strafe, all Claws] */
   setup: [number, number, number, number];
 }
@@ -53,8 +55,22 @@ for (const job of workerData.jobs as Job[]) {
   const dealt: Record<Side, number> = { A: 0, B: 0 };
   const byAttack: Result['byAttack'] = {};
   const tally = (a: string) => (byAttack[a] ??= [0, 0, 0]);
+  const byStone: Result['byStone'] = {};
+  const stoneTally = (s: Side, a: string) => ((byStone[bout.fighters[s].sheet.stone] ??= {})[a] ??= [0, 0, 0]);
   for (const e of ev) {
-    if (e.kind === 'aim') tally(e.action)[0]++;
+    if (e.kind === 'aim') {
+      tally(e.action)[0]++;
+      stoneTally(e.side, e.action)[0]++;
+    }
+    if (e.kind === 'hit') {
+      stoneTally(e.attacker, e.action)[1]++;
+      stoneTally(e.attacker, e.action)[2] += e.damage;
+      // What each stone takes from attacks aimed at it: [aimed at it, landed on it, damage].
+      const def: Side = e.attacker === 'A' ? 'B' : 'A';
+      stoneTally(def, `taken-${e.action}`)[1]++;
+      stoneTally(def, `taken-${e.action}`)[2] += e.damage;
+    }
+    if (e.kind === 'aim') stoneTally(e.side === 'A' ? 'B' : 'A', `taken-${e.action}`)[0]++;
     if (e.kind === 'aim' && e.action === 'breath') stats[0]++;
     if (e.kind === 'slotEnd') {
       for (const s of ['A', 'B'] as const) {
@@ -92,6 +108,6 @@ for (const job of workerData.jobs as Job[]) {
     stats[5]++;
     if (r.actions[s] === 'scales') stats[4]++;
   }
-  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup });
+  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone });
 }
 parentPort!.postMessage(results);
