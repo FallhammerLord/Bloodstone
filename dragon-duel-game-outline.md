@@ -282,6 +282,7 @@ Steps 1 to 4 match the vertical slice in the design doc: the three core morphs, 
 
 **Settled**
 - Platform: PC and Linux, private, local play first.
+- Team: solo with AI help for the mockup. If the project grows, contract programmers and artists, with the designer as project manager. The design doc and this outline become the brief.
 - Unfilled slots hold position.
 - One dragon per bout; the lair caps total dragons.
 - Local PvP between save profiles, in lobby bouts.
