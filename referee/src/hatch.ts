@@ -36,7 +36,7 @@ const MORPHS: Record<Morph, { wounds: number; evasion: number; hardness: number;
 };
 
 const STONES: Record<CoreStone, { claw: number; bite: number; breath: number; affinityMod: number; peak: 'claw' | 'bite' | 'breath' | 'affinityMod' }> = {
-  water: { claw: 6, bite: 9, breath: 9, affinityMod: -3, peak: 'affinityMod' },
+  water: { claw: 3, bite: 9, breath: 9, affinityMod: -3, peak: 'affinityMod' },
   earth: { claw: 6, bite: 12, breath: 9, affinityMod: -9, peak: 'bite' },
   fire: { claw: 6, bite: 6, breath: 12, affinityMod: -9, peak: 'breath' },
   air: { claw: 9, bite: 9, breath: 6, affinityMod: -3, peak: 'claw' },

@@ -98,13 +98,13 @@ test('lunge stops at the other body', () => {
 });
 
 test('pounce: a Claw right after a Strafe reaches from Close, and pierces', () => {
-  assert.deepEqual(slots({}, WYRM, 5, ['strafe:cw', 'claw:left'], ['hold', 'hold']), [0, 0]);
+  assert.deepEqual(slots({}, WYRM, 5, ['strafe:cw', 'claw:left'], ['hold', 'hold']), [0, 0], 'out of reach without the pounce');
   Object.assign(R.VARIANT, OFF, { clawPounce: true });
-  const bout = newBout(TD_WATER, WYRM, 5);
+  const bout = newBout({ name: 'Gust', morph: 'true-dragon', stone: 'air' }, WYRM, 5);
   simulateSlot(bout, { A: parseAction('strafe:cw'), B: parseAction('hold') });
   const ev = simulateSlot(bout, { A: parseAction('claw:left'), B: parseAction('hold') });
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 6 - (6 - R.POUNCE_PIERCE), 'Claw 6 against the Wyrm\'s Hardness 6, pierced to 3');
+  assert.equal(hits(ev)[0].damage, 9 - (6 - R.POUNCE_PIERCE), 'Claw 9 against the Wyrm\'s Hardness 6, pierced to 3');
 });
 
 test('pounce: only the Claw right after the Strafe', () => {

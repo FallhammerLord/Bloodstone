@@ -82,7 +82,7 @@ A hidden baseline; each morph and each stone takes one +3 peak and one −3 vall
 | Stone | Claw | Bite | Breath | Affinity (stone) |
 |---|---|---|---|---|
 | Baseline | 6 | 9 | 9 | 3 (−6) |
-| Water | 6 [Proposed; was 3] | 9 | 9 | 6 (−3) |
+| Water | 3 | 9 | 9 | 6 (−3) |
 | Earth | 6 | 12 | 9 | 0 (−9) |
 | Fire | 6 | 6 | 12 | 3 (−9) |
 | Air | 9 | 9 | 6 | 3 (−3) |
@@ -91,7 +91,6 @@ A hidden baseline; each morph and each stone takes one +3 peak and one −3 vall
 - The element that beats you peaks where you're weakest, so matchup stacks reach two layers at most.
 - Intermediates sum their parents' tilts: Salt +Bite −Claw; Magma +Breath −Affinity; Lightning +Claw −Bite; Storm +Affinity −Breath.
 - Each dragon gets the same allotment, varying only slightly with lineage.
-- [Open] Water's Claw rose from 3 to 6: a Claw of 3 hurt nothing in testing. Water now has no valley, so its allotment runs 3 over the others; Salt's −Claw tilt inherits the question.
 
 ### Elemental Preference
 Each morph prefers one element and dislikes the element that beats it.

@@ -75,7 +75,7 @@ export const WATER_PUSH = PACE; // Water: the jet pushes the target back
 export const AIR_SHOVE = PACE; // Air: the gust shoves the target sideways
 export const ZONE_RADIUS = PACE; // Fire's burning zone and Earth's corrosive pool
 export const ZONE_SLOTS = 1; // a zone lingers through this many slots after the one it lands in
-export const BURN_DAMAGE = 1; // true damage to a grounded dragon in a burning zone at slot's end
+export const BURN_DAMAGE = 3; // [Proposed; was 1] true damage to a grounded dragon in a burning zone at slot's end
 export const CORRODE_HARDNESS = 3; // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
 export const EARTH_OBSTACLE_MULTIPLIER = 2; // Earth's slurry eats obstacles
 
