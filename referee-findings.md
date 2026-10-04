@@ -1,6 +1,37 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 7: Breath charge optional again
+
+The only change from Round 6: a plain Breath fires in one slot again. Everything else stays: two-slot charges earn +3 (a one-slot charge earns nothing), Bellows Chest restores the +3, lunge and pounce are on, Water's Claw is 6, and brains plan setups. Master, 1,752 bouts.
+
+| | Round 6 | Round 7 |
+|---|---|---|
+| Breath's share of damage | 22% | 34% |
+| Bite's share | 51% | 38% |
+| Claw's share | 27% | 28% |
+| Lands: Breath / Bite / Claw | 66 / 50 / 66% | 60 / 48 / 69% |
+| Timeouts | 20% | 14% |
+| Exchanges per bout | 5.1 | 4.8 |
+| Charges (share of slots) | 14% | 5% |
+| Bites after an Approach / Claws after a Strafe | 23 / 29% | 29 / 29% |
+| claw-focus / bite-focus / breath-focus | 63 / 48 / 26% | 59 / 40 / 30% |
+| Morphs (TD / Wyrm / Wyvern) | 50 / 56 / 45 | 47 / 59 / 44 |
+| Stones (Air / Earth / Fire / Water) | 69 / 49 / 43 / 39 | 65 / 44 / 46 / 45 |
+| Pairing spread | 33–74% | 30–77% |
+| Crunchling vs plain | 64% | 74% (crunches in 20% of slots) |
+
+**What it shows:**
+- **The three attacks split damage about evenly for the first time** (34 / 38 / 28). Breath recovered 12 points, mostly from Bite. Timeouts are at their lowest yet (14%), and bouts are shortest (4.8 exchanges).
+- **Water and Fire recovered** (39 → 45%, 43 → 46%) as Breath came back. Earth fell to 44%.
+- **Charges dropped to 5% of slots.** A one-slot charge only guards, so brains skip it and use plain Breath or the two-slot charge.
+- **Claw still leads.** Claw-focus wins 59%, Air (Claw 9) leads the stones at 65%, and crunchlings climbed to 74%.
+- **The Wyrm rose to 59%, and Wyrm + Air is the top pairing (77%).** Serpentine makes the Wyrm's strafe evade like a dodge, and every strafe now sets up a pounce. The Wyrm owns the setup for the strongest attack.
+
+**Next levers:**
+1. **Trim the pounce:** pierce only, no advance; or a 2-pace reach. That should pull Claw, Air, the Wyrm and crunchlings down together.
+2. If crunchlings still lead after that, look at Raking Talons with Water's Claw at 6.
+
 ## Round 6: everything at once
 
 Added since Round 5, all in one run (master, 1,752 bouts):
