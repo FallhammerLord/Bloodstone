@@ -1,20 +1,11 @@
 // Runs a scenario file and prints the fight.
-//   node --experimental-strip-types src/cli.ts scenarios/footsies-melee.json [--trace] [--json]
+//   npm run duel -- scenarios/footsies-melee.json [--trace] [--json]
 
 import { readFileSync } from 'node:fs';
-import { parseAction } from './actions.ts';
-import { newBout, runExchange, type Event, type FighterSetup, type Side } from './referee.ts';
+import { runBout } from './bout.ts';
+import { newBout } from './referee.ts';
 import { LEGEND, report, rosterLines } from './report.ts';
-
-interface Scenario {
-  title?: string;
-  note?: string;
-  separation: number;
-  challenged?: Side;
-  A: FighterSetup;
-  B: FighterSetup;
-  exchanges: { A: string[]; B: string[] }[];
-}
+import { rulesFor, scenarioController, separationOf, type Scenario } from './scenario.ts';
 
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--'));
@@ -25,12 +16,11 @@ if (!file) {
 
 try {
   const sc = JSON.parse(readFileSync(file, 'utf8')) as Scenario;
-  const bout = newBout(sc.A, sc.B, sc.separation, sc.challenged ?? 'B');
-  const events: Event[] = [];
-  const header = rosterLines(bout);
-  for (const ex of sc.exchanges) {
-    events.push(...runExchange(bout, { A: ex.A.map(parseAction), B: ex.B.map(parseAction) }, { trace: args.includes('--trace') }));
-  }
+  const bout = newBout(sc.A, sc.B, separationOf(sc), sc.challenged ?? 'B');
+  const controllers = { A: scenarioController(sc, 'A'), B: scenarioController(sc, 'B') };
+  const header = rosterLines(bout, controllers);
+  const events = runBout(bout, controllers, rulesFor(sc), { trace: args.includes('--trace') });
+
   if (args.includes('--json')) {
     console.log(JSON.stringify(events, null, 2));
   } else {

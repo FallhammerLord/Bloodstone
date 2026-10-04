@@ -1,6 +1,7 @@
 // Turns the Referee's event log into readable text. Presentation only: it decides nothing.
 
 import { ACTIONS } from './actions.ts';
+import type { Controller } from './bout.ts';
 import type { Bout, Event, PlanInfo, Side } from './referee.ts';
 import { other } from './referee.ts';
 import * as R from './rules.ts';
@@ -30,12 +31,13 @@ export function bar(p: PlanInfo): string {
   return out;
 }
 
-export function rosterLines(bout: Bout): string[] {
+export function rosterLines(bout: Bout, controllers?: Record<Side, Controller>): string[] {
   const lines: string[] = [];
   for (const s of ['A', 'B'] as Side[]) {
     const f = bout.fighters[s];
     const h = f.sheet;
-    lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference})`);
+    const who = controllers ? `, played by ${controllers[s].name}` : '';
+    lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference})${who}`);
     lines.push(`   Wounds ${h.wounds}  Evasion ${h.evasion}  Hardness ${h.hardness}  Accuracy ${h.accuracy}`);
     lines.push(`   Claw ${h.claw}  Bite ${h.bite}  Breath ${h.breath}  Affinity ${h.affinity}  Acumen ${h.acumen}`);
   }
@@ -50,6 +52,9 @@ export function report(bout: Bout, events: Event[]): string[] {
   const label = (s: Side) => bout.fighters[s].name;
   let buffer: string[] = [];
   let ending: string[] = [];
+  let inSlot = false;
+  // Events between slots (revisions, pulses) print straight away; events inside a slot wait for its bars.
+  const say = (line: string) => (inSlot ? buffer : out).push(line);
   const at = (t: number) => `  t${String(t).padStart(2, '0')}  `;
 
   for (const e of events) {
@@ -59,6 +64,7 @@ export function report(bout: Bout, events: Event[]): string[] {
         break;
       case 'slotStart':
         buffer = [];
+        inSlot = true;
         break;
       case 'note':
         buffer.push(`${at(e.tick)}${label(e.side)}: ${e.text}`);
@@ -99,10 +105,17 @@ export function report(bout: Bout, events: Event[]): string[] {
             `Acumen meters ${e.meters.A} / ${e.meters.B}.`,
         );
         buffer = [];
+        inSlot = false;
         break;
       }
+      case 'revision':
+        say(`  ⚡ ${label(e.side)} revises slot 3 at the end of slot ${e.moment} (the slot flashes): ${e.from} → ${e.to}.`);
+        break;
+      case 'pulse':
+        say(`  ◎ Rim pulse ${e.pulse} strikes ${label(e.side)} on the outer rim for ${e.damage}${e.capped ? ' (this pulse can\'t kill)' : ''} → ${Math.max(0, e.woundsLeft)}.`);
+        break;
       case 'ko':
-        buffer.push(`${at(e.tick)}${label(e.side)} falls.`);
+        say(`${inSlot ? at(e.tick) : '  '}${label(e.side)} falls.`);
         break;
       case 'boutEnd':
         ending = ['', `★ ${name(e.winner)} wins (${e.reason}).`];

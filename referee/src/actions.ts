@@ -37,6 +37,8 @@ export interface ActionSpec {
   dir?: 'cw' | 'ccw';
   /** claw sweep (recorded; sweep timing is not modeled yet) */
   sweep?: 'left' | 'right';
+  /** set when this slot 3 was revised; a revised slot 3 gets no chain bonus [Proposed] */
+  revised?: boolean;
 }
 
 export const HOLD: ActionSpec = { name: 'hold' };

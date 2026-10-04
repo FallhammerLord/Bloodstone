@@ -8,7 +8,7 @@
 //   5. end-of-window checks (near misses, grazes, Intimidate)
 //   6. KO checks
 //
-// Not modeled yet: altitude (Leap, Dive), obstacles, crunch, charge, compounds, slot-3 revision,
+// Not modeled yet: altitude (Leap, Dive), obstacles, crunch, charge, compounds,
 // breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards.
 
 import { ACTIONS, HOLD, describe, type ActionName, type ActionSpec } from './actions.ts';
@@ -43,6 +43,8 @@ export interface Fighter {
   pending: Statuses;
   intimidateBonus: boolean;
   chain: { action: ActionName | null; links: number; lastLanded: boolean };
+  /** hit by a rim pulse this bout */
+  pulsed: boolean;
 }
 
 export interface Bout {
@@ -51,6 +53,10 @@ export interface Bout {
   challenged: Side;
   exchange: number;
   globalSlot: number;
+  /** Wounds when the current exchange began, so controllers can see who was hit */
+  startWounds: Record<Side, number>;
+  /** every action each side has used, in order; public, since everyone watched it happen */
+  history: Record<Side, ActionName[]>;
   over: boolean;
   winner: Side | null;
 }
@@ -70,12 +76,13 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
       side, name: setup.name, sheet, pos: { x, y: 0 },
       wounds: sheet.wounds, meter: sheet.acumen, readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
-      chain: { action: null, links: 0, lastLanded: false },
+      chain: { action: null, links: 0, lastLanded: false }, pulsed: false,
     };
   };
   return {
     fighters: { A: make('A', a, -half), B: make('B', b, half) },
     challenged, exchange: 0, globalSlot: 0, over: false, winner: null,
+    startWounds: { A: 0, B: 0 }, history: { A: [], B: [] },
   };
 }
 
@@ -101,6 +108,8 @@ export type Event =
   | { kind: 'trace'; tick: number; positions: Record<Side, Vec> }
   | { kind: 'slotEnd'; exchange: number; slot: number; plans: Record<Side, PlanInfo>; positions: Record<Side, Vec>; separation: number; wounds: Record<Side, number>; meters: Record<Side, number> }
   | { kind: 'ko'; tick: number; side: Side }
+  | { kind: 'revision'; side: Side; moment: Moment; from: string; to: string }
+  | { kind: 'pulse'; side: Side; pulse: number; damage: number; woundsLeft: number; capped: boolean }
   | { kind: 'boutEnd'; winner: Side; reason: string };
 
 // ---------------------------------------------------------------- plans
@@ -191,16 +200,71 @@ function makePlan(f: Fighter, requested: ActionSpec, g: number, ev: Event[]): Pl
 
 // ---------------------------------------------------------------- the exchange
 
-export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opts: { trace?: boolean } = {}): Event[] {
+/** Revision moments: the end of slot 1 or the end of slot 2, before slot 3 begins. */
+export type Moment = 1 | 2;
+
+/**
+ * Asked at each revision moment while the side still has its one revision. Sees the bout as it stands
+ * (everything is visible) and whether the opponent has already revised (the flash). Returns a new
+ * slot 3, or null to keep it. Both sides decide from the same moment, so same-moment revisions are simultaneous.
+ */
+export type Reviser = (bout: Bout, side: Side, moment: Moment, opponentRevised: boolean) => ActionSpec | null;
+
+export interface ExchangeOptions {
+  trace?: boolean;
+  revise?: Partial<Record<Side, Reviser>>;
+}
+
+export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opts: ExchangeOptions = {}): Event[] {
   const ev: Event[] = [];
   if (bout.over) return ev;
   bout.exchange++;
   ev.push({ kind: 'exchangeStart', exchange: bout.exchange });
-  for (const s of SIDES) bout.fighters[s].chain = { action: null, links: 0, lastLanded: false }; // [Assumed] chains live within one exchange
+  for (const s of SIDES) {
+    bout.fighters[s].chain = { action: null, links: 0, lastLanded: false }; // [Assumed] chains live within one exchange
+    bout.startWounds[s] = bout.fighters[s].wounds;
+  }
+  const slots: Record<Side, ActionSpec[]> = {
+    A: [0, 1, 2].map((i) => scripts.A[i] ?? HOLD),
+    B: [0, 1, 2].map((i) => scripts.B[i] ?? HOLD),
+  };
+  const revised: Record<Side, boolean> = { A: false, B: false };
+
   for (let slot = 0; slot < R.SLOTS_PER_EXCHANGE && !bout.over; slot++) {
-    runSlot(bout, slot, { A: scripts.A[slot] ?? HOLD, B: scripts.B[slot] ?? HOLD }, ev, opts.trace ?? false);
+    runSlot(bout, slot, { A: slots.A[slot], B: slots.B[slot] }, ev, opts.trace ?? false);
+
+    // The revision window: slot 3 stays live while slots 1 and 2 resolve, once per exchange [Doc].
+    if (slot < 2 && !bout.over && opts.revise) {
+      const moment = (slot + 1) as Moment;
+      const choices: Partial<Record<Side, ActionSpec>> = {};
+      for (const s of SIDES) {
+        const reviser = opts.revise[s];
+        if (!revised[s] && reviser) {
+          const c = reviser(bout, s, moment, revised[other(s)]);
+          if (c) choices[s] = c;
+        }
+      }
+      for (const s of SIDES) {
+        const c = choices[s];
+        if (!c) continue;
+        ev.push({ kind: 'revision', side: s, moment, from: describe(slots[s][2]), to: describe(c) });
+        slots[s][2] = { ...c, revised: true };
+        revised[s] = true;
+      }
+    }
   }
   return ev;
+}
+
+/** Ends the bout if anyone is down. A double KO goes to the challenged [Proposed]. */
+export function checkKO(bout: Bout, ev: Event[], tick: number): void {
+  const F = bout.fighters;
+  const down = SIDES.filter((s) => F[s].wounds <= 0);
+  if (down.length === 0) return;
+  for (const s of down) ev.push({ kind: 'ko', tick, side: s });
+  bout.over = true;
+  bout.winner = down.length === 2 ? bout.challenged : other(down[0]);
+  ev.push({ kind: 'boutEnd', winner: bout.winner, reason: down.length === 2 ? 'double KO goes to the challenged' : 'KO' });
 }
 
 function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: Event[], trace: boolean) {
@@ -224,10 +288,11 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     F[s].chain = category(p) === 'attack'
       ? { action: p.spec.name, links: p.link, lastLanded: p.landed }
       : { action: null, links: 0, lastLanded: false };
+    bout.history[s].push(p.spec.name);
   }
 
   const info = (p: Plan): PlanInfo => ({
-    label: describe(p.spec) + (p.converted === 'dodge' ? ' → dodge' : p.converted === 'roar' ? ' → roar' : ''),
+    label: describe(p.spec) + (p.spec.revised ? ' (revised)' : '') + (p.converted === 'dodge' ? ' → dodge' : p.converted === 'roar' ? ' → roar' : ''),
     windup: p.windup, active: p.active, recovery: p.recovery, interruptedAt: p.interruptedAt,
   });
   ev.push({
@@ -335,13 +400,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   }
 
   // 6. KO checks.
-  const down = SIDES.filter((s) => F[s].wounds <= 0);
-  if (down.length > 0) {
-    for (const s of down) ev.push({ kind: 'ko', tick: t, side: s });
-    bout.over = true;
-    bout.winner = down.length === 2 ? bout.challenged : other(down[0]);
-    ev.push({ kind: 'boutEnd', winner: bout.winner, reason: down.length === 2 ? 'double KO goes to the challenged' : 'KO' });
-  }
+  checkKO(bout, ev, t);
 }
 
 function evasionState(p: Plan, t: number): 'moving' | 'dodging' | null {
@@ -431,7 +490,7 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     v += R.INTIMIDATE_BONUS;
     parts.push(`+${R.INTIMIDATE_BONUS} Intimidate`);
   }
-  if (p.link === 3) {
+  if (p.link === 3 && !p.spec.revised) {
     v += R.CHAIN_THIRD_LINK_BONUS;
     parts.push(`+${R.CHAIN_THIRD_LINK_BONUS} chain third link`);
   }

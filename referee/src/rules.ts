@@ -6,6 +6,7 @@
 // ---- Time ----
 export const TICKS_PER_SLOT = 30; // [Doc] §4 Timeline: 30 ticks of 100 ms
 export const SLOTS_PER_EXCHANGE = 3; // [Doc] §4 Exchange
+export const EXCHANGE_LIMIT = 8; // [Assumed] the doc estimates six to eight; the last three get rim pulses
 export const MIN_ACTIVE = 3; // [Proposed] the active window never drops below 3 ticks
 
 // ---- Space ----
@@ -19,6 +20,8 @@ export const FAR_EDGE = 3 * BAND;
 export const LEASH = 4 * BAND; // [Doc] separation can't exceed Very Far's outer edge (12 paces)
 export const ARENA_RADIUS = 12 * PACE; // [Doc] §5 radius equals the leash
 export const BODY_GAP = 1 * PACE; // [Assumed] closest two dragon centers can get
+export const RIM_DEPTH = 3 * PACE; // [Assumed] how far in from the wall the pillars' pulse reaches
+export const START_SEPARATION = Math.floor(6.5 * PACE); // [Doc] Far, just outside Bite range
 
 // ---- Movement ----
 export const MOVE_CAP = BAND; // [Proposed] a move carries at most one band

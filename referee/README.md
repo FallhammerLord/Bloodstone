@@ -10,6 +10,7 @@ Needs [Node.js](https://nodejs.org) 22 or newer. From this folder:
 npm install                                  # once, for the type checker
 npm run duel -- scenarios/footsies-melee.json  # run a fight and print it
 npm test                                     # check the Referee against the design doc
+npm run tourney                              # every pairing fights every other; prints win rates
 ```
 
 Add `--trace` to a duel to print both dragons' positions every tick, or `--json` for the raw event log.
@@ -34,6 +35,23 @@ A scenario is a small text file in `scenarios/`. Copy one and edit it.
 - **morph:** `true-dragon`, `wyvern`, `wyrm`. **stone:** `water`, `earth`, `fire`, `air`.
 - **exchanges:** three actions per side per exchange. Add more exchanges to fight on toward a KO.
 - **Actions:** `bite`, `claw:left`, `claw:right`, `breath`, `stomp`, `approach`, `retreat`, `strafe:cw`, `strafe:ccw`, `dodge`, `scales`, `intimidate`, `hold`.
+- **separation** is optional; it defaults to 6.5 paces (Far, just outside Bite range).
+
+**Full bouts.** Add `"bout": true` to play until a KO or the exchange limit (8), with rim pulses in the final three exchanges and the timeout rule at the end. `"exchangeLimit"` changes the limit. `"timeout": "mostWounds"` gives an open-lobby timeout to the dragon with more Wounds; the default is that the challenger forfeits. `"challenged"` is `"A"` or `"B"` (default B). Exchanges you don't script are played by the side's AI, or held.
+
+**AI sides.** Add `"ai": "brawler"` (and optionally `"seed": 7`) to a side. Styles:
+- **brawler:** closes in and hits. Claw up close, Bite at Close, Breath at Far.
+- **skirmisher:** keeps range. Breathes at Far, backs off when crowded.
+- **guardian:** waits for you to commit. Guards, dodges, counters up close.
+- **mixed:** picks a different habit each slot.
+
+**Revisions.** Write a side's exchange as an object to give slot 3 a revision rule:
+
+```json
+"A": { "slots": ["bite", "bite", "bite"], "revise": { "at": 1, "if": "separation <= 3", "to": "claw:left" } }
+```
+
+`at` is 1 or 2: decide at the end of that slot (default 2). `if` is one of `always`, `opponent revised`, `i was hit`, `i landed`, `separation <= N`, `separation >= N`.
 
 ## Reading the output
 
@@ -44,7 +62,7 @@ A  Claw (left)  ------###############=========
 B  Bite         ------xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-`-` wind-up, `#` active, `=` recovery, `x` cancelled by an interrupt. Below the bars, every hit shows its arithmetic.
+`-` wind-up, `#` active, `=` recovery, `x` cancelled by an interrupt. Below the bars, every hit shows its arithmetic. ⚡ marks a revision (the slot flash); ◎ marks a rim pulse.
 
 ## Where the numbers live
 
@@ -53,9 +71,15 @@ Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came fr
 - **[Proposed]:** marked [Proposed] in the design doc.
 - **[Assumed]:** a placeholder this build needed. The numbers pass should replace these.
 
+## The tournament
+
+`npm run tourney` fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
+
+The AIs are crude, so the numbers mean "strong in crude hands." The Wyvern is also missing its kit: it owns altitude, and this build has no Leap or Dive.
+
 ## Not built yet
 
-Altitude (Leap, Dive), obstacles, crunch, charge, compounds, slot-3 revision, breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
+Altitude (Leap, Dive), obstacles, crunch, charge, compounds, breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
 
 ## Files
 
@@ -66,7 +90,11 @@ Altitude (Leap, Dive), obstacles, crunch, charge, compounds, slot-3 revision, br
 | `src/hatch.ts` | Egg + stone → stat sheet; the element wheel |
 | `src/shapes.ts` | Attack shapes and the phantom band |
 | `src/geometry.ts` | Whole-number vector math |
-| `src/referee.ts` | The tick-by-tick resolver |
+| `src/referee.ts` | The tick-by-tick resolver and the revision window |
+| `src/bout.ts` | Exchanges to a KO, rim pulses, timeouts; what each side can see |
+| `src/ai.ts` | AI tamers |
+| `src/scenario.ts` | Scenario files, scripted revisions |
+| `src/tourney.ts` | The balance harness |
 | `src/report.ts` | Turns the event log into text |
 | `src/cli.ts` | Runs a scenario file |
-| `test/referee.test.ts` | Design-doc claims as tests |
+| `test/*.test.ts` | Design-doc claims as tests |

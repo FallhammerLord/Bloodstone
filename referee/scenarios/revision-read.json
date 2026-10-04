@@ -1,0 +1,13 @@
+{
+  "title": "The revision window: a read and a counter-read",
+  "note": "Design doc §4: slot 3 can be revised once while slots 1 and 2 resolve, and a revision flashes. Brine sees Coil close to Melee and swaps its last bite for a claw. Coil sees the flash and braces.",
+  "separation": 4,
+  "A": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "B": { "name": "Coil", "morph": "wyrm", "stone": "earth" },
+  "exchanges": [
+    {
+      "A": { "slots": ["bite", "bite", "bite"], "revise": { "at": 1, "if": "separation <= 3", "to": "claw:left" } },
+      "B": { "slots": ["approach", "claw:right", "bite"], "revise": { "at": 2, "if": "opponent revised", "to": "scales" } }
+    }
+  ]
+}

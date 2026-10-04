@@ -1,0 +1,7 @@
+{
+  "title": "A full bout between two AI tamers",
+  "note": "Brawler closes and hits; mixed changes habit every slot. Change the styles or seeds to see other fights. Styles: brawler, skirmisher, guardian, mixed.",
+  "bout": true,
+  "A": { "name": "Ember", "morph": "true-dragon", "stone": "fire", "ai": "brawler", "seed": 7 },
+  "B": { "name": "Gale", "morph": "wyvern", "stone": "air", "ai": "mixed", "seed": 11 }
+}
