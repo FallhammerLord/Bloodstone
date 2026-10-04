@@ -1,6 +1,6 @@
 // The Hatching Engine: egg + stone → stat sheet. Order [Doc]: baselines, swing, then derive tertiaries.
 
-import { ACUMEN_START } from './rules.ts';
+import { ACUMEN_START, TRUE_DRAGON_WOUNDS } from './rules.ts';
 
 export type Morph = 'true-dragon' | 'wyvern' | 'wyrm';
 export type Element = 'water' | 'salt' | 'earth' | 'magma' | 'fire' | 'lightning' | 'air' | 'storm';
@@ -16,7 +16,7 @@ export interface StatSheet {
   /** winged morphs fly; the Wyrm is serpentine and grounded [Doc] */
   flies: boolean;
   /** the rule this morph bends [Doc] §2: True Dragon has none */
-  aspect: 'none' | 'talons' | 'serpentine';
+  aspect: 'stalwart' | 'talons' | 'serpentine';
   wounds: number;
   evasion: number;
   hardness: number;
@@ -42,7 +42,7 @@ const STONES: Record<CoreStone, { claw: number; bite: number; breath: number; af
   air: { claw: 9, bite: 9, breath: 6, affinityMod: -3, peak: 'claw' },
 };
 
-const ASPECTS: Record<Morph, StatSheet['aspect']> = { 'true-dragon': 'none', wyvern: 'talons', wyrm: 'serpentine' };
+const ASPECTS: Record<Morph, StatSheet['aspect']> = { 'true-dragon': 'stalwart', wyvern: 'talons', wyrm: 'serpentine' };
 
 // [Doc] §2 Elemental Preference
 const PREFERS: Record<Morph, CoreStone> = { 'true-dragon': 'fire', wyvern: 'air', wyrm: 'water' };
@@ -68,7 +68,8 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
 
   return {
     morph, stone, age, preference: pref, flies: morph !== 'wyrm', aspect: ASPECTS[morph],
-    wounds: m.wounds, evasion: m.evasion, hardness: m.hardness,
+    // The True Dragon's Aspect, Stalwart: a flat +9 Wounds, after the swing.
+    wounds: m.wounds + (morph === 'true-dragon' ? TRUE_DRAGON_WOUNDS : 0), evasion: m.evasion, hardness: m.hardness,
     claw: s.claw, bite: s.bite, breath: s.breath,
     accuracy: m.evasion + m.accuracyMod,
     affinity: s.breath + s.affinityMod,

@@ -50,6 +50,8 @@ export const GRAZE_PENALTY = 3;
 export const MATCHUP = 3;
 export const DAMAGE_FLOOR = 1;
 export const STOMP_DAMAGE = 3;
+export const BITE_PIERCE = 3; // [Doc] Bite is piercing; [Assumed] it ignores 3 Hardness
+export const TRUE_DRAGON_WOUNDS = 9; // the True Dragon's Aspect: a flat +9 Wounds (3 Wounds)
 
 // ---- Guards ----
 export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales

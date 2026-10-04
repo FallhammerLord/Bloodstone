@@ -61,8 +61,10 @@ test('Serpentine: a strafing Wyrm evades like a dodge; a retreating one does not
   assert.equal(hits(ev).length, 1);
 });
 
-test('the True Dragon has no Aspect', () => {
-  assert.equal(newBout(TD_WATER, TD_WATER, 4).fighters.A.sheet.aspect, 'none');
+test('the True Dragon\'s Aspect, Stalwart: a flat +9 Wounds', () => {
+  const td = newBout(TD_WATER, TD_WATER, 4).fighters.A.sheet;
+  assert.equal(td.aspect, 'stalwart');
+  assert.equal(td.wounds, 36 + 9);
 });
 
 // ---- Breath effects (§3) ----

@@ -23,9 +23,9 @@ const hitsBy = (hits: Extract<Event, { kind: 'hit' }>[], side: Side) => hits.fil
 
 test('swing table: every pairing in the design doc, with derived knock-ons', () => {
   const td = hatch('true-dragon', 'fire');
-  assert.deepEqual([td.breath, td.wounds, td.affinity], [15, 30, 6]);
+  assert.deepEqual([td.breath, td.wounds, td.affinity], [15, 30 + 9, 6]);
   const tdE = hatch('true-dragon', 'earth');
-  assert.deepEqual([tdE.bite, tdE.wounds], [9, 42]);
+  assert.deepEqual([tdE.bite, tdE.wounds], [9, 42 + 9]);
   const wa = hatch('wyvern', 'air');
   assert.deepEqual([wa.claw, wa.evasion, wa.accuracy], [12, 6, 3]);
   const wf = hatch('wyvern', 'fire');
@@ -39,7 +39,7 @@ test('swing table: every pairing in the design doc, with derived knock-ons', () 
 test('neutral pairings keep the base tables', () => {
   const h = hatch('true-dragon', 'water');
   assert.equal(h.preference, 'neutral');
-  assert.deepEqual([h.wounds, h.evasion, h.hardness, h.accuracy], [36, 3, 3, 6]);
+  assert.deepEqual([h.wounds, h.evasion, h.hardness, h.accuracy], [36 + 9, 3, 3, 6]);
   assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [3, 9, 9, 6]);
 });
 
@@ -79,19 +79,19 @@ test('footsies at Close: bite lands, claw only reaches the arc edge', () => {
   const { hits } = fight(TD_AIR, TD_WATER, 4, ['claw:left'], ['bite']);
   assert.equal(hitsBy(hits, 'A').length, 0);
   assert.equal(hitsBy(hits, 'B').length, 1);
-  assert.equal(hitsBy(hits, 'B')[0].damage, 6); // baseline bite: 9 − 3
+  assert.equal(hitsBy(hits, 'B')[0].damage, 9); // baseline bite: 9 − (3 pierced to 0)
 });
 
-test('chained bites deal 21 to a True Dragon: 6 + 6 + 9', () => {
+test('chained bites deal 30 to a True Dragon: 9 + 9 + 12 (Bite pierces 3 Hardness)', () => {
   const { hits, bout } = fight(TD_WATER, TD_WATER, 4, ['bite', 'bite', 'bite'], ['hold', 'hold', 'hold']);
-  assert.deepEqual(hits.map((h) => h.damage), [6, 6, 9]);
-  assert.equal(bout.fighters.B.wounds, 36 - 21);
+  assert.deepEqual(hits.map((h) => h.damage), [9, 9, 12]);
+  assert.equal(bout.fighters.B.wounds, 45 - 30);
 });
 
 test('a chain needs each link to land', () => {
   // B steps in during the first bite, which misses; the next two bites count as links 1 and 2, so no +3.
   const { hits } = fight(TD_WATER, TD_WATER, 6, ['bite', 'bite', 'bite'], ['approach', 'hold', 'hold']);
-  assert.deepEqual(hits.map((h) => h.damage), [6, 6]);
+  assert.deepEqual(hits.map((h) => h.damage), [9, 9]);
 });
 
 test('breath skips Evasion and applies the matchup', () => {
@@ -113,13 +113,13 @@ test('every landed hit deals at least 1', () => {
 
 test('Intimidate adds +3 to the next attack, and attacks punish it', () => {
   const { hits } = fight(TD_WATER, TD_WATER, 4, ['intimidate', 'bite', 'intimidate'], ['hold', 'hold', 'bite']);
-  assert.equal(hitsBy(hits, 'A')[0].damage, 9); // 6 + 3 Intimidate
-  assert.equal(hitsBy(hits, 'B')[0].damage, 9); // 6 + 3 punish
+  assert.equal(hitsBy(hits, 'A')[0].damage, 12); // 9 + 3 Intimidate
+  assert.equal(hitsBy(hits, 'B')[0].damage, 12); // 9 + 3 punish
 });
 
 test('Scales adds Hardness while guarding', () => {
   const { hits } = fight(TD_WATER, TD_WATER, 4, ['bite'], ['scales']);
-  assert.equal(hits[0].damage, 3); // 9 − (3 + 3)
+  assert.equal(hits[0].damage, 6); // 9 − (3 + 3, pierced to 3)
 });
 
 test('a strafe during the wind-up slips a bite', () => {
@@ -166,7 +166,7 @@ test('a chain carries across exchanges', () => {
   const bout = newBout(TD_WATER, TD_WATER, 4);
   runExchange(bout, { A: ['bite', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   const ev = runExchange(bout, { A: ['bite', 'bite', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
-  assert.deepEqual(ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage), [6, 9]);
+  assert.deepEqual(ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage), [9, 12]);
 });
 
 test('other actions don\'t break a chain', () => {
@@ -174,7 +174,7 @@ test('other actions don\'t break a chain', () => {
   const ev = runExchange(bout, { A: ['bite', 'scales', 'bite'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   const ev2 = runExchange(bout, { A: ['retreat', 'approach', 'bite'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   const dmg = [...ev, ...ev2].filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage);
-  assert.deepEqual(dmg, [6, 6, 9]);
+  assert.deepEqual(dmg, [9, 9, 12]);
 });
 
 test('a chain lapses only after a whole exchange without a landed hit', () => {
@@ -183,7 +183,7 @@ test('a chain lapses only after a whole exchange without a landed hit', () => {
   const quiet = runExchange(bout, { A: ['hold', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   assert.ok(quiet.some((e) => e.kind === 'note' && e.text.includes('chain lapses')));
   const ev = runExchange(bout, { A: ['bite', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
-  assert.deepEqual(ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage), [6], 'link 1 again, not link 3');
+  assert.deepEqual(ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage), [9], 'link 1 again, not link 3');
 });
 
 test('Scales adds Affinity against breath, as it adds Hardness against Bite and Claw', () => {

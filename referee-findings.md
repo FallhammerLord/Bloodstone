@@ -1,6 +1,34 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 2 update
+
+**Changes from the project chat's shard notes:**
+- **Bite pierces 3 Hardness** [Doc: "piercing"; amount Assumed]. A baseline Bite now deals 9 instead of 6. Chained bites reach 30 on a True Dragon.
+- **Ratchet Claws** is an escalating chain: each landed Claw link adds +1 to the next; the final link's bonus pays for it (−3, −1 from Adult). Grade terms are [Proposed].
+- **True Dragon Aspect, Stalwart:** a flat +9 Wounds after the swing (36 → 45; Fire 39; Earth 51).
+- Information Techniques kept as they are; judge them in human play. Crunchlings judged healthy.
+
+**Results (master skill, 1,176 bouts):**
+
+| | Round 1 | Round 2 |
+|---|---|---|
+| True Dragon | 41% | 49% |
+| Wyrm | 56% | 53% |
+| Wyvern | 53% | 47% |
+| Breath's share of damage | 76% | 68% |
+| Breath lands | 57% | 60% |
+| Pairing spread | 29%–76% | 35%–74% |
+| Crunchling vs plain | 51% | 52% |
+
+- **Morphs are now within 47–53%** at master, and within 49–52% at adept. The True Dragon recovered from last.
+- **Bite piercing pulled Breath's damage share down** from 76% to 68%: closing in pays more now. Timeouts are still about 25%.
+- **Hardness shards no longer sweep the shard ranking.** Mountainback (65%) and Ironheart (64%) remain strong; Shalecoat fell out of the top. The top is now mixed: Sundering Claws 72%, Smoldering Maw, Crucible Gland, Lance Throat.
+- **Still at the edges:** Air leads the stones (61%); Earth (41%) and Fire (44%) trail. Wyrm + Air (74%) and True Dragon + Earth (35%) are the outliers.
+- **Ratchet Claws (Venerable) ranks low (38%)** in random loadouts with crude AI. Worth a look after human play.
+
+The rest of this file is Round 1.
+
 The Referee is a text-only rules engine (in `referee/`). It plays two dragons' scripts tick by tick and reports exactly what happened. AI tamers play thousands of bouts through it to test balance. Every number it uses lives in `referee/src/rules.ts`, tagged **[Doc]** (settled), **[Proposed]** (marked proposed in the design doc) or **[Assumed]** (a placeholder this build needed).
 
 ---

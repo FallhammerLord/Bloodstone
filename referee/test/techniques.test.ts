@@ -30,7 +30,7 @@ test('Snapping Jaw Elder: a Bite that interrupts deals +3', () => {
   const ev = run(newBout(withTech(TD_WATER, 'Snapping Jaw', 'elder'), TD_WATER, 2), ['bite'], ['stomp']);
   const h = hits(ev)[0];
   assert.ok(h.interrupt);
-  assert.equal(h.damage, 6 + 3);
+  assert.equal(h.damage, 9 + 3);
 });
 
 test('Lockjaw: a landed Bite Pins; nothing is forced; a Venerable\'s next Bite gains +3', () => {
@@ -55,15 +55,21 @@ test('Scything Forelimbs: the claw arc widens', () => {
   assert.equal(hits(scy).length, 1);
 });
 
-test('Ratchet Claws Elder: a Claw chain holds through a hitless exchange and resumes 3 ticks faster', () => {
+test('Ratchet Claws: each landed Claw link adds +1 to the next; the final link\'s bonus pays for it', () => {
+  // True Dragon + Air claws 9 against Hardness 3: 6 a hit. Links: 6, 6 + 1, 6 + 2 + (3 − 3).
+  const air: FighterSetup = { name: 'Ash', morph: 'true-dragon', stone: 'air' };
+  const ev = run(newBout(withTech(air, 'Ratchet Claws', 'juvenile'), TD_WATER, 2), ['claw:left', 'claw:left', 'claw:left'], ['hold', 'hold', 'hold']);
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 7, 8]);
+});
+
+test('Ratchet Claws Elder: the escalating chain holds through a hitless exchange', () => {
   const air: FighterSetup = { name: 'Ash', morph: 'true-dragon', stone: 'air' };
   const bout = newBout(withTech(air, 'Ratchet Claws', 'elder'), TD_WATER, 2);
   run(bout, ['claw:left', 'claw:left', 'hold'], ['hold', 'hold', 'hold']);
   const quiet = run(bout, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
   assert.ok(notes(quiet).some((n) => n.startsWith('Ratchet Claws')));
   const ev = run(bout, ['claw:left', 'hold', 'hold'], ['hold', 'hold', 'hold']);
-  assert.equal(slotPlans(ev)[0].A.windup, 6 - 3);
-  assert.ok(hits(ev)[0].parts.some((x) => x.includes('Ratchet Claws')), 'the third link\'s bonus pays for the hold');
+  assert.equal(hits(ev)[0].damage, 6 + 2 + (3 - 1), 'link 3: +2 escalation, and an Adult-or-better chain bonus of +2');
 });
 
 test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pierces Affinity from Juvenile', () => {
@@ -116,7 +122,7 @@ test('Bounding Haunches: an Approach carries twice as far', () => {
 test('Thornscale: attackers landing into Scales take 3', () => {
   const bout = newBout(TD_WATER, withTech(TD_WATER, 'Thornscale', 'juvenile'), 2);
   run(bout, ['claw:left'], ['scales']);
-  assert.equal(bout.fighters.A.wounds, 36 - 3);
+  assert.equal(bout.fighters.A.wounds, 45 - 3);
 });
 
 test('Riposte Talons: a successful Dodge earns a free claw', () => {
@@ -124,7 +130,7 @@ test('Riposte Talons: a successful Dodge earns a free claw', () => {
   const bout = newBout(TD_WATER, withTech({ name: 'G', morph: 'wyvern', stone: 'water' }, 'Riposte Talons', 'juvenile'), 4);
   const ev = run(bout, ['bite'], ['dodge']);
   assert.ok(ev.some((e) => e.kind === 'evade'));
-  assert.equal(bout.fighters.A.wounds, 36 - 3);
+  assert.equal(bout.fighters.A.wounds, 45 - 3);
 });
 
 test('Mantle Wings: Scales adds Affinity against breath', () => {
@@ -151,5 +157,5 @@ test('Baleful Eye: intimidating in slot 1 or 2 shows the opponent\'s slot 3 at t
 test('Goading Roar: a Retreat next slot stings for 3', () => {
   const bout = newBout(withTech(TD_WATER, 'Goading Roar', 'juvenile'), TD_WATER, 4);
   run(bout, ['intimidate', 'hold'], ['hold', 'retreat']);
-  assert.equal(bout.fighters.B.wounds, 36 - 3);
+  assert.equal(bout.fighters.B.wounds, 45 - 3);
 });

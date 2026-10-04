@@ -84,12 +84,12 @@ The claw arc widens by 1 pace, catching strafes. Claw tests Accuracy at −3.
 - **Venerable:** as Elder; the arc also reaches 1 pace higher
 
 ### Ratchet Claws · Chain
-A Claw chain survives one hitless exchange, holding instead of lapsing. Final-link bonus −3. *(Rewritten for the chain rule: chains already survive Guards and other actions; only a hitless exchange ends one.)*
-- **Wyrmling:** only if you guarded with Scales during that exchange
-- **Juvenile:** any one hitless exchange
-- **Adult:** the −3 applies only if the chain held
-- **Elder:** as Adult; a resumed chain winds up 3 ticks faster
-- **Venerable:** as Elder; holds through two hitless exchanges
+An escalating chain: each landed Claw link adds +1 to the next. The final link's chain bonus pays for it: −3. *(Repurposed for the chain rule.)* **[Proposed]** grade terms:
+- **Wyrmling:** only the third link escalates (+1)
+- **Juvenile:** every link escalates: +1 on the second, +2 on the third
+- **Adult:** the final-link cost drops to −1
+- **Elder:** as Adult; the escalating chain holds through one hitless exchange
+- **Venerable:** as Elder; each landed link adds +2
 
 ### Raking Talons · Crunch
 Claw can crunch with itself: two claws in one slot. Recovery after a crunched pair +6 ticks.

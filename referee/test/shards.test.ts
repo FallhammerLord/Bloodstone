@@ -69,14 +69,14 @@ test('shards add to attributes but tertiaries don\'t re-derive', () => {
 test('Bastion Plates: +3 Hardness while guarding with Scales', () => {
   const bout = newBout(TD_WATER, { ...TD_WATER, shards: [{ shard: 'Bastion Plates', pips: [0, 1] }] }, 4);
   const ev = runExchange(bout, { A: ['bite', 'bite'].map(parseAction), B: ['scales', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 3], 'scales: 9 − (6 + 3 + 3) floors at 1; then 9 − 6');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 6], 'scales: Hardness 12 pierced to 9, so 9 − 9 floors at 1; then 9 − (6 pierced to 3)');
 });
 
 test('Ironheart: +3 Hardness at half Wounds or below', () => {
   const bout = newBout(TD_WATER, { ...TD_WATER, shards: [{ shard: 'Ironheart', pips: [0, 1] }] }, 4);
   bout.fighters.B.wounds = 18;
   const ev = runExchange(bout, { A: ['bite'].map(parseAction), B: ['hold'].map(parseAction) });
-  assert.equal(hits(ev)[0].damage, 9 - (3 + 3), 'Hardness 3, +3 from the rider');
+  assert.equal(hits(ev)[0].damage, 9 - (3 + 3 - 3), 'Hardness 3, +3 from the rider, pierced by 3');
 });
 
 test('Reaver Hooks: +3 Claw Sharpness on a chain\'s final link', () => {

@@ -128,7 +128,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Aspect** is the player-facing name for that bend ("bend" stays as design shorthand).
 - Morphs offer interesting choices and never overshadow base dragons. A True Dragon stands alongside an Ouroboros proudly. Unlock depth measures cost in lifetimes, never power.
 - No RPS at the egg or morph level.
-- Every Aspect has a price. The True Dragon is the generalist and gold standard: its Aspect is having none.
+- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart:** its Aspect is a flat +9 Wounds (3 Wounds), applied after the elemental swing.
 - **[Proposed]** Readability balances specialists: an Aspect telegraphs through the silhouette.
 - **[Proposed]** Audit rule: an Aspect may change its holder's own actions or respond to generic attack types, never another morph's features.
 - Balance watches pick rate against win rate across every choice. No Aspect should be an obvious best pick.
@@ -278,16 +278,16 @@ Each morph prefers one element and dislikes the element that beats it.
 - Strafe is the hedge: clean escapes ignore attributes, and position carries forward. Dodge is the commitment: its bonus answers wide coverage, and it holds range and altitude.
 
 ### Damage [Proposed]
-- **Bite:** Bite Force − Hardness. Baseline 9 − 3 = 6.
+- **Bite:** Bite Force − Hardness. Bite is piercing: it ignores 3 Hardness. Baseline 9 − (3 − 3) = 9.
 - **Claw:** one hit, Claw Sharpness − Hardness. Baseline 6 − 3 = 3; it earns its keep by landing often, its long active window catching strafes.
 - **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 9 − 3 = 6.
 - **Stomp:** 3 true damage plus Staggered.
 - **Floor:** every landed hit deals at least 1 point.
-- A True Dragon's 36 points fall to six landed bites or breaths.
+- A True Dragon's 45 points (36 plus Stalwart's 9) fall to five landed bites or eight landed breaths.
 
 **Modifiers:** Intimidate +3 to the next attack; +3 on a chain's third link; punish +3, raised by Acumen; graze −3. Crunched actions carry no modifier: the reward is doing the thing twice.
 
-**Ceilings against a True Dragon:** chained bites 21 (58%); crunched claws through Raking Talons 18 (50%); crunched bites through Gnashing Teeth 36, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs.
+**Ceilings against a True Dragon (45 Wounds):** chained bites 30 (67%); crunched claws through Raking Talons 18 (40%); crunched bites through Gnashing Teeth 54, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs.
 
 ### Chains, Cooldowns, Crunch, Charge
 - **Chains:** repeating an input 2 or 3 times improves efficacy. Each link counts only when it lands. Chains carry across exchanges: other actions in between don't break one, and a different attack starts a new one. A chain lapses only when a whole exchange passes without a landed hit. **[Proposed]** A revised slot 3 caps the bonus. **[Proposed]** Crunched slots don't count toward chains unless a shard says otherwise.

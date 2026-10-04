@@ -15,7 +15,7 @@ const hits = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'hit' }
 
 test('a charged Bite releases next slot for +3, whatever that slot scripted', () => {
   const { ev } = run(TD_WATER, TD_WATER, 4, ['charge:bite', 'retreat'], ['hold', 'hold']);
-  assert.deepEqual(hits(ev).map((h) => h.damage), [6 + 3]);
+  assert.deepEqual(hits(ev).map((h) => h.damage), [9 + 3]);
 });
 
 test('the charging slot guards like Scales, and a landed hit breaks the charge', () => {

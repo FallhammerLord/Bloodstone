@@ -408,7 +408,6 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
     wShift -= 3;
     f.marks.quick = null;
   }
-  if (spec.name === 'claw' && tech(f, 'ratchet-claws') >= E && f.chain.resumed && f.chain.action === 'claw') wShift -= 3;
   const [windup, active, recovery] = timing(def.profile, wShift, rShift);
 
   let moveTotal = 0;
@@ -546,8 +545,8 @@ function chainAtExchangeEnd(f: Fighter, ev: Event[]) {
   const c = f.chain;
   if (c.hitThisExchange || c.links === 0) return;
   const rat = tech(f, 'ratchet-claws');
-  const saves = rat >= V ? 2 : 1;
-  if (c.action === 'claw' && rat >= W && c.saves < saves && (rat >= J || c.scalesThisExchange)) {
+  // Ratchet Claws Elder: the escalating Claw chain holds through one hitless exchange.
+  if (c.action === 'claw' && rat >= E && c.saves < 1) {
     c.saves++;
     c.resumed = true;
     ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, text: `Ratchet Claws: the Claw chain (${c.links} link${c.links > 1 ? 's' : ''}) holds through a hitless exchange.` });
@@ -938,9 +937,11 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
   let v = 0;
   switch (p.spec.name) {
     case 'bite': {
+      // Bite is piercing [Doc]: it ignores some Hardness.
       const bite = eff(att, 'bite', {});
-      v = bite.value - hardness;
-      parts.push(`Bite Force ${bite.value}${bite.note}`, `−${hardLabel}`);
+      const pierced = Math.max(0, hardness - R.BITE_PIERCE);
+      v = bite.value - pierced;
+      parts.push(`Bite Force ${bite.value}${bite.note}`, `−${hardLabel}${hardness ? ` pierced to ${pierced}` : ''}`);
       if (p.spec.released) {
         v += R.CHARGE_BONUS;
         parts.push(`+${R.CHARGE_BONUS} charged`);
@@ -951,6 +952,15 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       const claw = eff(att, 'claw', { link: p.spec.revised ? 0 : p.link });
       v = claw.value - hardness;
       parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}`);
+      // Ratchet Claws: an escalating chain. Each landed link adds to the next (Wyrmling: only into the third).
+      const rat = tech(att, 'ratchet-claws');
+      const prior = p.link - 1;
+      if (rat >= W && !crunched && prior > 0 && (rat >= J || p.link === 3)) {
+        const step = rat >= V ? 2 : 1;
+        const esc = rat === W ? step : prior * step;
+        v += esc;
+        parts.push(`+${esc} Ratchet Claws`);
+      }
       break;
     }
     case 'breath': {
@@ -1003,8 +1013,11 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     if (sapped) {
       att.marks.sapped = null;
       parts.push('chain bonus sapped (Sapping Bellow)');
-    } else if (rat >= W && (rat < A || p.chainPaused)) {
-      parts.push('chain bonus spent holding the chain (Ratchet Claws)');
+    } else if (rat >= W) {
+      // Ratchet Claws pays for its escalation out of the final link's bonus.
+      const bonus = R.CHAIN_THIRD_LINK_BONUS - (rat >= A ? 1 : 3);
+      v += bonus;
+      parts.push(`+${bonus} chain third link (Ratchet Claws)`);
     } else {
       v += R.CHAIN_THIRD_LINK_BONUS;
       parts.push(`+${R.CHAIN_THIRD_LINK_BONUS} chain third link`);
