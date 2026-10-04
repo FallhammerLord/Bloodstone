@@ -142,6 +142,8 @@ export interface SlotRecord {
   wounds: Record<Side, number>;
   actions: Record<Side, ActionName>;
   landed: Record<Side, boolean>;
+  /** whether each side's Breath was off cooldown when the slot began */
+  breathReady: Record<Side, boolean>;
 }
 
 export interface FighterSetup {
@@ -588,6 +590,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
   const startSep = dist(F.A.pos, F.B.pos);
   const startZ = { A: F.A.pos.z, B: F.B.pos.z };
   const startWounds = { A: F.A.wounds, B: F.B.wounds };
+  const breathReady = { A: (F.A.readyAt.breath ?? 0) <= g, B: (F.B.readyAt.breath ?? 0) <= g };
   const prev = bout.record.at(-1);
   const prevLanded = (s: Side) => !!prev && prev.landed[s] && prev.actions[s] === specs[s].name;
   const plans: Record<Side, Plan> = {
@@ -632,7 +635,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
   }
   bout.record.push({
     exchange: bout.exchange, slot, separation: startSep, z: startZ, wounds: startWounds,
-    actions: { A: plans.A.spec.name, B: plans.B.spec.name }, landed: { A: plans.A.landed, B: plans.B.landed },
+    actions: { A: plans.A.spec.name, B: plans.B.spec.name }, landed: { A: plans.A.landed, B: plans.B.landed }, breathReady,
   });
 
   const info = (p: Plan): PlanInfo => ({

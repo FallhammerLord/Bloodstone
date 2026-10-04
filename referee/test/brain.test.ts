@@ -33,7 +33,7 @@ test('the read tallies the opponent\'s habits from the public record', () => {
   let tries = 0;
   const rng = () => ((tries = (tries * 9301 + 49297) % 233280) / 233280);
   const legal = [{ name: 'retreat' as const }, { name: 'stomp' as const }];
-  const picks = Array.from({ length: 200 }, () => read.guess('close', 0, legal, rng).name);
+  const picks = Array.from({ length: 200 }, () => read.guess('close', 0, false, legal, rng).name);
   assert.ok(picks.filter((p) => p === 'retreat').length > picks.filter((p) => p === 'stomp').length);
 });
 
@@ -46,4 +46,10 @@ test('tells: a novice swarmer opens by closing in from beyond Close', () => {
 test('tells: a novice reader opens by intimidating', () => {
   const brain = brainController('reader', 'novice', 7, 1);
   assert.equal(brain.script(viewOf(newBout(WYRM, WYVERN, 5), 'A'))[0].name, 'intimidate');
+});
+
+test('with no habits seen yet, a brain expects a breath at Far when the opponent\'s breath is ready', () => {
+  const read = new Read(viewOf(newBout(WYRM, WYVERN, 7.5), 'A'), 1);
+  const legal = [{ name: 'breath' as const }, { name: 'scales' as const }, { name: 'hold' as const }];
+  assert.equal(read.likeliest('far', 0, true, legal).name, 'breath');
 });

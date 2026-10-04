@@ -33,12 +33,14 @@ interface SkillLevel {
   memory: number;
   /** how often its style's tell shows */
   tell: number;
+  /** counter-scripts it builds against its likeliest guesses, slot by slot in the Referee */
+  counters: number;
 }
 
 const SKILL: Record<Skill, SkillLevel> = {
-  novice: { candidates: 8, guesses: 4, temperature: 0.08, memory: 0.5, tell: 0.9 },
-  adept: { candidates: 14, guesses: 6, temperature: 0.04, memory: 0.8, tell: 0.5 },
-  master: { candidates: 28, guesses: 12, temperature: 0.015, memory: 0.95, tell: 0.15 },
+  novice: { candidates: 8, guesses: 4, temperature: 0.08, memory: 0.5, tell: 0.9, counters: 0 },
+  adept: { candidates: 14, guesses: 6, temperature: 0.04, memory: 0.8, tell: 0.5, counters: 1 },
+  master: { candidates: 28, guesses: 12, temperature: 0.015, memory: 0.95, tell: 0.15, counters: 2 },
 };
 
 /** Which actions each style reaches for first when imagining scripts, by range band. Others still get a look. */
@@ -57,7 +59,11 @@ const bandOf = (sep: number): Band => (sep <= R.MELEE_EDGE ? 'melee' : sep <= R.
 
 // ---------------------------------------------------------------- 1. the read
 
-/** The opponent's habits: how often it used each action, by range band and slot. Old habits fade. */
+/**
+ * The opponent's habits: how often it used each action, by range band, slot, and whether its Breath was
+ * ready. Old habits fade. Guesses start from an informed prior (what is available and sensible at that
+ * range) and lean toward what the opponent has actually shown.
+ */
 export class Read {
   private counts = new Map<string, Map<ActionName, number>>();
 
@@ -65,7 +71,9 @@ export class Read {
     const them = view.opp.side;
     for (const r of view.record) {
       const weight = Math.pow(memory, Math.max(0, view.exchange - r.exchange));
-      for (const key of [`${bandOf(r.separation)}|${r.slot}`, bandOf(r.separation)]) {
+      const band = bandOf(r.separation);
+      const ready = r.breathReady?.[them] ?? false;
+      for (const key of [`${band}|${r.slot}|${ready}`, `${band}|${ready}`, band]) {
         const m = this.counts.get(key) ?? new Map<ActionName, number>();
         m.set(r.actions[them], (m.get(r.actions[them]) ?? 0) + weight);
         this.counts.set(key, m);
@@ -73,14 +81,35 @@ export class Read {
     }
   }
 
-  /** A likely opponent action here. With little to go on it falls back to a broad, plausible prior. */
-  guess(band: Band, slot: number, legal: ActionSpec[], rng: () => number): ActionSpec {
-    const specific = this.counts.get(`${band}|${slot}`);
-    const general = this.counts.get(band);
-    const weights = legal.map((a) => 1 + 3 * (specific?.get(a.name) ?? 0) + (general?.get(a.name) ?? 0));
-    return pick(legal, weights, rng);
+  /** A likely opponent action here, from what it could do and what it has done. */
+  guess(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[], rng: () => number): ActionSpec {
+    return pick(legal, this.weights(band, slot, breathReady, legal), rng);
   }
 
+  /** The single likeliest action here. */
+  likeliest(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[]): ActionSpec {
+    const w = this.weights(band, slot, breathReady, legal);
+    return legal[w.indexOf(Math.max(...w))];
+  }
+
+  private weights(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[]): number[] {
+    const exact = this.counts.get(`${band}|${slot}|${breathReady}`);
+    const ready = this.counts.get(`${band}|${breathReady}`);
+    const general = this.counts.get(band);
+    return legal.map((a) => prior(band, a) + 3 * (exact?.get(a.name) ?? 0) + 2 * (ready?.get(a.name) ?? 0) + (general?.get(a.name) ?? 0));
+  }
+}
+
+/** An educated guess before any habits are known: what a sensible dragon does at this range. */
+function prior(band: Band, a: ActionSpec): number {
+  const table: Record<Band, Partial<Record<ActionName, number>>> = {
+    melee: { claw: 3, bite: 2, stomp: 1.5, scales: 1.5, dodge: 1, retreat: 1, breath: 1 },
+    close: { bite: 3, breath: 2.5, claw: 1, approach: 1.5, strafe: 1.5, scales: 1, retreat: 1 },
+    far: { breath: 4, approach: 2, strafe: 2, retreat: 1, intimidate: 1, leap: 1 },
+    veryFar: { approach: 3, strafe: 1, leap: 1, intimidate: 0.5 },
+  };
+  const base = table[band][a.name] ?? 0.4;
+  return a.charge ? base * 0.5 : a.crunch ? base * 1.5 : base;
 }
 
 function pick<T>(items: T[], weights: number[], rng: () => number): T {
@@ -116,7 +145,29 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   if (ready('dodge')) out.push({ name: 'dodge' });
   if (s.f.sheet.flies && s.z < R.MAX_ALTITUDE) out.push({ name: 'leap' });
   if (s.z > 0) out.push({ name: 'dive' });
+  // A charge takes this slot and the next; it must release by slot 3.
+  if (s.globalSlot % R.SLOTS_PER_EXCHANGE < 2) {
+    out.push({ name: 'bite', charge: true });
+    if ((s.readyAt.breath ?? 0) <= s.globalSlot + 1) out.push({ name: 'breath', charge: true });
+  }
+  // Crunches come only from shards (a Wyrmling-grade crunch needs a landed hit first, so it isn't planned).
+  const grade = (id: string) => s.f.loadout.techniques.find((t) => t.id === id)?.grade;
+  const g1 = grade('raking-talons');
+  if (g1 && g1 !== 'wyrmling') out.push({ name: 'claw', sweep: side(), crunch: true });
+  const g2 = grade('gnashing-teeth');
+  if (g2 && g2 !== 'wyrmling') out.push({ name: 'bite', crunch: true });
   return out;
+}
+
+/** Appends an action to a script being built, filling a charge's release slot too. */
+function place(out: ActionSpec[], s: Situation, a: ActionSpec): Situation {
+  out.push(a);
+  let next = advance(s, a.charge ? { name: 'hold' } : a);
+  if (a.charge && out.length < R.SLOTS_PER_EXCHANGE) {
+    out.push({ name: a.name });
+    next = advance(next, { name: a.name });
+  }
+  return next;
 }
 
 /** Advances the imagined situation past one action: cooldowns and altitude. */
@@ -191,16 +242,17 @@ function boutFromView(view: View): Bout {
 function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter, sep: number, rng: () => number, styled: boolean): ActionSpec[] {
   const out: ActionSpec[] = [];
   let s = situation;
-  for (let i = 0; i < R.SLOTS_PER_EXCHANGE; i++) {
+  while (out.length < R.SLOTS_PER_EXCHANGE) {
     const legal = legalActions(s, rng);
     const leanTable = LEAN[style];
     const lean = typeof leanTable === 'function' ? leanTable(bandOf(sep), s.z > 0, opp.pos.z > 0) : leanTable;
-    const weights = legal.map((a) => (styled ? (lean[a.name] ?? 0.4) : 1));
-    const a = pick(legal, weights, rng);
-    out.push(a);
-    s = advance(s, a);
+    const weights = legal.map((a) => {
+      const w = styled ? (lean[a.name] ?? 0.4) : 1;
+      return a.charge ? w * (style === 'slugger' || style === 'out-boxer' ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
+    });
+    s = place(out, s, pick(legal, weights, rng));
   }
-  return out;
+  return out.slice(0, R.SLOTS_PER_EXCHANGE);
 }
 
 export function brainController(style: BrainStyle, skill: Skill = 'adept', seed = 1, tellOverride?: number): Controller {
@@ -234,18 +286,21 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       for (let i = 0; i < level.candidates; i++) candidates.push(scriptFor(style, mine, view.opp, sep, rng, i < (level.candidates * 2) / 3));
       if (lastScript.length) candidates.push(lastScript);
 
-      // Guesses at the opponent: from the read, slot by slot.
-      const guesses: ActionSpec[][] = [];
-      for (let i = 0; i < level.guesses; i++) {
+      // Guesses at the opponent: from what it could do and what it has shown, slot by slot.
+      const guessScript = (choose: (legal: ActionSpec[], slot: number, ready: boolean) => ActionSpec) => {
         const g: ActionSpec[] = [];
         let s = theirs;
-        for (let slot = 0; slot < R.SLOTS_PER_EXCHANGE; slot++) {
-          const a = read.guess(bandOf(sep), slot, legalActions(s, rng), rng);
-          g.push(a);
-          s = advance(s, a);
+        while (g.length < R.SLOTS_PER_EXCHANGE) {
+          const ready = (s.readyAt.breath ?? 0) <= s.globalSlot;
+          s = place(g, s, choose(legalActions(s, rng), g.length, ready));
         }
-        guesses.push(g);
-      }
+        return g.slice(0, R.SLOTS_PER_EXCHANGE);
+      };
+      const guesses: ActionSpec[][] = [guessScript((legal, slot, ready) => read.likeliest(bandOf(sep), slot, ready, legal))];
+      while (guesses.length < level.guesses) guesses.push(guessScript((legal, slot, ready) => read.guess(bandOf(sep), slot, ready, legal, rng)));
+
+      // Counter-scripts: the best answer, slot by slot, to its likeliest guesses.
+      for (let i = 0; i < Math.min(level.counters, guesses.length); i++) candidates.push(counterScript(style, base, me, them, guesses[i], mine, rng));
 
       const values = candidates.map((c) => {
         let total = 0;
@@ -277,7 +332,10 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt };
       const options = [current[2], ...legalActions(mine, rng).filter((a) => a.name !== current[2].name)];
       let theirOptions = legalActions(theirs, rng);
-      if (revealed) {
+      // A charge on the board releases next slot: no guessing needed.
+      const theirCharge = view.opp.marks.charge;
+      if (theirCharge) theirOptions = [{ name: theirCharge.action, sweep: theirCharge.sweep }];
+      else if (revealed) {
         const r = revealed.toLowerCase();
         const matches = theirOptions.filter((a) => {
           const cat = ACTIONS[a.name].category;
@@ -285,7 +343,8 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
         });
         if (matches.length) theirOptions = matches;
       }
-      const guesses = Array.from({ length: level.guesses }, () => read.guess(bandOf(view.separation), 2, theirOptions, rng));
+      const ready = (view.opp.readyAt.breath ?? 0) <= view.globalSlot;
+      const guesses = Array.from({ length: level.guesses }, () => read.guess(bandOf(view.separation), 2, ready, theirOptions, rng));
       const values = options.map((o, i) => {
         let total = 0;
         for (const g of guesses) {
@@ -301,6 +360,34 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       return options[best];
     },
   };
+}
+
+/** The best answer to one guessed opponent script, chosen slot by slot by playing each option in the Referee. */
+function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, guess: ActionSpec[], mine: Situation, rng: () => number): ActionSpec[] {
+  const b = structuredClone(base);
+  let s = mine;
+  const out: ActionSpec[] = [];
+  for (let i = 0; i < R.SLOTS_PER_EXCHANGE; i++) {
+    if (b.over) {
+      out.push({ name: 'hold' });
+      continue;
+    }
+    let best: ActionSpec = { name: 'hold' };
+    let bestValue = -Infinity;
+    for (const a of legalActions(s, rng).filter((x) => !x.charge)) {
+      const trial = structuredClone(b);
+      const events = simulateSlot(trial, { [me]: a, [them]: guess[i] } as Record<Side, ActionSpec>);
+      const v = value(style, { before: b, after: trial, events, me });
+      if (v > bestValue) {
+        bestValue = v;
+        best = a;
+      }
+    }
+    simulateSlot(b, { [me]: best, [them]: guess[i] } as Record<Side, ActionSpec>);
+    out.push(best);
+    s = advance(s, best);
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------- 5. tells

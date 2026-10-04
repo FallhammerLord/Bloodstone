@@ -35,6 +35,8 @@ A scenario is a small text file in `scenarios/`. Copy one and edit it.
 - **morph:** `true-dragon`, `wyvern`, `wyrm`. **stone:** `water`, `earth`, `fire`, `air`.
 - **exchanges:** three actions per side per exchange. Add more exchanges to fight on toward a KO.
 - **Actions:** `bite`, `claw:left`, `claw:right`, `breath`, `stomp`, `approach`, `retreat`, `strafe:cw`, `strafe:ccw`, `leap`, `dive`, `dodge`, `scales`, `intimidate`, `hold`.
+- **Charges:** `charge:bite` or `charge:breath` takes this slot and the next. The charging slot guards like Scales; a landed hit breaks the charge; the release hits for +3 and can't be revised. No charging in slot 3.
+- **Crunches:** `crunch:claw` or `crunch:bite` puts two attacks in one slot, 15 ticks each, with no modifiers and no chain. Needs Raking Talons (Claw) or Gnashing Teeth (Bite); a Wyrmling-grade one only after a landed hit of that attack in the slot before.
 - **separation** is optional; it defaults to 6.5 paces (Far, just outside Bite range).
 
 **Full bouts.** Add `"bout": true` to play until a KO or the exchange limit (8), with rim pulses in the final three exchanges and the timeout rule at the end. `"exchangeLimit"` changes the limit. `"timeout": "mostWounds"` gives an open-lobby timeout to the dragon with more Wounds; the default is that the challenger forfeits. `"challenged"` is `"A"` or `"B"` (default B). Exchanges you don't script are played by the side's AI, or held.
@@ -78,6 +80,7 @@ Each morph bends one rule (design doc §2). The True Dragon's Aspect is having n
 
 At wyrmling strength (design doc §3):
 - **Water** pushes the target back 1 pace. **Air** shoves it 1 pace sideways. Walls, obstacles and the leash stop the push early.
+- **Breath damage by element:** Water +2, Air +2, Earth +1, Fire −2. Harmless extras earn points; harmful ones cost them.
 - **Fire** leaves a burning zone where it lands; **Earth** leaves a corrosive pool. Zones last through the next slot. A grounded dragon inside one at a slot's end takes 1 damage (burning) or loses 3 Hardness for the next slot (corrosive), whoever breathed it.
 
 ## Obstacles
@@ -99,7 +102,7 @@ A wyrmling's array is one valence of three pips (pips 0, 1 and 2), treated as a 
 ```
 
 - **Body and Bloodstone** (all 40): names carry their grade. Wyrmling, Juvenile and Adult chips add 1, 2 or 3 points on one pip. Elder and Venerable splinters take two pips, add 3 points and a conditional +3 rider; a Venerable adds 1 point of a related attribute. Riders apply in play when their condition holds (half Wounds, aloft, guarding with Scales, a target at a different altitude, a chain's final link, a target at Far, an element that beats your stone).
-- **Techniques** (17 of 20) need a grade. They take one pip (Lance Throat two) and one more at Elder and Venerable. Gnashing Teeth, Raking Talons and Bellows Chest wait for crunch and charge.
+- **Techniques** (all 20) need a grade. They take one pip (Lance Throat and Bellows Chest two) and one more at Elder and Venerable.
 - **Seating locks.** A shard seated over another strips the covered shard's rider first, then its value; a chip covered is destroyed.
 - Supports wait for seams, and Traits are Elder-and-Venerable rule bends; neither is built yet.
 - Strafe shifts for Sidewinder Spine are written `strafe:cw:in` or `strafe:ccw:out`. Baleful Eye's reveal can drive a scripted revision: `"if": "revealed attack"`.
@@ -109,8 +112,8 @@ A wyrmling's array is one valence of three pips (pips 0, 1 and 2), treated as a 
 Brains are AI tamers that think. Give a side `"ai": "swarmer"` (any style below) and optionally `"skill": "novice" | "adept" | "master"` and `"seed"`. See `scenarios/brains.json`.
 
 How a brain decides, each exchange:
-1. **Read.** It tallies the opponent's habits from the public slot record: what it did, by range band and slot. Old habits fade.
-2. **Imagine.** It writes candidate scripts, mostly in its style's lean, and guesses the opponent's scripts from its read. Then it plays each pairing out in a copy of the bout, in the real Referee.
+1. **Read.** It tallies the opponent's habits from the public slot record: what it did, by range band, slot, and whether its Breath was ready. Old habits fade. Before it has seen anything, it guesses from what's available and sensible at that range. A charge on the board is a certainty.
+2. **Imagine.** It writes candidate scripts, mostly in its style's lean, including charges and any crunches its shards allow. Adept and master brains also build counter-scripts against their likeliest guesses, testing each slot in the Referee. Then it plays every candidate against every guess in a copy of the bout.
 3. **Value.** It scores each imagined outcome by its style's priorities.
 4. **Choose.** It picks among good scripts with weighted chance, so it can bluff and isn't perfectly predictable.
 5. **Revise.** At the end of slot 2 it imagines slot 3 again, using a Baleful Eye reveal if it has one, and revises when a new idea is clearly better.
@@ -147,7 +150,7 @@ Each bout's arena gets 0 to 3 seeded boulders. The AIs are crude, so the numbers
 
 ## Not built yet
 
-Supports, Traits, Gnashing Teeth, Raking Talons and Bellows Chest; crunch, charge, compounds; hazards beyond boulders (pits, traps, atmospherics), Salt/Magma/Lightning/Storm breaths, extended morphs, claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
+Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps, atmospherics), Salt/Magma/Lightning/Storm breaths, extended morphs, claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
 
 ## Files
 

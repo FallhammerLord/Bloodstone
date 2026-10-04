@@ -28,8 +28,8 @@ const rng = seededRandom(2026);
 const jobs: Job[] = [];
 const brain = (style: string, seed: number): Player => ({ kind: 'brain', style, skill, seed });
 const crude = (style: string, seed: number): Player => ({ kind: 'crude', style, skill, seed });
-const add = (group: string, A: FighterSetup, B: FighterSetup, playerA: Player, playerB: Player) =>
-  jobs.push({ id: jobs.length, group, A, B, playerA, playerB, challenged: jobs.length % 2 ? 'A' : 'B', arenaSeed: jobs.length * 31 + 7 });
+const add = (group: string, A: FighterSetup, B: FighterSetup, playerA: Player, playerB: Player, challenged?: Side) =>
+  jobs.push({ id: jobs.length, group, A, B, playerA, playerB, challenged: challenged ?? (jobs.length % 2 ? 'A' : 'B'), arenaSeed: jobs.length * 31 + 7 });
 
 // 1. Thinking against habit: a balanced brain against each crude style, every pairing against every other.
 for (const a of pairings) for (const b of pairings) {
@@ -43,7 +43,7 @@ for (const sa of BRAIN_STYLES) for (const sb of BRAIN_STYLES) {
   if (sa === sb) continue;
   for (let i = 0; i < 12; i++) {
     const p = pairings[Math.floor(rng() * pairings.length)].setup;
-    add(`style|${sa}|${sb}`, p, p, brain(sa, jobs.length), brain(sb, jobs.length + 1));
+    add(`style|${sa}|${sb}`, p, p, brain(sa, jobs.length), brain(sb, jobs.length + 1), i % 2 ? 'A' : 'B');
   }
 }
 // 3. Pairings when both sides think, with random styles.
@@ -53,6 +53,19 @@ for (const a of pairings) for (const b of pairings) {
     const s1 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
     const s2 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
     add(`pair|${a.label}|${b.label}`, a.setup, b.setup, brain(s1, jobs.length), brain(s2, jobs.length + 1));
+  }
+}
+
+// 4. Crunchlings: identical dragons, one carrying Raking Talons (Juvenile), the other nothing.
+for (const p of pairings) {
+  for (let i = 0; i < 12; i++) {
+    const crunchling: FighterSetup = { ...p.setup, shards: [{ shard: 'Raking Talons', grade: 'juvenile', pips: [0] }] };
+    const s1 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
+    const s2 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
+    // The crunchling sits on each side equally, and is the challenged dragon half the time (timeouts go to the challenged).
+    const challenged: Side = i % 4 < 2 ? 'A' : 'B';
+    if (i % 2) add('crunch|A', crunchling, p.setup, brain(s1, jobs.length), brain(s2, jobs.length + 1), challenged);
+    else add('crunch|B', p.setup, crunchling, brain(s1, jobs.length), brain(s2, jobs.length + 1), challenged);
   }
 }
 
@@ -76,8 +89,8 @@ for (const r of results) {
   ex += r.exchanges;
 }
 console.log(`Endings: ${ends.ko} KO, ${ends.pulse} rim-pulse KO, ${ends.timeout} timeout. Average ${(ex / results.length).toFixed(1)} exchanges per bout.`);
-const st = results.reduce((a, r) => a.map((v, i) => v + r.stats[i]), [0, 0, 0, 0, 0, 0]);
-console.log(`Breath lands ${pct(st[1], st[0])} of the time and deals ${pct(st[2], st[3])} of all damage. Scales is chosen in ${pct(st[4], st[5])} of slots.`);
+const st = results.reduce((a, r) => a.map((v, i) => v + r.stats[i]), [0, 0, 0, 0, 0, 0, 0, 0]);
+console.log(`Breath lands ${pct(st[1], st[0])} of the time and deals ${pct(st[2], st[3])} of all damage. Scales is chosen in ${pct(st[4], st[5])} of slots; charges in ${pct(st[6], st[5])}.`);
 
 // 1.
 const crudeJobs = jobs.filter((j) => j.group === 'crude');
@@ -167,3 +180,24 @@ console.log('\n  By morph:');
 for (const [k, t] of group((l) => l.split(' + ')[0])) console.log(`    ${pct(t.w, t.n)}  ${k}`);
 console.log('  By stone:');
 for (const [k, t] of group((l) => l.split(' + ')[1])) console.log(`    ${pct(t.w, t.n)}  ${k}`);
+
+// 4.
+const crunchJobs = jobs.filter((j) => j.group.startsWith('crunch|'));
+let cw = 0;
+let cDealt = 0;
+let pDealt = 0;
+let crunchSlots = 0;
+let slots = 0;
+for (const j of crunchJobs) {
+  const r = byId.get(j.id)!;
+  const side = j.group.split('|')[1] as Side;
+  const plain: Side = side === 'A' ? 'B' : 'A';
+  if (r.winner === side) cw++;
+  cDealt += r.dealt[side];
+  pDealt += r.dealt[plain];
+  crunchSlots += r.stats[7];
+  slots += r.stats[5] / 2;
+}
+console.log('\n── Crunchlings (Raking Talons, Juvenile) against identical plain dragons ──');
+console.log(`  The crunchling wins ${pct(cw, crunchJobs.length)} of ${crunchJobs.length} bouts and crunches in ${pct(crunchSlots, slots)} of its slots.`);
+console.log(`  Damage dealt per bout: crunchling ${(cDealt / crunchJobs.length).toFixed(1)}, plain ${(pDealt / crunchJobs.length).toFixed(1)}.`);
