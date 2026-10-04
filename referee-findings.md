@@ -1,6 +1,48 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 4: attack roles
+
+The goal: each attack catches one form of evasion. Claw catches strafes, Bite catches retreats and armor, Breath catches dodges, Stomp catches burrows and the grounded. Four [Proposed] changes went in behind a switch (`REFEREE_VARIANT`) and were added one per run, master skill, 1,752 bouts each:
+1. **Charge:** Breath must charge. A plain Breath is read as a charge; slot 3 can't start one.
+2. **Tracking:** a Bite begun at Close re-aims as its wind-up ends, and a strafe's Evasion doesn't apply to it. Melee strafes still escape.
+3. **Lunge:** a Bite carries the dragon up to 1 pace along its aim during its wind-up, and a retreat's Evasion doesn't apply to it.
+4. **Elemental bite:** a Bite carries the stone matchup (±3) unless the biter has a Breath charged.
+
+**A premise correction from building it.** A strafe or retreat escapes a Bite through the Evasion test (Evasion above Accuracy while moving), not through geometry. Probes showed pure re-aiming changed nothing against Wyvern and Wyrm strafes, so tracking and lunge were built to skip that Evasion. Claw also tests Evasion against strafes, so "Claw catches strafes" is not built yet; only Scything Forelimbs Elder touches it.
+
+| | Base | +Charge | +Tracking | +Lunge | +Elemental |
+|---|---|---|---|---|---|
+| Breath's share of damage | 63% | 69% | 68% | 25% | 25% |
+| Bite's share | 27% | 22% | 24% | 55% | 55% |
+| Claw's share | 10% | 9% | 9% | 20% | 20% |
+| Breath lands | 59% | 68% | 69% | 65% | 64% |
+| Bite lands | 39% | 34% | 24% | 40% | 40% |
+| Claw lands | 55% | 57% | 57% | 73% | 74% |
+| Timeouts | 28% | 23% | 22% | 16% | 16% |
+| Exchanges per bout | 5.6 | 5.6 | 5.5 | 4.5 | 4.5 |
+| Scales use | 5% | 2% | 2% | 2% | 2% |
+| breath-focus | 48% | 46% | 44% | 31% | 31% |
+| claw-focus | 44% | 40% | 40% | 54% | 54% |
+| bite-focus | 34% | 38% | 39% | 40% | 40% |
+| Morphs (TD / Wyrm / Wyvern) | 47 / 52 / 52 | 51 / 49 / 50 | 50 / 49 / 52 | 56 / 55 / 39 | 55 / 57 / 39 |
+| Air (top stone) | 60% | 62% | 61% | 68% | 68% |
+| Pairing spread | 33–68% | 33–67% | 33–68% | 24–79% | 29–80% |
+| Crunchling vs plain | 54% | 60% | 55% | 70% | 70% |
+
+**Attribution:**
+- **Charge made Breath stronger, not weaker.** The release's +3 and the charging slot's Scales guard outweigh the lost tempo; Breath lands more (68%) and its share rose to 69%. Timeouts fell 5 points. Scales use halved, since the charging slot already guards. Morphs tightened to 49–51%.
+- **Tracking alone barely moved anything.** Bite's land rate fell (34% → 24%): brains bite more at Close and still meet dodges and Melee strafes. Bite-focus gained 1 point.
+- **The lunge is the big lever, and it overshoots.** Breath falls to 25% of damage, Bite rises to 55%, fights end an exchange sooner, timeouts drop to 16%. The Dragonseeds range trap is gone. The cost: every Bite is also a free 1-pace approach, so the swarmer and claw-focus climb, crunchlings jump to 70%, and the Wyvern collapses to 39% (its Evasion was its defense against being run down). Breath-focus falls to 31%.
+- **Elemental bite is a wash in aggregate.** Among the four built stones, each beats one and loses to one, so ±3 cancels across stones. It nudges single pairings (Wyvern + Fire 24% → 29%). Salt, Magma, Lightning and Storm would change that.
+
+**Open questions for the project chat:**
+- **Scope the lunge.** Candidates: lunge only when the Bite begins at Close (where Bite lives); lunge ½ pace; keep the carry but drop the Evasion skip. Each answers "catches retreats" with less tempo.
+- **Charge as built rewards Breath.** If the intent was a tempo tax, the charged release should lose the +3 when charging is mandatory, or the charging slot should lose its Scales guard.
+- **Wyvern needs an answer to the lunge** if it stays: a Leap or airborne target might escape it.
+- **Claw's strafe-catching role** needs its own rule: for example, Claw skips a strafe's Evasion at Melee, mirroring tracking at Close.
+- Infuse refocusing on Claw waits on Supports, which aren't built.
+
 ## Round 3: focus brains
 
 Three new brains attack with one thing only, and use every move, guard and Intimidate to serve it: **claw-focus** (Melee), **bite-focus** (Close), **breath-focus** (Far). They joined the style-against-style matrix on identical dragons (24 bouts per pairing of styles, so ±10 points is noise).
@@ -12,7 +54,7 @@ Three new brains attack with one thing only, and use every move, guard and Intim
 | bite-focus | 34% | 34% | 32% |
 
 - **Breath alone nearly holds its own.** A dragon that only ever breathes wins about half its bouts against brains using everything. More evidence that Breath carries the game.
-- **Bite alone is the weakest plan,** even after piercing. It needs Close range and a narrow line, and strafes slip it during the wind-up.
+- **Bite alone is the weakest plan,** even after piercing. It needs Close range and a narrow line, and moving targets escape it through Evasion (see Round 4).
 - **Claw-only beats the other focus brains at master (63%)**: the long active window catches movement.
 - With focus brains in the mix, Breath's share of all damage reads 63–64%.
 - **General styles at master:** aerialist 62%, out-boxer 56%, counterpuncher 56%, slugger 55%, swarmer 50%, reader 48%, boxer-puncher 47%.
