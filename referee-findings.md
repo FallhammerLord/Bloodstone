@@ -1,6 +1,48 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 5: charge and lunge, reworked
+
+Settled from Round 4:
+- Hits resolve in layers: geometry first, then Accuracy against Evasion, then Acumen. A swift dragon reaching safe geometry before the active window is intended. Round 4's Evasion skips are gone.
+- Tracking is dropped. Bite stays a straight line.
+- A one-slot charge releases with no bonus. Holding a charge a second slot (Bite or Breath, slots 1–2, release in 3) earns +3. Bellows Chest restores the +3 on any Breath charge and then adds its own; its 2-pip size is its price.
+- The lunge needs an Approach that moved in the slot before, and is geometry only.
+
+Probes: a Bite chain against a retreating Wyrm hits at Melee, hits at Close, and misses once it reaches Far. Approach then Bite catches a retreating Wyrm one pace farther out than before; a Wyvern still outruns it.
+
+**Results (master, 1,752 bouts per run, one change added per run):**
+
+| | Base | +Charge | +Lunge | +Elemental |
+|---|---|---|---|---|
+| Breath's share of damage | 63% | 55% | 45% | 46% |
+| Bite's share | 27% | 35% | 42% | 42% |
+| Claw's share | 10% | 11% | 12% | 12% |
+| Breath lands | 59% | 71% | 70% | 70% |
+| Bite lands | 39% | 40% | 45% | 45% |
+| Timeouts | 28% | 33% | 29% | 29% |
+| Exchanges per bout | 5.6 | 6.0 | 5.7 | 5.7 |
+| Bites right after an Approach | 13% | 13% | 14% | 13% |
+| breath-focus | 48% | 43% | 34% | 34% |
+| claw-focus | 44% | 44% | 47% | 47% |
+| bite-focus | 34% | 53% | 67% | 67% |
+| Morphs (TD / Wyrm / Wyvern) | 47 / 52 / 52 | 49 / 52 / 49 | 51 / 52 / 47 | 51 / 52 / 48 |
+| Air / Fire (top and bottom stones) | 60 / 49 | 59 / 44 | 64 / 39 | 65 / 39 |
+| Pairing spread | 33–68% | 38–67% | 32–70% | 33–73% |
+| Crunchling vs plain | 54% | 57% | 58% | 58% |
+
+**Attribution:**
+- **Charge without the free +3 does what Round 4's didn't.** Breath's share falls 63% → 55% and Bite's rises 27% → 35%. Breath lands more often (71%): brains charge when it's safe, and the charging slot guards. Bite-focus jumps 34% → 53%, since a charging dragon stands still. That fits "Approach and lunge counter a charged Breath." Timeouts rise 5 points; bouts run longer when every Breath costs two slots.
+- **The gated lunge shifts damage without the Round 4 collapse.** Breath falls to 45% and Bite rises to 42%; the three attacks now split damage. Morphs stay within 47–52%: the Wyvern holds at 47% (it was 39% with the ungated lunge). The setup is rarely free: only 13–14% of Bites follow an Approach in every run.
+- **Bite-focus overshoots: 67% overall, 65% against general styles.** The focus brain approaches and then bites on purpose; general brains do it about 1 time in 7. Before tuning the lunge down, it's worth teaching general styles the Approach-Bite sequence. A ½-pace lunge is the fallback.
+- **Elemental bite is still a wash in aggregate**, as in Round 4: on the four built stones each beats one and loses to one. The style matrix uses identical dragons, so it can't move there at all.
+- **Fire keeps sliding (49% → 39%).** Mandatory charge hits Fire hardest: its −2 breath and small blast make two slots for one Breath a poor trade. Air (wide cone, shove) stays on top at 64–65%.
+
+**Open questions:**
+- Teach general brains the Approach-Bite sequence, then rerun before touching the lunge's size.
+- Fire under mandatory charge: lift the −2, or give its burning zone more weight.
+- Timeouts went up with charge (33%); the lunge pulls them back to 29%. Still above the 25% we were aiming under.
+
 ## Round 4: attack roles
 
 The goal: each attack catches one form of evasion. Claw catches strafes, Bite catches retreats and armor, Breath catches dodges, Stomp catches burrows and the grounded. Four [Proposed] changes went in behind a switch (`REFEREE_VARIANT`) and were added one per run, master skill, 1,752 bouts each:
