@@ -1,6 +1,27 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 8: Water's Claw back to 3, Fire's burn to 3
+
+Changes from Round 7: Water's Claw returns to 3 (its valley; Air's Claw of 9 is its stone peak, not a boost), and Fire's burning zone deals 3 at slot's end instead of 1 (up to 6 if the target stays grounded in it through the next slot). Fire keeps its −2 Breath. Master, 1,752 bouts.
+
+| | Round 7 | Round 8 |
+|---|---|---|
+| Damage: Breath / Bite / Claw | 34 / 38 / 28% | 35 / 42 / 23% |
+| Timeouts | 14% | 14% |
+| Stones (Air / Fire / Earth / Water) | 65 / 46 / 44 / 45 | 65 / 49 / 48 / 37 |
+| Morphs (TD / Wyrm / Wyvern) | 47 / 59 / 44 | 47 / 57 / 45 |
+| claw-focus / bite-focus / breath-focus | 59 / 40 / 30% | 58 / 40 / 34% |
+| Top / bottom pairing | Wyrm + Air 77% / Wyvern + Earth 30% | Wyrm + Air 74% / Wyvern + Earth 35% |
+| Crunchling vs plain | 74% | 74% |
+
+- **Fire recovered to 49%**, now second among the stones. Breath-focus rose 4 points.
+- **Water fell to 37%** without its Claw raise. Its strengths (Affinity, Breath 9) don't carry it yet.
+- **Air still leads at 65%, and Wyrm + Air at 74%.** That pairing isn't a Claw story: the Wyrm dislikes Air, so the swing moves 3 from Claw into Hardness, making it the only dragon with Hardness 9. Bites pierce to 6, a plain Claw of 6 does nothing, and a pounce does 3. Wyrm + Earth (Hardness 6, Bite 12) is second at 65%.
+- **Crunchlings hold at 74%.** Raking Talons needs its own look.
+
+**Next levers:** cap the disliked swing on Hardness (a disliked Wyrm gains Wounds instead), or raise pierce against Hardness 6 and above. Then Water, then Raking Talons.
+
 ## Round 7: Breath charge optional again
 
 The only change from Round 6: a plain Breath fires in one slot again. Everything else stays: two-slot charges earn +3 (a one-slot charge earns nothing), Bellows Chest restores the +3, lunge and pounce are on, Water's Claw is 6, and brains plan setups. Master, 1,752 bouts.
