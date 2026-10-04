@@ -40,7 +40,7 @@ test('neutral pairings keep the base tables', () => {
   const h = hatch('true-dragon', 'water');
   assert.equal(h.preference, 'neutral');
   assert.deepEqual([h.wounds, h.evasion, h.hardness, h.accuracy], [36 + 9, 3, 3, 6]);
-  assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [3, 9, 9, 6]);
+  assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [6, 9, 9, 6]);
 });
 
 test('element wheel: each element beats the three clockwise of it; opposites are neutral', () => {

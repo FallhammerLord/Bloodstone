@@ -58,8 +58,10 @@ export interface Marks {
   charge: { action: 'bite' | 'breath'; sweep?: 'left' | 'right'; slots: number } | null;
   /** an Approach that moved last slot: the next Bite lunges [Proposed] */
   advanced: boolean;
+  /** a Strafe that moved last slot: the next Claw pounces [Proposed] */
+  strafed: boolean;
 }
-const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false });
+const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false });
 
 export interface Chain {
   action: ActionName | null;
@@ -242,10 +244,12 @@ interface Plan {
   intimidateBonus: boolean;
   /** a Wyvern stoop: flies from the air to land at Melee during the wind-up */
   stoop: { from: Vec; to: Vec; target: Vec } | null;
-  /** a lunging Bite [Proposed]: carries the dragon forward during its wind-up */
-  lunge: { from: Vec; to: Vec } | null;
+  /** a lunging Bite (during the wind-up) or a pouncing Claw (during the active window) [Proposed] */
+  carry: { kind: 'lunge' | 'pounce'; from: Vec; to: Vec } | null;
   /** this Bite follows an Approach and may lunge [Proposed] */
   lunges: boolean;
+  /** this Claw follows a Strafe: it pounces and pierces [Proposed] */
+  pounces: boolean;
   /** Sidewinder Spine: distance to shift along the line while strafing, and how far it has */
   shiftTotal: number;
   shifted: number;
@@ -346,6 +350,9 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   // Lunge [Proposed]: a Bite right after an Approach that moved carries the dragon forward.
   const lunges = R.VARIANT.biteLunge && f.marks.advanced;
   f.marks.advanced = false;
+  // Pounce [Proposed]: a Claw right after a Strafe that moved.
+  const pounces = R.VARIANT.clawPounce && f.marks.strafed;
+  f.marks.strafed = false;
   // Mandatory charge [Proposed]: a Breath always takes two slots.
   if (R.VARIANT.breathCharge && spec.name === 'breath' && !spec.charge && !spec.released) {
     spec = { ...spec, charge: true };
@@ -480,7 +487,8 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   return {
     spec, windup: w0, active: a0, recovery: r0, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null, lunge: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
+    pounces: pounces && spec.name === 'claw' && !spec.crunch,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
     charging, halves, landedHalves: 0,
   };
@@ -656,6 +664,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     }
     bout.history[s].push(p.spec.name);
     f.marks.advanced = p.spec.name === 'approach' && p.converted === null && p.moved > 0;
+    f.marks.strafed = p.spec.name === 'strafe' && p.converted === null && p.moved > 0;
   }
   bout.record.push({
     exchange: bout.exchange, slot, separation: startSep, z: startZ, wounds: startWounds,
@@ -683,16 +692,16 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   // 1. Movement, both dragons from the same starting positions.
   const next = { A: moveStep(F.A, F.B, plans.A, plans.B, t, ev), B: moveStep(F.B, F.A, plans.B, plans.A, t, ev) };
   for (const s of SIDES) next[s] = stoopStep(F[s], plans[s], t, next[s]);
-  for (const s of SIDES) next[s] = lungeStep(plans[s], t, next[s]);
+  for (const s of SIDES) next[s] = carryStep(plans[s], t, next[s]);
   for (const s of SIDES) {
     // Obstacles restrict movement [Doc]; a blocked move defaults to a dodge.
     const o = next[s] !== F[s].pos ? obstacleAt(bout.arena, next[s]) : null;
     if (o) {
       next[s] = F[s].pos;
-      if (plans[s].stoop || plans[s].lunge) {
-        ev.push({ kind: 'note', tick: t, side: s, text: `The ${plans[s].stoop ? 'stoop' : 'lunge'} is cut short by ${describeObstacle(o)}.` });
+      if (plans[s].stoop || plans[s].carry) {
+        ev.push({ kind: 'note', tick: t, side: s, text: `The ${plans[s].stoop ? 'stoop' : plans[s].carry!.kind} is cut short by ${describeObstacle(o)}.` });
         plans[s].stoop = null;
-        plans[s].lunge = null;
+        plans[s].carry = null;
       } else {
         plans[s].converted = 'dodge';
         ev.push({ kind: 'note', tick: t, side: s, text: `Blocked by ${describeObstacle(o)}; converts to a dodge.` });
@@ -704,10 +713,10 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     for (const s of SIDES) {
       if (next[s] !== F[s].pos) {
         next[s] = F[s].pos;
-        if (plans[s].stoop || plans[s].lunge) {
-          ev.push({ kind: 'note', tick: t, side: s, text: `The ${plans[s].stoop ? 'stoop' : 'lunge'} is cut short by the other body.` });
+        if (plans[s].stoop || plans[s].carry) {
+          ev.push({ kind: 'note', tick: t, side: s, text: `The ${plans[s].stoop ? 'stoop' : plans[s].carry!.kind} is cut short by the other body.` });
           plans[s].stoop = null;
-          plans[s].lunge = null;
+          plans[s].carry = null;
         } else {
           plans[s].converted = 'dodge';
           ev.push({ kind: 'note', tick: t, side: s, text: 'Blocked by the other body; converts to a dodge.' });
@@ -733,9 +742,13 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       ev.push({ kind: 'aim', tick: t, side: s, action: p.spec.name, distance: len(p.aim) });
       if (!p.halves) beginStoop(F[s], F[other(s)], p, t, ev);
       if (p.lunges && t === 0) beginLunge(F[s], p, ev);
+      if (p.pounces && t === 0 && !p.stoop) beginPounce(F[s], p, ev);
+      if (p.pounces && t === 0 && p.stoop) ev.push({ kind: 'note', tick: t, side: s, text: 'Strafed into the stoop: it pounces, and pierces.' });
     }
     // A lunging Bite strikes from where the wind-up carried it, along the line it locked.
     if (p.lunges && t === p.windup && phase(p, t) === 'active') p.origin = { ...F[s].pos };
+    // A pouncing Claw sweeps its arc from wherever the pounce has carried it, tick by tick.
+    if (p.pounces && !p.stoop && phase(p, t) === 'active') p.origin = { ...F[s].pos };
     // A stooping Wyvern strikes from wherever it actually landed, toward where the target stood.
     if (p.stoop && t === p.windup && phase(p, t) === 'active') {
       p.origin = { ...F[s].pos };
@@ -981,8 +994,10 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     }
     case 'claw': {
       const claw = eff(att, 'claw', { link: p.spec.revised ? 0 : p.link });
-      v = claw.value - hardness;
-      parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}`);
+      // A pounce out of a strafe pierces like a Bite [Proposed].
+      const felt = p.pounces ? Math.max(0, hardness - R.POUNCE_PIERCE) : hardness;
+      v = claw.value - felt;
+      parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}${p.pounces && hardness ? ` pierced to ${felt} (pounce)` : ''}`);
       // Ratchet Claws: an escalating chain. Each landed link adds to the next (Wyrmling: only into the third).
       const rat = tech(att, 'ratchet-claws');
       const prior = p.link - 1;
@@ -1267,17 +1282,41 @@ function beginLunge(att: Fighter, p: Plan, ev: Event[]) {
   const ahead = flat(p.aim);
   const room = Math.min(R.BITE_LUNGE, Math.max(0, flatLen(ahead) - R.BODY_GAP));
   if (room <= 0 || flatLen(ahead) === 0) return;
-  let to = add(att.pos, scaleTo(ahead, room));
-  if (flatLen(to) > R.ARENA_RADIUS) to = { ...scaleTo(flat(to), R.ARENA_RADIUS), z: att.pos.z };
-  p.lunge = { from: { ...att.pos }, to };
-  ev.push({ kind: 'note', tick: 0, side: att.side, text: `Lunges ${(dist(att.pos, to) / R.PACE).toFixed(1)} paces into the Bite.` });
+  p.carry = { kind: 'lunge', from: { ...att.pos }, to: carryTo(att, ahead, room) };
+  ev.push({ kind: 'note', tick: 0, side: att.side, text: `Lunges ${(dist(att.pos, p.carry.to) / R.PACE).toFixed(1)} paces into the Bite.` });
 }
 
-function lungeStep(p: Plan, t: number, fallback: Vec): Vec {
-  if (!p.lunge || t === 0 || phase(p, t) !== 'windup') return fallback;
-  const span = Math.max(1, p.windup - 1);
-  const { from, to } = p.lunge;
-  const k = Math.min(t, span);
+/**
+ * Pounce [Proposed]: a Claw right after a Strafe advances up to one band along its locked line during
+ * the active window, sweeping its arc as it goes, and pierces 3 Hardness. It stops at the stoop's landing
+ * distance from where the target stood; a grounded Wyvern's short Claw pounces too. An airborne Wyvern
+ * that strafes into a stoop gets the pierce on the stoop instead.
+ */
+function beginPounce(att: Fighter, p: Plan, ev: Event[]) {
+  if (!p.aim) return;
+  const ahead = flat(p.aim);
+  const room = Math.min(R.POUNCE_REACH, Math.max(0, flatLen(ahead) - R.STOOP_LANDING));
+  if (room <= 0 || flatLen(ahead) === 0) {
+    ev.push({ kind: 'note', tick: 0, side: att.side, text: 'Pounces from the strafe, already in reach.' });
+    return;
+  }
+  p.carry = { kind: 'pounce', from: { ...att.pos }, to: carryTo(att, ahead, room) };
+  ev.push({ kind: 'note', tick: 0, side: att.side, text: `Pounces ${(dist(att.pos, p.carry.to) / R.PACE).toFixed(1)} paces out of the strafe.` });
+}
+
+function carryTo(att: Fighter, ahead: Vec, room: number): Vec {
+  const to = add(att.pos, scaleTo(ahead, room));
+  return flatLen(to) > R.ARENA_RADIUS ? { ...scaleTo(flat(to), R.ARENA_RADIUS), z: att.pos.z } : to;
+}
+
+/** Where a lunge or pounce has carried the dragon this tick: a lunge across the wind-up, a pounce across the active window. */
+function carryStep(p: Plan, t: number, fallback: Vec): Vec {
+  if (!p.carry) return fallback;
+  const lunge = p.carry.kind === 'lunge';
+  if (lunge ? t === 0 || phase(p, t) !== 'windup' : phase(p, t) !== 'active') return fallback;
+  const span = lunge ? Math.max(1, p.windup - 1) : Math.max(1, p.active);
+  const k = lunge ? Math.min(t, span) : Math.min(t - p.windup + 1, span);
+  const { from, to } = p.carry;
   return vec(from.x + Math.trunc(((to.x - from.x) * k) / span), from.y + Math.trunc(((to.y - from.y) * k) / span), from.z);
 }
 

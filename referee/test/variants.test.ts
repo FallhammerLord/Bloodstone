@@ -10,7 +10,7 @@ import * as R from '../src/rules.ts';
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
 const WYVERN: FighterSetup = { name: 'Gale', morph: 'wyvern', stone: 'earth' };
 const WYRM: FighterSetup = { name: 'Coil', morph: 'wyrm', stone: 'earth' };
-const OFF = { breathCharge: false, biteLunge: false };
+const OFF = { breathCharge: false, biteLunge: false, clawPounce: false };
 afterEach(() => Object.assign(R.VARIANT, OFF));
 const run = (flags: Partial<typeof OFF>, b: FighterSetup, sep: number, A: string[], B: string[]) => {
   Object.assign(R.VARIANT, OFF, flags);
@@ -88,4 +88,33 @@ test('only the first Bite after an Approach lunges', () => {
 test('lunge stops at the other body', () => {
   const { ev } = run({ biteLunge: true }, TD_WATER, 2.5, ['approach', 'bite'], ['hold', 'hold']);
   assert.ok(ev.some((e) => e.kind === 'note' && /^Lunges 0\.\d/.test(e.text)));
+});
+
+test('pounce: a Claw right after a Strafe reaches from Close, and pierces', () => {
+  assert.deepEqual(slots({}, WYRM, 5, ['strafe:cw', 'claw:left'], ['hold', 'hold']), [0, 0]);
+  Object.assign(R.VARIANT, OFF, { clawPounce: true });
+  const bout = newBout(TD_WATER, WYRM, 5);
+  simulateSlot(bout, { A: parseAction('strafe:cw'), B: parseAction('hold') });
+  const ev = simulateSlot(bout, { A: parseAction('claw:left'), B: parseAction('hold') });
+  assert.equal(hits(ev).length, 1);
+  assert.equal(hits(ev)[0].damage, 6 - (6 - R.POUNCE_PIERCE), 'Claw 6 against the Wyrm\'s Hardness 6, pierced to 3');
+});
+
+test('pounce: only the Claw right after the Strafe', () => {
+  const { ev } = run({ clawPounce: true }, WYRM, 2, ['strafe:cw', 'claw:left', 'claw:left'], ['hold', 'hold', 'hold']);
+  assert.equal(ev.filter((e) => e.kind === 'note' && e.text.startsWith('Pounces')).length, 1);
+});
+
+test('pounce is geometry only: a swift retreat still escapes it', () => {
+  assert.deepEqual(slots({ clawPounce: true }, WYVERN, 5, ['strafe:cw', 'claw:left'], ['hold', 'retreat']), [0, 0]);
+});
+
+test('an airborne Wyvern that strafes into its stoop pierces', () => {
+  Object.assign(R.VARIANT, OFF, { clawPounce: true });
+  const bout = newBout(WYVERN, WYRM, 6);
+  simulateSlot(bout, { A: parseAction('leap'), B: parseAction('hold') });
+  simulateSlot(bout, { A: parseAction('strafe:cw'), B: parseAction('hold') });
+  const ev = simulateSlot(bout, { A: parseAction('claw:left'), B: parseAction('hold') });
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Strafed into the stoop')));
+  assert.ok(hits(ev)[0].parts.some((x) => x.includes('pierced')));
 });

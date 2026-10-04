@@ -175,6 +175,11 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
     out.push({ name: 'bite', charge: true });
     if ((s.readyAt.breath ?? 0) <= s.globalSlot + 1) out.push({ name: 'breath', charge: true });
   }
+  // Setups: an Approach makes the next Bite lunge; a Strafe makes the next Claw pounce. Both take two slots.
+  if (s.globalSlot % R.SLOTS_PER_EXCHANGE < 2) {
+    if (R.VARIANT.biteLunge) out.push({ name: 'bite', setup: 'approach' });
+    if (R.VARIANT.clawPounce) out.push({ name: 'claw', sweep: side(), dir: turn(), setup: 'strafe' });
+  }
   // With the charge variant, a charge held two slots earns the bonus; it must start in slot 1.
   if (R.VARIANT.breathCharge && s.globalSlot % R.SLOTS_PER_EXCHANGE === 0) {
     out.push({ name: 'bite', charge: true, long: true });
@@ -194,6 +199,12 @@ function place(out: ActionSpec[], s: Situation, a: ActionSpec): Situation {
   if (a.long) {
     out.push({ name: a.name, charge: true });
     s = advance(s, { name: 'hold' });
+  }
+  if (a.setup) {
+    const move: ActionSpec = a.setup === 'strafe' ? { name: 'strafe', dir: a.dir } : { name: 'approach' };
+    out.push(move);
+    s = advance(s, move);
+    a = { name: a.name, sweep: a.sweep };
   }
   out.push(a.long ? { name: a.name, charge: true } : a);
   let next = advance(s, a.charge ? { name: 'hold' } : a);
@@ -290,7 +301,8 @@ function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter, sep: n
     const leanTable = LEAN[style];
     const lean = typeof leanTable === 'function' ? leanTable(bandOf(sep), s.z > 0, opp.pos.z > 0) : leanTable;
     const weights = legal.map((a) => {
-      const w = styled ? (lean[a.name] ?? 0.4) : 1;
+      // A setup sequence is weighed by the style's taste for both halves, so each style keeps its flavor.
+      const w = styled ? (a.setup ? ((lean[a.setup] ?? 0.4) + (lean[a.name] ?? 0.4)) / 2 : (lean[a.name] ?? 0.4)) : 1;
       return a.charge ? w * (style === 'slugger' || style === 'out-boxer' || (R.VARIANT.breathCharge && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
     });
     s = place(out, s, pick(legal, weights, rng));
@@ -373,7 +385,7 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const them = view.opp.side;
       const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt };
       const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt };
-      const options = [current[2], ...legalActions(mine, rng).filter((a) => a.name !== current[2].name && allowed(style, a))];
+      const options = [current[2], ...legalActions(mine, rng).filter((a) => !a.charge && !a.setup && a.name !== current[2].name && allowed(style, a))];
       let theirOptions = legalActions(theirs, rng);
       // A charge on the board releases next slot: no guessing needed.
       const theirCharge = view.opp.marks.charge;
@@ -418,14 +430,17 @@ function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, gues
     let best: ActionSpec = { name: 'hold' };
     let bestValue = -Infinity;
     // Under mandatory charge a Breath is weighed across both its slots, per slot.
-    const twoSlot = (x: ActionSpec) => x.charge === true && !x.long && x.name === 'breath' && R.VARIANT.breathCharge && i + 1 < R.SLOTS_PER_EXCHANGE;
-    for (const a of legalActions(s, rng).filter((x) => (!x.charge || twoSlot(x)) && allowed(style, x))) {
+    // Two-slot ideas (a mandatory Breath charge, a setup and its strike) are weighed across both slots, per slot.
+    const twoSlot = (x: ActionSpec) => i + 1 < R.SLOTS_PER_EXCHANGE && ((x.charge === true && !x.long && x.name === 'breath' && R.VARIANT.breathCharge) || x.setup !== undefined);
+    const first = (x: ActionSpec): ActionSpec => (x.setup === 'strafe' ? { name: 'strafe', dir: x.dir } : x.setup === 'approach' ? { name: 'approach' } : x);
+    const second = (x: ActionSpec): ActionSpec => (x.setup ? { name: x.name, sweep: x.sweep } : { name: 'breath' });
+    for (const a of legalActions(s, rng).filter((x) => (!(x.charge || x.setup) || twoSlot(x)) && allowed(style, x))) {
       const trial = structuredClone(b);
-      const events = simulateSlot(trial, { [me]: a, [them]: guess[i] } as Record<Side, ActionSpec>);
+      const events = simulateSlot(trial, { [me]: first(a), [them]: guess[i] } as Record<Side, ActionSpec>);
       let v = value(style, { before: b, after: trial, events, me });
       if (twoSlot(a) && !trial.over) {
         const mid = structuredClone(trial);
-        const more = simulateSlot(trial, { [me]: { name: 'breath' }, [them]: guess[i + 1] } as Record<Side, ActionSpec>);
+        const more = simulateSlot(trial, { [me]: second(a), [them]: guess[i + 1] } as Record<Side, ActionSpec>);
         v = (v + value(style, { before: mid, after: trial, events: more, me })) / 2;
       }
       if (v > bestValue) {
@@ -433,14 +448,16 @@ function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, gues
         best = a;
       }
     }
-    simulateSlot(b, { [me]: best, [them]: guess[i] } as Record<Side, ActionSpec>);
-    out.push(best);
-    s = advance(s, best.charge ? { name: 'hold' } : best);
-    if (best.charge && i + 1 < R.SLOTS_PER_EXCHANGE && !b.over) {
+    const opener = first(best);
+    simulateSlot(b, { [me]: opener, [them]: guess[i] } as Record<Side, ActionSpec>);
+    out.push(opener);
+    s = advance(s, opener.charge ? { name: 'hold' } : opener);
+    if ((best.charge || best.setup) && i + 1 < R.SLOTS_PER_EXCHANGE && !b.over) {
       i++;
-      simulateSlot(b, { [me]: { name: 'breath' }, [them]: guess[i] } as Record<Side, ActionSpec>);
-      out.push({ name: 'breath' });
-      s = advance(s, { name: 'breath' });
+      const strike = second(best);
+      simulateSlot(b, { [me]: strike, [them]: guess[i] } as Record<Side, ActionSpec>);
+      out.push(strike);
+      s = advance(s, strike);
     }
   }
   return out;

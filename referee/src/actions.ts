@@ -51,6 +51,8 @@ export interface ActionSpec {
   full?: boolean;
   /** brains only: a charge held two slots, then released */
   long?: boolean;
+  /** brains only: a setup move the slot before (Approach for a lunging Bite, Strafe for a pouncing Claw) */
+  setup?: 'approach' | 'strafe';
   /** a crunch: the attack twice in one slot, 15 ticks each; needs Raking Talons or Gnashing Teeth [Doc] */
   crunch?: boolean;
 }
