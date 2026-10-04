@@ -1,6 +1,4 @@
 # Dragonshards: Trait Suite v0.2
-*Refactored to points, ticks, paces, pips, spoils, visible revisions, and the eight elements. Supersedes the Trait half of support-trait v0.1.*
-
 Traits bend rules. They're rare, heavy, and always carry a price.
 
 ## Rules

@@ -1,6 +1,4 @@
 # Dragonshards: Technique Suite v0.2
-*Refactored to points, ticks, paces, pips, seams, and Ichor. Supersedes v0.1.*
-
 Technique shards change how an action behaves. Every Technique is a sidegrade: each grade keeps a cost.
 
 ## Rules
@@ -19,6 +17,8 @@ Technique shards change how an action behaves. Every Technique is a sidegrade: e
 **Seams [Proposed placeholder]:** each seam touching a Technique shard trims 1 tick from one of its timing costs.
 
 **Units:** 3 points make one unit. A slot is 30 ticks of 100 ms. A band is 3 paces.
+
+**Timing:** an action always totals 30 ticks. Wind-up and recovery shifts move the active window's edges: −3 wind-up and +5 recovery opens the window 3 ticks earlier and closes it 5 ticks earlier. **[Proposed]** The active window never drops below 3 ticks.
 
 **Statuses**
 - **Pinned:** can't Move next slot.

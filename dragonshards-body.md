@@ -1,6 +1,4 @@
 # Dragonshards: Body Suite v0.3
-*Egg-side attributes. Supersedes v0.2, which covered all nine attributes.*
-
 Body shards buff what the egg sets: Wounds, Evasion, Hardness, and Accuracy (derived from Evasion and the egg). Common.
 
 ## Rules
@@ -68,4 +66,4 @@ New shards come from three choices: attribute, Elder condition, Venerable relate
 | Hardness | while guarding with Scales | Wounds |
 | Accuracy | against a target at a different altitude | Evasion |
 
-Acumen has no shards: it stays hidden and grows only through its meter.
+Acumen has no shards: it grows only through play, and its meter is visible to both players.

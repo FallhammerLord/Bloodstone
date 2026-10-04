@@ -1,6 +1,4 @@
 # Dragonshards: Bloodstone Suite v0.1
-*Stone-side attributes. Split from the Body suite.*
-
 Bloodstone shards buff what the stone sets: Claw Sharpness, Bite Force, Breath Potency, and Affinity (derived from Breath Potency and the stone). Common.
 
 ## Rules

@@ -1,6 +1,4 @@
 # Dragonshards: Support Suite v0.2
-*Refactored to seams, pips, points, ticks, and ordered-crunch compounds. Supersedes the Support half of support-trait v0.1; Traits remain there until refactored.*
-
 Support shards are inert alone and act on neighbors connected by seams.
 
 ## Rules

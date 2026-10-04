@@ -1,11 +1,9 @@
-# Dragon Duel: Design Document v0.1.3
+# Dragon Duel: Design Document v0.1.4
 *Working title TBD. A spiritual successor to Dragonseeds (Jaleco, PS1, 1998).*
 
 **Status convention:** everything here is settled unless marked **[Proposed]** (suggested, not yet confirmed) or **[Open]** (undecided).
 
-**Companion files**
-- `dragon-duel-changelog.md`: version history.
-- `dragonshards-body-v0.3.md`, `dragonshards-bloodstone-v0.1.md`, `dragonshards-technique-v0.2.md`, `dragonshards-support-v0.2.md`, `dragonshards-trait-v0.2.md`: shard suites.
+**Companion files:** `dragonshards-body.md`, `dragonshards-bloodstone.md`, `dragonshards-technique.md`, `dragonshards-support.md`, `dragonshards-trait.md` (shard suites).
 
 ---
 
@@ -59,11 +57,11 @@
 - **Claw Sharpness, Bite Force, Breath Potency:** attack damage.
 - **Accuracy:** tracking and reach without leaving position; sets the phantom band around hitboxes.
 - **Affinity:** elemental resistance.
-- **Acumen:** battle sense. A hidden percentage shown as an integer. It converts near misses, tips close contests, and scales punishes. No shards raise it; it grows only through play.
+- **Acumen:** battle sense, shown as an integer and mapped through a hidden curve. It converts near misses, tips close contests, and scales punishes. Its meter is visible to both players. No shards raise it; it grows only through play.
 
 **Units.** 3 points make one combat unit, everywhere. Everything runs on integers and displays as units and thirds. Damage is dealt in points: attack attributes add, Hardness and Affinity subtract. Acumen is the exception, mapping through a hidden curve.
 
-**Derivation.** Tertiaries derive once at hatching: Accuracy from Evasion plus an egg modifier, Affinity from Breath Potency plus a stone modifier, Acumen from a starting value. **[Proposed]** Acumen's starting value is seeded from egg and stone rather than rolled. After hatching, each attribute grows independently, so no attribute buys another.
+**Derivation.** Tertiaries derive once at hatching, after the elemental swing: Accuracy from Evasion plus an egg modifier, Affinity from Breath Potency plus a stone modifier, Acumen from a starting value. **[Proposed]** Acumen's starting value is seeded from egg and stone rather than rolled. After hatching, each attribute grows independently, so no attribute buys another.
 
 **Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. Every defense has an attack that ignores it, which answers concentration. Single-attribute builds are avoided by design; Stomp scales by age only for this reason. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
 
@@ -108,15 +106,18 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Disliked stone:** −3 to the stone's peak, +3 to the egg's peak. The dragon fights its stone and toughens for it: more body, less element.
 - **Neutral stone:** no swing.
 - Wounds moves in 6s on its doubled scale.
+- **Order:** the swing applies before tertiaries derive, so it carries into Accuracy and Affinity. A swing on Affinity (Water's peak) moves the stone modifier.
 
-| Pairing | Swing |
-|---|---|
-| True Dragon + Fire | Breath 12 → 15, Wounds 36 → 30: a breath cannon |
-| True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill |
-| Wyvern + Air | Claw 9 → 12, Evasion 9 → 6 |
-| Wyvern + Fire | Breath 12 → 9, Evasion 9 → 12: almost impossible to pin down |
-| Wyrm + Water | Affinity 6 → 9, Hardness 6 → 3: a supple sea serpent |
-| Wyrm + Air | Claw 9 → 6, Hardness 6 → 9 |
+| Pairing | Swing | Derived knock-on |
+|---|---|---|
+| True Dragon + Fire | Breath 12 → 15, Wounds 36 → 30: a breath cannon | Affinity 3 → 6 |
+| True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill | |
+| Wyvern + Air | Claw 9 → 12, Evasion 9 → 6 | Accuracy 6 → 3 |
+| Wyvern + Fire | Breath 12 → 9, Evasion 9 → 12: almost impossible to pin down | Affinity 3 → 0, Accuracy 6 → 9 |
+| Wyrm + Water | Affinity 6 → 9, Hardness 6 → 3: a supple sea serpent | |
+| Wyrm + Air | Claw 9 → 6, Hardness 6 → 9 | |
+
+**[Open]** Derivation amplifies swings that touch Evasion or Breath Potency, so those pairings are no longer strictly zero-sum. True Dragon + Fire gains Affinity on top of its Breath.
 
 - **Growth leans the same way:** preferred pairings weight age-up points toward the stone's attributes; disliked pairings toward the egg's.
 - **Intermediates derive:** one preferred parent counts as preference, one disliked parent as distaste, one of each cancels to neutral. For a True Dragon, Lightning is preferred, Salt disliked, Magma neutral.
@@ -206,12 +207,12 @@ Each morph prefers one element and dislikes the element that beats it.
 ### Exchange and Scripting
 - Each exchange has 3 action slots, scripted simultaneously. Slots 1 and 2 lock; slot 3 can be revised live while slots 1 and 2 resolve, once per exchange. A revision makes the slot flash on screen. Default: no change.
 - Each action opens a menu of sub-actions and directions. A ghost preview shows the first few frames; confirm sends the set.
-- Scripting clock: 15 seconds in PvP, unlimited in campaign.
+- Scripting clock: 30 seconds in PvP, unlimited in campaign.
 - **[Proposed]** Directions are scripted relative to the orbit (clockwise or counterclockwise), so camera swings never flip inputs.
-- **[Proposed]** Pacing: about 24 seconds per exchange; six to eight exchanges per fight, about three minutes.
+- **[Proposed]** Pacing: about 40 seconds per exchange; six to eight exchanges per fight, about four to five minutes.
 
 **Readable information.** Slots 1 and 2 lock, so a wind-up inside a locked slot can't be answered; wind-ups matter for timing, not reading. What players can act on:
-- **Between exchanges:** positions, cooldown rhythms, statuses, silhouettes, the chest stone.
+- **Between exchanges:** positions, cooldown rhythms, statuses, Acumen meters, silhouettes, the chest stone.
 - **During the revision window:** slots 1 and 2 resolving, revision flashes, and a charge releasing in slot 3.
 
 ### Actions
@@ -252,7 +253,9 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Claw timing:** direction and speed decide it. A fast claw catches the counter-strafe and misses the patient one.
 
 ### Timeline
-- An action runs 30 ticks of 100 ms, split into wind-up, active, and recovery, each a whole number of ticks. Attributes and shards shift them.
+- An action runs 30 ticks of 100 ms, split into wind-up, active, and recovery, each a whole number of ticks. Attributes, shards, and statuses shift wind-up and recovery; the active window absorbs the difference, so the action always totals 30. Faster wind-up or shorter recovery widens the active window; slower wind-up or longer recovery narrows it.
+- **[Proposed]** The active window never drops below 3 ticks; shifts past that floor are lost.
+- **[Proposed]** A crunch half runs 15 ticks: wind-up and recovery halve (rounding down), and the active window absorbs the rest.
 - Identical attacks trade. An active window hitting the opponent's wind-up interrupts it; hitting their recovery is a punish, a guaranteed bonus scaled by Acumen.
 - Fast attacks win when they connect; slow, wide attacks punish them when they whiff.
 - **[Proposed] Base profiles** (wind-up / active / recovery ticks): Claw 6 / 15 / 9; Bite 12 / 6 / 12; Breath 12 / 9 / 9; Stomp 15 / 6 / 9.
@@ -264,7 +267,7 @@ Each morph prefers one element and dislikes the element that beats it.
 ### Hits
 - A dragon outside an attack's active area during its active window takes no hit.
 - **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). Acumen converts them into grazes, animated dynamically.
-- **[Proposed] Acumen meter:** starts at the dragon's base Acumen; each near miss adds 10; at 100 that near miss converts and the meter returns to base. Deterministic and streak-free.
+- **Acumen meter:** visible to both players. **[Proposed]** It starts at the dragon's base Acumen; each near miss adds 10; at 100 that near miss converts and the meter returns to base. Deterministic and streak-free.
 
 **Evasive resolution**
 - **Strafe:** pure geometry. A dragon out of coverage is untouched; one still inside during the active window tests Evasion against Accuracy.
@@ -283,7 +286,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 **Modifiers:** Intimidate +3 to the next attack; +3 on a chain's third link; punish +3, raised by Acumen; graze −3. Crunched actions carry no modifier: the reward is doing the thing twice.
 
-**Ceilings against a True Dragon:** chained bites 21 (58%); crunched claws through Raking Talons 18 (50%); crunched bites through Gnashing Teeth 36, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs, and Gnashing Teeth carries the tightest.
+**Ceilings against a True Dragon:** chained bites 21 (58%); crunched claws through Raking Talons 18 (50%); crunched bites through Gnashing Teeth 36, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs.
 
 ### Chains, Cooldowns, Crunch, Charge
 - **Chains:** repeating an input 2 or 3 times improves efficacy. **[Proposed]** Each bonus requires the previous link to land; a Guard in any slot breaks the combo; a revised slot 3 caps the bonus. **[Proposed]** Crunched slots don't count toward chains unless a shard says otherwise.
@@ -487,7 +490,7 @@ The testbed: the three core morphs, the four core elements, wyrmling through adu
 ### Later
 - Valence patterns in detail; seam quality.
 - Campaign structure: rest timing, rival hunts, the tutorial elder's pattern.
-- Element depth: interacting surfaces; Twin-Blooded scope.
+- Element depth: interacting surfaces.
 - Roster: open grid cells; Tiamat's pair ban list; signature Traits and elemental preferences for the extended morphs.
 - Region sectors as body regions on the array.
 - Retreat penalty, if champions kite in testing.
