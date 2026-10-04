@@ -10,7 +10,7 @@ import * as R from '../src/rules.ts';
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
 const WYVERN: FighterSetup = { name: 'Gale', morph: 'wyvern', stone: 'earth' };
 const WYRM: FighterSetup = { name: 'Coil', morph: 'wyrm', stone: 'earth' };
-const OFF = { breathCharge: false, biteLunge: false, elementalBite: false };
+const OFF = { breathCharge: false, biteLunge: false };
 afterEach(() => Object.assign(R.VARIANT, OFF));
 const run = (flags: Partial<typeof OFF>, b: FighterSetup, sep: number, A: string[], B: string[]) => {
   Object.assign(R.VARIANT, OFF, flags);
@@ -88,10 +88,4 @@ test('only the first Bite after an Approach lunges', () => {
 test('lunge stops at the other body', () => {
   const { ev } = run({ biteLunge: true }, TD_WATER, 2.5, ['approach', 'bite'], ['hold', 'hold']);
   assert.ok(ev.some((e) => e.kind === 'note' && /^Lunges 0\.\d/.test(e.text)));
-});
-
-test('elemental bite: a Bite carries the stone matchup', () => {
-  const off = hits(run({}, WYRM, 2, ['bite'], ['hold']).ev)[0];
-  const on = hits(run({ elementalBite: true }, WYRM, 2, ['bite'], ['hold']).ev)[0];
-  assert.equal(on.damage, off.damage + R.MATCHUP, 'Water beats Earth');
 });

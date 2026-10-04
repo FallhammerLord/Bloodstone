@@ -142,10 +142,9 @@ Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses i
 
 Hits resolve in layers: geometry first (is the target in the shape?), then Accuracy against Evasion for a moving or dodging target, then Acumen on a tie. A swift dragon that reaches safe geometry before the active window is meant to escape.
 
-Three [Proposed] changes sit behind a switch, so a run can add them one at a time: `REFEREE_VARIANT=charge,lunge,elemental npm run brains -- --skill master`.
+Two [Proposed] changes sit behind a switch, so a run can add them one at a time: `REFEREE_VARIANT=charge,lunge npm run brains -- --skill master`.
 - **charge:** Breath must charge. A plain Breath is read as a one-slot charge, and slot 3 can't start one. A one-slot charge releases with no bonus. Scripting the same charge again holds it a second slot (Bite or Breath, slots 1–2), and that release earns +3. Bellows Chest restores the +3 on any Breath charge, then adds its own.
 - **lunge:** a Bite right after an Approach that moved carries the dragon up to 1 pace along its line during the wind-up. Pure geometry: Evasion still applies, and a retreat that outruns it escapes. Only the first Bite after the Approach lunges.
-- **elemental:** a Bite carries the stone matchup (±3) unless the biter has a Breath charged.
 
 The brain tournament prints how often a Bite follows an Approach, to show how much of the lunge comes free. Tests flip the switches at runtime in `test/variants.test.ts`.
 

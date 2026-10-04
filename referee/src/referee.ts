@@ -973,12 +973,6 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       const pierced = Math.max(0, hardness - R.BITE_PIERCE);
       v = bite.value - pierced;
       parts.push(`Bite Force ${bite.value}${bite.note}`, `−${hardLabel}${hardness ? ` pierced to ${pierced}` : ''}`);
-      // Elemental bite [Proposed]: the stone speaks through the jaws whenever no Breath is charged.
-      if (R.VARIANT.elementalBite && !crunched && att.marks.charge?.action !== 'breath') {
-        const m = matchup(att.sheet.stone, def.sheet.stone) * R.MATCHUP;
-        v += m;
-        if (m) parts.push(`${m > 0 ? '+' : ''}${m} elemental bite`);
-      }
       if (p.spec.released && p.spec.full) {
         v += R.CHARGE_BONUS;
         parts.push(`+${R.CHARGE_BONUS} charged`);

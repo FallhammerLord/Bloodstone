@@ -39,6 +39,7 @@ Probes: a Bite chain against a retreating Wyrm hits at Melee, hits at Close, and
 - **Fire keeps sliding (49% → 39%).** Mandatory charge hits Fire hardest: its −2 breath and small blast make two slots for one Breath a poor trade. Air (wide cone, shove) stays on top at 64–65%.
 
 **Open questions:**
+- **Elemental bite is dropped.** It was meant to carry Bite through bad matchups while Breath sat on a longer cooldown. Breath's cooldown didn't change, so it would only punish Bite in bad matchups.
 - Teach general brains the Approach-Bite sequence, then rerun before touching the lunge's size.
 - Fire under mandatory charge: lift the −2, or give its burning zone more weight.
 - Timeouts went up with charge (33%); the lunge pulls them back to 29%, still above the 28% baseline.
