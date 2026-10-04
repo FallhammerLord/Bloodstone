@@ -1,0 +1,10 @@
+{
+  "title": "Footsies at Melee: claw beats bite",
+  "note": "Design doc §4: at Melee a claw's active window opens inside a bite's wind-up, so claws interrupt bites up close.",
+  "separation": 2,
+  "A": { "name": "Ash", "morph": "true-dragon", "stone": "air" },
+  "B": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "exchanges": [
+    { "A": ["claw:left", "hold", "hold"], "B": ["bite", "hold", "hold"] }
+  ]
+}

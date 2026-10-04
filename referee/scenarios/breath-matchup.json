@@ -1,0 +1,10 @@
+{
+  "title": "Breath and matchups: Water erodes Earth",
+  "note": "Design doc §3-4: breath skips Evasion, deals Potency − Affinity, ±3 for matchup. Breath has cooldown 2.",
+  "separation": 7,
+  "A": { "name": "Tide", "morph": "wyrm", "stone": "water" },
+  "B": { "name": "Clod", "morph": "true-dragon", "stone": "earth" },
+  "exchanges": [
+    { "A": ["breath", "retreat", "breath"], "B": ["breath", "approach", "bite"] }
+  ]
+}

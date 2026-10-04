@@ -1,0 +1,16 @@
+{
+  "name": "dragon-duel-referee",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Dragon Duel rules engine: two dragons, two scripts, an exact outcome.",
+  "type": "module",
+  "scripts": {
+    "duel": "node --experimental-strip-types --no-warnings src/cli.ts",
+    "test": "node --experimental-strip-types --no-warnings --test test/*.test.ts",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "~5.9.3"
+  }
+}

@@ -1,0 +1,470 @@
+// The Referee: two dragons, two scripts, an exact outcome. No drawing, no randomness, integers only.
+//
+// Per tick, in order [Proposed] §4 Resolution order:
+//   1. movement for both dragons
+//   2. attacks starting their wind-up lock their aim
+//   3. hit detection, evasion tests, near-miss checks
+//   4. damage and statuses, applied together
+//   5. end-of-window checks (near misses, grazes, Intimidate)
+//   6. KO checks
+//
+// Not modeled yet: altitude (Leap, Dive), obstacles, crunch, charge, compounds, slot-3 revision,
+// breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards.
+
+import { ACTIONS, HOLD, describe, type ActionName, type ActionSpec } from './actions.ts';
+import { hatch, matchup, type StatSheet } from './hatch.ts';
+import { add, dist, len, scaleTo, sub, type Vec } from './geometry.ts';
+import { inShape, shapeOf } from './shapes.ts';
+import * as R from './rules.ts';
+
+export type Side = 'A' | 'B';
+export const SIDES: readonly Side[] = ['A', 'B'];
+export const other = (s: Side): Side => (s === 'A' ? 'B' : 'A');
+
+export interface Statuses {
+  pinned: boolean;
+  staggered: boolean;
+  rattled: boolean;
+  blinded: boolean;
+}
+const noStatuses = (): Statuses => ({ pinned: false, staggered: false, rattled: false, blinded: false });
+
+export interface Fighter {
+  side: Side;
+  name: string;
+  sheet: StatSheet;
+  pos: Vec;
+  wounds: number;
+  meter: number;
+  /** global slot number when each cooldown action is usable again */
+  readyAt: Partial<Record<ActionName, number>>;
+  /** statuses in force this slot, and those landing next slot */
+  status: Statuses;
+  pending: Statuses;
+  intimidateBonus: boolean;
+  chain: { action: ActionName | null; links: number; lastLanded: boolean };
+}
+
+export interface Bout {
+  fighters: Record<Side, Fighter>;
+  /** wins a double KO [Proposed] */
+  challenged: Side;
+  exchange: number;
+  globalSlot: number;
+  over: boolean;
+  winner: Side | null;
+}
+
+export interface FighterSetup {
+  name: string;
+  morph: StatSheet['morph'];
+  stone: StatSheet['stone'];
+}
+
+/** Separation is in paces (decimals allowed). A stands west of B, facing east. */
+export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: number, challenged: Side = 'B'): Bout {
+  const half = Math.round((separationPaces * R.PACE) / 2);
+  const make = (side: Side, setup: FighterSetup, x: number): Fighter => {
+    const sheet = hatch(setup.morph, setup.stone);
+    return {
+      side, name: setup.name, sheet, pos: { x, y: 0 },
+      wounds: sheet.wounds, meter: sheet.acumen, readyAt: {},
+      status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
+      chain: { action: null, links: 0, lastLanded: false },
+    };
+  };
+  return {
+    fighters: { A: make('A', a, -half), B: make('B', b, half) },
+    challenged, exchange: 0, globalSlot: 0, over: false, winner: null,
+  };
+}
+
+// ---------------------------------------------------------------- events
+
+export interface PlanInfo {
+  label: string;
+  windup: number;
+  active: number;
+  recovery: number;
+  interruptedAt: number | null;
+}
+
+export type Event =
+  | { kind: 'exchangeStart'; exchange: number }
+  | { kind: 'slotStart'; exchange: number; slot: number }
+  | { kind: 'note'; tick: number; side: Side; text: string }
+  | { kind: 'aim'; tick: number; side: Side; action: ActionName; distance: number }
+  | { kind: 'hit'; tick: number; attacker: Side; action: ActionName; damage: number; parts: string[]; interrupt: boolean; graze: boolean; trade: boolean; woundsLeft: number }
+  | { kind: 'evade'; tick: number; attacker: Side; action: ActionName; text: string }
+  | { kind: 'nearMiss'; tick: number; attacker: Side; action: ActionName; meter: number }
+  | { kind: 'whiff'; tick: number; attacker: Side; action: ActionName }
+  | { kind: 'trace'; tick: number; positions: Record<Side, Vec> }
+  | { kind: 'slotEnd'; exchange: number; slot: number; plans: Record<Side, PlanInfo>; positions: Record<Side, Vec>; separation: number; wounds: Record<Side, number>; meters: Record<Side, number> }
+  | { kind: 'ko'; tick: number; side: Side }
+  | { kind: 'boutEnd'; winner: Side; reason: string };
+
+// ---------------------------------------------------------------- plans
+
+type Phase = 'windup' | 'active' | 'recovery' | 'idle';
+
+interface Plan {
+  spec: ActionSpec;
+  windup: number;
+  active: number;
+  recovery: number;
+  interruptedAt: number | null;
+  resolved: boolean;
+  landed: boolean;
+  nearMiss: boolean;
+  origin: Vec | null;
+  aim: Vec | null;
+  moveTotal: number;
+  moved: number;
+  converted: 'dodge' | 'roar' | null;
+  link: number;
+  intimidateBonus: boolean;
+}
+
+const category = (p: Plan) => ACTIONS[p.spec.name].category;
+
+function phase(p: Plan, t: number): Phase {
+  if (p.interruptedAt !== null && t >= p.interruptedAt) return 'idle';
+  if (t < p.windup) return 'windup';
+  if (t < p.windup + p.active) return 'active';
+  return 'recovery';
+}
+
+/** Shifts move the active window's edges; the action always totals 30 ticks [Doc]. */
+export function timing(profile: readonly [number, number, number], windupShift: number, recoveryShift: number): [number, number, number] {
+  let w = Math.max(0, profile[0] + windupShift);
+  let r = Math.max(0, profile[2] + recoveryShift);
+  let a = R.TICKS_PER_SLOT - w - r;
+  if (a < R.MIN_ACTIVE) {
+    // Shifts past the floor are lost: trim recovery first, then wind-up.
+    let need = R.MIN_ACTIVE - a;
+    const fromR = Math.min(r, need);
+    r -= fromR;
+    need -= fromR;
+    w -= need;
+    a = R.MIN_ACTIVE;
+  }
+  return [w, a, r];
+}
+
+function makePlan(f: Fighter, requested: ActionSpec, g: number, ev: Event[]): Plan {
+  let spec = requested;
+  const ready = f.readyAt[spec.name] ?? 0;
+  if (ready > g) {
+    ev.push({ kind: 'note', tick: 0, side: f.side, text: `${describe(spec)} is still cooling down; holds instead.` });
+    spec = HOLD;
+  }
+  if (f.status.pinned && ACTIONS[spec.name].category === 'move') {
+    ev.push({ kind: 'note', tick: 0, side: f.side, text: `Pinned: can't ${describe(spec)}; holds instead.` });
+    spec = HOLD;
+  }
+  const def = ACTIONS[spec.name];
+  if (def.cooldown > 0) f.readyAt[spec.name] = g + def.cooldown + 1;
+
+  const [windup, active, recovery] = timing(def.profile, f.status.rattled ? R.RATTLED_WINDUP : 0, 0);
+
+  let moveTotal = 0;
+  if (def.category === 'move') {
+    moveTotal = Math.min(f.sheet.evasion * R.EVASION_STEP, R.MOVE_CAP);
+    if (f.status.staggered) moveTotal = Math.floor(moveTotal / 2);
+  }
+
+  let link = 0;
+  let intimidateBonus = false;
+  if (def.category === 'attack') {
+    const continues = f.chain.action === spec.name && f.chain.lastLanded && def.cooldown === 0 && f.chain.links < 3;
+    link = continues ? f.chain.links + 1 : 1;
+    intimidateBonus = f.intimidateBonus;
+    f.intimidateBonus = false;
+  }
+
+  return {
+    spec, windup, active, recovery, interruptedAt: null,
+    resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
+    moveTotal, moved: 0, converted: null, link, intimidateBonus,
+  };
+}
+
+// ---------------------------------------------------------------- the exchange
+
+export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opts: { trace?: boolean } = {}): Event[] {
+  const ev: Event[] = [];
+  if (bout.over) return ev;
+  bout.exchange++;
+  ev.push({ kind: 'exchangeStart', exchange: bout.exchange });
+  for (const s of SIDES) bout.fighters[s].chain = { action: null, links: 0, lastLanded: false }; // [Assumed] chains live within one exchange
+  for (let slot = 0; slot < R.SLOTS_PER_EXCHANGE && !bout.over; slot++) {
+    runSlot(bout, slot, { A: scripts.A[slot] ?? HOLD, B: scripts.B[slot] ?? HOLD }, ev, opts.trace ?? false);
+  }
+  return ev;
+}
+
+function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: Event[], trace: boolean) {
+  const g = bout.globalSlot++;
+  const F = bout.fighters;
+  ev.push({ kind: 'slotStart', exchange: bout.exchange, slot: slot + 1 });
+
+  for (const s of SIDES) {
+    F[s].status = F[s].pending;
+    F[s].pending = noStatuses();
+  }
+  const plans: Record<Side, Plan> = { A: makePlan(F.A, specs.A, g, ev), B: makePlan(F.B, specs.B, g, ev) };
+
+  for (let t = 0; t < R.TICKS_PER_SLOT && !bout.over; t++) {
+    tick(bout, plans, t, ev);
+    if (trace) ev.push({ kind: 'trace', tick: t, positions: { A: { ...F.A.pos }, B: { ...F.B.pos } } });
+  }
+
+  for (const s of SIDES) {
+    const p = plans[s];
+    F[s].chain = category(p) === 'attack'
+      ? { action: p.spec.name, links: p.link, lastLanded: p.landed }
+      : { action: null, links: 0, lastLanded: false };
+  }
+
+  const info = (p: Plan): PlanInfo => ({
+    label: describe(p.spec) + (p.converted === 'dodge' ? ' → dodge' : p.converted === 'roar' ? ' → roar' : ''),
+    windup: p.windup, active: p.active, recovery: p.recovery, interruptedAt: p.interruptedAt,
+  });
+  ev.push({
+    kind: 'slotEnd', exchange: bout.exchange, slot: slot + 1,
+    plans: { A: info(plans.A), B: info(plans.B) },
+    positions: { A: { ...F.A.pos }, B: { ...F.B.pos } },
+    separation: dist(F.A.pos, F.B.pos),
+    wounds: { A: F.A.wounds, B: F.B.wounds },
+    meters: { A: F.A.meter, B: F.B.meter },
+  });
+}
+
+function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
+  const F = bout.fighters;
+
+  // 1. Movement, both dragons from the same starting positions.
+  const next = { A: moveStep(F.A, F.B, plans.A, plans.B, t, ev), B: moveStep(F.B, F.A, plans.B, plans.A, t, ev) };
+  if (dist(next.A, next.B) < R.BODY_GAP) {
+    // Bodies block each other: whoever moved this tick stays put and dodges instead.
+    for (const s of SIDES) {
+      if (next[s] !== F[s].pos) {
+        next[s] = F[s].pos;
+        plans[s].converted = 'dodge';
+        ev.push({ kind: 'note', tick: t, side: s, text: 'Blocked by the other body; converts to a dodge.' });
+      }
+    }
+  }
+  F.A.pos = next.A;
+  F.B.pos = next.B;
+
+  // 2. Attacks lock their aim when the wind-up starts [Assumed]. A strafe during the wind-up can carry
+  //    the target out of the shape; Accuracy's phantom band and the long Claw window answer that.
+  for (const s of SIDES) {
+    const p = plans[s];
+    if (category(p) === 'attack' && t === 0) {
+      p.origin = { ...F[s].pos };
+      p.aim = sub(F[other(s)].pos, F[s].pos);
+      ev.push({ kind: 'aim', tick: t, side: s, action: p.spec.name, distance: len(p.aim) });
+    }
+  }
+
+  // 3. Hit detection.
+  const hits: Side[] = [];
+  for (const s of SIDES) {
+    const p = plans[s];
+    if (category(p) !== 'attack' || p.resolved || phase(p, t) !== 'active' || !p.origin || !p.aim) continue;
+    const att = F[s];
+    const def = F[other(s)];
+    const accuracy = att.sheet.accuracy - (att.status.blinded ? R.BLINDED_ACCURACY : 0);
+    const shape = shapeOf(p.spec.name, att.sheet);
+
+    if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, 0)) {
+      // Breath and Stomp skip Evasion [Doc]. Bite and Claw test it against a moving or dodging target.
+      const evading = evasionState(plans[other(s)], t);
+      if ((p.spec.name === 'bite' || p.spec.name === 'claw') && evading) {
+        const evasion = def.sheet.evasion + (evading === 'dodging' ? R.DODGE_BONUS : 0);
+        const escaped = evasion > accuracy || (evasion === accuracy && def.sheet.acumen > att.sheet.acumen);
+        if (escaped) {
+          p.resolved = true;
+          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, text: `${evading} with Evasion ${evasion} beats Accuracy ${accuracy}` });
+          continue;
+        }
+      }
+      hits.push(s);
+    } else if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, Math.max(0, accuracy) * R.NOTCH)) {
+      p.nearMiss = true;
+    }
+  }
+
+  // 4. Damage and statuses, worked out from the same moment, then applied together.
+  const results = hits.map((s) => ({ s, ...damage(F[s], F[other(s)], plans[s], plans[other(s)], t, false) }));
+  const trade = results.length === 2;
+  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, t, false, trade, ev);
+
+  // 5. End-of-window checks.
+  for (const s of SIDES) {
+    const p = plans[s];
+    const lastActive = t === p.windup + p.active - 1 && phase(p, t) === 'active';
+    if (!lastActive) continue;
+    if (category(p) === 'attack' && !p.resolved) {
+      p.resolved = true;
+      if (!p.nearMiss) {
+        ev.push({ kind: 'whiff', tick: t, attacker: s, action: p.spec.name });
+        continue;
+      }
+      const att = F[s];
+      att.meter += R.NEAR_MISS_STEP;
+      if (att.meter >= R.METER_MAX) {
+        att.meter = att.sheet.acumen;
+        const g = damage(att, F[other(s)], p, plans[other(s)], t, true);
+        applyHit(bout, plans, s, g.total, g.parts, t, true, false, ev);
+      } else {
+        ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: att.meter });
+      }
+    }
+    if (p.spec.name === 'intimidate') {
+      const sep = dist(F.A.pos, F.B.pos);
+      if (sep <= R.FAR_EDGE) {
+        F[s].intimidateBonus = true;
+        ev.push({ kind: 'note', tick: t, side: s, text: 'Intimidate lands: +3 to the next attack.' });
+      } else {
+        ev.push({ kind: 'note', tick: t, side: s, text: 'Intimidate falls short: the opponent is beyond Far.' });
+      }
+    }
+  }
+
+  // 6. KO checks.
+  const down = SIDES.filter((s) => F[s].wounds <= 0);
+  if (down.length > 0) {
+    for (const s of down) ev.push({ kind: 'ko', tick: t, side: s });
+    bout.over = true;
+    bout.winner = down.length === 2 ? bout.challenged : other(down[0]);
+    ev.push({ kind: 'boutEnd', winner: bout.winner, reason: down.length === 2 ? 'double KO goes to the challenged' : 'KO' });
+  }
+}
+
+function evasionState(p: Plan, t: number): 'moving' | 'dodging' | null {
+  if (phase(p, t) !== 'active') return null;
+  if (p.spec.name === 'dodge' || p.converted === 'dodge') return 'dodging';
+  if (category(p) === 'move' && p.converted === null) return 'moving';
+  return null;
+}
+
+function moveStep(me: Fighter, opp: Fighter, p: Plan, oppPlan: Plan, t: number, ev: Event[]): Vec {
+  if (category(p) !== 'move' || p.converted || phase(p, t) !== 'active') return me.pos;
+  const k = t - p.windup;
+  const target = Math.floor((p.moveTotal * (k + 1)) / p.active);
+  const delta = target - p.moved;
+  if (delta <= 0) return me.pos;
+
+  const v = sub(me.pos, opp.pos);
+  const sep = len(v);
+  let np: Vec;
+  switch (p.spec.name) {
+    case 'approach': {
+      const both = oppPlan.spec.name === 'approach' && oppPlan.converted === null && phase(oppPlan, t) === 'active';
+      if (both && sep <= R.MELEE_EDGE) {
+        p.converted = 'dodge';
+        ev.push({ kind: 'note', tick: t, side: me.side, text: 'Both advanced: stops at Melee and converts to a dodge.' });
+        return me.pos;
+      }
+      np = add(opp.pos, scaleTo(v, Math.max(R.BODY_GAP, sep - delta)));
+      break;
+    }
+    case 'retreat': {
+      if (sep + delta > R.LEASH) {
+        p.converted = 'roar';
+        ev.push({ kind: 'note', tick: t, side: me.side, text: 'The leash holds: the retreat becomes an impotent roar.' });
+        return me.pos;
+      }
+      np = add(opp.pos, scaleTo(v, sep + delta));
+      break;
+    }
+    case 'strafe': {
+      const tangent = p.spec.dir === 'cw' ? { x: v.y, y: -v.x } : { x: -v.y, y: v.x };
+      np = add(opp.pos, scaleTo(add(v, scaleTo(tangent, delta)), sep));
+      break;
+    }
+    default:
+      return me.pos;
+  }
+  if (len(np) > R.ARENA_RADIUS) {
+    p.converted = 'dodge';
+    ev.push({ kind: 'note', tick: t, side: me.side, text: 'Blocked by the arena wall; converts to a dodge.' });
+    return me.pos;
+  }
+  p.moved = target;
+  return np;
+}
+
+function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[] } {
+  const parts: string[] = [];
+  const defPhase = phase(defPlan, t);
+  const scales = defPlan.spec.name === 'scales' && defPhase === 'active';
+  const hardness = def.sheet.hardness + (scales ? R.SCALES_HARDNESS : 0);
+  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}`;
+  let v = 0;
+  switch (p.spec.name) {
+    case 'bite':
+      v = att.sheet.bite - hardness;
+      parts.push(`Bite Force ${att.sheet.bite}`, `−${hardLabel}`);
+      break;
+    case 'claw':
+      v = att.sheet.claw - hardness;
+      parts.push(`Claw Sharpness ${att.sheet.claw}`, `−${hardLabel}`);
+      break;
+    case 'breath': {
+      const m = matchup(att.sheet.stone, def.sheet.stone) * R.MATCHUP;
+      v = att.sheet.breath - def.sheet.affinity + m;
+      parts.push(`Breath Potency ${att.sheet.breath}`, `−Affinity ${def.sheet.affinity}`);
+      if (m > 0) parts.push(`+${m} matchup`);
+      if (m < 0) parts.push(`${m} matchup`);
+      break;
+    }
+    case 'stomp':
+      v = R.STOMP_DAMAGE;
+      parts.push(`Stomp ${R.STOMP_DAMAGE} true damage`);
+      break;
+  }
+  if (p.intimidateBonus) {
+    v += R.INTIMIDATE_BONUS;
+    parts.push(`+${R.INTIMIDATE_BONUS} Intimidate`);
+  }
+  if (p.link === 3) {
+    v += R.CHAIN_THIRD_LINK_BONUS;
+    parts.push(`+${R.CHAIN_THIRD_LINK_BONUS} chain third link`);
+  }
+  if (defPhase === 'recovery') {
+    v += R.PUNISH_BONUS;
+    parts.push(`+${R.PUNISH_BONUS} punish (caught in recovery)`);
+  } else if (defPlan.spec.name === 'intimidate' && defPhase !== 'idle') {
+    v += R.PUNISH_BONUS;
+    parts.push(`+${R.PUNISH_BONUS} punish (caught intimidating)`);
+  }
+  if (graze) {
+    v -= R.GRAZE_PENALTY;
+    parts.push(`−${R.GRAZE_PENALTY} graze`);
+  }
+  if (v < R.DAMAGE_FLOOR) {
+    v = R.DAMAGE_FLOOR;
+    parts.push(`floor ${R.DAMAGE_FLOOR}`);
+  }
+  return { total: v, parts };
+}
+
+function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], t: number, graze: boolean, trade: boolean, ev: Event[]) {
+  const p = plans[s];
+  const defPlan = plans[other(s)];
+  const def = bout.fighters[other(s)];
+  p.resolved = true;
+  p.landed = true;
+  def.wounds -= total;
+  const interrupt = phase(defPlan, t) === 'windup';
+  if (interrupt) defPlan.interruptedAt = t;
+  ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, interrupt, graze, trade, woundsLeft: def.wounds });
+  if (p.spec.name === 'stomp') {
+    def.pending.staggered = true;
+    ev.push({ kind: 'note', tick: t, side: def.side, text: 'Staggered next slot: movement distance halved.' });
+  }
+}

@@ -1,0 +1,61 @@
+// Every number the Referee uses lives here. Each one is a dial.
+// [Doc]      settled in dragon-duel-design.md
+// [Proposed] marked [Proposed] in the design doc
+// [Assumed]  placeholder chosen for this build; the numbers pass should replace it
+
+// ---- Time ----
+export const TICKS_PER_SLOT = 30; // [Doc] §4 Timeline: 30 ticks of 100 ms
+export const SLOTS_PER_EXCHANGE = 3; // [Doc] §4 Exchange
+export const MIN_ACTIVE = 3; // [Proposed] the active window never drops below 3 ticks
+
+// ---- Space ----
+// Positions are whole numbers in a fine grain so all math stays in integers.
+export const PACE = 300; // internal units per pace
+export const NOTCH = PACE / 3; // ⅓ pace: one point of Accuracy's phantom band [Doc] §4 Hits
+export const BAND = 3 * PACE; // [Doc] each range band is 3 paces deep
+export const MELEE_EDGE = BAND;
+export const CLOSE_EDGE = 2 * BAND;
+export const FAR_EDGE = 3 * BAND;
+export const LEASH = 4 * BAND; // [Doc] separation can't exceed Very Far's outer edge (12 paces)
+export const ARENA_RADIUS = 12 * PACE; // [Doc] §5 radius equals the leash
+export const BODY_GAP = 1 * PACE; // [Assumed] closest two dragon centers can get
+
+// ---- Movement ----
+export const MOVE_CAP = BAND; // [Proposed] a move carries at most one band
+export const EVASION_STEP = NOTCH; // [Assumed] each point of Evasion moves ⅓ pace (Evasion 9 = one band)
+
+// ---- Damage ---- [Doc] §4 Damage, Modifiers
+export const INTIMIDATE_BONUS = 3;
+export const CHAIN_THIRD_LINK_BONUS = 3;
+export const PUNISH_BONUS = 3; // Acumen scaling of punishes not modeled yet
+export const GRAZE_PENALTY = 3;
+export const MATCHUP = 3;
+export const DAMAGE_FLOOR = 1;
+export const STOMP_DAMAGE = 3;
+
+// ---- Guards ----
+export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales
+export const DODGE_BONUS = 3; // [Assumed] Evasion bonus while dodging
+
+// ---- Acumen ---- [Proposed] §4 Acumen meter
+export const ACUMEN_START = 10; // [Assumed] starting Acumen for every hatchling
+export const NEAR_MISS_STEP = 10;
+export const METER_MAX = 100;
+
+// ---- Statuses ---- [Doc] §4 Statuses
+export const RATTLED_WINDUP = 3;
+export const BLINDED_ACCURACY = 3;
+
+// ---- Attack shapes ----
+// Measured from the attacker along its aim ("forward") and to either side ("lateral").
+export const BITE_REACH = 5 * PACE; // [Assumed] Melee into Close; starts just outside at Far
+export const BITE_HALF_WIDTH = PACE / 2; // [Assumed] narrow
+export const CLAW_REACH = Math.floor((10 * PACE) / 3); // [Assumed] arc edge reaches just into Close
+export const CLAW_BACK = PACE / 2; // [Assumed] arc wraps slightly behind the shoulders
+export const STOMP_RADIUS = { wyrmling: 2 * PACE, adult: 3 * PACE, venerable: 4 * PACE }; // [Assumed] contact + 1/2/3 paces
+export const BREATH = {
+  line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
+  narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
+  wideCone: { reach: 6 * PACE }, // Air: half-width equals distance
+  blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(1.5 * PACE) }, // Fire: lands on the target
+}; // all [Assumed]; every breath stays within Far [Doc]

@@ -1,0 +1,10 @@
+{
+  "title": "Intimidate: the raise, and its risk",
+  "note": "Design doc §4: Intimidate gives +3 to the next attack but leaves you open. Attack beats Intimidate.",
+  "separation": 4,
+  "A": { "name": "Ash", "morph": "true-dragon", "stone": "fire" },
+  "B": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "exchanges": [
+    { "A": ["intimidate", "bite", "intimidate"], "B": ["scales", "hold", "bite"] }
+  ]
+}

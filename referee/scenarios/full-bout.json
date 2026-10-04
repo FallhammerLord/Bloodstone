@@ -1,0 +1,13 @@
+{
+  "title": "A full bout to KO",
+  "note": "Several exchanges until one dragon falls. Starts at Far, just outside bite range.",
+  "separation": 6.5,
+  "A": { "name": "Ember", "morph": "true-dragon", "stone": "fire" },
+  "B": { "name": "Gale", "morph": "wyvern", "stone": "air" },
+  "exchanges": [
+    { "A": ["breath", "approach", "bite"], "B": ["strafe:cw", "approach", "claw:left"] },
+    { "A": ["breath", "bite", "bite"], "B": ["claw:right", "claw:right", "claw:right"] },
+    { "A": ["breath", "bite", "bite"], "B": ["dodge", "claw:left", "claw:left"] },
+    { "A": ["breath", "bite", "bite"], "B": ["claw:left", "claw:left", "claw:left"] }
+  ]
+}
