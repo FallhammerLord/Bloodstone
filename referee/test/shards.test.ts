@@ -30,9 +30,8 @@ test('three Wyrmling chips make one full unit', () => {
   assert.equal(compile(hatch('true-dragon', 'water'), a).sheet.bite, 9 + 3);
 });
 
-test('Techniques need a grade; unbuilt ones say why', () => {
+test('Techniques need a grade', () => {
   assert.throws(() => findShard('Snapping Jaw'), /grade/);
-  assert.throws(() => findShard('Gnashing Teeth', 'adult'), /crunch/);
   assert.equal(findShard('Lance Throat', 'wyrmling').pips, 2);
   assert.equal(findShard('Lance Throat', 'elder').pips, 3);
 });
@@ -99,7 +98,7 @@ test('Wardskin: +3 Affinity against elements that beat your stone', () => {
   const plain = newBout({ name: 'G', morph: 'true-dragon', stone: 'air' }, TD_WATER, 4);
   const warded = newBout({ name: 'G', morph: 'true-dragon', stone: 'air' }, { ...TD_WATER, shards: [{ shard: 'Wardskin', pips: [0, 1] }] }, 4);
   const d = (b: typeof plain) => hits(runExchange(b, { A: ['breath'].map(parseAction), B: ['hold'].map(parseAction) }))[0].damage;
-  assert.equal(d(plain) - d(warded), Math.min(3, d(plain) - 1));
+  assert.equal(d(plain) - d(warded), Math.min(6, d(plain) - 1), 'Wardskin: +3 Affinity flat, +3 more from its rider');
 });
 
 test('Galewing: +3 Evasion, and +3 more while aloft, carries a flyer farther', () => {

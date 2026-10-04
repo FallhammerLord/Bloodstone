@@ -54,8 +54,10 @@ export interface Marks {
   revisionLockedFor: number;
   /** Baleful Eye: this exchange's reveal, by grade rank */
   eye: number | null;
+  /** a charge on the board: it releases next slot. Visible to both sides. */
+  charge: { action: 'bite' | 'breath'; sweep?: 'left' | 'right' } | null;
 }
-const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null });
+const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null });
 
 export interface Chain {
   action: ActionName | null;
@@ -189,6 +191,8 @@ export interface PlanInfo {
   active: number;
   recovery: number;
   interruptedAt: number | null;
+  /** a crunch: each half's wind-up, active and recovery, 15 ticks apiece */
+  halves?: [number, number, number][];
 }
 
 export type Event =
@@ -245,12 +249,51 @@ interface Plan {
   chainPaused: boolean;
   lockjawBonus: boolean;
   diveBonus: boolean;
+  /** the charging slot of a charge: it guards like Scales and attacks nothing */
+  charging: boolean;
+  /** a crunch: two attacks of 15 ticks each */
+  halves: [number, number, number][] | null;
+  landedHalves: number;
 }
 
-const category = (p: Plan) => ACTIONS[p.spec.name].category;
+const category = (p: Plan) => (p.charging ? 'guard' : ACTIONS[p.spec.name].category);
+
+/** Guarding like Scales: Scales itself, or the charging slot of a charge [Proposed]. */
+const guarding = (p: Plan, t: number) => (p.spec.name === 'scales' || p.charging) && phase(p, t) === 'active';
+
+/** The last active tick of the window t falls in (a crunch has one per half). */
+function lastActiveTick(p: Plan, t: number): number {
+  if (!p.halves) return p.windup + p.active - 1;
+  const h = t < R.HALF ? 0 : 1;
+  return h * R.HALF + p.halves[h][0] + p.halves[h][1] - 1;
+}
+
+/** A crunch half's profile: wind-up and recovery halve, rounding down; the active window absorbs the rest [Proposed]. */
+function halfTiming(profile: readonly [number, number, number], extraRecovery: number): [number, number, number] {
+  let w = Math.floor(profile[0] / 2);
+  let r = Math.floor(profile[2] / 2) + extraRecovery;
+  let a = R.HALF - w - r;
+  if (a < R.MIN_ACTIVE) {
+    let need = R.MIN_ACTIVE - a;
+    const fromR = Math.min(r, need);
+    r -= fromR;
+    need -= fromR;
+    w -= need;
+    a = R.MIN_ACTIVE;
+  }
+  return [w, a, r];
+}
 
 function phase(p: Plan, t: number): Phase {
   if (p.interruptedAt !== null && t >= p.interruptedAt) return 'idle';
+  if (p.halves) {
+    const h = t < R.HALF ? 0 : 1;
+    const local = t - h * R.HALF;
+    const [w, a] = p.halves[h];
+    if (local < w) return 'windup';
+    if (local < w + a) return 'active';
+    return 'recovery';
+  }
   if (t < p.windup) return 'windup';
   if (t < p.windup + p.active) return 'active';
   return 'recovery';
@@ -273,15 +316,22 @@ export function timing(profile: readonly [number, number, number], windupShift: 
   return [w, a, r];
 }
 
-function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev: Event[]): Plan {
+function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, slot: number, prevLanded: boolean, ev: Event[]): Plan {
   let spec = requested;
   const note = (text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, text });
+
+  // A charge begun last slot releases now, whatever this slot scripted.
+  if (f.marks.charge) {
+    spec = { name: f.marks.charge.action, sweep: f.marks.charge.sweep, released: true };
+    f.marks.charge = null;
+    note(`Releases the charged ${ACTIONS[spec.name].label}.`);
+  }
 
   // Lockjaw Venerable: a Bite the slot after a landed Lockjaw Bite gains +3. Nothing is forced.
   const lockjawBonus = f.marks.lockjawFollow && spec.name === 'bite';
   f.marks.lockjawFollow = false;
   const ready = f.readyAt[spec.name] ?? 0;
-  if (ready > g) {
+  if (ready > g + (spec.charge ? 1 : 0)) {
     note(`${describe(spec)} is still cooling down; holds instead.`);
     spec = HOLD;
   }
@@ -302,6 +352,20 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev
     spec = HOLD;
   }
   f.marks.noLeap = false;
+
+  // Charging: one action across two slots [Doc]. It must release by slot 3; only the Ouroboros wraps a charge.
+  if (spec.charge && slot >= 2) {
+    note('A charge must release by slot 3: charging in slot 3 holds instead.');
+    spec = HOLD;
+  }
+  // Crunching comes only from shards [Doc]: Raking Talons for Claw, Gnashing Teeth for Bite.
+  const crunchTech = spec.name === 'claw' ? tech(f, 'raking-talons') : spec.name === 'bite' ? tech(f, 'gnashing-teeth') : -1;
+  if (spec.crunch && (crunchTech < 0 || (crunchTech === W && !prevLanded))) {
+    note(crunchTech < 0
+      ? `Crunching a ${ACTIONS[spec.name].label} needs ${spec.name === 'claw' ? 'Raking Talons' : 'Gnashing Teeth'}: attacks once.`
+      : `A Wyrmling crunch needs a landed ${ACTIONS[spec.name].label} in the slot before: attacks once.`);
+    spec = { ...spec, crunch: undefined };
+  }
   const sw = tech(f, 'sidewinder-spine');
   if (spec.shift && (sw < 0 || (sw === W && spec.shift === 'in'))) {
     note(sw < 0 ? 'Strafes without shifting: that needs Sidewinder Spine.' : 'A Wyrmling Sidewinder Spine only shifts away.');
@@ -322,7 +386,8 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev
   const def = ACTIONS[spec.name];
   const rip = tech(f, 'riposte-talons');
   const cooldown = def.cooldown + (spec.name === 'dodge' && rip >= W && rip < A ? 1 : 0);
-  if (cooldown > 0) f.readyAt[spec.name] = g + cooldown + 1;
+  // A charging breath's cooldown starts when it releases.
+  if (cooldown > 0 && !spec.charge) f.readyAt[spec.name] = g + cooldown + 1;
 
   // Timing shifts move the active window's edges.
   let wShift = f.status.rattled ? R.RATTLED_WINDUP : 0;
@@ -368,20 +433,31 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev
   let link = 0;
   let intimidateBonus = false;
   let diveBonus = false;
-  if (def.category === 'attack') {
+  const charging = spec.charge === true;
+  if (charging) f.marks.charge = { action: spec.name as 'bite' | 'breath', sweep: spec.sweep };
+  // Crunched halves carry no modifier: the reward is doing the thing twice [Doc]. Raking Talons Venerable counts the pair as a link.
+  const crunchLink = spec.crunch && spec.name === 'claw' && crunchTech >= V;
+  if (def.category === 'attack' && !charging && (!spec.crunch || crunchLink)) {
     // Cooldown actions can't chain [Proposed]; they neither build nor break one.
     link = def.cooldown === 0 && f.chain.action === spec.name ? f.chain.links + 1 : 1;
+  }
+  if (def.category === 'attack' && !charging && !spec.crunch) {
     intimidateBonus = f.intimidateBonus;
     f.intimidateBonus = false;
     diveBonus = f.marks.diveBonus;
     f.marks.diveBonus = false;
   }
+  const halves: [number, number, number][] | null = spec.crunch
+    ? [halfTiming(def.profile, 0), halfTiming(def.profile, crunchTech >= A ? 3 : 6)]
+    : null;
+  const [w0, a0, r0] = charging ? [0, R.TICKS_PER_SLOT, 0] : halves ? halves[0] : [windup, active, recovery];
 
   return {
-    spec, windup, active, recovery, interruptedAt: null,
+    spec, windup: w0, active: a0, recovery: r0, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
     moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
+    charging, halves, landedHalves: 0,
   };
 }
 
@@ -440,7 +516,8 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
       for (const s of SIDES) {
         const reviser = opts.revise[s];
         const f = bout.fighters[s];
-        if (!revised[s] && reviser && f.marks.revisionLockedFor !== bout.exchange) {
+        // A charge on the board releases next slot regardless, so there's nothing to revise.
+        if (!revised[s] && reviser && f.marks.revisionLockedFor !== bout.exchange && !f.marks.charge) {
           const seen = f.marks.eye !== null ? reveal(slots[other(s)][2], f.marks.eye) : null;
           const c = reviser(bout, s, moment, revised[other(s)], seen);
           if (c) choices[s] = c;
@@ -511,7 +588,12 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
   const startSep = dist(F.A.pos, F.B.pos);
   const startZ = { A: F.A.pos.z, B: F.B.pos.z };
   const startWounds = { A: F.A.wounds, B: F.B.wounds };
-  const plans: Record<Side, Plan> = { A: makePlan(F.A, F.B, specs.A, g, ev), B: makePlan(F.B, F.A, specs.B, g, ev) };
+  const prev = bout.record.at(-1);
+  const prevLanded = (s: Side) => !!prev && prev.landed[s] && prev.actions[s] === specs[s].name;
+  const plans: Record<Side, Plan> = {
+    A: makePlan(F.A, F.B, specs.A, g, slot, prevLanded('A'), ev),
+    B: makePlan(F.B, F.A, specs.B, g, slot, prevLanded('B'), ev),
+  };
   checkKO(bout, ev, 0); // a goaded retreat can be the last straw
 
   for (let t = 0; t < R.TICKS_PER_SLOT && !bout.over; t++) {
@@ -525,7 +607,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     const f = F[s];
     if (p.landed) f.chain.hitThisExchange = true;
     if (p.spec.name === 'scales') f.chain.scalesThisExchange = true;
-    if (category(p) === 'attack' && ACTIONS[p.spec.name].cooldown === 0) {
+    if (category(p) === 'attack' && ACTIONS[p.spec.name].cooldown === 0 && p.link > 0) {
       const c = f.chain;
       if (c.action !== p.spec.name) {
         // A different attack starts a new chain.
@@ -556,6 +638,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
   const info = (p: Plan): PlanInfo => ({
     label: describe(p.spec) + (p.spec.revised ? ' (revised)' : '') + (p.converted === 'dodge' ? ' → dodge' : p.converted === 'roar' ? ' → roar' : ''),
     windup: p.windup, active: p.active, recovery: p.recovery, interruptedAt: p.interruptedAt,
+    ...(p.halves ? { halves: p.halves } : {}),
   });
   ev.push({
     kind: 'slotEnd', exchange: bout.exchange, slot: slot + 1,
@@ -609,11 +692,16 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   //    the target out of the shape; Accuracy's phantom band and the long Claw window answer that.
   for (const s of SIDES) {
     const p = plans[s];
-    if (category(p) === 'attack' && t === 0) {
+    if (category(p) === 'attack' && (t === 0 || (p.halves && t === R.HALF)) && phase(p, t) !== 'idle') {
+      // Each half of a crunch aims afresh.
+      if (t > 0) {
+        p.resolved = false;
+        p.nearMiss = false;
+      }
       p.origin = { ...F[s].pos };
       p.aim = sub(F[other(s)].pos, F[s].pos);
       ev.push({ kind: 'aim', tick: t, side: s, action: p.spec.name, distance: len(p.aim) });
-      beginStoop(F[s], F[other(s)], p, t, ev);
+      if (!p.halves) beginStoop(F[s], F[other(s)], p, t, ev);
     }
     // A stooping Wyvern strikes from wherever it actually landed, toward where the target stood.
     if (p.stoop && t === p.windup && phase(p, t) === 'active') {
@@ -642,7 +730,9 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       widen: lance >= E,
     };
 
-    if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, 0, mods)) {
+    // Bellows Chest Elder: a charged breath's area grows.
+    const area = p.spec.released && p.spec.name === 'breath' && tech(att, 'bellows-chest') >= E ? R.PACE : 0;
+    if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, area, mods)) {
       // An attack shape stops where it meets an obstacle and damages it instead [Proposed]. Stomp shakes the ground under it.
       // Lance Throat from Adult punches through one obstacle.
       const o = p.spec.name === 'stomp' ? null : obstacleOnLine(bout.arena, p.origin, def.pos, lance >= A ? 1 : 0);
@@ -670,7 +760,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
         }
       }
       hits.push(s);
-    } else if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, Math.max(0, accuracy) * R.NOTCH, mods)) {
+    } else if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, area + Math.max(0, accuracy) * R.NOTCH, mods)) {
       p.nearMiss = true;
     }
   }
@@ -685,7 +775,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   // 5. End-of-window checks.
   for (const s of SIDES) {
     const p = plans[s];
-    const lastActive = t === p.windup + p.active - 1 && phase(p, t) === 'active';
+    const lastActive = t === lastActiveTick(p, t) && phase(p, t) === 'active';
     if (!lastActive) continue;
     if (p.spec.name === 'breath' && p.origin && p.aim) {
       leaveZone(bout, s, p.origin, p.aim, t, ev);
@@ -810,8 +900,9 @@ function moveStep(me: Fighter, opp: Fighter, p: Plan, oppPlan: Plan, t: number, 
 function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[] } {
   const parts: string[] = [];
   const defPhase = phase(defPlan, t);
-  const scales = defPlan.spec.name === 'scales' && defPhase === 'active';
+  const scales = guarding(defPlan, t);
   const corroded = def.status.corroded;
+  const crunched = p.halves !== null;
   const sep = dist(att.pos, def.pos);
 
   // Ash Gland: the breath carries information, not harm (3 points from Adult).
@@ -834,6 +925,11 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     }
   }
   const hard = eff(def, 'hardness', { scales });
+  // Gnashing Teeth Elder: the second bite of a crunch pierces 3 Hardness.
+  if (crunched && p.spec.name === 'bite' && t >= R.HALF && tech(att, 'gnashing-teeth') >= E) {
+    guardShift -= 3;
+    guardNotes.push('Gnashing Teeth');
+  }
   const hardness = Math.max(0, hard.value + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0) + guardShift);
   const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${guardNotes.length ? ` (−3 ${guardNotes.join(', ')})` : ''}${hard.note}`;
   let v = 0;
@@ -842,6 +938,10 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       const bite = eff(att, 'bite', {});
       v = bite.value - hardness;
       parts.push(`Bite Force ${bite.value}${bite.note}`, `−${hardLabel}`);
+      if (p.spec.released) {
+        v += R.CHARGE_BONUS;
+        parts.push(`+${R.CHARGE_BONUS} charged`);
+      }
       break;
     }
     case 'claw': {
@@ -864,6 +964,18 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       const affinity = Math.max(0, aff.value + scalesAff + mantleAff - pierce);
       v = breath.value - affinity + m;
       parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${scalesAff ? ' (Scales)' : ''}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
+      const elem = R.ELEMENT_BREATH_MOD[att.sheet.stone];
+      if (elem) {
+        v += elem;
+        parts.push(`${elem > 0 ? '+' : ''}${elem} ${att.sheet.stone} breath`);
+      }
+      if (p.spec.released) {
+        // Bellows Chest: +3 more, then +6 more, then double Potency from Adult.
+        const bel = tech(att, 'bellows-chest');
+        const extra = bel >= A ? breath.value : bel === J ? 6 : bel === W ? 3 : 0;
+        v += R.CHARGE_BONUS + extra;
+        parts.push(`+${R.CHARGE_BONUS + extra} charged${bel >= W ? ' (Bellows Chest)' : ''}`);
+      }
       if (tech(att, 'smoldering-maw') >= W) {
         v -= 3;
         parts.push('−3 Smoldering Maw (it lingers instead)');
@@ -877,11 +989,12 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       parts.push(`Stomp ${R.STOMP_DAMAGE} true damage`);
       break;
   }
+  if (crunched) parts.push('crunched: no modifiers');
   if (p.intimidateBonus) {
     v += R.INTIMIDATE_BONUS;
     parts.push(`+${R.INTIMIDATE_BONUS} Intimidate`);
   }
-  if (p.link === 3 && !p.spec.revised) {
+  if (p.link === 3 && !p.spec.revised && !crunched) {
     const sapped = att.marks.sapped === 'any' || (att.marks.sapped === 'claw' && p.spec.name === 'claw');
     const rat = p.spec.name === 'claw' ? tech(att, 'ratchet-claws') : -1;
     if (sapped) {
@@ -935,7 +1048,16 @@ function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number,
   const def = bout.fighters[other(s)];
   p.resolved = true;
   p.landed = true;
+  p.landedHalves++;
   def.wounds -= total;
+  if (defPlan.charging && def.marks.charge) {
+    def.marks.charge = null;
+    ev.push({ kind: 'note', tick: t, side: def.side, text: 'The hit breaks the charge.' });
+  }
+  if (p.halves && p.landedHalves === 2 && p.spec.name === 'bite' && tech(bout.fighters[s], 'gnashing-teeth') >= V) {
+    def.pending.rattled = true;
+    ev.push({ kind: 'note', tick: t, side: def.side, text: 'Gnashing Teeth: both bites land; Rattled.' });
+  }
   const interrupt = phase(defPlan, t) === 'windup';
   if (interrupt) defPlan.interruptedAt = t;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, interrupt, graze, trade, woundsLeft: def.wounds });
@@ -1157,7 +1279,7 @@ function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: number, 
   }
   // Thornscale: attackers landing into Scales take 3 (Wyrmling: Claw only; Juvenile: Claw and Bite).
   const th = tech(def, 'thornscale');
-  const intoScales = defPlan.spec.name === 'scales' && phase(defPlan, t) === 'active';
+  const intoScales = guarding(defPlan, t);
   if (th >= W && intoScales && (p.spec.name === 'claw' || (th >= J && p.spec.name === 'bite'))) {
     att.wounds -= R.TECHNIQUE_POINTS;
     if (th >= V) att.pending.rattled = true;

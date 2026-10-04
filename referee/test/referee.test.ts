@@ -97,7 +97,7 @@ test('a chain needs each link to land', () => {
 test('breath skips Evasion and applies the matchup', () => {
   // Wyrm + Water (Breath 9) against True Dragon + Earth (Affinity 0): 9 − 0 + 3.
   const { hits } = fight({ name: 'Tide', morph: 'wyrm', stone: 'water' }, { name: 'Clod', morph: 'true-dragon', stone: 'earth' }, 7, ['breath'], ['strafe:cw']);
-  assert.equal(hitsBy(hits, 'A')[0].damage, 12);
+  assert.equal(hitsBy(hits, 'A')[0].damage, 9 - 0 + 3 + 2, 'Potency 9, Affinity 0, +3 matchup, +2 Water');
 });
 
 test('breath cooldown 2: a second breath in the same exchange holds instead', () => {

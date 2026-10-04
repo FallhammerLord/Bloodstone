@@ -25,7 +25,11 @@ export function bar(p: PlanInfo): string {
   let out = '';
   for (let t = 0; t < R.TICKS_PER_SLOT; t++) {
     if (p.interruptedAt !== null && t >= p.interruptedAt) out += 'x';
-    else if (t < p.windup) out += '-';
+    else if (p.halves) {
+      const [w, a] = p.halves[t < R.HALF ? 0 : 1];
+      const local = t % R.HALF;
+      out += local < w ? '-' : local < w + a ? '#' : '=';
+    } else if (t < p.windup) out += '-';
     else if (t < p.windup + p.active) out += '#';
     else out += '=';
   }

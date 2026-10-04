@@ -72,12 +72,12 @@ test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pie
   assert.equal(hits(run(newBout(fire, TD_WATER, 8.5), ['breath'], ['hold'])).length, 0);
   const ev = run(newBout(withTech(fire, 'Lance Throat', 'juvenile'), TD_WATER, 8.5), ['breath'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 15 - (6 - 3), 'Potency 15, Affinity 6 pierced to 3, Fire and Water neutral');
+  assert.equal(hits(ev)[0].damage, 15 - (6 - 3) - 2, 'Potency 15, Affinity 6 pierced to 3, Fire and Water neutral, −2 Fire breath');
 });
 
 test('Smoldering Maw: −3 on the hit, then the area lingers and stings at slot end', () => {
   const ev = run(newBout(withTech(TD_WATER, 'Smoldering Maw', 'juvenile'), TD_WATER, 4), ['breath', 'hold'], ['hold', 'hold']);
-  assert.equal(hits(ev)[0].damage, 1, 'Water into Water: 9 − 6 − 3 floors at 1');
+  assert.equal(hits(ev)[0].damage, 2, 'Water into Water: 9 − 6 + 2 Water − 3 Smoldering');
   const stings = ev.filter((e) => e.kind === 'zoneEffect' && e.zone === 'smolder');
   assert.equal(stings.length, 2, 'the slot it lands and the next');
 });

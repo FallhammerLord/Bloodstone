@@ -8,6 +8,8 @@ export const TICKS_PER_SLOT = 30; // [Doc] §4 Timeline: 30 ticks of 100 ms
 export const SLOTS_PER_EXCHANGE = 3; // [Doc] §4 Exchange
 export const EXCHANGE_LIMIT = 8; // [Assumed] the doc estimates six to eight; the last three get rim pulses
 export const MIN_ACTIVE = 3; // [Proposed] the active window never drops below 3 ticks
+export const HALF = 15; // [Doc] a crunch half runs 15 ticks
+export const CHARGE_BONUS = 3; // [Assumed] a charged Bite or Breath hits for +3
 
 // ---- Space ----
 // Positions are whole numbers in a fine grain so all math stays in integers.
@@ -62,6 +64,9 @@ export const METER_MAX = 100;
 // ---- Statuses ---- [Doc] §4 Statuses
 export const RATTLED_WINDUP = 3;
 export const BLINDED_ACCURACY = 3;
+
+// ---- Breath damage by element ---- [Assumed]: harmless extras earn points, harmful extras cost them
+export const ELEMENT_BREATH_MOD = { water: 2, air: 2, earth: 1, fire: -2 }; // push, shove, corrode, burn
 
 // ---- Breath effects, wyrmling strength ---- [Doc] §3 element table; numbers [Assumed]
 export const WATER_PUSH = PACE; // Water: the jet pushes the target back

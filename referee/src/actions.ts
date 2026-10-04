@@ -43,6 +43,12 @@ export interface ActionSpec {
   shift?: 'in' | 'out';
   /** set when this slot 3 was revised; a revised slot 3 gets no chain bonus [Proposed] */
   revised?: boolean;
+  /** a charge: this slot charges the Bite or Breath, which releases next slot [Doc] §4 */
+  charge?: boolean;
+  /** set by the Referee on the slot a charge releases in */
+  released?: boolean;
+  /** a crunch: the attack twice in one slot, 15 ticks each; needs Raking Talons or Gnashing Teeth [Doc] */
+  crunch?: boolean;
 }
 
 export const HOLD: ActionSpec = { name: 'hold' };
@@ -50,6 +56,15 @@ export const HOLD: ActionSpec = { name: 'hold' };
 /** Reads "bite", "strafe:cw", "claw:left", and so on. */
 export function parseAction(text: string): ActionSpec {
   const [raw, detail, extra] = text.trim().toLowerCase().split(':');
+  if (raw === 'charge') {
+    if (detail !== 'bite' && detail !== 'breath') throw new Error(`Charge a Bite or a Breath: "charge:bite" or "charge:breath".`);
+    return { name: detail, charge: true };
+  }
+  if (raw === 'crunch') {
+    if (detail === 'bite') return { name: 'bite', crunch: true };
+    if (detail === 'claw') return { name: 'claw', sweep: extra === 'right' ? 'right' : 'left', crunch: true };
+    throw new Error(`Crunch a Claw or a Bite: "crunch:claw" or "crunch:bite".`);
+  }
   if (!(raw in ACTIONS)) throw new Error(`Unknown action "${text}".`);
   const name = raw as ActionName;
   if (name === 'strafe') {
@@ -67,7 +82,8 @@ export function parseAction(text: string): ActionSpec {
 }
 
 export function describe(spec: ActionSpec): string {
-  const label = ACTIONS[spec.name].label;
+  const base = ACTIONS[spec.name].label;
+  const label = spec.charge ? `${base} (charging)` : spec.released ? `${base} (charged)` : spec.crunch ? `${base} ×2 (crunched)` : base;
   if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''})`;
   if (spec.sweep) return `${label} (${spec.sweep})`;
   return label;
