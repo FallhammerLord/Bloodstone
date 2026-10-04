@@ -41,6 +41,8 @@ export function rosterLines(bout: Bout, controllers?: Record<Side, Controller>):
     lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference}, ${h.flies ? 'flies' : 'grounded'}, Aspect: ${ASPECT_NAMES[h.aspect]})${who}`);
     lines.push(`   Wounds ${h.wounds}  Evasion ${h.evasion}  Hardness ${h.hardness}  Accuracy ${h.accuracy}`);
     lines.push(`   Claw ${h.claw}  Bite ${h.bite}  Breath ${h.breath}  Affinity ${h.affinity}  Acumen ${h.acumen}`);
+    const L = f.loadout;
+    if (L.names.length) lines.push(`   Shards: ${L.names.join(', ')}${L.seating.length ? `. Seating: ${L.seating.join(' ')}` : ''}`);
   }
   const sep = Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x);
   lines.push(`Starting separation: ${paces(sep)} paces (${bandOf(sep)})`);

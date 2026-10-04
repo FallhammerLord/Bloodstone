@@ -15,6 +15,7 @@ import { ACTIONS, HOLD, describe, type ActionName, type ActionSpec } from './act
 import { hatch, matchup, type StatSheet } from './hatch.ts';
 import { add, dist, flat, flatLen, isqrt, len, scaleTo, sub, vec, type Vec } from './geometry.ts';
 import { describeObstacle, inZone, makeArena, obstacleAt, obstacleOnLine, type Arena, type ArenaSetup, type Obstacle } from './arena.ts';
+import { compile, emptyArray, findShard, seat, type Attr, type Condition, type Grade, type Loadout } from './shards.ts';
 import { inShape, shapeOf } from './shapes.ts';
 import * as R from './rules.ts';
 
@@ -36,6 +37,8 @@ export interface Fighter {
   side: Side;
   name: string;
   sheet: StatSheet;
+  /** seated shards: conditional riders and techniques */
+  loadout: Loadout;
   pos: Vec;
   wounds: number;
   meter: number;
@@ -65,19 +68,38 @@ export interface Bout {
   winner: Side | null;
 }
 
+export interface ShardSetup {
+  shard: string;
+  /** Techniques need a grade; Body and Bloodstone names carry theirs */
+  grade?: Grade;
+  pips: number[];
+}
+
 export interface FighterSetup {
   name: string;
   morph: StatSheet['morph'];
   stone: StatSheet['stone'];
+  /** seated in order; a later shard over an earlier one damages or destroys it */
+  shards?: ShardSetup[];
+}
+
+/** Hatches the dragon and seats its shards. */
+export function buildSheet(setup: FighterSetup): { sheet: StatSheet; loadout: Loadout; notes: string[] } {
+  const array = emptyArray();
+  const notes: string[] = [];
+  for (const s of setup.shards ?? []) notes.push(...seat(array, findShard(s.shard, s.grade), s.pips));
+  const { sheet, loadout } = compile(hatch(setup.morph, setup.stone), array);
+  loadout.seating = notes;
+  return { sheet, loadout, notes };
 }
 
 /** Separation is in paces (decimals allowed). A stands west of B, facing east. */
 export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: number, challenged: Side = 'B', arena: ArenaSetup = {}): Bout {
   const half = Math.round((separationPaces * R.PACE) / 2);
   const make = (side: Side, setup: FighterSetup, x: number): Fighter => {
-    const sheet = hatch(setup.morph, setup.stone);
+    const { sheet, loadout } = buildSheet(setup);
     return {
-      side, name: setup.name, sheet, pos: vec(x, 0),
+      side, name: setup.name, sheet, loadout, pos: vec(x, 0),
       wounds: sheet.wounds, meter: sheet.acumen, readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
       chain: { action: null, links: 0, lastLanded: false }, pulsed: false,
@@ -200,7 +222,7 @@ function makePlan(f: Fighter, requested: ActionSpec, g: number, ev: Event[]): Pl
   let moveTotal = 0;
   let travel = active;
   if (def.category === 'move') {
-    const raw = f.sheet.evasion * R.EVASION_STEP;
+    const raw = eff(f, 'evasion', {}).value * R.EVASION_STEP;
     moveTotal = Math.min(raw, R.MOVE_CAP);
     // A move carries at most one band; Evasion beyond that buys timing [Proposed]: the move finishes sooner.
     if (raw > R.MOVE_CAP) travel = Math.max(1, Math.floor((active * R.MOVE_CAP) / raw));
@@ -394,7 +416,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     if (category(p) !== 'attack' || p.resolved || phase(p, t) !== 'active' || !p.origin || !p.aim) continue;
     const att = F[s];
     const def = F[other(s)];
-    const accuracy = att.sheet.accuracy - (att.status.blinded ? R.BLINDED_ACCURACY : 0);
+    const accuracy = eff(att, 'accuracy', { opp: def }).value - (att.status.blinded ? R.BLINDED_ACCURACY : 0);
     const shape = p.stoop ? 'stoop' : shapeOf(p.spec.name, att.sheet);
 
     if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, 0)) {
@@ -409,7 +431,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       if ((p.spec.name === 'bite' || p.spec.name === 'claw') && evading) {
         // Wyrm Serpentine [Assumed reading of §2]: it owns lateral movement, so its strafe evades like a dodge.
         const serpentine = def.sheet.aspect === 'serpentine' && plans[other(s)].spec.name === 'strafe' && evading === 'moving';
-        const evasion = def.sheet.evasion + (evading === 'dodging' || serpentine ? R.DODGE_BONUS : 0);
+        const evasion = eff(def, 'evasion', {}).value + (evading === 'dodging' || serpentine ? R.DODGE_BONUS : 0);
         const escaped = evasion > accuracy || (evasion === accuracy && def.sheet.acumen > att.sheet.acumen);
         if (escaped) {
           p.resolved = true;
@@ -553,22 +575,29 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
   const defPhase = phase(defPlan, t);
   const scales = defPlan.spec.name === 'scales' && defPhase === 'active';
   const corroded = def.status.corroded;
-  const hardness = Math.max(0, def.sheet.hardness + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0));
-  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}`;
+  const hard = eff(def, 'hardness', { scales });
+  const hardness = Math.max(0, hard.value + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0));
+  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${hard.note}`;
   let v = 0;
   switch (p.spec.name) {
-    case 'bite':
-      v = att.sheet.bite - hardness;
-      parts.push(`Bite Force ${att.sheet.bite}`, `−${hardLabel}`);
+    case 'bite': {
+      const bite = eff(att, 'bite', {});
+      v = bite.value - hardness;
+      parts.push(`Bite Force ${bite.value}${bite.note}`, `−${hardLabel}`);
       break;
-    case 'claw':
-      v = att.sheet.claw - hardness;
-      parts.push(`Claw Sharpness ${att.sheet.claw}`, `−${hardLabel}`);
+    }
+    case 'claw': {
+      const claw = eff(att, 'claw', { link: p.spec.revised ? 0 : p.link });
+      v = claw.value - hardness;
+      parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}`);
       break;
+    }
     case 'breath': {
       const m = matchup(att.sheet.stone, def.sheet.stone) * R.MATCHUP;
-      v = att.sheet.breath - def.sheet.affinity + m;
-      parts.push(`Breath Potency ${att.sheet.breath}`, `−Affinity ${def.sheet.affinity}`);
+      const breath = eff(att, 'breath', { sep: dist(att.pos, def.pos) });
+      const aff = eff(def, 'affinity', { opp: att });
+      v = breath.value - aff.value + m;
+      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${aff.value}${aff.note}`);
       if (m > 0) parts.push(`+${m} matchup`);
       if (m < 0) parts.push(`${m} matchup`);
       break;
@@ -749,4 +778,37 @@ function stoopStep(f: Fighter, p: Plan, t: number, fallback: Vec): Vec {
     from.y + Math.trunc(((to.y - from.y) * k) / span),
     from.z + Math.trunc(((to.z - from.z) * k) / span),
   );
+}
+
+// ---------------------------------------------------------------- attributes with shard riders
+
+interface RiderContext {
+  opp?: Fighter;
+  scales?: boolean;
+  link?: number;
+  sep?: number;
+}
+
+function riderHolds(c: Condition, f: Fighter, ctx: RiderContext): boolean {
+  switch (c) {
+    case 'halfWounds': return f.wounds * 2 <= f.sheet.wounds;
+    case 'aloft': return f.pos.z > 0;
+    case 'scales': return ctx.scales === true;
+    case 'altitudeDiff': return ctx.opp !== undefined && ctx.opp.pos.z !== f.pos.z;
+    case 'chainFinal': return ctx.link === 3;
+    case 'crunchedDifferent': return false; // crunch isn't built yet
+    case 'targetFar': return ctx.sep !== undefined && ctx.sep > R.CLOSE_EDGE && ctx.sep <= R.FAR_EDGE;
+    case 'beatsMyStone': return ctx.opp !== undefined && matchup(ctx.opp.sheet.stone, f.sheet.stone) === 1;
+  }
+}
+
+/** An attribute as it stands right now: the compiled sheet plus any shard riders whose condition holds. */
+function eff(f: Fighter, attr: Attr, ctx: RiderContext): { value: number; note: string } {
+  let value = f.sheet[attr];
+  let bonus = 0;
+  for (const r of f.loadout.riders) {
+    if (r.attr === attr && riderHolds(r.condition, f, ctx)) bonus += r.points;
+  }
+  value += bonus;
+  return { value, note: bonus ? ` (+${bonus} shard rider)` : '' };
 }
