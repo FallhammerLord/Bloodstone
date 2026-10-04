@@ -15,7 +15,7 @@ import { ACTIONS, HOLD, describe, type ActionName, type ActionSpec } from './act
 import { hatch, matchup, type StatSheet } from './hatch.ts';
 import { add, dist, flat, flatLen, isqrt, len, scaleTo, sub, vec, type Vec } from './geometry.ts';
 import { describeObstacle, inZone, makeArena, obstacleAt, obstacleOnLine, type Arena, type ArenaSetup, type Obstacle } from './arena.ts';
-import { compile, emptyArray, findShard, seat, type Attr, type Condition, type Grade, type Loadout } from './shards.ts';
+import { compile, emptyArray, findShard, gradeRank, seat, type Attr, type Condition, type Grade, type Loadout, type TechniqueId } from './shards.ts';
 import { inShape, shapeOf } from './shapes.ts';
 import * as R from './rules.ts';
 
@@ -30,8 +30,40 @@ export interface Statuses {
   blinded: boolean;
   /** Hardness lowered after ending a slot in a corrosive pool [Assumed] */
   corroded: boolean;
+  /** Hamstring Hooks Elder: moves complete 3 ticks later */
+  slowed: boolean;
+  /** Hamstring Hooks Venerable: can't Leap */
+  grounded: boolean;
 }
-const noStatuses = (): Statuses => ({ pinned: false, staggered: false, rattled: false, blinded: false, corroded: false });
+const noStatuses = (): Statuses => ({ pinned: false, staggered: false, rattled: false, blinded: false, corroded: false, slowed: false, grounded: false });
+
+/** Lingering effects of Techniques, carried between slots. All visible on the board. */
+export interface Marks {
+  /** Lockjaw: the next slot must be one of these; Venerable adds +3 to the locked Bite */
+  forced: { allowed: ActionName[]; bonus: boolean } | null;
+  /** Sapping Bellow on this dragon: its next chain bonus is stripped */
+  sapped: 'claw' | 'any' | null;
+  /** Goading Roar on this dragon: a Retreat next slot (or Dodge, from an Elder roar) stings; the grade rank */
+  goaded: number | null;
+  /** Stooping Pinions: +3 to the next attack; and the next slot can't Leap */
+  diveBonus: boolean;
+  noLeap: boolean;
+  /** Bounding Haunches Elder: next Bite or Claw winds up 3 faster. Sidewinder Elder: next wind-up of any kind. */
+  quick: 'strike' | 'any' | null;
+  /** Ash Gland: this dragon can't revise during this exchange */
+  revisionLockedFor: number;
+  /** Baleful Eye: this exchange's reveal, by grade rank */
+  eye: number | null;
+}
+const noMarks = (): Marks => ({ forced: null, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null });
+
+// Grade ranks, for reading technique terms.
+const W = 0, J = 1, A = 2, E = 3, V = 4;
+/** The grade rank a dragon holds a Technique at, or -1. */
+const tech = (f: Fighter, id: TechniqueId): number => {
+  const t = f.loadout.techniques.find((x) => x.id === id);
+  return t ? gradeRank(t.grade) : -1;
+};
 
 export interface Fighter {
   side: Side;
@@ -48,7 +80,8 @@ export interface Fighter {
   status: Statuses;
   pending: Statuses;
   intimidateBonus: boolean;
-  chain: { action: ActionName | null; links: number; lastLanded: boolean };
+  chain: { action: ActionName | null; links: number; lastLanded: boolean; paused: boolean; pauseUsed: boolean };
+  marks: Marks;
   /** hit by a rim pulse this bout */
   pulsed: boolean;
 }
@@ -102,7 +135,7 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
       side, name: setup.name, sheet, loadout, pos: vec(x, 0),
       wounds: sheet.wounds, meter: sheet.acumen, readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
-      chain: { action: null, links: 0, lastLanded: false }, pulsed: false,
+      chain: { action: null, links: 0, lastLanded: false, paused: false, pauseUsed: false }, marks: noMarks(), pulsed: false,
     };
   };
   const fighters = { A: make('A', a, -half), B: make('B', b, half) };
@@ -139,8 +172,8 @@ export type Event =
   | { kind: 'revision'; side: Side; moment: Moment; from: string; to: string }
   | { kind: 'pulse'; side: Side; pulse: number; damage: number; woundsLeft: number; capped: boolean }
   | { kind: 'obstacle'; tick: number; attacker: Side; action: ActionName; obstacle: string; damage: number; destroyed: boolean; through: boolean }
-  | { kind: 'zone'; tick: number; owner: Side; zone: 'burning' | 'corrosive'; center: Vec }
-  | { kind: 'zoneEffect'; side: Side; zone: 'burning' | 'corrosive'; damage: number; woundsLeft: number }
+  | { kind: 'zone'; tick: number; owner: Side; zone: 'burning' | 'corrosive' | 'smolder'; center: Vec }
+  | { kind: 'zoneEffect'; side: Side; zone: 'burning' | 'corrosive' | 'smolder'; damage: number; woundsLeft: number }
   | { kind: 'boutEnd'; winner: Side; reason: string };
 
 // ---------------------------------------------------------------- plans
@@ -167,6 +200,17 @@ interface Plan {
   intimidateBonus: boolean;
   /** a Wyvern stoop: flies from the air to land at Melee during the wind-up */
   stoop: { from: Vec; to: Vec; target: Vec } | null;
+  /** Sidewinder Spine: distance to shift along the line while strafing, and how far it has */
+  shiftTotal: number;
+  shifted: number;
+  /** altitude when the slot began (Stooping Pinions) */
+  startZ: number;
+  /** a Bite or Claw aimed at this dragon missed while it evaded (Riposte, Sidewinder) */
+  evaded: boolean;
+  /** this chain paused through a Guard (Ratchet Claws) */
+  chainPaused: boolean;
+  lockjawBonus: boolean;
+  diveBonus: boolean;
 }
 
 const category = (p: Plan) => ACTIONS[p.spec.name].category;
@@ -195,53 +239,123 @@ export function timing(profile: readonly [number, number, number], windupShift: 
   return [w, a, r];
 }
 
-function makePlan(f: Fighter, requested: ActionSpec, g: number, ev: Event[]): Plan {
+function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev: Event[]): Plan {
   let spec = requested;
+  const note = (text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, text });
+
+  // Lockjaw: the slot after a landed Bite is locked.
+  let lockjawBonus = false;
+  if (f.marks.forced) {
+    const { allowed, bonus } = f.marks.forced;
+    f.marks.forced = null;
+    if (!allowed.includes(spec.name)) {
+      note(`Lockjaw keeps its grip: ${describe(spec)} becomes a Bite.`);
+      spec = { name: 'bite' };
+    }
+    lockjawBonus = bonus && spec.name === 'bite';
+  }
   const ready = f.readyAt[spec.name] ?? 0;
   if (ready > g) {
-    ev.push({ kind: 'note', tick: 0, side: f.side, text: `${describe(spec)} is still cooling down; holds instead.` });
+    note(`${describe(spec)} is still cooling down; holds instead.`);
     spec = HOLD;
   }
   if (f.status.pinned && ACTIONS[spec.name].category === 'move') {
-    ev.push({ kind: 'note', tick: 0, side: f.side, text: `Pinned: can't ${describe(spec)}; holds instead.` });
+    note(`Pinned: can't ${describe(spec)}; holds instead.`);
     spec = HOLD;
   }
   if (spec.name === 'dive' && f.pos.z === 0) {
-    ev.push({ kind: 'note', tick: 0, side: f.side, text: 'Already on the ground: nothing to dive from; holds instead.' });
+    note('Already on the ground: nothing to dive from; holds instead.');
     spec = HOLD;
   }
   if (spec.name === 'stomp' && f.pos.z > 0) {
-    ev.push({ kind: 'note', tick: 0, side: f.side, text: "Can't Stomp while aloft; holds instead." });
+    note("Can't Stomp while aloft; holds instead.");
     spec = HOLD;
   }
-  const def = ACTIONS[spec.name];
-  if (def.cooldown > 0) f.readyAt[spec.name] = g + def.cooldown + 1;
+  if (spec.name === 'leap' && (f.status.grounded || f.marks.noLeap)) {
+    note(f.status.grounded ? 'Hamstrung: can\'t Leap; holds instead.' : 'Just dived: can\'t Leap this slot; holds instead.');
+    spec = HOLD;
+  }
+  f.marks.noLeap = false;
+  const sw = tech(f, 'sidewinder-spine');
+  if (spec.shift && (sw < 0 || (sw === W && spec.shift === 'in'))) {
+    note(sw < 0 ? 'Strafes without shifting: that needs Sidewinder Spine.' : 'A Wyrmling Sidewinder Spine only shifts away.');
+    spec = { name: spec.name, dir: spec.dir };
+  }
 
-  const [windup, active, recovery] = timing(def.profile, f.status.rattled ? R.RATTLED_WINDUP : 0, 0);
+  // Goading Roar: a goaded Retreat stings, even when the leash turns it into a roar.
+  if (f.marks.goaded !== null) {
+    const gr = f.marks.goaded;
+    f.marks.goaded = null;
+    if (spec.name === 'retreat' || (gr >= E && spec.name === 'dodge')) {
+      f.wounds -= R.TECHNIQUE_POINTS;
+      note(`Goaded into a ${describe(spec)}: takes ${R.TECHNIQUE_POINTS}.`);
+      if (gr >= V) f.status.rattled = true;
+    }
+  }
+
+  const def = ACTIONS[spec.name];
+  const rip = tech(f, 'riposte-talons');
+  const cooldown = def.cooldown + (spec.name === 'dodge' && rip >= W && rip < A ? 1 : 0);
+  if (cooldown > 0) f.readyAt[spec.name] = g + cooldown + 1;
+
+  // Timing shifts move the active window's edges.
+  let wShift = f.status.rattled ? R.RATTLED_WINDUP : 0;
+  let rShift = 0;
+  const snap = tech(f, 'snapping-jaw');
+  if (spec.name === 'bite' && snap >= W) {
+    wShift += snap === W ? -3 : -5;
+    rShift += snap >= A ? 3 : 5;
+  }
+  const ham = tech(f, 'hamstring-hooks');
+  if (spec.name === 'claw' && ham >= W) rShift += ham >= A ? 3 : 5;
+  const bound = tech(f, 'bounding-haunches');
+  const bounding = spec.name === 'approach' && bound >= W && (bound >= J || dist(f.pos, opp.pos) > R.CLOSE_EDGE);
+  if (bounding) rShift += bound >= A ? 3 : 6;
+  if (f.marks.quick && (f.marks.quick === 'any' || spec.name === 'bite' || spec.name === 'claw') && spec.name !== 'hold') {
+    wShift -= 3;
+    f.marks.quick = null;
+  }
+  if (spec.name === 'claw' && tech(f, 'ratchet-claws') >= E && f.chain.paused) wShift -= 3;
+  const [windup, active, recovery] = timing(def.profile, wShift, rShift);
 
   let moveTotal = 0;
   let travel = active;
+  let shiftTotal = 0;
   if (def.category === 'move') {
-    const raw = eff(f, 'evasion', {}).value * R.EVASION_STEP;
-    moveTotal = Math.min(raw, R.MOVE_CAP);
+    let raw = eff(f, 'evasion', {}).value * R.EVASION_STEP;
+    let cap = R.MOVE_CAP;
+    // Bounding Haunches: an Approach carries up to two bands [Doc]; read here as double distance [Assumed].
+    if (bounding) {
+      raw *= 2;
+      cap *= 2;
+    }
+    moveTotal = Math.min(raw, cap);
     // A move carries at most one band; Evasion beyond that buys timing [Proposed]: the move finishes sooner.
-    if (raw > R.MOVE_CAP) travel = Math.max(1, Math.floor((active * R.MOVE_CAP) / raw));
+    if (raw > cap) travel = Math.max(1, Math.floor((active * cap) / raw));
+    if (spec.name === 'strafe' && sw >= W && (sw < A || spec.shift)) moveTotal = Math.max(0, moveTotal - R.PACE);
+    if (spec.shift) shiftTotal = (sw >= A ? 2 : 1) * R.PACE;
     if (f.status.staggered) moveTotal = Math.floor(moveTotal / 2);
+    if (f.status.slowed) travel = Math.min(active, travel + 3);
+    if (spec.name === 'dive' && tech(f, 'stooping-pinions') >= E) travel = Math.max(1, travel - 3);
   }
 
   let link = 0;
   let intimidateBonus = false;
+  let diveBonus = false;
   if (def.category === 'attack') {
     const continues = f.chain.action === spec.name && f.chain.lastLanded && def.cooldown === 0 && f.chain.links < 3;
     link = continues ? f.chain.links + 1 : 1;
     intimidateBonus = f.intimidateBonus;
     f.intimidateBonus = false;
+    diveBonus = f.marks.diveBonus;
+    f.marks.diveBonus = false;
   }
 
   return {
     spec, windup, active, recovery, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
     moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null,
+    shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.pauseUsed, lockjawBonus, diveBonus,
   };
 }
 
@@ -255,7 +369,16 @@ export type Moment = 1 | 2;
  * (everything is visible) and whether the opponent has already revised (the flash). Returns a new
  * slot 3, or null to keep it. Both sides decide from the same moment, so same-moment revisions are simultaneous.
  */
-export type Reviser = (bout: Bout, side: Side, moment: Moment, opponentRevised: boolean) => ActionSpec | null;
+export type Reviser = (bout: Bout, side: Side, moment: Moment, opponentRevised: boolean, revealed: string | null) => ActionSpec | null;
+
+/** Baleful Eye: what the eye shows of the opponent's scripted slot 3, by grade [Doc]. */
+function reveal(spec: ActionSpec, rank: number): string {
+  const cat = ACTIONS[spec.name].category;
+  if (rank >= V) return describe(spec);
+  if (rank >= E) return ACTIONS[spec.name].label;
+  if (rank >= J) return cat;
+  return cat === 'attack' ? 'attack' : 'not an attack';
+}
 
 export interface ExchangeOptions {
   trace?: boolean;
@@ -268,8 +391,11 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
   bout.exchange++;
   ev.push({ kind: 'exchangeStart', exchange: bout.exchange });
   for (const s of SIDES) {
-    bout.fighters[s].chain = { action: null, links: 0, lastLanded: false }; // [Assumed] chains live within one exchange
-    bout.startWounds[s] = bout.fighters[s].wounds;
+    const f = bout.fighters[s];
+    f.chain = { action: null, links: 0, lastLanded: false, paused: false, pauseUsed: false }; // [Assumed] chains live within one exchange
+    f.marks.eye = null;
+    bout.startWounds[s] = f.wounds;
+    if (f.marks.revisionLockedFor === bout.exchange) ev.push({ kind: 'note', tick: 0, side: s, text: "Ash Gland: can't revise this exchange." });
   }
   const slots: Record<Side, ActionSpec[]> = {
     A: [0, 1, 2].map((i) => scripts.A[i] ?? HOLD),
@@ -286,8 +412,10 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
       const choices: Partial<Record<Side, ActionSpec>> = {};
       for (const s of SIDES) {
         const reviser = opts.revise[s];
-        if (!revised[s] && reviser) {
-          const c = reviser(bout, s, moment, revised[other(s)]);
+        const f = bout.fighters[s];
+        if (!revised[s] && reviser && f.marks.revisionLockedFor !== bout.exchange) {
+          const seen = f.marks.eye !== null ? reveal(slots[other(s)][2], f.marks.eye) : null;
+          const c = reviser(bout, s, moment, revised[other(s)], seen);
           if (c) choices[s] = c;
         }
       }
@@ -323,19 +451,39 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     F[s].status = F[s].pending;
     F[s].pending = noStatuses();
   }
-  const plans: Record<Side, Plan> = { A: makePlan(F.A, specs.A, g, ev), B: makePlan(F.B, specs.B, g, ev) };
+  const plans: Record<Side, Plan> = { A: makePlan(F.A, F.B, specs.A, g, ev), B: makePlan(F.B, F.A, specs.B, g, ev) };
+  checkKO(bout, ev, 0); // a goaded retreat can be the last straw
 
   for (let t = 0; t < R.TICKS_PER_SLOT && !bout.over; t++) {
     tick(bout, plans, t, ev);
     if (trace) ev.push({ kind: 'trace', tick: t, positions: { A: { ...F.A.pos }, B: { ...F.B.pos } } });
   }
-  if (!bout.over) zonesAtSlotEnd(bout, g, ev);
+  if (!bout.over) zonesAtSlotEnd(bout, plans, g, ev);
 
   for (const s of SIDES) {
     const p = plans[s];
-    F[s].chain = category(p) === 'attack'
-      ? { action: p.spec.name, links: p.link, lastLanded: p.landed }
-      : { action: null, links: 0, lastLanded: false };
+    const f = F[s];
+    if (category(p) === 'attack') {
+      f.chain = { action: p.spec.name, links: p.link, lastLanded: p.landed, paused: false, pauseUsed: p.link > 1 && f.chain.pauseUsed };
+    } else {
+      // Ratchet Claws: a Claw chain survives one Guard (Wyrmling: Scales only; Venerable: a Move too), pausing.
+      const rat = tech(f, 'ratchet-claws');
+      const cat = category(p);
+      const pauses = f.chain.action === 'claw' && !f.chain.pauseUsed && rat >= W &&
+        (p.spec.name === 'scales' || (rat >= J && cat === 'guard') || (rat >= V && cat === 'move'));
+      f.chain = pauses
+        ? { ...f.chain, paused: true, pauseUsed: true }
+        : { action: null, links: 0, lastLanded: false, paused: false, pauseUsed: false };
+    }
+    // Riposte Talons Adult: the Dodge cooldown penalty applies only after a failed dodge.
+    if (p.spec.name === 'dodge' && !p.evaded && tech(f, 'riposte-talons') >= A) f.readyAt.dodge = (f.readyAt.dodge ?? 0) + 1;
+    // Stooping Pinions: a dive from high enough adds +3 to the next attack; the next slot can't Leap below Adult.
+    const sp = tech(f, 'stooping-pinions');
+    if (p.spec.name === 'dive' && sp >= W && p.moved > 0 && p.startZ >= (sp === W ? R.STOOPING_HEIGHT.wyrmling : R.STOOPING_HEIGHT.rest)) {
+      f.marks.diveBonus = true;
+      f.marks.noLeap = sp < A;
+      ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: 'Stooping Pinions: +3 to the next attack.' });
+    }
     bout.history[s].push(p.spec.name);
   }
 
@@ -416,12 +564,22 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     if (category(p) !== 'attack' || p.resolved || phase(p, t) !== 'active' || !p.origin || !p.aim) continue;
     const att = F[s];
     const def = F[other(s)];
-    const accuracy = eff(att, 'accuracy', { opp: def }).value - (att.status.blinded ? R.BLINDED_ACCURACY : 0);
-    const shape = p.stoop ? 'stoop' : shapeOf(p.spec.name, att.sheet);
+    const defPlan = plans[other(s)];
+    // Scything Forelimbs: a wider claw arc that tests Accuracy at −3 (from Adult, only on a chain's first claw).
+    const scy = p.spec.name === 'claw' ? tech(att, 'scything-forelimbs') : -1;
+    const scythePenalty = scy >= W && (scy < A || p.link <= 1) ? 3 : 0;
+    const accuracy = eff(att, 'accuracy', { opp: def }).value - (att.status.blinded ? R.BLINDED_ACCURACY : 0) - scythePenalty;
+    const lance = p.spec.name === 'breath' ? tech(att, 'lance-throat') : -1;
+    const shape = p.stoop ? 'stoop' : lance >= W ? 'lance' : shapeOf(p.spec.name, att.sheet);
+    const mods = {
+      reach: scy < W ? 0 : (scy === W ? R.SCYTHE_REACH.wyrmling : R.SCYTHE_REACH.full) + (scy >= V && def.pos.z > p.origin.z ? R.PACE : 0),
+      widen: lance >= E,
+    };
 
-    if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, 0)) {
+    if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, 0, mods)) {
       // An attack shape stops where it meets an obstacle and damages it instead [Proposed]. Stomp shakes the ground under it.
-      const o = p.spec.name === 'stomp' ? null : obstacleOnLine(bout.arena, p.origin, def.pos);
+      // Lance Throat from Adult punches through one obstacle.
+      const o = p.spec.name === 'stomp' ? null : obstacleOnLine(bout.arena, p.origin, def.pos, lance >= A ? 1 : 0);
       if (o) {
         blocked.push({ s, o });
         continue;
@@ -431,16 +589,22 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       if ((p.spec.name === 'bite' || p.spec.name === 'claw') && evading) {
         // Wyrm Serpentine [Assumed reading of §2]: it owns lateral movement, so its strafe evades like a dodge.
         const serpentine = def.sheet.aspect === 'serpentine' && plans[other(s)].spec.name === 'strafe' && evading === 'moving';
-        const evasion = eff(def, 'evasion', {}).value + (evading === 'dodging' || serpentine ? R.DODGE_BONUS : 0);
+        let evasion = eff(def, 'evasion', {}).value + (evading === 'dodging' || serpentine ? R.DODGE_BONUS : 0);
+        if (def.status.pinned && p.spec.name === 'bite' && tech(att, 'lockjaw') >= E) evasion -= 3; // Lockjaw Elder
+        if (scy >= E && defPlan.spec.name === 'strafe') evasion -= 3; // Scything Elder: caught strafers
+        const sw = tech(def, 'sidewinder-spine');
+        if (sw >= V && defPlan.spec.name === 'strafe' && bout.history[def.side].at(-1) === 'strafe') evasion += 3; // chained Sidewinders
         const escaped = evasion > accuracy || (evasion === accuracy && def.sheet.acumen > att.sheet.acumen);
         if (escaped) {
           p.resolved = true;
+          defPlan.evaded = true;
           ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, text: `${serpentine ? 'strafing (Serpentine)' : evading} with Evasion ${evasion} beats Accuracy ${accuracy}` });
+          riposte(bout, other(s), p, defPlan, t, ev);
           continue;
         }
       }
       hits.push(s);
-    } else if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, Math.max(0, accuracy) * R.NOTCH)) {
+    } else if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, Math.max(0, accuracy) * R.NOTCH, mods)) {
       p.nearMiss = true;
     }
   }
@@ -457,9 +621,18 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     const p = plans[s];
     const lastActive = t === p.windup + p.active - 1 && phase(p, t) === 'active';
     if (!lastActive) continue;
-    if (p.spec.name === 'breath' && p.origin && p.aim) leaveZone(bout, s, p.origin, p.aim, t, ev);
+    if (p.spec.name === 'breath' && p.origin && p.aim) {
+      leaveZone(bout, s, p.origin, p.aim, t, ev);
+      smolder(bout, s, p.origin, p.aim, t, ev);
+    }
     if (category(p) === 'attack' && !p.resolved) {
       p.resolved = true;
+      // Sidewinder Spine Elder: a strafe that slips an attack speeds the next wind-up.
+      const dp = plans[other(s)];
+      if (dp.spec.name === 'strafe' && tech(F[other(s)], 'sidewinder-spine') >= E) {
+        dp.evaded = true;
+        F[other(s)].marks.quick = 'any';
+      }
       if (!p.nearMiss) {
         ev.push({ kind: 'whiff', tick: t, attacker: s, action: p.spec.name });
         continue;
@@ -474,15 +647,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
         ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: att.meter });
       }
     }
-    if (p.spec.name === 'intimidate') {
-      const sep = dist(F.A.pos, F.B.pos);
-      if (sep <= R.FAR_EDGE) {
-        F[s].intimidateBonus = true;
-        ev.push({ kind: 'note', tick: t, side: s, text: 'Intimidate lands: +3 to the next attack.' });
-      } else {
-        ev.push({ kind: 'note', tick: t, side: s, text: 'Intimidate falls short: the opponent is beyond Far.' });
-      }
-    }
+    if (p.spec.name === 'intimidate') intimidateLands(bout, s, t, ev);
   }
 
   // 6. KO checks.
@@ -542,7 +707,13 @@ function moveStep(me: Fighter, opp: Fighter, p: Plan, oppPlan: Plan, t: number, 
     case 'strafe': {
       if (flatSep === 0) return me.pos;
       const tangent = p.spec.dir === 'cw' ? vec(flatV.y, -flatV.x) : vec(-flatV.y, flatV.x);
-      np = { ...add(flat(opp.pos), scaleTo(add(flatV, scaleTo(tangent, delta)), flatSep)), z: me.pos.z };
+      // Sidewinder Spine: shift along the line while strafing, spread over the same ticks.
+      const k2 = Math.min(t - p.windup + 1, p.travel);
+      const shiftNow = Math.floor((p.shiftTotal * k2) / p.travel) - p.shifted;
+      p.shifted += shiftNow;
+      const radius = Math.max(R.BODY_GAP, flatSep + (p.spec.shift === 'in' ? -shiftNow : shiftNow));
+      np = { ...add(flat(opp.pos), scaleTo(add(flatV, scaleTo(tangent, delta)), radius)), z: me.pos.z };
+      if (dist(np, opp.pos) > R.LEASH) np = { ...add(flat(opp.pos), scaleTo(add(flatV, scaleTo(tangent, delta)), flatSep)), z: me.pos.z };
       break;
     }
     case 'leap': {
@@ -575,9 +746,30 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
   const defPhase = phase(defPlan, t);
   const scales = defPlan.spec.name === 'scales' && defPhase === 'active';
   const corroded = def.status.corroded;
+  const sep = dist(att.pos, def.pos);
+
+  // Ash Gland: the breath carries information, not harm (3 points from Adult).
+  const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
+  if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`] };
+
+  // Guard techniques change Hardness while guarding with Scales.
+  let guardShift = 0;
+  const guardNotes: string[] = [];
+  if (scales) {
+    const thorn = tech(def, 'thornscale');
+    if (thorn >= W && (thorn < A || p.spec.name === 'bite')) {
+      guardShift -= 3;
+      guardNotes.push('Thornscale');
+    }
+    const mantle = tech(def, 'mantle-wings');
+    if (mantle >= W && (p.spec.name === 'claw' || (p.spec.name === 'bite' && mantle < A)) && !(mantle >= V && def.pos.z > 0)) {
+      guardShift -= 3;
+      guardNotes.push('Mantle Wings');
+    }
+  }
   const hard = eff(def, 'hardness', { scales });
-  const hardness = Math.max(0, hard.value + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0));
-  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${hard.note}`;
+  const hardness = Math.max(0, hard.value + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0) + guardShift);
+  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${guardNotes.length ? ` (−3 ${guardNotes.join(', ')})` : ''}${hard.note}`;
   let v = 0;
   switch (p.spec.name) {
     case 'bite': {
@@ -594,10 +786,21 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     }
     case 'breath': {
       const m = matchup(att.sheet.stone, def.sheet.stone) * R.MATCHUP;
-      const breath = eff(att, 'breath', { sep: dist(att.pos, def.pos) });
+      const breath = eff(att, 'breath', { sep });
       const aff = eff(def, 'affinity', { opp: att });
-      v = breath.value - aff.value + m;
-      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${aff.value}${aff.note}`);
+      // Mantle Wings: Scales adds Affinity against breath (Wyrmling: only at Melee or Close).
+      const mantle = scales ? tech(def, 'mantle-wings') : -1;
+      const mantleAff = mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
+      // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable.
+      const lance = tech(att, 'lance-throat');
+      const pierce = lance >= V && sep > R.CLOSE_EDGE ? 6 : lance >= J ? 3 : 0;
+      const affinity = Math.max(0, aff.value + mantleAff - pierce);
+      v = breath.value - affinity + m;
+      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
+      if (tech(att, 'smoldering-maw') >= W) {
+        v -= 3;
+        parts.push('−3 Smoldering Maw (it lingers instead)');
+      }
       if (m > 0) parts.push(`+${m} matchup`);
       if (m < 0) parts.push(`${m} matchup`);
       break;
@@ -612,8 +815,29 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     parts.push(`+${R.INTIMIDATE_BONUS} Intimidate`);
   }
   if (p.link === 3 && !p.spec.revised) {
-    v += R.CHAIN_THIRD_LINK_BONUS;
-    parts.push(`+${R.CHAIN_THIRD_LINK_BONUS} chain third link`);
+    const sapped = att.marks.sapped === 'any' || (att.marks.sapped === 'claw' && p.spec.name === 'claw');
+    const rat = p.spec.name === 'claw' ? tech(att, 'ratchet-claws') : -1;
+    if (sapped) {
+      att.marks.sapped = null;
+      parts.push('chain bonus sapped (Sapping Bellow)');
+    } else if (rat >= W && (rat < A || p.chainPaused)) {
+      parts.push('chain bonus spent holding the chain (Ratchet Claws)');
+    } else {
+      v += R.CHAIN_THIRD_LINK_BONUS;
+      parts.push(`+${R.CHAIN_THIRD_LINK_BONUS} chain third link`);
+    }
+  }
+  if (p.lockjawBonus) {
+    v += 3;
+    parts.push('+3 Lockjaw follow-up');
+  }
+  if (p.diveBonus) {
+    v += 3;
+    parts.push('+3 Stooping Pinions');
+  }
+  if (p.spec.name === 'bite' && defPhase === 'windup' && tech(att, 'snapping-jaw') >= E) {
+    v += 3;
+    parts.push('+3 Snapping Jaw interrupt');
   }
   if (defPhase === 'recovery') {
     v += R.PUNISH_BONUS;
@@ -621,6 +845,11 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
   } else if (defPlan.spec.name === 'intimidate' && defPhase !== 'idle') {
     v += R.PUNISH_BONUS;
     parts.push(`+${R.PUNISH_BONUS} punish (caught intimidating)`);
+    // Intimidate techniques at Adult: punishes against you deal 3 less [Doc].
+    if (['sapping-bellow', 'baleful-eye', 'goading-roar'].some((id) => tech(def, id as TechniqueId) >= A)) {
+      v -= 3;
+      parts.push('−3 (Intimidate technique)');
+    }
   }
   if (graze) {
     v -= R.GRAZE_PENALTY;
@@ -643,7 +872,8 @@ function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number,
   const interrupt = phase(defPlan, t) === 'windup';
   if (interrupt) defPlan.interruptedAt = t;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, interrupt, graze, trade, woundsLeft: def.wounds });
-  if (p.spec.name === 'breath' && !graze && p.aim) breathVerb(bout, s, p.aim, t, ev);
+  if (p.spec.name === 'breath' && !graze && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) breathVerb(bout, s, p.aim, t, ev);
+  techniqueOnHit(bout, s, p, defPlan, t, graze, ev);
   if (p.spec.name === 'stomp') {
     def.pending.staggered = true;
     ev.push({ kind: 'note', tick: t, side: def.side, text: 'Staggered next slot: movement distance halved.' });
@@ -729,19 +959,41 @@ function leaveZone(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, ev: Ev
   ev.push({ kind: 'zone', tick: t, owner: s, zone, center });
 }
 
-/** At slot's end, grounded dragons inside a zone feel it, whoever breathed it; then spent zones fade. */
-function zonesAtSlotEnd(bout: Bout, g: number, ev: Event[]) {
+/**
+ * At slot's end, dragons inside a zone feel it, whoever breathed it; then spent zones fade.
+ * Floor zones touch only grounded dragons. A dragon guarding with Mantle Wings (Elder) is shielded.
+ * Smoldering Maw: 3 points and the element's verb; overlapping areas stack only for a Venerable.
+ */
+function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Event[]) {
+  const smoldered = new Set<Side>();
   for (const z of bout.arena.zones) {
     for (const s of SIDES) {
       const f = bout.fighters[s];
       if (!inZone(z, f.pos)) continue;
+      if (plans[s].spec.name === 'scales' && tech(f, 'mantle-wings') >= E) continue;
       if (z.kind === 'burning') {
         f.wounds -= R.BURN_DAMAGE;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.BURN_DAMAGE, woundsLeft: f.wounds });
-      } else {
+      } else if (z.kind === 'corrosive') {
         f.pending.corroded = true;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: 0, woundsLeft: f.wounds });
+      } else {
+        if (smoldered.has(s) && !z.stacks) continue;
+        smoldered.add(s);
+        f.wounds -= R.TECHNIQUE_POINTS;
+        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.TECHNIQUE_POINTS, woundsLeft: f.wounds });
+        const away = sub(f.pos, z.center);
+        if (z.element === 'water') shove(bout, s, away, R.WATER_PUSH);
+        if (z.element === 'air') shove(bout, s, vec(-away.y, away.x), R.AIR_SHOVE);
+        if (z.element === 'earth') f.pending.corroded = true;
       }
+    }
+    // Smoldering Maw Elder: the lingering area eats at obstacles inside it.
+    if (z.kind === 'smolder' && tech(bout.fighters[z.owner], 'smoldering-maw') >= E) {
+      for (const o of bout.arena.obstacles) {
+        if (o.wounds !== null && flatLen(sub(o.pos, z.center)) <= z.radius + o.radius) o.wounds -= R.TECHNIQUE_POINTS;
+      }
+      bout.arena.obstacles = bout.arena.obstacles.filter((o) => o.wounds === null || o.wounds > 0);
     }
   }
   bout.arena.zones = bout.arena.zones.filter((z) => z.lastSlot > g);
@@ -811,4 +1063,114 @@ function eff(f: Fighter, attr: Attr, ctx: RiderContext): { value: number; note: 
   }
   value += bonus;
   return { value, note: bonus ? ` (+${bonus} shard rider)` : '' };
+}
+
+// ---------------------------------------------------------------- techniques (dragonshards-technique.md)
+
+/** What a landed hit sets off, by the attacker's and defender's Techniques. */
+function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: number, graze: boolean, ev: Event[]) {
+  const att = bout.fighters[s];
+  const def = bout.fighters[other(s)];
+  const note = (side: Side, text: string) => ev.push({ kind: 'note', tick: t, side, text });
+
+  // Lockjaw: a landed Bite Pins; the biter's next slot locks to Bite (Adult: Bite or Guard).
+  const lj = p.spec.name === 'bite' ? tech(att, 'lockjaw') : -1;
+  if (lj >= W && (lj >= J || p.link === 3)) {
+    def.pending.pinned = true;
+    att.marks.forced = { allowed: lj >= A ? ['bite', 'scales', 'dodge'] : ['bite'], bonus: lj >= V };
+    note(def.side, 'Lockjaw: Pinned next slot.');
+  }
+  // Hamstring Hooks: a landed Claw Staggers (Elder: slows its next move; Venerable: no Leap).
+  const hh = p.spec.name === 'claw' ? tech(att, 'hamstring-hooks') : -1;
+  if (hh >= W && (hh >= J || p.link === 3)) {
+    def.pending.staggered = true;
+    if (hh >= E) def.pending.slowed = true;
+    if (hh >= V) def.pending.grounded = true;
+    note(def.side, `Hamstring Hooks: Staggered next slot${hh >= E ? ', and slowed' : ''}${hh >= V ? ', and can\'t Leap' : ''}.`);
+  }
+  // Thornscale: attackers landing into Scales take 3 (Wyrmling: Claw only; Juvenile: Claw and Bite).
+  const th = tech(def, 'thornscale');
+  const intoScales = defPlan.spec.name === 'scales' && phase(defPlan, t) === 'active';
+  if (th >= W && intoScales && (p.spec.name === 'claw' || (th >= J && p.spec.name === 'bite'))) {
+    att.wounds -= R.TECHNIQUE_POINTS;
+    if (th >= V) att.pending.rattled = true;
+    note(s, `Thornscale: takes ${R.TECHNIQUE_POINTS} from the spines${th >= V ? ' and is Rattled' : ''}.`);
+  }
+  // Ash Gland: locks the target's revision next exchange (Wyrmling: clean hits only).
+  const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
+  if (ash >= W && (ash >= J || !graze)) {
+    def.marks.revisionLockedFor = bout.exchange + 1;
+    if (ash >= E) def.pending.blinded = true;
+    if (ash >= V) def.pending.rattled = true;
+    note(def.side, `Ash Gland: can't revise next exchange${ash >= E ? '; Blinded' : ''}${ash >= V ? ' and Rattled' : ''}.`);
+  }
+}
+
+/** Riposte Talons: a successful Dodge earns a free claw (Wyrmling: only against Bite). */
+function riposte(bout: Bout, s: Side, attackPlan: Plan, dodgePlan: Plan, t: number, ev: Event[]) {
+  const f = bout.fighters[s];
+  const target = bout.fighters[other(s)];
+  const rip = tech(f, 'riposte-talons');
+  if (rip < W || dodgePlan.spec.name !== 'dodge' || (rip === W && attackPlan.spec.name !== 'bite')) return;
+  const parts: string[] = [];
+  let v = R.TECHNIQUE_POINTS;
+  if (rip >= V) {
+    v = Math.max(R.DAMAGE_FLOOR, eff(f, 'claw', {}).value - eff(target, 'hardness', {}).value);
+    parts.push(`Riposte Talons: Claw Sharpness against Hardness, ${v}`);
+  } else parts.push(`Riposte Talons: ${v}`);
+  if (rip >= E) {
+    v += R.PUNISH_BONUS;
+    parts.push(`+${R.PUNISH_BONUS} punish`);
+  }
+  target.wounds -= v;
+  ev.push({ kind: 'hit', tick: t, attacker: s, action: 'claw', damage: v, parts, interrupt: false, graze: false, trade: false, woundsLeft: target.wounds });
+}
+
+/** An Intimidate that reaches its target (within Far): the +3, or what a Technique trades it for. */
+function intimidateLands(bout: Bout, s: Side, t: number, ev: Event[]) {
+  const f = bout.fighters[s];
+  const opp = bout.fighters[other(s)];
+  const note = (text: string) => ev.push({ kind: 'note', tick: t, side: s, text });
+  const sep = dist(f.pos, opp.pos);
+  if (sep > R.FAR_EDGE) return note('Intimidate falls short: the opponent is beyond Far.');
+  const sap = tech(f, 'sapping-bellow');
+  const eye = tech(f, 'baleful-eye');
+  const goad = tech(f, 'goading-roar');
+  if (sap >= W) {
+    opp.marks.sapped = sap >= J ? 'any' : 'claw';
+    if (sap >= E) opp.intimidateBonus = false;
+    if (sap >= V) opp.pending.rattled = true;
+    return note(`Sapping Bellow: strips the opponent's next ${sap >= J ? '' : 'Claw '}chain bonus${sap >= E ? ' and its pending Intimidate' : ''}${sap >= V ? '; Rattled' : ''}.`);
+  }
+  if (eye >= W) {
+    const slot = (bout.globalSlot - 1) % R.SLOTS_PER_EXCHANGE;
+    if (slot < 2) {
+      f.marks.eye = eye;
+      return note("Baleful Eye: it will see the opponent's slot 3 during the revision window.");
+    }
+    return note('Baleful Eye in slot 3 sees nothing to reveal.');
+  }
+  if (goad >= W) {
+    if (goad === W && sep > R.CLOSE_EDGE) return note('Goading Roar falls short: a Wyrmling roar needs Close or nearer.');
+    opp.marks.goaded = goad;
+    return note(`Goading Roar: a Retreat${goad >= E ? ' or Dodge' : ''} next slot will sting.`);
+  }
+  f.intimidateBonus = true;
+  note('Intimidate lands: +3 to the next attack.');
+}
+
+/** Smoldering Maw: the breath's area lingers; dragons inside at slot's end take 3 and the element's verb. */
+function smolder(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, ev: Event[]) {
+  const f = bout.fighters[s];
+  const sm = tech(f, 'smoldering-maw');
+  if (sm < W) return;
+  const reach = tech(f, 'lance-throat') >= W ? R.FAR_EDGE : f.sheet.stone === 'water' ? R.BREATH.line.reach : f.sheet.stone === 'earth' ? R.BREATH.narrowCone.reach : f.sheet.stone === 'air' ? R.BREATH.wideCone.reach : R.BREATH.blast.maxCenter;
+  // The area is centered where the breath reaches its target, or its full reach.
+  const center = add(origin, scaleTo(aim, Math.min(len(aim), reach)));
+  bout.arena.zones.push({
+    kind: 'smolder', element: f.sheet.stone, stacks: sm >= V, center,
+    radius: sm === W ? R.SMOLDER_RADIUS.center : R.SMOLDER_RADIUS.full,
+    lastSlot: bout.globalSlot - 1 + (sm >= A ? 2 : 1), owner: s,
+  });
+  ev.push({ kind: 'zone', tick: t, owner: s, zone: 'smolder', center });
 }

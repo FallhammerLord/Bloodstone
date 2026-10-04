@@ -121,12 +121,14 @@ export function report(bout: Bout, events: Event[]): string[] {
         break;
       }
       case 'zone':
-        say(`${at(e.tick)}${label(e.owner)}'s breath leaves a ${e.zone === 'burning' ? 'burning zone' : 'corrosive pool'} at (${paces(e.center.x)}, ${paces(e.center.y)}).`);
+        say(`${at(e.tick)}${label(e.owner)}'s breath leaves ${e.zone === 'burning' ? 'a burning zone' : e.zone === 'corrosive' ? 'a corrosive pool' : 'a smoldering area (Smoldering Maw)'} at (${paces(e.center.x)}, ${paces(e.center.y)}).`);
         break;
       case 'zoneEffect':
         say(e.zone === 'burning'
           ? `  🔥 ${label(e.side)} ends the slot in a burning zone: ${e.damage} damage → ${Math.max(0, e.woundsLeft)}.`
-          : `  ☣ ${label(e.side)} ends the slot in a corrosive pool: Hardness −${R.CORRODE_HARDNESS} next slot.`);
+          : e.zone === 'corrosive'
+            ? `  ☣ ${label(e.side)} ends the slot in a corrosive pool: Hardness −${R.CORRODE_HARDNESS} next slot.`
+            : `  ♨ ${label(e.side)} ends the slot in a smoldering area: ${e.damage} damage and the breath's verb → ${Math.max(0, e.woundsLeft)}.`);
         break;
       case 'revision':
         say(`  ⚡ ${label(e.side)} revises slot 3 at the end of slot ${e.moment}. The opponent sees only the flash. (Replay view: ${e.from} → ${e.to}.)`);

@@ -10,7 +10,8 @@ import * as R from './rules.ts';
 /**
  * A scripted revision for slot 3.
  *   at:  1 or 2, the end of which slot to decide at (default 2)
- *   if:  "always", "opponent revised", "i was hit", "i landed", "separation <= N", "separation >= N" (paces)
+ *   if:  "always", "opponent revised", "i was hit", "i landed", "separation <= N", "separation >= N" (paces),
+ *        "revealed X" (Baleful Eye showed something containing X, such as "attack" or "Bite")
  *   to:  the new slot-3 action
  */
 export interface RevisionRule {
@@ -53,8 +54,9 @@ export function separationOf(sc: Scenario): number {
   return sc.separation ?? R.START_SEPARATION / R.PACE;
 }
 
-function conditionHolds(cond: string, view: View, opponentRevised: boolean): boolean {
+function conditionHolds(cond: string, view: View, opponentRevised: boolean, revealed: string | null): boolean {
   const c = cond.trim().toLowerCase();
+  if (c.startsWith('revealed ')) return revealed !== null && revealed.toLowerCase().includes(c.slice(9).trim());
   if (c === 'always') return true;
   if (c === 'opponent revised') return opponentRevised;
   if (c === 'i was hit') return view.me.wounds < view.startWounds[view.side];
@@ -92,10 +94,10 @@ export function scenarioController(sc: Scenario, side: Side): Controller {
       }
       return [HOLD, HOLD, HOLD];
     },
-    revise(view: View, moment: Moment, opponentRevised: boolean): ActionSpec | null {
-      if (usingAi && ai?.revise) return ai.revise(view, moment, opponentRevised);
+    revise(view: View, moment: Moment, opponentRevised: boolean, revealed: string | null): ActionSpec | null {
+      if (usingAi && ai?.revise) return ai.revise(view, moment, opponentRevised, revealed);
       if (!rule || (rule.at ?? 2) !== moment) return null;
-      return conditionHolds(rule.if ?? 'always', view, opponentRevised) ? parseAction(rule.to) : null;
+      return conditionHolds(rule.if ?? 'always', view, opponentRevised, revealed) ? parseAction(rule.to) : null;
     },
   };
 }

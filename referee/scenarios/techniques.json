@@ -1,0 +1,10 @@
+{
+  "title": "Techniques: Lockjaw and Thornscale",
+  "note": "Brine bites with Lockjaw: a landed Bite Pins the target and locks Brine's next slot to Bite. Coil answers with Scales and Thornscale: biting into the spines costs 3. Coil's Baleful Eye isn't seated here; try adding it.",
+  "separation": 4,
+  "A": { "name": "Brine", "morph": "true-dragon", "stone": "water", "shards": [{ "shard": "Lockjaw", "grade": "juvenile", "pips": [0] }, { "shard": "Crushing Molars", "pips": [1] }] },
+  "B": { "name": "Coil", "morph": "wyrm", "stone": "water", "shards": [{ "shard": "Thornscale", "grade": "juvenile", "pips": [0] }, { "shard": "Shalecoat", "pips": [1] }] },
+  "exchanges": [
+    { "A": ["bite", "claw:left", "hold"], "B": ["hold", "scales", "retreat"] }
+  ]
+}

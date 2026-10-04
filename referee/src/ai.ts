@@ -154,13 +154,15 @@ export function aiController(style: Style, seed: number): Controller {
     },
 
     // At the end of slot 2, look again: if the plan for slot 3 no longer fits, change it.
-    revise(view: View, moment: Moment, opponentRevised: boolean): ActionSpec | null {
-      if (moment !== 2) return null;
+    revise(view: View, moment: Moment, opponentRevised: boolean, revealed: string | null): ActionSpec | null {
+      if (moment !== 2 && !revealed) return null;
       const planned = current[2];
       if (!planned) return null;
       const z = view.me.pos.z;
       const usable = (a: ActionName) => (view.me.readyAt[a] ?? 0) <= view.globalSlot && !(a === 'dive' && z === 0) && !(a === 'stomp' && z > 0);
       if (opponentRevised && ACTIONS[planned.name].category === 'attack' && rng() < 0.4) return { name: 'scales' };
+      // Baleful Eye showed an attack coming: brace for it.
+      if (revealed && /attack|bite|claw|breath|stomp/i.test(revealed) && !/not an attack/.test(revealed) && planned.name !== 'scales' && rng() < 0.7) return { name: 'scales' };
       const fresh = habit({ sep: view.separation, usable, rng, prev: current[1] ?? null, myZ: z, oppZ: view.opp.pos.z, flies: view.me.sheet.flies, talons: view.me.sheet.aspect === 'talons' });
       if (fresh.name === planned.name || !usable(fresh.name)) return null;
       return rng() < 0.7 ? fresh : null;

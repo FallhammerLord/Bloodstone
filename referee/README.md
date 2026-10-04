@@ -87,6 +87,23 @@ The arena has four unbreakable rim pillars. Scenarios can add boulders: `"arena"
 - An attack that meets an obstacle on the way to its target hits the obstacle instead. Stomp shakes the ground and isn't blocked.
 - Earth's slurry eats obstacles: double damage, and if it destroys the obstacle it carries on to the target.
 
+## Shards
+
+A wyrmling's array is one valence of three pips (pips 0, 1 and 2), treated as a ring so any two pips are adjacent. Seat shards per side in a scenario, in order:
+
+```json
+"shards": [
+  { "shard": "Bastion Plates", "pips": [0, 1] },
+  { "shard": "Snapping Jaw", "grade": "adult", "pips": [2] }
+]
+```
+
+- **Body and Bloodstone** (all 40): names carry their grade. Wyrmling, Juvenile and Adult chips add 1, 2 or 3 points on one pip. Elder and Venerable splinters take two pips, add 3 points and a conditional +3 rider; a Venerable adds 1 point of a related attribute. Riders apply in play when their condition holds (half Wounds, aloft, guarding with Scales, a target at a different altitude, a chain's final link, a target at Far, an element that beats your stone).
+- **Techniques** (17 of 20) need a grade. They take one pip (Lance Throat two) and one more at Elder and Venerable. Gnashing Teeth, Raking Talons and Bellows Chest wait for crunch and charge.
+- **Seating locks.** A shard seated over another strips the covered shard's rider first, then its value; a chip covered is destroyed.
+- Supports wait for seams, and Traits are Elder-and-Venerable rule bends; neither is built yet.
+- Strafe shifts for Sidewinder Spine are written `strafe:cw:in` or `strafe:ccw:out`. Baleful Eye's reveal can drive a scripted revision: `"if": "revealed attack"`.
+
 ## Where the numbers live
 
 Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came from:
@@ -96,13 +113,13 @@ Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came fr
 
 ## The tournament
 
-`npm run tourney` fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
+`npm run tourney` (add `-- --shards` for random, seeded 3-pip loadouts and a shard ranking) fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
 
 Each bout's arena gets 0 to 3 seeded boulders. The AIs are crude, so the numbers mean "strong in crude hands."
 
 ## Not built yet
 
-Crunch, charge, compounds, hazards beyond boulders (pits, traps, atmospherics), Salt/Magma/Lightning/Storm breaths, extended morphs, claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
+Supports, Traits, Gnashing Teeth, Raking Talons and Bellows Chest; crunch, charge, compounds; hazards beyond boulders (pits, traps, atmospherics), Salt/Magma/Lightning/Storm breaths, extended morphs, claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
 
 ## Files
 
@@ -119,6 +136,7 @@ Crunch, charge, compounds, hazards beyond boulders (pits, traps, atmospherics), 
 | `src/bout.ts` | Exchanges to a KO, rim pulses, timeouts; what each side can see |
 | `src/ai.ts` | AI tamers |
 | `src/scenario.ts` | Scenario files, scripted revisions |
+| `src/shards.ts` | Shard catalog, the array, seating and overlap, compiling a loadout |
 | `src/tourney.ts` | The balance harness |
 | `src/report.ts` | Turns the event log into text |
 | `src/cli.ts` | Runs a scenario file |

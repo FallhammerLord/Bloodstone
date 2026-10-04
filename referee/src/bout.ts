@@ -52,7 +52,8 @@ export function viewOf(bout: Bout, side: Side): View {
 export interface Controller {
   name: string;
   script(view: View): ActionSpec[];
-  revise?(view: View, moment: Moment, opponentRevised: boolean): ActionSpec | null;
+  /** revealed: what Baleful Eye shows of the opponent's slot 3, or null */
+  revise?(view: View, moment: Moment, opponentRevised: boolean, revealed: string | null): ActionSpec | null;
 }
 
 export function runBout(bout: Bout, controllers: Record<Side, Controller>, rules: Ruleset = DEFAULT_RULES, opts: { trace?: boolean } = {}): Event[] {
@@ -60,7 +61,7 @@ export function runBout(bout: Bout, controllers: Record<Side, Controller>, rules
   while (!bout.over && bout.exchange < rules.exchangeLimit) {
     const scripts = { A: controllers.A.script(viewOf(bout, 'A')), B: controllers.B.script(viewOf(bout, 'B')) };
     const revise = Object.fromEntries(
-      SIDES.map((s) => [s, (b: Bout, side: Side, m: Moment, opp: boolean) => controllers[s].revise?.(viewOf(b, side), m, opp) ?? null]),
+      SIDES.map((s) => [s, (b: Bout, side: Side, m: Moment, opp: boolean, seen: string | null) => controllers[s].revise?.(viewOf(b, side), m, opp, seen) ?? null]),
     );
     ev.push(...runExchange(bout, scripts, { trace: opts.trace, revise }));
     if (!bout.over && rules.lateGame) ev.push(...rimPulse(bout, rules));

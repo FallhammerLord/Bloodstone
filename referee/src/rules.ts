@@ -76,6 +76,13 @@ export const STOOP_RANGE = FAR_EDGE; // Wyvern Talons: a Claw from the air stoop
 export const STOOP_LANDING = Math.floor(1.5 * PACE); // [Assumed] it lands on the ground this far short of where the target stood
 export const WYVERN_GROUND_CLAW_REACH = 2 * PACE; // [Assumed] forelimbs are wings, so its Claw from the ground is short
 
+// ---- Technique numbers ---- (dragonshards-technique.md gives most; these fill its gaps) [Assumed]
+export const TECHNIQUE_POINTS = 3; // Thornscale's spikes, Goading Roar's sting, Riposte's free claw, Smoldering Maw's linger
+export const SCYTHE_REACH = { wyrmling: PACE / 2, full: PACE }; // Scything widens the arc: one side, then both
+export const SMOLDER_RADIUS = { center: PACE, full: 2 * PACE }; // Smoldering Maw: the area's center, then all of it
+export const LANCE_WIDEN = PACE / 2; // Lance Throat Elder: the line's half-width grows this much by its end
+export const STOOPING_HEIGHT = { wyrmling: 6 * PACE, rest: 3 * PACE }; // Stooping Pinions: how high a dive must start
+
 // ---- Attack shapes ----
 // Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").
 export const BITE_REACH = 5 * PACE; // [Assumed] Melee into Close; starts just outside at Far

@@ -20,7 +20,12 @@ export interface Obstacle {
 }
 
 export interface Zone {
-  kind: 'burning' | 'corrosive';
+  /** burning (Fire) and corrosive (Earth) lie on the floor; smolder is Smoldering Maw's lingering breath */
+  kind: 'burning' | 'corrosive' | 'smolder';
+  /** smolder only: the breath's element, whose verb it carries */
+  element?: 'water' | 'earth' | 'fire' | 'air';
+  /** smolder only: Venerable Smoldering Maw lets overlapping areas stack */
+  stacks?: boolean;
   /** center on the floor (z = 0) */
   center: Vec;
   radius: number;
@@ -95,20 +100,31 @@ export function obstacleAt(arena: Arena, pos: Vec): Obstacle | null {
  * The first obstacle on the straight line from one point to another, if any. Samples every ⅓ pace,
  * which is finer than the smallest boulder. Returns the obstacle and how far along the line it sits.
  */
-export function obstacleOnLine(arena: Arena, from: Vec, to: Vec): Obstacle | null {
+export function obstacleOnLine(arena: Arena, from: Vec, to: Vec, skip = 0): Obstacle | null {
+  let passed: Obstacle | null = null;
+  let skipped = 0;
   const d = sub(to, from);
   const length = dist(from, to);
   const steps = Math.max(1, Math.floor(length / R.NOTCH));
   for (let i = 1; i < steps; i++) {
     const p = vec(from.x + Math.trunc((d.x * i) / steps), from.y + Math.trunc((d.y * i) / steps), from.z + Math.trunc((d.z * i) / steps));
     for (const o of arena.obstacles) {
-      if (p.z <= o.height && flatLen(sub(p, o.pos)) <= o.radius) return o;
+      if (o === passed || p.z > o.height || flatLen(sub(p, o.pos)) > o.radius) continue;
+      if (skipped < skip) {
+        // Lance Throat punches through one obstacle.
+        skipped++;
+        passed = o;
+        continue;
+      }
+      return o;
     }
   }
   return null;
 }
 
 export function inZone(zone: Zone, pos: Vec): boolean {
+  // A lingering breath hangs where it was breathed; floor zones touch only grounded dragons.
+  if (zone.kind === 'smolder') return dist(pos, zone.center) <= zone.radius;
   return pos.z === 0 && flatLen(sub(pos, zone.center)) <= zone.radius;
 }
 

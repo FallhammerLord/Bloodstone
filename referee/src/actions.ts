@@ -27,7 +27,7 @@ export const ACTIONS: Record<ActionName, ActionDef> = {
   strafe: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Strafe' }, // [Assumed]
   leap: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Leap' }, // [Assumed]
   dive: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Dive' }, // [Assumed]
-  dodge: { category: 'guard', profile: [3, 9, 18], cooldown: 1, label: 'Dodge' }, // [Assumed]; cooldown [Proposed]
+  dodge: { category: 'guard', profile: [6, 12, 12], cooldown: 1, label: 'Dodge' }, // [Assumed]: active 6-17 covers a Bite's window; cooldown [Proposed]
   scales: { category: 'guard', profile: [3, 24, 3], cooldown: 0, label: 'Scales' }, // [Assumed]
   intimidate: { category: 'intimidate', profile: [9, 12, 9], cooldown: 0, label: 'Intimidate' }, // [Assumed]
   hold: { category: 'hold', profile: [0, 30, 0], cooldown: 0, label: 'Hold' }, // the timeout default [Doc]
@@ -39,6 +39,8 @@ export interface ActionSpec {
   dir?: 'cw' | 'ccw';
   /** claw sweep (recorded; sweep timing is not modeled yet) */
   sweep?: 'left' | 'right';
+  /** Sidewinder Spine: a strafe that also shifts along the line, toward (in) or away (out) */
+  shift?: 'in' | 'out';
   /** set when this slot 3 was revised; a revised slot 3 gets no chain bonus [Proposed] */
   revised?: boolean;
 }
@@ -47,12 +49,13 @@ export const HOLD: ActionSpec = { name: 'hold' };
 
 /** Reads "bite", "strafe:cw", "claw:left", and so on. */
 export function parseAction(text: string): ActionSpec {
-  const [raw, detail] = text.trim().toLowerCase().split(':');
+  const [raw, detail, extra] = text.trim().toLowerCase().split(':');
   if (!(raw in ACTIONS)) throw new Error(`Unknown action "${text}".`);
   const name = raw as ActionName;
   if (name === 'strafe') {
     if (detail !== 'cw' && detail !== 'ccw') throw new Error(`Strafe needs a direction: "strafe:cw" or "strafe:ccw".`);
-    return { name, dir: detail };
+    if (extra !== undefined && extra !== 'in' && extra !== 'out') throw new Error(`A strafe shift is "in" or "out": "strafe:cw:in".`);
+    return extra ? { name, dir: detail, shift: extra } : { name, dir: detail };
   }
   if (name === 'claw') {
     const sweep = detail ?? 'left';
@@ -65,7 +68,7 @@ export function parseAction(text: string): ActionSpec {
 
 export function describe(spec: ActionSpec): string {
   const label = ACTIONS[spec.name].label;
-  if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'})`;
+  if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''})`;
   if (spec.sweep) return `${label} (${spec.sweep})`;
   return label;
 }

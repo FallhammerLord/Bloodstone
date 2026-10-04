@@ -6,6 +6,8 @@ import { aiController, STYLES } from './ai.ts';
 import { DEFAULT_RULES, runBout } from './bout.ts';
 import type { CoreStone, Morph } from './hatch.ts';
 import { newBout, type FighterSetup, type Side } from './referee.ts';
+import { seededRandom } from './random.ts';
+import { allAttrShards, builtTechniques, findShard, GRADES, type Shard } from './shards.ts';
 import * as R from './rules.ts';
 
 const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
@@ -26,6 +28,24 @@ const entrants: Entrant[] = MORPHS.flatMap((morph) =>
 const argv = process.argv.slice(2);
 const roundsArg = argv.indexOf('--rounds');
 const rounds = roundsArg >= 0 ? Number(argv[roundsArg + 1]) : 1;
+const withShards = argv.includes('--shards');
+
+/** A random, legal wyrmling loadout: three pips, filled with chips or a splinter and a chip. */
+function randomLoadout(rng: () => number): FighterSetup['shards'] {
+  const pool: Shard[] = [...allAttrShards(), ...builtTechniques().flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
+  const fits = (n: number) => pool.filter((s) => s.pips <= n);
+  const out: NonNullable<FighterSetup['shards']> = [];
+  let free = [0, 1, 2];
+  while (free.length > 0) {
+    const options = fits(free.length);
+    const s = options[Math.floor(rng() * options.length)];
+    const pips = free.slice(0, s.pips);
+    free = free.slice(s.pips);
+    out.push({ shard: s.name, grade: s.grade, pips });
+  }
+  return out;
+}
+const shardTally = new Map<string, { wins: number; bouts: number }>();
 
 interface Tally {
   wins: number;
@@ -45,7 +65,10 @@ for (const a of entrants) {
         for (const styleB of STYLES) {
           for (const challenged of ['A', 'B'] as Side[]) {
             const seed = total * 7919 + 17;
-            const bout = newBout(a.setup, b.setup, R.START_SEPARATION / R.PACE, challenged, { boulders: total % 4, seed });
+            const rng = seededRandom(seed);
+            const la = withShards ? randomLoadout(rng) : undefined;
+            const lb = withShards ? randomLoadout(rng) : undefined;
+            const bout = newBout({ ...a.setup, shards: la }, { ...b.setup, shards: lb }, R.START_SEPARATION / R.PACE, challenged, { boulders: total % 4, seed });
             const events = runBout(bout, { A: aiController(styleA, seed), B: aiController(styleB, seed + 1) }, DEFAULT_RULES);
             const end = events.find((e) => e.kind === 'boutEnd');
             if (end?.reason.startsWith('timeout')) endings.timeout++;
@@ -60,6 +83,15 @@ for (const a of entrants) {
             const ob = overall.get(b.key)!;
             ob.bouts++;
             if (!aWon) ob.wins++;
+            for (const [load, won] of [[la, aWon], [lb, !aWon]] as const) {
+              for (const sh of load ?? []) {
+                const key = sh.grade && findShard(sh.shard, sh.grade).kind.family === 'technique' ? `${sh.shard} (${sh.grade})` : sh.shard;
+                const st = shardTally.get(key) ?? { wins: 0, bouts: 0 };
+                st.bouts++;
+                if (won) st.wins++;
+                shardTally.set(key, st);
+              }
+            }
             const h = head.get(`${a.key}|${b.key}`) ?? { wins: 0, bouts: 0 };
             h.bouts++;
             if (aWon) h.wins++;
@@ -77,6 +109,7 @@ const fmt = (n: number) => `${n.toFixed(0).padStart(3)}%`;
 console.log(`Tournament: ${total} bouts. Every pairing against every other, ${STYLES.length * STYLES.length} AI style matchups, both as challenger and challenged.`);
 console.log(`Endings: ${endings.ko} KO, ${endings.pulse} rim-pulse KO, ${endings.timeout} timeout. Average ${(exchanges / total).toFixed(1)} exchanges per bout.`);
 console.log('Arenas: the four rim pillars plus 0 to 3 seeded boulders per bout.');
+if (withShards) console.log('Loadouts: every dragon gets a random, seeded 3-pip wyrmling loadout from every built shard at every grade.');
 console.log('A fair pairing wins about 50%. These AIs are crude, so read this as "strong in crude hands."\n');
 
 console.log('── Pairings, by win rate ──');
@@ -117,4 +150,13 @@ for (let i = 0; i < entrants.length; i++) {
 }
 for (const { a, b, p } of pairs.sort((x, y) => y.p - x.p).slice(0, 10)) {
   console.log(`  ${fmt(p)}  ${a.label} over ${b.label}`);
+}
+
+if (withShards) {
+  // Technique grades vary in power, so they are listed per grade; ranks are by win rate of dragons carrying them.
+  const rows = [...shardTally.entries()].filter(([, t]) => t.bouts >= 30).sort((x, y) => pct(y[1]) - pct(x[1]));
+  console.log('\n── Shards, by win rate of dragons carrying them (random 3-pip loadouts) ──');
+  for (const [k, t] of rows.slice(0, 12)) console.log(`  ${fmt(pct(t))}  ${k}`);
+  console.log('  ...');
+  for (const [k, t] of rows.slice(-8)) console.log(`  ${fmt(pct(t))}  ${k}`);
 }
