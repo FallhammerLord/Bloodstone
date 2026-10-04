@@ -10,7 +10,7 @@ import * as R from '../src/rules.ts';
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
 const WYVERN: FighterSetup = { name: 'Gale', morph: 'wyvern', stone: 'earth' };
 const WYRM: FighterSetup = { name: 'Coil', morph: 'wyrm', stone: 'earth' };
-const OFF = { breathCharge: false, biteLunge: false, clawPounce: false };
+const OFF = { breathCharge: false, breathMandatory: false, biteLunge: false, clawPounce: false };
 afterEach(() => Object.assign(R.VARIANT, OFF));
 const run = (flags: Partial<typeof OFF>, b: FighterSetup, sep: number, A: string[], B: string[]) => {
   Object.assign(R.VARIANT, OFF, flags);
@@ -33,14 +33,21 @@ test('a bite chain catches a retreat at Melee and Close, then misses once it rea
 
 test('mandatory charge: a plain Breath charges one slot and releases with no bonus', () => {
   const plain = run({}, TD_WATER, 5, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']);
-  const charged = run({ breathCharge: true }, TD_WATER, 5, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  const charged = run({ breathCharge: true, breathMandatory: true }, TD_WATER, 5, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']);
   assert.equal(hits(charged.ev).length, 1);
   assert.equal(hits(charged.ev)[0].damage, hits(plain.ev)[0].damage);
   assert.ok(charged.ev.some((e) => e.kind === 'note' && e.text.startsWith('Breath must charge')));
 });
 
+test('optional charge: a plain Breath fires in one slot, and a one-slot charge earns nothing', () => {
+  const plain = hits(run({ breathCharge: true }, TD_WATER, 5, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']).ev);
+  const one = hits(run({ breathCharge: true }, TD_WATER, 5, ['charge:breath', 'breath', 'hold'], ['hold', 'hold', 'hold']).ev);
+  assert.equal(plain.length, 1);
+  assert.equal(one[0].damage, plain[0].damage);
+});
+
 test('mandatory charge: a Breath scripted in slot 3 holds', () => {
-  assert.equal(hits(run({ breathCharge: true }, TD_WATER, 5, ['hold', 'hold', 'breath'], ['hold', 'hold', 'hold']).ev).length, 0);
+  assert.equal(hits(run({ breathCharge: true, breathMandatory: true }, TD_WATER, 5, ['hold', 'hold', 'breath'], ['hold', 'hold', 'hold']).ev).length, 0);
 });
 
 test('a charge held a second slot earns +3, for Bite and Breath', () => {
@@ -58,9 +65,9 @@ test('a second charge slot can\'t run into slot 3: it releases there', () => {
 });
 
 test('Bellows Chest restores the +3 on a one-slot Breath charge, then adds its own', () => {
-  const plain = hits(run({ breathCharge: true }, TD_WATER, 5, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']).ev)[0];
+  const plain = hits(run({ breathCharge: true }, TD_WATER, 5, ['charge:breath', 'breath', 'hold'], ['hold', 'hold', 'hold']).ev)[0];
   Object.assign(R.VARIANT, OFF, { breathCharge: true });
-  const ev = runExchange(newBout(BELLOWS, TD_WATER, 5), { A: ['breath', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  const ev = runExchange(newBout(BELLOWS, TD_WATER, 5), { A: ['charge:breath', 'breath', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   assert.equal(hits(ev)[0].damage, plain.damage + R.CHARGE_BONUS + 3, 'Wyrmling Bellows: +3 restored, +3 its own');
 });
 

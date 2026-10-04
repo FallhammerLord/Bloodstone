@@ -354,7 +354,7 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   const pounces = R.VARIANT.clawPounce && f.marks.strafed;
   f.marks.strafed = false;
   // Mandatory charge [Proposed]: a Breath always takes two slots.
-  if (R.VARIANT.breathCharge && spec.name === 'breath' && !spec.charge && !spec.released) {
+  if (R.VARIANT.breathMandatory && spec.name === 'breath' && !spec.charge && !spec.released) {
     spec = { ...spec, charge: true };
     note('Breath must charge: this slot draws breath, the next releases it.');
   }

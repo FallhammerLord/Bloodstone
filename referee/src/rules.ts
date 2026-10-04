@@ -105,11 +105,12 @@ export const BREATH = {
   blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.5 * PACE) }, // Fire: lands on the target; radius cut from 1.5 to 0.5
 }; // all [Assumed]; every breath stays within Far [Doc]
 
-// ---- Attack-role variants ---- [Proposed] Switched on for testing, one per run: REFEREE_VARIANT=charge,lunge,pounce
+// ---- Attack-role variants ---- [Proposed] Switched on for testing, one per run: REFEREE_VARIANT=charge,mandatory,lunge,pounce
 // Claw catches strafes; Bite catches retreats and armor; Breath catches dodges; Stomp catches burrows and the grounded.
 const variantEnv = (typeof process !== 'undefined' ? process.env.REFEREE_VARIANT ?? '' : '').split(',');
 export const VARIANT = {
-  breathCharge: variantEnv.includes('charge'), // Breath must charge; a charge earns +3 only on its second slot (Bellows Chest restores it for Breath)
+  breathCharge: variantEnv.includes('charge'), // a charge earns +3 only on its second slot (Bellows Chest restores it for Breath)
+  breathMandatory: variantEnv.includes('mandatory'), // Breath must charge: a plain Breath is read as a one-slot charge
   biteLunge: variantEnv.includes('lunge'), // a Bite right after an Approach carries the dragon 1 pace forward during its wind-up
   clawPounce: variantEnv.includes('pounce'), // a Claw right after a Strafe advances through its active window and pierces
 };

@@ -165,7 +165,7 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
     { name: 'strafe', dir: turn() }, { name: 'scales' }, { name: 'intimidate' },
   ];
   // With mandatory charge, Breath is only ever planned as a charge.
-  if (ready('breath') && !R.VARIANT.breathCharge) out.push({ name: 'breath' });
+  if (ready('breath') && !R.VARIANT.breathMandatory) out.push({ name: 'breath' });
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });
   if (ready('dodge')) out.push({ name: 'dodge' });
   if (s.f.sheet.flies && s.z < R.MAX_ALTITUDE) out.push({ name: 'leap' });
@@ -303,7 +303,7 @@ function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter, sep: n
     const weights = legal.map((a) => {
       // A setup sequence is weighed by the style's taste for both halves, so each style keeps its flavor.
       const w = styled ? (a.setup ? ((lean[a.setup] ?? 0.4) + (lean[a.name] ?? 0.4)) / 2 : (lean[a.name] ?? 0.4)) : 1;
-      return a.charge ? w * (style === 'slugger' || style === 'out-boxer' || (R.VARIANT.breathCharge && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
+      return a.charge ? w * (style === 'slugger' || style === 'out-boxer' || (R.VARIANT.breathMandatory && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
     });
     s = place(out, s, pick(legal, weights, rng));
   }
@@ -431,7 +431,7 @@ function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, gues
     let bestValue = -Infinity;
     // Under mandatory charge a Breath is weighed across both its slots, per slot.
     // Two-slot ideas (a mandatory Breath charge, a setup and its strike) are weighed across both slots, per slot.
-    const twoSlot = (x: ActionSpec) => i + 1 < R.SLOTS_PER_EXCHANGE && ((x.charge === true && !x.long && x.name === 'breath' && R.VARIANT.breathCharge) || x.setup !== undefined);
+    const twoSlot = (x: ActionSpec) => i + 1 < R.SLOTS_PER_EXCHANGE && ((x.charge === true && !x.long && x.name === 'breath' && R.VARIANT.breathMandatory) || x.setup !== undefined);
     const first = (x: ActionSpec): ActionSpec => (x.setup === 'strafe' ? { name: 'strafe', dir: x.dir } : x.setup === 'approach' ? { name: 'approach' } : x);
     const second = (x: ActionSpec): ActionSpec => (x.setup ? { name: x.name, sweep: x.sweep } : { name: 'breath' });
     for (const a of legalActions(s, rng).filter((x) => (!(x.charge || x.setup) || twoSlot(x)) && allowed(style, x))) {
