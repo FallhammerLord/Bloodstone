@@ -150,7 +150,7 @@ Each bout's arena gets 0 to 3 seeded boulders. The AIs are crude, so the numbers
 
 ## Not built yet
 
-Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps, atmospherics), Salt/Magma/Lightning/Storm breaths, extended morphs, claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
+Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps, atmospherics), Salt/Magma/Lightning/Storm breaths, extended morphs, claw sweep timing, Acumen-scaled punishes, and growth past wyrmling.
 
 ## Files
 
