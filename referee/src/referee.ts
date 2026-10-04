@@ -854,15 +854,16 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       const m = matchup(att.sheet.stone, def.sheet.stone) * R.MATCHUP;
       const breath = eff(att, 'breath', { sep });
       const aff = eff(def, 'affinity', { opp: att });
-      // Mantle Wings: Scales adds Affinity against breath (Wyrmling: only at Melee or Close).
+      // Scales presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
+      const scalesAff = scales ? R.SCALES_AFFINITY : 0;
       const mantle = scales ? tech(def, 'mantle-wings') : -1;
       const mantleAff = mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
       // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable.
       const lance = tech(att, 'lance-throat');
       const pierce = lance >= V && sep > R.CLOSE_EDGE ? 6 : lance >= J ? 3 : 0;
-      const affinity = Math.max(0, aff.value + mantleAff - pierce);
+      const affinity = Math.max(0, aff.value + scalesAff + mantleAff - pierce);
       v = breath.value - affinity + m;
-      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
+      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${scalesAff ? ' (Scales)' : ''}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
       if (tech(att, 'smoldering-maw') >= W) {
         v -= 3;
         parts.push('−3 Smoldering Maw (it lingers instead)');

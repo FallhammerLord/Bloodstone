@@ -51,6 +51,7 @@ export const STOMP_DAMAGE = 3;
 
 // ---- Guards ----
 export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales
+export const SCALES_AFFINITY = 3; // [Assumed] Affinity bonus while guarding with Scales: presenting the hide to the elements
 export const DODGE_BONUS = 3; // [Assumed] Evasion bonus while dodging
 
 // ---- Acumen ---- [Proposed] §4 Acumen meter

@@ -185,3 +185,12 @@ test('a chain lapses only after a whole exchange without a landed hit', () => {
   const ev = runExchange(bout, { A: ['bite', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   assert.deepEqual(ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage), [6], 'link 1 again, not link 3');
 });
+
+test('Scales adds Affinity against breath, as it adds Hardness against Bite and Claw', () => {
+  const at = (guard: string) => {
+    const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5);
+    const ev = runExchange(bout, { A: ['breath'].map(parseAction), B: [guard].map(parseAction) });
+    return ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage)[0];
+  };
+  assert.equal(Number(at('hold')) - Number(at('scales')), 3);
+});

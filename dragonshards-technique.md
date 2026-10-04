@@ -184,7 +184,7 @@ A successful dodge grants a free claw for 3 points. Dodge cooldown +1.
 - **Venerable:** as Elder; the riposte uses your full Claw Sharpness
 
 ### Mantle Wings · Scales vs Breath
-Guarding with Scales grants +3 Affinity against breath. Hardness −3 against Bite and Claw.
+Guarding with Scales grants +3 more Affinity against breath, on top of Scales' own +3. Hardness −3 against Bite and Claw.
 - **Wyrmling:** only against breath at Melee or Close
 - **Juvenile:** at any range
 - **Adult:** the Hardness penalty applies only against Claw
