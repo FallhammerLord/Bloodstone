@@ -3,10 +3,10 @@
 
 import type { ActionName } from './actions.ts';
 import type { CoreStone, StatSheet } from './hatch.ts';
-import { add, dist, flatLen, frame, len, scaleTo, sub, type Vec } from './geometry.ts';
+import { add, dist, frame, len, scaleTo, type Vec } from './geometry.ts';
 import * as R from './rules.ts';
 
-export type Shape = 'bite' | 'claw' | 'stomp' | 'line' | 'narrowCone' | 'wideCone' | 'blast';
+export type Shape = 'bite' | 'claw' | 'stoop' | 'stomp' | 'line' | 'narrowCone' | 'wideCone' | 'blast';
 
 // [Doc] §3 Breath shapes for the core quartet
 const BREATH_SHAPE: Record<CoreStone, Shape> = { water: 'line', earth: 'narrowCone', fire: 'blast', air: 'wideCone' };
@@ -23,11 +23,13 @@ export function inShape(shape: Shape, sheet: StatSheet, origin: Vec, aim: Vec, t
     case 'bite':
       return f > 0 && f <= R.BITE_REACH + grow && l <= R.BITE_HALF_WIDTH + grow;
     case 'claw':
-      if (sheet.aspect === 'talons') {
-        // Wyvern Talons [Assumed reading of §2]: from the air, the hind talons strike anything below within reach.
-        if (origin.z > 0) return target.z < origin.z && flatLen(sub(target, origin)) <= R.TALON_RADIUS + grow;
+      // A Wyvern's forelimbs are wings: from the ground its Claw is short. In the air its talons reach fully.
+      if (sheet.aspect === 'talons' && origin.z === 0) {
         return dist(origin, target) <= R.WYVERN_GROUND_CLAW_REACH + grow && f >= -R.CLAW_BACK - grow;
       }
+      return dist(origin, target) <= R.CLAW_REACH + grow && f >= -R.CLAW_BACK - grow;
+    case 'stoop':
+      // Landing from a stoop, the talons swipe both left and right: the full claw arc to either side.
       return dist(origin, target) <= R.CLAW_REACH + grow && f >= -R.CLAW_BACK - grow;
     case 'stomp':
       // A ground quake: it misses anything aloft [Doc].

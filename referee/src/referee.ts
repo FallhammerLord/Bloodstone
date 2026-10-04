@@ -143,6 +143,8 @@ interface Plan {
   converted: 'dodge' | 'roar' | null;
   link: number;
   intimidateBonus: boolean;
+  /** a Wyvern stoop: flies from the air to land at Melee during the wind-up */
+  stoop: { from: Vec; to: Vec; target: Vec } | null;
 }
 
 const category = (p: Plan) => ACTIONS[p.spec.name].category;
@@ -217,7 +219,7 @@ function makePlan(f: Fighter, requested: ActionSpec, g: number, ev: Event[]): Pl
   return {
     spec, windup, active, recovery, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null,
   };
 }
 
@@ -334,13 +336,19 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
 
   // 1. Movement, both dragons from the same starting positions.
   const next = { A: moveStep(F.A, F.B, plans.A, plans.B, t, ev), B: moveStep(F.B, F.A, plans.B, plans.A, t, ev) };
+  for (const s of SIDES) next[s] = stoopStep(F[s], plans[s], t, next[s]);
   for (const s of SIDES) {
     // Obstacles restrict movement [Doc]; a blocked move defaults to a dodge.
     const o = next[s] !== F[s].pos ? obstacleAt(bout.arena, next[s]) : null;
     if (o) {
       next[s] = F[s].pos;
-      plans[s].converted = 'dodge';
-      ev.push({ kind: 'note', tick: t, side: s, text: `Blocked by ${describeObstacle(o)}; converts to a dodge.` });
+      if (plans[s].stoop) {
+        plans[s].stoop = null;
+        ev.push({ kind: 'note', tick: t, side: s, text: `The stoop is cut short by ${describeObstacle(o)}.` });
+      } else {
+        plans[s].converted = 'dodge';
+        ev.push({ kind: 'note', tick: t, side: s, text: `Blocked by ${describeObstacle(o)}; converts to a dodge.` });
+      }
     }
   }
   if (dist(next.A, next.B) < R.BODY_GAP) {
@@ -348,8 +356,13 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     for (const s of SIDES) {
       if (next[s] !== F[s].pos) {
         next[s] = F[s].pos;
-        plans[s].converted = 'dodge';
-        ev.push({ kind: 'note', tick: t, side: s, text: 'Blocked by the other body; converts to a dodge.' });
+        if (plans[s].stoop) {
+          plans[s].stoop = null;
+          ev.push({ kind: 'note', tick: t, side: s, text: 'The stoop is cut short by the other body.' });
+        } else {
+          plans[s].converted = 'dodge';
+          ev.push({ kind: 'note', tick: t, side: s, text: 'Blocked by the other body; converts to a dodge.' });
+        }
       }
     }
   }
@@ -364,6 +377,12 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       p.origin = { ...F[s].pos };
       p.aim = sub(F[other(s)].pos, F[s].pos);
       ev.push({ kind: 'aim', tick: t, side: s, action: p.spec.name, distance: len(p.aim) });
+      beginStoop(F[s], F[other(s)], p, t, ev);
+    }
+    // A stooping Wyvern strikes from wherever it actually landed, toward where the target stood.
+    if (p.stoop && t === p.windup && phase(p, t) === 'active') {
+      p.origin = { ...F[s].pos };
+      p.aim = sub(p.stoop.target, F[s].pos);
     }
   }
 
@@ -376,7 +395,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     const att = F[s];
     const def = F[other(s)];
     const accuracy = att.sheet.accuracy - (att.status.blinded ? R.BLINDED_ACCURACY : 0);
-    const shape = shapeOf(p.spec.name, att.sheet);
+    const shape = p.stoop ? 'stoop' : shapeOf(p.spec.name, att.sheet);
 
     if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, 0)) {
       // An attack shape stops where it meets an obstacle and damages it instead [Proposed]. Stomp shakes the ground under it.
@@ -698,4 +717,36 @@ function zonesAtSlotEnd(bout: Bout, g: number, ev: Event[]) {
   }
   bout.arena.zones = bout.arena.zones.filter((z) => z.lastSlot > g);
   checkKO(bout, ev, R.TICKS_PER_SLOT - 1);
+}
+
+// ---------------------------------------------------------------- the Wyvern stoop
+
+/**
+ * Wyvern Talons [Doc] §2, claws from hind talons on dives: a Claw scripted while aloft, against a grounded
+ * opponent within Far, is a stoop. It bends the one-band move rule: during the wind-up the Wyvern flies
+ * straight to the ground, landing at Melee short of where the target stood when the wind-up began, then
+ * swipes both ways. Against an airborne opponent it simply claws. The price is getting airborne first.
+ */
+function beginStoop(att: Fighter, def: Fighter, p: Plan, t: number, ev: Event[]) {
+  if (p.spec.name !== 'claw' || att.sheet.aspect !== 'talons' || att.pos.z === 0 || def.pos.z !== 0) return;
+  if (dist(att.pos, def.pos) > R.STOOP_RANGE) return;
+  const target = { ...def.pos };
+  const back = flat(sub(att.pos, target));
+  const offset = flatLen(back) === 0 ? vec(R.STOOP_LANDING, 0) : scaleTo(back, R.STOOP_LANDING);
+  const to = add(target, offset);
+  p.stoop = { from: { ...att.pos }, to, target };
+  ev.push({ kind: 'note', tick: t, side: att.side, text: `Stoops from ${(dist(att.pos, to) / R.PACE).toFixed(1)} paces to land at Melee, talons first.` });
+}
+
+/** Where a stooping Wyvern is this tick: a straight flight that touches down as the wind-up ends. */
+function stoopStep(f: Fighter, p: Plan, t: number, fallback: Vec): Vec {
+  if (!p.stoop || t === 0 || phase(p, t) !== 'windup') return fallback;
+  const span = Math.max(1, p.windup - 1);
+  const { from, to } = p.stoop;
+  const k = Math.min(t, span);
+  return vec(
+    from.x + Math.trunc(((to.x - from.x) * k) / span),
+    from.y + Math.trunc(((to.y - from.y) * k) / span),
+    from.z + Math.trunc(((to.z - from.z) * k) / span),
+  );
 }

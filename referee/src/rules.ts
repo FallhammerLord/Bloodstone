@@ -72,8 +72,9 @@ export const CORRODE_HARDNESS = 3; // Hardness lost next slot by a grounded drag
 export const EARTH_OBSTACLE_MULTIPLIER = 2; // Earth's slurry eats obstacles
 
 // ---- Aspects ---- [Doc] §2; numbers [Assumed]
-export const TALON_RADIUS = Math.floor(1.5 * PACE); // Wyvern Talons: a Claw from the air strikes anything below within this
-export const WYVERN_GROUND_CLAW_REACH = 2 * PACE; // its price: forelimbs are wings, so its grounded Claw is short
+export const STOOP_RANGE = FAR_EDGE; // Wyvern Talons: a Claw from the air stoops on a grounded target anywhere within Far
+export const STOOP_LANDING = Math.floor(1.5 * PACE); // [Assumed] it lands on the ground this far short of where the target stood
+export const WYVERN_GROUND_CLAW_REACH = 2 * PACE; // [Assumed] forelimbs are wings, so its Claw from the ground is short
 
 // ---- Attack shapes ----
 // Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").

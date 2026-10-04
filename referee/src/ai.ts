@@ -4,7 +4,6 @@
 import { ACTIONS, type ActionName, type ActionSpec } from './actions.ts';
 import type { Controller, View } from './bout.ts';
 import type { Moment } from './referee.ts';
-import { flatLen, sub } from './geometry.ts';
 import { seededRandom } from './random.ts';
 import * as R from './rules.ts';
 
@@ -22,18 +21,15 @@ interface Situation {
   myZ: number;
   oppZ: number;
   flies: boolean;
-  /** distance across the floor, ignoring height */
-  flatSep: number;
   talons: boolean;
 }
 
 /** Shared airborne habits: come down to fight, or answer a dragon overhead. Returns null when grounded and level. */
-function altitudeHabit({ sep, usable, rng, myZ, oppZ, flies, flatSep, talons }: Situation, style: 'close' | 'far' | 'wait'): ActionSpec | null {
-  if (myZ > 0 && oppZ === 0 && talons) {
-    // Wyvern Talons: strike down from above, or close in across the floor while staying up.
-    if (flatSep <= R.TALON_RADIUS) return { name: 'claw', sweep: side(rng) };
-    if (style === 'far' && usable('breath') && sep <= R.FAR_EDGE) return { name: 'breath' };
-    return { name: 'approach' };
+function altitudeHabit({ sep, usable, rng, myZ, oppZ, flies, talons }: Situation, style: 'close' | 'far' | 'wait'): ActionSpec | null {
+  if (talons && oppZ === 0) {
+    // Wyvern Talons: from the air, stoop on anything within Far; from the ground at range, get airborne first.
+    if (myZ > 0) return sep <= R.STOOP_RANGE ? { name: 'claw', sweep: side(rng) } : { name: 'approach' };
+    if (sep > R.MELEE_EDGE && rng() < (style === 'wait' ? 0.3 : 0.6)) return { name: 'leap' };
   }
   if (myZ > 0 && oppZ === 0) {
     // Up high and the opponent is grounded: hold the height at range, or dive in to fight.
@@ -135,20 +131,23 @@ export function aiController(style: Style, seed: number): Controller {
       const out: ActionSpec[] = [];
       let sep = view.separation;
       let myZ = view.me.pos.z;
-      let flatSep = flatLen(sub(view.me.pos, view.opp.pos));
       const talons = view.me.sheet.aspect === 'talons';
       for (let i = 0; i < R.SLOTS_PER_EXCHANGE; i++) {
         const slot = view.globalSlot + i;
         const usable = (a: ActionName) => (readyAt[a] ?? 0) <= slot && !(a === 'dive' && myZ === 0) && !(a === 'stomp' && myZ > 0);
-        let pick = habit({ sep, usable, rng, prev: out[i - 1] ?? null, myZ, oppZ: view.opp.pos.z, flies: view.me.sheet.flies, flatSep, talons });
+        let pick = habit({ sep, usable, rng, prev: out[i - 1] ?? null, myZ, oppZ: view.opp.pos.z, flies: view.me.sheet.flies, talons });
         if (!usable(pick.name)) pick = { name: 'hold' };
         if (view.me.pending.pinned && i === 0 && ACTIONS[pick.name].category === 'move') pick = { name: 'scales' };
         const cd = ACTIONS[pick.name].cooldown;
         if (cd > 0) readyAt[pick.name] = slot + cd + 1;
         out.push(pick);
-        const before = sep;
-        ({ sep, z: myZ } = predict(sep, myZ, pick, view, i === 0 && view.me.pending.staggered));
-        flatSep = Math.max(0, flatSep - (before - sep));
+        if (pick.name === 'claw' && talons && myZ > 0 && view.opp.pos.z === 0 && sep <= R.STOOP_RANGE) {
+          // A stoop lands at Melee, on the ground.
+          sep = R.STOOP_LANDING;
+          myZ = 0;
+        } else {
+          ({ sep, z: myZ } = predict(sep, myZ, pick, view, i === 0 && view.me.pending.staggered));
+        }
       }
       current = out;
       return out;
@@ -162,7 +161,7 @@ export function aiController(style: Style, seed: number): Controller {
       const z = view.me.pos.z;
       const usable = (a: ActionName) => (view.me.readyAt[a] ?? 0) <= view.globalSlot && !(a === 'dive' && z === 0) && !(a === 'stomp' && z > 0);
       if (opponentRevised && ACTIONS[planned.name].category === 'attack' && rng() < 0.4) return { name: 'scales' };
-      const fresh = habit({ sep: view.separation, usable, rng, prev: current[1] ?? null, myZ: z, oppZ: view.opp.pos.z, flies: view.me.sheet.flies, flatSep: flatLen(sub(view.me.pos, view.opp.pos)), talons: view.me.sheet.aspect === 'talons' });
+      const fresh = habit({ sep: view.separation, usable, rng, prev: current[1] ?? null, myZ: z, oppZ: view.opp.pos.z, flies: view.me.sheet.flies, talons: view.me.sheet.aspect === 'talons' });
       if (fresh.name === planned.name || !usable(fresh.name)) return null;
       return rng() < 0.7 ? fresh : null;
     },

@@ -21,12 +21,38 @@ test('Talons: a grounded Wyvern claw is short', () => {
   assert.equal(hits(wy).length, 0);
 });
 
-test('Talons: from the air, the Wyvern claw strikes straight down', () => {
-  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 2);
-  bout.fighters.A.pos = { x: bout.fighters.B.pos.x, y: 0, z: 2 * R.PACE }; // directly overhead
+test('Talons: from the air, a Wyvern stoops on a grounded target anywhere within Far, lands at Melee, and claws', () => {
+  // Wyvern + Air 3 paces up, 8 paces across the floor: 8.5 paces away, inside Far.
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 8);
+  bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
   const ev = run(bout, ['claw:left'], ['hold']);
   assert.equal(hits(ev).length, 1);
   assert.equal(hits(ev)[0].damage, 12 - 3);
+  assert.equal(bout.fighters.A.pos.z, 0, 'lands on the ground');
+  assert.ok(Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x) <= R.MELEE_EDGE, 'at Melee');
+});
+
+test('Talons: the stoop swipes both ways, catching a target that steps to either side', () => {
+  for (const dir of ['strafe:cw', 'strafe:ccw']) {
+    const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 6);
+    bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
+    const ev = run(bout, ['claw:left'], [dir]);
+    assert.equal(hits(ev).length, 1, dir);
+  }
+});
+
+test('Talons: no stoop beyond Far, and none against an airborne opponent', () => {
+  const far = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 10);
+  far.fighters.A.pos = { ...far.fighters.A.pos, z: 3 * R.PACE };
+  run(far, ['claw:left'], ['hold']);
+  assert.equal(far.fighters.A.pos.z, 3 * R.PACE, 'stays aloft');
+
+  const air = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, { name: 'H', morph: 'wyvern', stone: 'water' }, 6);
+  air.fighters.A.pos = { ...air.fighters.A.pos, z: 3 * R.PACE };
+  air.fighters.B.pos = { ...air.fighters.B.pos, z: 3 * R.PACE };
+  const ev = run(air, ['claw:left'], ['hold']);
+  assert.equal(hits(ev).length, 0, 'a plain claw at 6 paces misses');
+  assert.equal(air.fighters.A.pos.z, 3 * R.PACE);
 });
 
 test('Serpentine: a strafing Wyrm evades like a dodge; a retreating one does not', () => {
