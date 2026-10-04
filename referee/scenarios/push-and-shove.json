@@ -1,0 +1,10 @@
+{
+  "title": "Breath effects: Water pushes, Air shoves",
+  "note": "Design doc §3: Water's jet pushes the target back; Air's gust shoves it sideways.",
+  "separation": 4,
+  "A": { "name": "Tide", "morph": "wyrm", "stone": "water" },
+  "B": { "name": "Gust", "morph": "wyrm", "stone": "air" },
+  "exchanges": [
+    { "A": ["breath", "hold", "hold"], "B": ["hold", "breath", "hold"] }
+  ]
+}

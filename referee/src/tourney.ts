@@ -45,7 +45,7 @@ for (const a of entrants) {
         for (const styleB of STYLES) {
           for (const challenged of ['A', 'B'] as Side[]) {
             const seed = total * 7919 + 17;
-            const bout = newBout(a.setup, b.setup, R.START_SEPARATION / R.PACE, challenged);
+            const bout = newBout(a.setup, b.setup, R.START_SEPARATION / R.PACE, challenged, { boulders: total % 4, seed });
             const events = runBout(bout, { A: aiController(styleA, seed), B: aiController(styleB, seed + 1) }, DEFAULT_RULES);
             const end = events.find((e) => e.kind === 'boutEnd');
             if (end?.reason.startsWith('timeout')) endings.timeout++;
@@ -76,6 +76,7 @@ const fmt = (n: number) => `${n.toFixed(0).padStart(3)}%`;
 
 console.log(`Tournament: ${total} bouts. Every pairing against every other, ${STYLES.length * STYLES.length} AI style matchups, both as challenger and challenged.`);
 console.log(`Endings: ${endings.ko} KO, ${endings.pulse} rim-pulse KO, ${endings.timeout} timeout. Average ${(exchanges / total).toFixed(1)} exchanges per bout.`);
+console.log('Arenas: the four rim pillars plus 0 to 3 seeded boulders per bout.');
 console.log('A fair pairing wins about 50%. These AIs are crude, so read this as "strong in crude hands."\n');
 
 console.log('── Pairings, by win rate ──');

@@ -15,6 +15,8 @@ export interface StatSheet {
   preference: Preference;
   /** winged morphs fly; the Wyrm is serpentine and grounded [Doc] */
   flies: boolean;
+  /** the rule this morph bends [Doc] §2: True Dragon has none */
+  aspect: 'none' | 'talons' | 'serpentine';
   wounds: number;
   evasion: number;
   hardness: number;
@@ -40,6 +42,8 @@ const STONES: Record<CoreStone, { claw: number; bite: number; breath: number; af
   air: { claw: 9, bite: 9, breath: 6, affinityMod: -3, peak: 'claw' },
 };
 
+const ASPECTS: Record<Morph, StatSheet['aspect']> = { 'true-dragon': 'none', wyvern: 'talons', wyrm: 'serpentine' };
+
 // [Doc] §2 Elemental Preference
 const PREFERS: Record<Morph, CoreStone> = { 'true-dragon': 'fire', wyvern: 'air', wyrm: 'water' };
 const DISLIKES: Record<Morph, CoreStone> = { 'true-dragon': 'earth', wyvern: 'fire', wyrm: 'air' };
@@ -63,7 +67,7 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
   m[m.peak] -= (m.peak === 'wounds' ? 6 : 3) * sign;
 
   return {
-    morph, stone, age, preference: pref, flies: morph !== 'wyrm',
+    morph, stone, age, preference: pref, flies: morph !== 'wyrm', aspect: ASPECTS[morph],
     wounds: m.wounds, evasion: m.evasion, hardness: m.hardness,
     claw: s.claw, bite: s.bite, breath: s.breath,
     accuracy: m.evasion + m.accuracyMod,

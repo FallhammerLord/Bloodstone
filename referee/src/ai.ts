@@ -4,22 +4,14 @@
 import { ACTIONS, type ActionName, type ActionSpec } from './actions.ts';
 import type { Controller, View } from './bout.ts';
 import type { Moment } from './referee.ts';
+import { flatLen, sub } from './geometry.ts';
+import { seededRandom } from './random.ts';
 import * as R from './rules.ts';
+
+export { seededRandom };
 
 export type Style = 'brawler' | 'skirmisher' | 'guardian' | 'mixed';
 export const STYLES: readonly Style[] = ['brawler', 'skirmisher', 'guardian', 'mixed'];
-
-/** Small, fast, seeded random numbers (mulberry32). Returns 0 ≤ n < 1. */
-export function seededRandom(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 interface Situation {
   sep: number;
@@ -30,10 +22,19 @@ interface Situation {
   myZ: number;
   oppZ: number;
   flies: boolean;
+  /** distance across the floor, ignoring height */
+  flatSep: number;
+  talons: boolean;
 }
 
 /** Shared airborne habits: come down to fight, or answer a dragon overhead. Returns null when grounded and level. */
-function altitudeHabit({ sep, usable, rng, myZ, oppZ, flies }: Situation, style: 'close' | 'far' | 'wait'): ActionSpec | null {
+function altitudeHabit({ sep, usable, rng, myZ, oppZ, flies, flatSep, talons }: Situation, style: 'close' | 'far' | 'wait'): ActionSpec | null {
+  if (myZ > 0 && oppZ === 0 && talons) {
+    // Wyvern Talons: strike down from above, or close in across the floor while staying up.
+    if (flatSep <= R.TALON_RADIUS) return { name: 'claw', sweep: side(rng) };
+    if (style === 'far' && usable('breath') && sep <= R.FAR_EDGE) return { name: 'breath' };
+    return { name: 'approach' };
+  }
   if (myZ > 0 && oppZ === 0) {
     // Up high and the opponent is grounded: hold the height at range, or dive in to fight.
     if (style === 'far' && sep > R.MELEE_EDGE) return usable('breath') && sep <= R.FAR_EDGE ? { name: 'breath' } : { name: 'strafe', dir: turn(rng) };
@@ -134,16 +135,20 @@ export function aiController(style: Style, seed: number): Controller {
       const out: ActionSpec[] = [];
       let sep = view.separation;
       let myZ = view.me.pos.z;
+      let flatSep = flatLen(sub(view.me.pos, view.opp.pos));
+      const talons = view.me.sheet.aspect === 'talons';
       for (let i = 0; i < R.SLOTS_PER_EXCHANGE; i++) {
         const slot = view.globalSlot + i;
         const usable = (a: ActionName) => (readyAt[a] ?? 0) <= slot && !(a === 'dive' && myZ === 0) && !(a === 'stomp' && myZ > 0);
-        let pick = habit({ sep, usable, rng, prev: out[i - 1] ?? null, myZ, oppZ: view.opp.pos.z, flies: view.me.sheet.flies });
+        let pick = habit({ sep, usable, rng, prev: out[i - 1] ?? null, myZ, oppZ: view.opp.pos.z, flies: view.me.sheet.flies, flatSep, talons });
         if (!usable(pick.name)) pick = { name: 'hold' };
         if (view.me.pending.pinned && i === 0 && ACTIONS[pick.name].category === 'move') pick = { name: 'scales' };
         const cd = ACTIONS[pick.name].cooldown;
         if (cd > 0) readyAt[pick.name] = slot + cd + 1;
         out.push(pick);
+        const before = sep;
         ({ sep, z: myZ } = predict(sep, myZ, pick, view, i === 0 && view.me.pending.staggered));
+        flatSep = Math.max(0, flatSep - (before - sep));
       }
       current = out;
       return out;
@@ -157,7 +162,7 @@ export function aiController(style: Style, seed: number): Controller {
       const z = view.me.pos.z;
       const usable = (a: ActionName) => (view.me.readyAt[a] ?? 0) <= view.globalSlot && !(a === 'dive' && z === 0) && !(a === 'stomp' && z > 0);
       if (opponentRevised && ACTIONS[planned.name].category === 'attack' && rng() < 0.4) return { name: 'scales' };
-      const fresh = habit({ sep: view.separation, usable, rng, prev: current[1] ?? null, myZ: z, oppZ: view.opp.pos.z, flies: view.me.sheet.flies });
+      const fresh = habit({ sep: view.separation, usable, rng, prev: current[1] ?? null, myZ: z, oppZ: view.opp.pos.z, flies: view.me.sheet.flies, flatSep: flatLen(sub(view.me.pos, view.opp.pos)), talons: view.me.sheet.aspect === 'talons' });
       if (fresh.name === planned.name || !usable(fresh.name)) return null;
       return rng() < 0.7 ? fresh : null;
     },

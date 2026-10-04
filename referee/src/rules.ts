@@ -22,6 +22,18 @@ export const ARENA_RADIUS = 12 * PACE; // [Doc] §5 radius equals the leash
 export const BODY_GAP = 1 * PACE; // [Assumed] closest two dragon centers can get
 export const RIM_DEPTH = 3 * PACE; // [Assumed] how far in from the wall the pillars' pulse reaches
 export const MAX_ALTITUDE = 3 * BAND; // [Assumed] arena ceiling: 9 paces
+export const BODY_RADIUS = BODY_GAP / 2; // [Assumed] for collisions with obstacles
+
+// ---- Obstacles ---- [Doc] §5: four unbreakable pillars at the quadrants; obstacles have 3, 6 or 9 Wounds by size
+export const PILLAR_RING = ARENA_RADIUS - Math.floor(1.5 * PACE); // [Assumed] pillars stand just inside the rim
+export const PILLAR_RADIUS = PACE; // [Assumed]
+export const PILLAR_HEIGHT = 1_000_000; // unbreakable and too tall to fly over
+export const BOULDERS = {
+  small: { radius: PACE / 2, height: PACE, wounds: 3 }, // radius and height [Assumed]
+  medium: { radius: PACE, height: 2 * PACE, wounds: 6 },
+  large: { radius: Math.floor(1.5 * PACE), height: 3 * PACE, wounds: 9 },
+};
+export const BOULDER_CLEARANCE = 2 * PACE; // [Assumed] random boulders keep this far from starting spots
 export const START_SEPARATION = Math.floor(6.5 * PACE); // [Doc] Far, just outside Bite range
 
 // ---- Movement ----
@@ -49,6 +61,19 @@ export const METER_MAX = 100;
 // ---- Statuses ---- [Doc] §4 Statuses
 export const RATTLED_WINDUP = 3;
 export const BLINDED_ACCURACY = 3;
+
+// ---- Breath effects, wyrmling strength ---- [Doc] §3 element table; numbers [Assumed]
+export const WATER_PUSH = PACE; // Water: the jet pushes the target back
+export const AIR_SHOVE = PACE; // Air: the gust shoves the target sideways
+export const ZONE_RADIUS = PACE; // Fire's burning zone and Earth's corrosive pool
+export const ZONE_SLOTS = 1; // a zone lingers through this many slots after the one it lands in
+export const BURN_DAMAGE = 1; // true damage to a grounded dragon in a burning zone at slot's end
+export const CORRODE_HARDNESS = 3; // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
+export const EARTH_OBSTACLE_MULTIPLIER = 2; // Earth's slurry eats obstacles
+
+// ---- Aspects ---- [Doc] §2; numbers [Assumed]
+export const TALON_RADIUS = Math.floor(1.5 * PACE); // Wyvern Talons: a Claw from the air strikes anything below within this
+export const WYVERN_GROUND_CLAW_REACH = 2 * PACE; // its price: forelimbs are wings, so its grounded Claw is short
 
 // ---- Attack shapes ----
 // Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").

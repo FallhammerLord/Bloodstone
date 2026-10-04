@@ -1,6 +1,7 @@
 // The bout: exchanges until a KO or the exchange limit, with late pressure and the timeout rule.
 
 import type { ActionSpec } from './actions.ts';
+import type { Arena } from './arena.ts';
 import { flatLen, len, sub } from './geometry.ts';
 import { SIDES, checkKO, other, runExchange, type Bout, type Event, type Fighter, type Moment, type Side } from './referee.ts';
 import * as R from './rules.ts';
@@ -26,6 +27,8 @@ export interface View {
   /** Wounds at the start of this exchange, to tell who was hit during it */
   startWounds: Record<Side, number>;
   history: Record<Side, string[]>;
+  /** obstacles and lingering zones: all visible */
+  arena: Arena;
 }
 
 export function viewOf(bout: Bout, side: Side): View {
@@ -41,6 +44,7 @@ export function viewOf(bout: Bout, side: Side): View {
     separation: len(sub(me.pos, opp.pos)),
     startWounds: { ...bout.startWounds },
     history: { A: [...bout.history.A], B: [...bout.history.B] },
+    arena: structuredClone(bout.arena),
   };
 }
 

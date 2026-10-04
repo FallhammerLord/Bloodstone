@@ -68,6 +68,25 @@ B  Bite         ------xxxxxxxxxxxxxxxxxxxxxxxx
 
 Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Approach, Retreat and Strafe move across the floor. Distances, reach, range bands and the leash all count height. The Wyrm is grounded: its Leap is a hop that lands by the end of the slot, and it can't Dive. Stomp misses anything aloft, and a dragon in the air can't Stomp. Evasion beyond the one-band move cap makes moves finish sooner.
 
+## Aspects
+
+Each morph bends one rule (design doc §2). The True Dragon's Aspect is having none.
+- **Wyvern, Talons:** a Claw from the air strikes anything below it within 1½ paces across the floor, at any height. The price: its grounded Claw reaches only 2 paces, because its forelimbs are wings.
+- **Wyrm, Serpentine:** its Strafe tests Evasion with Dodge's +3. It is grounded: its Leap is a hop, and it can't Dive.
+
+## Breath effects
+
+At wyrmling strength (design doc §3):
+- **Water** pushes the target back 1 pace. **Air** shoves it 1 pace sideways. Walls, obstacles and the leash stop the push early.
+- **Fire** leaves a burning zone where it lands; **Earth** leaves a corrosive pool. Zones last through the next slot. A grounded dragon inside one at a slot's end takes 1 damage (burning) or loses 3 Hardness for the next slot (corrosive), whoever breathed it.
+
+## Obstacles
+
+The arena has four unbreakable rim pillars. Scenarios can add boulders: `"arena": { "boulders": 2, "seed": 5 }` scatters them by seed, and `"arena": { "obstacles": [{ "size": "large", "x": 0, "y": 0 }] }` places them in paces. Boulders are small, medium or large, with 3, 6 or 9 Wounds.
+- A move into an obstacle is blocked and becomes a dodge. A flyer above a boulder's top passes over it.
+- An attack that meets an obstacle on the way to its target hits the obstacle instead. Stomp shakes the ground and isn't blocked.
+- Earth's slurry eats obstacles: double damage, and if it destroys the obstacle it carries on to the target.
+
 ## Where the numbers live
 
 Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came from:
@@ -79,11 +98,11 @@ Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came fr
 
 `npm run tourney` fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
 
-The AIs are crude, so the numbers mean "strong in crude hands." The Wyvern still lacks its Aspect (talons on dives) and its shards.
+Each bout's arena gets 0 to 3 seeded boulders. The AIs are crude, so the numbers mean "strong in crude hands."
 
 ## Not built yet
 
-Morph Aspects, obstacles, crunch, charge, compounds, breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
+Crunch, charge, compounds, hazards beyond boulders (pits, traps, atmospherics), Salt/Magma/Lightning/Storm breaths, extended morphs, claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
 
 ## Files
 
@@ -93,7 +112,9 @@ Morph Aspects, obstacles, crunch, charge, compounds, breath verbs (push, burn, p
 | `src/actions.ts` | The action menu and timing profiles |
 | `src/hatch.ts` | Egg + stone → stat sheet; the element wheel |
 | `src/shapes.ts` | Attack shapes and the phantom band |
-| `src/geometry.ts` | Whole-number vector math |
+| `src/geometry.ts` | Whole-number vector math, in 3D |
+| `src/arena.ts` | Pillars, boulders, lingering zones |
+| `src/random.ts` | Seeded random numbers for AI and map layout |
 | `src/referee.ts` | The tick-by-tick resolver and the revision window |
 | `src/bout.ts` | Exchanges to a KO, rim pulses, timeouts; what each side can see |
 | `src/ai.ts` | AI tamers |

@@ -135,8 +135,8 @@ Each morph prefers one element and dislikes the element that beats it.
 
 ### Core Morphs
 - **True Dragon:** four limbs plus wings. The generalist.
-- **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude.
-- **Wyrm:** serpentine and grounded. Owns lateral movement and close range.
+- **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude. **[Proposed] Talons:** a Claw from the air strikes anything below within 1½ paces across the floor, at any height; its grounded Claw reaches only 2 paces.
+- **Wyrm:** serpentine and grounded. Owns lateral movement and close range. **[Proposed] Serpentine:** its Strafe tests Evasion with Dodge's bonus. Its Leap is a hop that lands within the slot; it can't Dive.
 
 ### Extended Morphs (Aspects **[Proposed]** unless noted)
 - **Chimera:** three heads; a native cruncher.
@@ -154,7 +154,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Cockatrice:** a wyvern with a rooster's head. Its breath becomes a gaze that deals no damage and Pins on a clean hit.
 - **Gargouille:** guard turns it to stone: near-total Hardness, unable to act next slot.
 - **Lindworm:** grappling forelegs turn claw hits into holds.
-- **Zmey:** the Slavic fire serpent. Its breath leaves burning zones natively.
+- **Zmey:** the Slavic fire serpent. Its breath leaves burning zones natively. **[Open]** Fire breath already leaves a burning zone (§3), so this Aspect needs a different bend, such as larger or longer-lasting zones.
 - **Leviathan:** swallows whole. A landed Bite engulfs the target; if the target's next action is an attack, it lands from inside ignoring Hardness and bursts free, otherwise it takes 3 from digestion. Either way it's spat to a range band of the Leviathan's choosing.
 - **Amphisbaena:** a head at each end; attacks while retreating.
 - **Basilisk** (tier 3): the crowned serpent king. Gaze Pins; breath scorches and splits rock.

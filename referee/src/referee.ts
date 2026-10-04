@@ -8,12 +8,13 @@
 //   5. end-of-window checks (near misses, grazes, Intimidate)
 //   6. KO checks
 //
-// Not modeled yet: obstacles, crunch, charge, compounds,
-// breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards.
+// Not modeled yet: crunch, charge, compounds, hazards beyond boulders, claw sweep timing,
+// Acumen-scaled punishes, shards, extended morphs.
 
 import { ACTIONS, HOLD, describe, type ActionName, type ActionSpec } from './actions.ts';
 import { hatch, matchup, type StatSheet } from './hatch.ts';
 import { add, dist, flat, flatLen, isqrt, len, scaleTo, sub, vec, type Vec } from './geometry.ts';
+import { describeObstacle, inZone, makeArena, obstacleAt, obstacleOnLine, type Arena, type ArenaSetup, type Obstacle } from './arena.ts';
 import { inShape, shapeOf } from './shapes.ts';
 import * as R from './rules.ts';
 
@@ -26,8 +27,10 @@ export interface Statuses {
   staggered: boolean;
   rattled: boolean;
   blinded: boolean;
+  /** Hardness lowered after ending a slot in a corrosive pool [Assumed] */
+  corroded: boolean;
 }
-const noStatuses = (): Statuses => ({ pinned: false, staggered: false, rattled: false, blinded: false });
+const noStatuses = (): Statuses => ({ pinned: false, staggered: false, rattled: false, blinded: false, corroded: false });
 
 export interface Fighter {
   side: Side;
@@ -57,6 +60,7 @@ export interface Bout {
   startWounds: Record<Side, number>;
   /** every action each side has used, in order; public, since everyone watched it happen */
   history: Record<Side, ActionName[]>;
+  arena: Arena;
   over: boolean;
   winner: Side | null;
 }
@@ -68,7 +72,7 @@ export interface FighterSetup {
 }
 
 /** Separation is in paces (decimals allowed). A stands west of B, facing east. */
-export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: number, challenged: Side = 'B'): Bout {
+export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: number, challenged: Side = 'B', arena: ArenaSetup = {}): Bout {
   const half = Math.round((separationPaces * R.PACE) / 2);
   const make = (side: Side, setup: FighterSetup, x: number): Fighter => {
     const sheet = hatch(setup.morph, setup.stone);
@@ -79,8 +83,10 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
       chain: { action: null, links: 0, lastLanded: false }, pulsed: false,
     };
   };
+  const fighters = { A: make('A', a, -half), B: make('B', b, half) };
   return {
-    fighters: { A: make('A', a, -half), B: make('B', b, half) },
+    fighters,
+    arena: makeArena(arena, [fighters.A.pos, fighters.B.pos]),
     challenged, exchange: 0, globalSlot: 0, over: false, winner: null,
     startWounds: { A: 0, B: 0 }, history: { A: [], B: [] },
   };
@@ -110,6 +116,9 @@ export type Event =
   | { kind: 'ko'; tick: number; side: Side }
   | { kind: 'revision'; side: Side; moment: Moment; from: string; to: string }
   | { kind: 'pulse'; side: Side; pulse: number; damage: number; woundsLeft: number; capped: boolean }
+  | { kind: 'obstacle'; tick: number; attacker: Side; action: ActionName; obstacle: string; damage: number; destroyed: boolean; through: boolean }
+  | { kind: 'zone'; tick: number; owner: Side; zone: 'burning' | 'corrosive'; center: Vec }
+  | { kind: 'zoneEffect'; side: Side; zone: 'burning' | 'corrosive'; damage: number; woundsLeft: number }
   | { kind: 'boutEnd'; winner: Side; reason: string };
 
 // ---------------------------------------------------------------- plans
@@ -296,6 +305,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     tick(bout, plans, t, ev);
     if (trace) ev.push({ kind: 'trace', tick: t, positions: { A: { ...F.A.pos }, B: { ...F.B.pos } } });
   }
+  if (!bout.over) zonesAtSlotEnd(bout, g, ev);
 
   for (const s of SIDES) {
     const p = plans[s];
@@ -324,6 +334,15 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
 
   // 1. Movement, both dragons from the same starting positions.
   const next = { A: moveStep(F.A, F.B, plans.A, plans.B, t, ev), B: moveStep(F.B, F.A, plans.B, plans.A, t, ev) };
+  for (const s of SIDES) {
+    // Obstacles restrict movement [Doc]; a blocked move defaults to a dodge.
+    const o = next[s] !== F[s].pos ? obstacleAt(bout.arena, next[s]) : null;
+    if (o) {
+      next[s] = F[s].pos;
+      plans[s].converted = 'dodge';
+      ev.push({ kind: 'note', tick: t, side: s, text: `Blocked by ${describeObstacle(o)}; converts to a dodge.` });
+    }
+  }
   if (dist(next.A, next.B) < R.BODY_GAP) {
     // Bodies block each other: whoever moved this tick stays put and dodges instead.
     for (const s of SIDES) {
@@ -348,8 +367,9 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     }
   }
 
-  // 3. Hit detection.
+  // 3. Hit detection. Obstacles in the way are judged as they stood at the start of the tick.
   const hits: Side[] = [];
+  const blocked: { s: Side; o: Obstacle }[] = [];
   for (const s of SIDES) {
     const p = plans[s];
     if (category(p) !== 'attack' || p.resolved || phase(p, t) !== 'active' || !p.origin || !p.aim) continue;
@@ -359,14 +379,22 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     const shape = shapeOf(p.spec.name, att.sheet);
 
     if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, 0)) {
+      // An attack shape stops where it meets an obstacle and damages it instead [Proposed]. Stomp shakes the ground under it.
+      const o = p.spec.name === 'stomp' ? null : obstacleOnLine(bout.arena, p.origin, def.pos);
+      if (o) {
+        blocked.push({ s, o });
+        continue;
+      }
       // Breath and Stomp skip Evasion [Doc]. Bite and Claw test it against a moving or dodging target.
       const evading = evasionState(plans[other(s)], t);
       if ((p.spec.name === 'bite' || p.spec.name === 'claw') && evading) {
-        const evasion = def.sheet.evasion + (evading === 'dodging' ? R.DODGE_BONUS : 0);
+        // Wyrm Serpentine [Assumed reading of §2]: it owns lateral movement, so its strafe evades like a dodge.
+        const serpentine = def.sheet.aspect === 'serpentine' && plans[other(s)].spec.name === 'strafe' && evading === 'moving';
+        const evasion = def.sheet.evasion + (evading === 'dodging' || serpentine ? R.DODGE_BONUS : 0);
         const escaped = evasion > accuracy || (evasion === accuracy && def.sheet.acumen > att.sheet.acumen);
         if (escaped) {
           p.resolved = true;
-          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, text: `${evading} with Evasion ${evasion} beats Accuracy ${accuracy}` });
+          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, text: `${serpentine ? 'strafing (Serpentine)' : evading} with Evasion ${evasion} beats Accuracy ${accuracy}` });
           continue;
         }
       }
@@ -375,6 +403,8 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       p.nearMiss = true;
     }
   }
+
+  for (const s of strikeObstacles(bout, plans, blocked, t, ev)) hits.push(s);
 
   // 4. Damage and statuses, worked out from the same moment, then applied together.
   const results = hits.map((s) => ({ s, ...damage(F[s], F[other(s)], plans[s], plans[other(s)], t, false) }));
@@ -386,6 +416,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     const p = plans[s];
     const lastActive = t === p.windup + p.active - 1 && phase(p, t) === 'active';
     if (!lastActive) continue;
+    if (p.spec.name === 'breath' && p.origin && p.aim) leaveZone(bout, s, p.origin, p.aim, t, ev);
     if (category(p) === 'attack' && !p.resolved) {
       p.resolved = true;
       if (!p.nearMiss) {
@@ -502,8 +533,9 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
   const parts: string[] = [];
   const defPhase = phase(defPlan, t);
   const scales = defPlan.spec.name === 'scales' && defPhase === 'active';
-  const hardness = def.sheet.hardness + (scales ? R.SCALES_HARDNESS : 0);
-  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}`;
+  const corroded = def.status.corroded;
+  const hardness = Math.max(0, def.sheet.hardness + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0));
+  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}`;
   let v = 0;
   switch (p.spec.name) {
     case 'bite':
@@ -563,8 +595,107 @@ function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number,
   const interrupt = phase(defPlan, t) === 'windup';
   if (interrupt) defPlan.interruptedAt = t;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, interrupt, graze, trade, woundsLeft: def.wounds });
+  if (p.spec.name === 'breath' && !graze && p.aim) breathVerb(bout, s, p.aim, t, ev);
   if (p.spec.name === 'stomp') {
     def.pending.staggered = true;
     ev.push({ kind: 'note', tick: t, side: def.side, text: 'Staggered next slot: movement distance halved.' });
   }
+}
+
+// ---------------------------------------------------------------- obstacles and breath effects
+
+/** Raw force of an attack against an obstacle: no Hardness, no modifiers. */
+function obstacleDamage(att: Fighter, action: ActionName): number {
+  switch (action) {
+    case 'bite': return att.sheet.bite;
+    case 'claw': return att.sheet.claw;
+    case 'breath': return att.sheet.breath * (att.sheet.stone === 'earth' ? R.EARTH_OBSTACLE_MULTIPLIER : 1);
+    default: return R.STOMP_DAMAGE;
+  }
+}
+
+/**
+ * Attacks that met an obstacle hit it instead and are spent [Proposed]. Damage from both sides lands
+ * together; then destroyed obstacles are removed. Earth's slurry eats obstacles: if the obstacle it met
+ * is destroyed, it carries on to the target. Returns the sides whose attack carries on.
+ */
+function strikeObstacles(bout: Bout, plans: Record<Side, Plan>, blocked: { s: Side; o: Obstacle }[], t: number, ev: Event[]): Side[] {
+  const dealt = blocked.map(({ s, o }) => (o.wounds === null ? 0 : obstacleDamage(bout.fighters[s], plans[s].spec.name)));
+  blocked.forEach(({ o }, i) => {
+    if (o.wounds !== null) o.wounds -= dealt[i];
+  });
+  const carryOn: Side[] = [];
+  blocked.forEach(({ s, o }, i) => {
+    const p = plans[s];
+    const destroyed = o.wounds !== null && o.wounds <= 0;
+    const through = destroyed && p.spec.name === 'breath' && bout.fighters[s].sheet.stone === 'earth';
+    ev.push({ kind: 'obstacle', tick: t, attacker: s, action: p.spec.name, obstacle: describeObstacle(o), damage: dealt[i], destroyed, through });
+    if (through) carryOn.push(s);
+    else p.resolved = true;
+  });
+  bout.arena.obstacles = bout.arena.obstacles.filter((o) => o.wounds === null || o.wounds > 0);
+  return carryOn;
+}
+
+/** Moves a dragon across the floor in ⅓-pace steps until the full distance or something stops it. */
+function shove(bout: Bout, side: Side, dir: Vec, amount: number): number {
+  const f = bout.fighters[side];
+  const opp = bout.fighters[other(side)];
+  if (flatLen(dir) === 0) return 0;
+  let moved = 0;
+  while (moved < amount) {
+    const step = Math.min(R.NOTCH, amount - moved);
+    const np = add(f.pos, scaleTo(flat(dir), step));
+    if (flatLen(np) > R.ARENA_RADIUS || obstacleAt(bout.arena, np) || dist(np, opp.pos) < R.BODY_GAP || dist(np, opp.pos) > R.LEASH) break;
+    f.pos = np;
+    moved += step;
+  }
+  return moved;
+}
+
+/** The breath's verb on a hit [Doc] §3: Water pushes back, Air shoves sideways. Fire and Earth act through zones. */
+function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]) {
+  const att = bout.fighters[s];
+  const def = bout.fighters[other(s)];
+  if (att.sheet.stone === 'water') {
+    const moved = shove(bout, def.side, aim, R.WATER_PUSH);
+    ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The jet pushes it back ${(moved / R.PACE).toFixed(1)} paces.` : 'The jet pushes, but something holds it in place.' });
+  } else if (att.sheet.stone === 'air') {
+    // Shove away from the gust's center line; dead center goes counterclockwise.
+    const d = sub(def.pos, att.pos);
+    const side = aim.x * d.y - aim.y * d.x;
+    const perp = side >= 0 ? vec(-aim.y, aim.x) : vec(aim.y, -aim.x);
+    const moved = shove(bout, def.side, perp, R.AIR_SHOVE);
+    ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The gust shoves it sideways ${(moved / R.PACE).toFixed(1)} paces.` : 'The gust shoves, but something holds it in place.' });
+  }
+}
+
+/** Fire leaves a burning zone and Earth a corrosive pool where the breath lands, on the floor below [Doc] §3. */
+function leaveZone(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, ev: Event[]) {
+  const stone = bout.fighters[s].sheet.stone;
+  if (stone !== 'fire' && stone !== 'earth') return;
+  const reach = stone === 'fire' ? R.BREATH.blast.maxCenter : R.BREATH.narrowCone.reach;
+  const center = flat(add(origin, scaleTo(aim, Math.min(len(aim), reach))));
+  const zone = stone === 'fire' ? 'burning' : 'corrosive';
+  bout.arena.zones.push({ kind: zone, center, radius: R.ZONE_RADIUS, lastSlot: bout.globalSlot - 1 + R.ZONE_SLOTS, owner: s });
+  ev.push({ kind: 'zone', tick: t, owner: s, zone, center });
+}
+
+/** At slot's end, grounded dragons inside a zone feel it, whoever breathed it; then spent zones fade. */
+function zonesAtSlotEnd(bout: Bout, g: number, ev: Event[]) {
+  for (const z of bout.arena.zones) {
+    for (const s of SIDES) {
+      const f = bout.fighters[s];
+      if (!inZone(z, f.pos)) continue;
+      if (z.kind === 'burning') {
+        f.wounds -= R.BURN_DAMAGE;
+        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.BURN_DAMAGE, woundsLeft: f.wounds });
+      } else {
+        f.pending.corroded = true;
+        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: 0, woundsLeft: f.wounds });
+      }
+    }
+  }
+  bout.arena.zones = bout.arena.zones.filter((z) => z.lastSlot > g);
+  checkKO(bout, ev, R.TICKS_PER_SLOT - 1);
 }

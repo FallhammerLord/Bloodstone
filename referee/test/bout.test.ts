@@ -29,7 +29,7 @@ test('a revision replaces slot 3 and flashes', () => {
 test('a side sees that the opponent revised, never what to', () => {
   // Controllers see the board and a yes/no flash. No script, revised or not, is part of what they see.
   const view = viewOf(newBout(TD_WATER, TD_WATER, 4), 'A');
-  assert.deepEqual(Object.keys(view).sort(), ['exchange', 'globalSlot', 'history', 'me', 'opp', 'separation', 'side', 'startWounds']);
+  assert.deepEqual(Object.keys(view).sort(), ['arena', 'exchange', 'globalSlot', 'history', 'me', 'opp', 'separation', 'side', 'startWounds']);
   assert.ok(!JSON.stringify(view).includes('slots'));
 });
 

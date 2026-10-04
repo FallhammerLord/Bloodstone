@@ -3,7 +3,7 @@
 
 import type { ActionName } from './actions.ts';
 import type { CoreStone, StatSheet } from './hatch.ts';
-import { add, dist, frame, len, scaleTo, type Vec } from './geometry.ts';
+import { add, dist, flatLen, frame, len, scaleTo, sub, type Vec } from './geometry.ts';
 import * as R from './rules.ts';
 
 export type Shape = 'bite' | 'claw' | 'stomp' | 'line' | 'narrowCone' | 'wideCone' | 'blast';
@@ -23,6 +23,11 @@ export function inShape(shape: Shape, sheet: StatSheet, origin: Vec, aim: Vec, t
     case 'bite':
       return f > 0 && f <= R.BITE_REACH + grow && l <= R.BITE_HALF_WIDTH + grow;
     case 'claw':
+      if (sheet.aspect === 'talons') {
+        // Wyvern Talons [Assumed reading of §2]: from the air, the hind talons strike anything below within reach.
+        if (origin.z > 0) return target.z < origin.z && flatLen(sub(target, origin)) <= R.TALON_RADIUS + grow;
+        return dist(origin, target) <= R.WYVERN_GROUND_CLAW_REACH + grow && f >= -R.CLAW_BACK - grow;
+      }
       return dist(origin, target) <= R.CLAW_REACH + grow && f >= -R.CLAW_BACK - grow;
     case 'stomp':
       // A ground quake: it misses anything aloft [Doc].

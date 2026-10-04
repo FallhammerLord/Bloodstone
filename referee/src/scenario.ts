@@ -1,6 +1,7 @@
 // Scenario files: hand-written scripts, AI sides, and scripted revisions.
 
 import { HOLD, parseAction, type ActionSpec } from './actions.ts';
+import type { ArenaSetup } from './arena.ts';
 import { aiController, STYLES, type Style } from './ai.ts';
 import { DEFAULT_RULES, type Controller, type Ruleset, type View } from './bout.ts';
 import type { FighterSetup, Moment, Side } from './referee.ts';
@@ -32,6 +33,8 @@ export interface Scenario {
   A: FighterSetup & { ai?: Style; seed?: number };
   B: FighterSetup & { ai?: Style; seed?: number };
   exchanges?: Partial<Record<Side, SideScript>>[];
+  /** boulders: random ("boulders", "seed") or placed ("obstacles": [{ size, x, y }] in paces) */
+  arena?: ArenaSetup;
 }
 
 export function rulesFor(sc: Scenario): Ruleset {

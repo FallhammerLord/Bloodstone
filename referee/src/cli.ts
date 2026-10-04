@@ -16,7 +16,7 @@ if (!file) {
 
 try {
   const sc = JSON.parse(readFileSync(file, 'utf8')) as Scenario;
-  const bout = newBout(sc.A, sc.B, separationOf(sc), sc.challenged ?? 'B');
+  const bout = newBout(sc.A, sc.B, separationOf(sc), sc.challenged ?? 'B', sc.arena ?? {});
   const controllers = { A: scenarioController(sc, 'A'), B: scenarioController(sc, 'B') };
   const header = rosterLines(bout, controllers);
   const events = runBout(bout, controllers, rulesFor(sc), { trace: args.includes('--trace') });

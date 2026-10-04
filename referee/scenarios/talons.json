@@ -1,0 +1,11 @@
+{
+  "title": "Aspect: Wyvern Talons",
+  "note": "Design doc §2: the Wyvern's forelimbs are wings; its claws come from hind talons. On the ground its claw is short. From the air it strikes straight down. A dragon below can still bite up at it.",
+  "separation": 2.5,
+  "A": { "name": "Gale", "morph": "wyvern", "stone": "air" },
+  "B": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "exchanges": [
+    { "A": ["claw:left", "leap", "approach"], "B": ["hold", "hold", "hold"] },
+    { "A": ["claw:left", "claw:left", "hold"], "B": ["hold", "hold", "bite"] }
+  ]
+}

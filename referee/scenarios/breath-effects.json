@@ -1,0 +1,11 @@
+{
+  "title": "Breath effects: burn and corrode",
+  "note": "Design doc §3: Fire leaves a burning zone, Earth a corrosive pool. Zones hit grounded dragons standing in them at slot's end, whoever breathed them. A corroded dragon's Hardness drops by 3 for a slot. (Water's push and Air's shove are in push-and-shove.json.)",
+  "separation": 5,
+  "A": { "name": "Ember", "morph": "true-dragon", "stone": "fire" },
+  "B": { "name": "Clod", "morph": "wyrm", "stone": "earth" },
+  "exchanges": [
+    { "A": ["breath", "hold", "hold"], "B": ["hold", "breath", "hold"] },
+    { "A": ["hold", "hold", "hold"], "B": ["bite", "hold", "hold"] }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Aspect: Wyrm Serpentine",
+  "note": "Design doc §2: the Wyrm owns lateral movement. Its strafe evades like a dodge (+3 Evasion). Slot 1: the strafing Wyrm slips the claw. Slot 2: a retreating Wyrm gets no bonus, ties the True Dragon's Accuracy, and is hit.",
+  "separation": 2,
+  "A": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "B": { "name": "Coil", "morph": "wyrm", "stone": "water" },
+  "exchanges": [
+    { "A": ["claw:left", "claw:left", "hold"], "B": ["strafe:cw", "retreat", "hold"] }
+  ]
+}

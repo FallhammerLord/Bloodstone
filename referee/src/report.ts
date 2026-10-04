@@ -7,6 +7,7 @@ import { other } from './referee.ts';
 import * as R from './rules.ts';
 
 const MORPH_NAMES = { 'true-dragon': 'True Dragon', wyvern: 'Wyvern', wyrm: 'Wyrm' } as const;
+const ASPECT_NAMES = { none: 'none', talons: 'Talons', serpentine: 'Serpentine' } as const;
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 export const paces = (units: number) => (units / R.PACE).toFixed(1);
@@ -37,12 +38,14 @@ export function rosterLines(bout: Bout, controllers?: Record<Side, Controller>):
     const f = bout.fighters[s];
     const h = f.sheet;
     const who = controllers ? `, played by ${controllers[s].name}` : '';
-    lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference}, ${h.flies ? 'flies' : 'grounded'})${who}`);
+    lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference}, ${h.flies ? 'flies' : 'grounded'}, Aspect: ${ASPECT_NAMES[h.aspect]})${who}`);
     lines.push(`   Wounds ${h.wounds}  Evasion ${h.evasion}  Hardness ${h.hardness}  Accuracy ${h.accuracy}`);
     lines.push(`   Claw ${h.claw}  Bite ${h.bite}  Breath ${h.breath}  Affinity ${h.affinity}  Acumen ${h.acumen}`);
   }
   const sep = Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x);
   lines.push(`Starting separation: ${paces(sep)} paces (${bandOf(sep)})`);
+  const boulders = bout.arena.obstacles.filter((o) => o.kind === 'boulder');
+  lines.push(`Arena: 4 rim pillars${boulders.length ? `; ${boulders.map((o) => `${o.size} boulder ${o.id} at (${paces(o.pos.x)}, ${paces(o.pos.y)})`).join(', ')}` : '; open floor'}.`);
   return lines;
 }
 
@@ -110,6 +113,19 @@ export function report(bout: Bout, events: Event[]): string[] {
         inSlot = false;
         break;
       }
+      case 'obstacle': {
+        const what = e.damage > 0 ? ` for ${e.damage}${e.destroyed ? ', destroying it' : ''}` : ' (unbreakable)';
+        say(`${at(e.tick)}${label(e.attacker)}'s ${ACTIONS[e.action].label} strikes the ${e.obstacle} in the way${what}.${e.through ? ' The slurry eats through and carries on.' : ''}`);
+        break;
+      }
+      case 'zone':
+        say(`${at(e.tick)}${label(e.owner)}'s breath leaves a ${e.zone === 'burning' ? 'burning zone' : 'corrosive pool'} at (${paces(e.center.x)}, ${paces(e.center.y)}).`);
+        break;
+      case 'zoneEffect':
+        say(e.zone === 'burning'
+          ? `  🔥 ${label(e.side)} ends the slot in a burning zone: ${e.damage} damage → ${Math.max(0, e.woundsLeft)}.`
+          : `  ☣ ${label(e.side)} ends the slot in a corrosive pool: Hardness −${R.CORRODE_HARDNESS} next slot.`);
+        break;
       case 'revision':
         say(`  ⚡ ${label(e.side)} revises slot 3 at the end of slot ${e.moment}. The opponent sees only the flash. (Replay view: ${e.from} → ${e.to}.)`);
         break;

@@ -1,0 +1,12 @@
+{
+  "title": "Obstacles: cover, blocked moves, and Earth eating through",
+  "note": "Design doc §5: obstacles block movement and attacks; boulders have 3, 6 or 9 Wounds by size. An attack that meets one damages it instead. Earth's slurry eats obstacles and carries on if it breaks through.",
+  "separation": 5.5,
+  "arena": { "obstacles": [{ "size": "large", "x": 0, "y": 0 }] },
+  "A": { "name": "Ash", "morph": "true-dragon", "stone": "air" },
+  "B": { "name": "Clod", "morph": "true-dragon", "stone": "earth" },
+  "exchanges": [
+    { "A": ["breath", "approach", "hold"], "B": ["hold", "hold", "hold"] },
+    { "A": ["hold", "hold", "hold"], "B": ["breath", "hold", "hold"] }
+  ]
+}
