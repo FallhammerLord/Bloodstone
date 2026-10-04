@@ -67,12 +67,12 @@ test('Ratchet Claws Elder: a Claw chain holds through a hitless exchange and res
 });
 
 test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pierces Affinity from Juvenile', () => {
-  // An Air breath's wide cone reaches 6 paces; the lance reaches 9.
-  const air: FighterSetup = { name: 'G', morph: 'true-dragon', stone: 'air' };
-  assert.equal(hits(run(newBout(air, TD_WATER, 8), ['breath'], ['hold'])).length, 0);
-  const ev = run(newBout(withTech(air, 'Lance Throat', 'juvenile'), TD_WATER, 8), ['breath'], ['hold']);
+  // Fire's blast reaches 8 paces (center 7½, radius ½); the lance reaches 9.
+  const fire: FighterSetup = { name: 'E', morph: 'true-dragon', stone: 'fire' };
+  assert.equal(hits(run(newBout(fire, TD_WATER, 8.5), ['breath'], ['hold'])).length, 0);
+  const ev = run(newBout(withTech(fire, 'Lance Throat', 'juvenile'), TD_WATER, 8.5), ['breath'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 6 - (6 - 3) + 3, 'Air beats Water: Potency 6, Affinity 6 pierced to 3, +3 matchup');
+  assert.equal(hits(ev)[0].damage, 15 - (6 - 3), 'Potency 15, Affinity 6 pierced to 3, Fire and Water neutral');
 });
 
 test('Smoldering Maw: −3 on the hit, then the area lingers and stings at slot end', () => {
