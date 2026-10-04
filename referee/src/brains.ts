@@ -93,6 +93,15 @@ for (const r of results) {
 console.log(`Endings: ${ends.ko} KO, ${ends.pulse} rim-pulse KO, ${ends.timeout} timeout. Average ${(ex / results.length).toFixed(1)} exchanges per bout.`);
 const st = results.reduce((a, r) => a.map((v, i) => v + r.stats[i]), [0, 0, 0, 0, 0, 0, 0, 0]);
 console.log(`Breath lands ${pct(st[1], st[0])} of the time and deals ${pct(st[2], st[3])} of all damage. Scales is chosen in ${pct(st[4], st[5])} of slots; charges in ${pct(st[6], st[5])}.`);
+const byAttack: Record<string, [number, number, number]> = {};
+for (const r of results) for (const [k, v] of Object.entries(r.byAttack)) {
+  const t = (byAttack[k] ??= [0, 0, 0]);
+  for (let i = 0; i < 3; i++) t[i] += v[i];
+}
+console.log(`Damage by attack: ${['breath', 'bite', 'claw', 'stomp'].map((k) => {
+  const [aimed, landed, dmg] = byAttack[k] ?? [0, 0, 0];
+  return `${k} ${pct(dmg, st[3])} (lands ${pct(landed, aimed)})`;
+}).join(', ')}.`);
 
 // 1.
 const crudeJobs = jobs.filter((j) => j.group === 'crude');

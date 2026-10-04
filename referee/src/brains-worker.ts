@@ -34,6 +34,8 @@ export interface Result {
   stats: [number, number, number, number, number, number, number, number];
   /** damage dealt by each side */
   dealt: Record<Side, number>;
+  /** per attack: [aimed, landed, damage] */
+  byAttack: Record<string, [number, number, number]>;
 }
 
 const controller = (p: Player): Controller =>
@@ -47,7 +49,10 @@ for (const job of workerData.jobs as Job[]) {
   const ending = end?.kind === 'boutEnd' && end.reason.startsWith('timeout') ? 'timeout' : ev.some((e) => e.kind === 'pulse' && e.woundsLeft <= 0) ? 'pulse' : 'ko';
   const stats: Result['stats'] = [0, 0, 0, 0, 0, 0, 0, 0];
   const dealt: Record<Side, number> = { A: 0, B: 0 };
+  const byAttack: Result['byAttack'] = {};
+  const tally = (a: string) => (byAttack[a] ??= [0, 0, 0]);
   for (const e of ev) {
+    if (e.kind === 'aim') tally(e.action)[0]++;
     if (e.kind === 'aim' && e.action === 'breath') stats[0]++;
     if (e.kind === 'slotEnd') {
       for (const s of ['A', 'B'] as const) {
@@ -57,6 +62,8 @@ for (const job of workerData.jobs as Job[]) {
     }
     if (e.kind === 'hit') {
       dealt[e.attacker] += e.damage;
+      tally(e.action)[1]++;
+      tally(e.action)[2] += e.damage;
       stats[3] += e.damage;
       if (e.action === 'breath') {
         stats[1]++;
@@ -68,6 +75,6 @@ for (const job of workerData.jobs as Job[]) {
     stats[5]++;
     if (r.actions[s] === 'scales') stats[4]++;
   }
-  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt });
+  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack });
 }
 parentPort!.postMessage(results);

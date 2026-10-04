@@ -136,7 +136,17 @@ It sees only what a player sees: the board, the record, and its own script.
 
 Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how tightly it sticks to its best idea, and how long it remembers your habits.
 
-`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles.
+`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate.
+
+## Attack-role variants
+
+Each attack should catch one form of evasion: Claw catches strafes, Bite catches retreats and armor, Breath catches dodges, Stomp catches burrows and the grounded. Four [Proposed] changes sit behind a switch, so a run can add them one at a time: `REFEREE_VARIANT=charge,tracking,lunge,elemental npm run brains -- --skill master`.
+- **charge:** Breath must charge. A plain Breath is read as a charge; one scripted in slot 3 holds.
+- **tracking:** a Bite begun at Close re-aims as its wind-up ends, and a strafe's Evasion doesn't apply to it. At Melee, the strafe still escapes.
+- **lunge:** a Bite carries the dragon up to 1 pace along its aim during the wind-up. Bodies, obstacles and the wall cut the lunge short. A retreat's Evasion doesn't apply to a lunging Bite.
+- **elemental:** a Bite carries the stone matchup (±3) unless the biter has a Breath charged.
+
+Tracking and lunge skip Evasion because, in this engine, a strafe or retreat escapes a Bite through the Evasion test, not geometry; re-aiming alone changed nothing in probes. Tests flip the switches at runtime in `test/variants.test.ts`.
 
 ## Where the numbers live
 

@@ -104,3 +104,14 @@ export const BREATH = {
   wideCone: { reach: 9 * PACE }, // Air: half-width equals distance; reaches Far like the others
   blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.5 * PACE) }, // Fire: lands on the target; radius cut from 1.5 to 0.5
 }; // all [Assumed]; every breath stays within Far [Doc]
+
+// ---- Attack-role variants ---- [Proposed] Switched on for testing, one per run: REFEREE_VARIANT=charge,tracking,lunge,elemental
+// Claw catches strafes; Bite catches retreats and armor; Breath catches dodges; Stomp catches burrows and the grounded.
+const variantEnv = (typeof process !== 'undefined' ? process.env.REFEREE_VARIANT ?? '' : '').split(',');
+export const VARIANT = {
+  breathCharge: variantEnv.includes('charge'), // Breath must charge: a plain Breath is read as a charge
+  biteTracking: variantEnv.includes('tracking'), // a Bite begun at Close locks its aim when the wind-up ends
+  biteLunge: variantEnv.includes('lunge'), // a Bite carries the dragon 1 pace forward during its wind-up
+  elementalBite: variantEnv.includes('elemental'), // a Bite carries the stone matchup unless a Breath is charged
+};
+export const BITE_LUNGE = PACE;
