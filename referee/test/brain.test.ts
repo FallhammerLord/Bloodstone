@@ -53,3 +53,14 @@ test('with no habits seen yet, a brain expects a breath at Far when the opponent
   const legal = [{ name: 'breath' as const }, { name: 'scales' as const }, { name: 'hold' as const }];
   assert.equal(read.likeliest('far', 0, true, legal).name, 'breath');
 });
+
+test('focus brains attack only with their focus, and still move and guard', () => {
+  for (const [style, attack] of [['claw-focus', 'claw'], ['bite-focus', 'bite'], ['breath-focus', 'breath']] as const) {
+    const bout = newBout(WYRM, WYVERN, 6.5);
+    runBout(bout, { A: brainController(style, 'novice', 3), B: brainController('boxer-puncher', 'novice', 4) });
+    const mine = bout.record.map((r) => r.actions.A);
+    const attacks = mine.filter((a) => ['bite', 'claw', 'breath', 'stomp'].includes(a));
+    assert.ok(attacks.every((a) => a === attack), `${style}: ${attacks.join(', ')}`);
+    assert.ok(mine.some((a) => !['bite', 'claw', 'breath', 'stomp', 'hold'].includes(a)), `${style} also moves or guards`);
+  }
+});

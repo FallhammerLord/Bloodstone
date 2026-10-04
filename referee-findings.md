@@ -1,6 +1,22 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 3: focus brains
+
+Three new brains attack with one thing only, and use every move, guard and Intimidate to serve it: **claw-focus** (Melee), **bite-focus** (Close), **breath-focus** (Far). They joined the style-against-style matrix on identical dragons (24 bouts per pairing of styles, so ±10 points is noise).
+
+| Focus brain | Overall, adept | Overall, master | vs general styles (master) |
+|---|---|---|---|
+| breath-focus | 51% | 48% | 48% |
+| claw-focus | 43% | 44% | 39% |
+| bite-focus | 34% | 34% | 32% |
+
+- **Breath alone nearly holds its own.** A dragon that only ever breathes wins about half its bouts against brains using everything. More evidence that Breath carries the game.
+- **Bite alone is the weakest plan,** even after piercing. It needs Close range and a narrow line, and strafes slip it during the wind-up.
+- **Claw-only beats the other focus brains at master (63%)**: the long active window catches movement.
+- With focus brains in the mix, Breath's share of all damage reads 63–64%.
+- **General styles at master:** aerialist 62%, out-boxer 56%, counterpuncher 56%, slugger 55%, swarmer 50%, reader 48%, boxer-puncher 47%.
+
 ## Round 2 update
 
 **Changes from the project chat's shard notes:**

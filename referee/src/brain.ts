@@ -16,8 +16,29 @@ import * as R from './rules.ts';
 
 // ---------------------------------------------------------------- styles and skill
 
-export type BrainStyle = 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' | 'boxer-puncher' | 'aerialist' | 'reader';
-export const BRAIN_STYLES: readonly BrainStyle[] = ['swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher', 'aerialist', 'reader'];
+export type BrainStyle =
+  | 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' | 'boxer-puncher' | 'aerialist' | 'reader'
+  | 'claw-focus' | 'bite-focus' | 'breath-focus';
+export const BRAIN_STYLES: readonly BrainStyle[] = [
+  'swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher', 'aerialist', 'reader',
+  'claw-focus', 'bite-focus', 'breath-focus',
+];
+
+/**
+ * Focus brains attack with one thing only: Claw at Melee, Bite at Close, or Breath at Far. Every move,
+ * guard and Intimidate stays open to them, in service of landing that one attack.
+ */
+const FOCUS: Partial<Record<BrainStyle, { attack: ActionName; band: 'melee' | 'close' | 'far' }>> = {
+  'claw-focus': { attack: 'claw', band: 'melee' },
+  'bite-focus': { attack: 'bite', band: 'close' },
+  'breath-focus': { attack: 'breath', band: 'far' },
+};
+
+/** Whether this style may script this action: focus brains attack only with their focus. */
+export function allowed(style: BrainStyle, a: ActionSpec): boolean {
+  const focus = FOCUS[style];
+  return !focus || ACTIONS[a.name].category !== 'attack' || a.name === focus.attack;
+}
 
 export type Skill = 'novice' | 'adept' | 'master';
 export const SKILLS: readonly Skill[] = ['novice', 'adept', 'master'];
@@ -53,6 +74,9 @@ const LEAN: Record<BrainStyle, Partial<Record<ActionName, number>> | ((band: Ban
   'boxer-puncher': {},
   aerialist: (_b, aloft, oppAloft) => (aloft && !oppAloft ? { claw: 4, breath: 2, approach: 1 } : { leap: 4, breath: 2, dive: 1 }),
   reader: (b) => (b === 'far' || b === 'veryFar' ? { intimidate: 3, breath: 2, approach: 2 } : { intimidate: 3, scales: 2, bite: 2, claw: 2 }),
+  'claw-focus': (b) => (b === 'melee' ? { claw: 5, dodge: 1, scales: 1, strafe: 1 } : { approach: 4, strafe: 1, dodge: 1 }),
+  'bite-focus': (b) => (b === 'close' ? { bite: 5, strafe: 1, scales: 1, intimidate: 1 } : b === 'melee' ? { retreat: 3, bite: 2, dodge: 1 } : { approach: 4, strafe: 1 }),
+  'breath-focus': (b) => (b === 'far' ? { breath: 5, strafe: 2, scales: 1 } : b === 'veryFar' ? { approach: 3, breath: 1 } : { retreat: 4, leap: 1, breath: 2, dodge: 1 }),
 };
 
 const bandOf = (sep: number): Band => (sep <= R.MELEE_EDGE ? 'melee' : sep <= R.CLOSE_EDGE ? 'close' : sep <= R.FAR_EDGE ? 'far' : 'veryFar');
@@ -224,6 +248,15 @@ export function value(style: BrainStyle, o: Outcome): number {
       return dealt - taken + (me1.pos.z > 0 && op1.pos.z === 0 && sep <= R.STOOP_RANGE ? 0.06 : 0) + rim;
     case 'reader':
       return dealt - taken + (op1.marks.revisionLockedFor > o.after.exchange ? 0.05 : 0) + (me1.marks.eye !== null ? 0.03 : 0) + rim;
+    case 'claw-focus':
+    case 'bite-focus':
+    case 'breath-focus': {
+      // Being at the focus range is worth a little; landing the focus attack is the point.
+      const focus = FOCUS[style]!;
+      const order: Band[] = ['melee', 'close', 'far', 'veryFar'];
+      const off = Math.abs(order.indexOf(band) - order.indexOf(focus.band));
+      return dealt - taken + (off === 0 ? 0.08 : off === 1 ? 0 : -0.06) + rim;
+    }
   }
 }
 
@@ -243,7 +276,7 @@ function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter, sep: n
   const out: ActionSpec[] = [];
   let s = situation;
   while (out.length < R.SLOTS_PER_EXCHANGE) {
-    const legal = legalActions(s, rng);
+    const legal = legalActions(s, rng).filter((a) => allowed(style, a));
     const leanTable = LEAN[style];
     const lean = typeof leanTable === 'function' ? leanTable(bandOf(sep), s.z > 0, opp.pos.z > 0) : leanTable;
     const weights = legal.map((a) => {
@@ -330,7 +363,7 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const them = view.opp.side;
       const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt };
       const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt };
-      const options = [current[2], ...legalActions(mine, rng).filter((a) => a.name !== current[2].name)];
+      const options = [current[2], ...legalActions(mine, rng).filter((a) => a.name !== current[2].name && allowed(style, a))];
       let theirOptions = legalActions(theirs, rng);
       // A charge on the board releases next slot: no guessing needed.
       const theirCharge = view.opp.marks.charge;
@@ -374,7 +407,7 @@ function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, gues
     }
     let best: ActionSpec = { name: 'hold' };
     let bestValue = -Infinity;
-    for (const a of legalActions(s, rng).filter((x) => !x.charge)) {
+    for (const a of legalActions(s, rng).filter((x) => !x.charge && allowed(style, x))) {
       const trial = structuredClone(b);
       const events = simulateSlot(trial, { [me]: a, [them]: guess[i] } as Record<Side, ActionSpec>);
       const v = value(style, { before: b, after: trial, events, me });
@@ -446,6 +479,16 @@ function tell(style: BrainStyle, script: ActionSpec[], view: View, show: boolean
       break;
     case 'reader':
       set(0, { name: 'intimidate' });
+      break;
+    case 'claw-focus':
+      if (sep > R.MELEE_EDGE) set(0, { name: 'approach' });
+      break;
+    case 'bite-focus':
+      if (sep <= R.MELEE_EDGE) set(0, { name: 'retreat' });
+      else if (sep > R.BITE_REACH) set(0, { name: 'approach' });
+      break;
+    case 'breath-focus':
+      if (sep <= R.CLOSE_EDGE) set(0, { name: 'retreat' });
       break;
   }
   return out;

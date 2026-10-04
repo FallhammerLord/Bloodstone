@@ -130,6 +130,9 @@ It sees only what a player sees: the board, the record, and its own script.
 | boxer-puncher | balanced | damage dealt against taken | after an exchange that went its way, it repeats the script |
 | aerialist | altitude and stoops | being aloft above a grounded opponent | on the ground, it opens by taking to the air |
 | reader | information | locking the opponent's revision, a Baleful Eye reveal | it opens by intimidating |
+| claw-focus | attacks only with Claw (crunched if it can); moves and guards to get to Melee | being at Melee | beyond Melee, it opens by closing in |
+| bite-focus | attacks only with Bite (charged or crunched if it can); holds Close | being at Close | at Melee it backs off; beyond Bite reach it closes in |
+| breath-focus | attacks only with Breath (charged if it can); holds Far | being at Far | at Close or nearer, it opens by backing off |
 
 Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how tightly it sticks to its best idea, and how long it remembers your habits.
 
