@@ -8,12 +8,12 @@
 //   5. end-of-window checks (near misses, grazes, Intimidate)
 //   6. KO checks
 //
-// Not modeled yet: altitude (Leap, Dive), obstacles, crunch, charge, compounds,
+// Not modeled yet: obstacles, crunch, charge, compounds,
 // breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards.
 
 import { ACTIONS, HOLD, describe, type ActionName, type ActionSpec } from './actions.ts';
 import { hatch, matchup, type StatSheet } from './hatch.ts';
-import { add, dist, len, scaleTo, sub, type Vec } from './geometry.ts';
+import { add, dist, flat, flatLen, isqrt, len, scaleTo, sub, vec, type Vec } from './geometry.ts';
 import { inShape, shapeOf } from './shapes.ts';
 import * as R from './rules.ts';
 
@@ -73,7 +73,7 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
   const make = (side: Side, setup: FighterSetup, x: number): Fighter => {
     const sheet = hatch(setup.morph, setup.stone);
     return {
-      side, name: setup.name, sheet, pos: { x, y: 0 },
+      side, name: setup.name, sheet, pos: vec(x, 0),
       wounds: sheet.wounds, meter: sheet.acumen, readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
       chain: { action: null, links: 0, lastLanded: false }, pulsed: false,
@@ -128,6 +128,8 @@ interface Plan {
   origin: Vec | null;
   aim: Vec | null;
   moveTotal: number;
+  /** ticks the move takes to complete; Evasion beyond the one-band cap shortens it */
+  travel: number;
   moved: number;
   converted: 'dodge' | 'roar' | null;
   link: number;
@@ -171,14 +173,26 @@ function makePlan(f: Fighter, requested: ActionSpec, g: number, ev: Event[]): Pl
     ev.push({ kind: 'note', tick: 0, side: f.side, text: `Pinned: can't ${describe(spec)}; holds instead.` });
     spec = HOLD;
   }
+  if (spec.name === 'dive' && f.pos.z === 0) {
+    ev.push({ kind: 'note', tick: 0, side: f.side, text: 'Already on the ground: nothing to dive from; holds instead.' });
+    spec = HOLD;
+  }
+  if (spec.name === 'stomp' && f.pos.z > 0) {
+    ev.push({ kind: 'note', tick: 0, side: f.side, text: "Can't Stomp while aloft; holds instead." });
+    spec = HOLD;
+  }
   const def = ACTIONS[spec.name];
   if (def.cooldown > 0) f.readyAt[spec.name] = g + def.cooldown + 1;
 
   const [windup, active, recovery] = timing(def.profile, f.status.rattled ? R.RATTLED_WINDUP : 0, 0);
 
   let moveTotal = 0;
+  let travel = active;
   if (def.category === 'move') {
-    moveTotal = Math.min(f.sheet.evasion * R.EVASION_STEP, R.MOVE_CAP);
+    const raw = f.sheet.evasion * R.EVASION_STEP;
+    moveTotal = Math.min(raw, R.MOVE_CAP);
+    // A move carries at most one band; Evasion beyond that buys timing [Proposed]: the move finishes sooner.
+    if (raw > R.MOVE_CAP) travel = Math.max(1, Math.floor((active * R.MOVE_CAP) / raw));
     if (f.status.staggered) moveTotal = Math.floor(moveTotal / 2);
   }
 
@@ -194,7 +208,7 @@ function makePlan(f: Fighter, requested: ActionSpec, g: number, ev: Event[]): Pl
   return {
     spec, windup, active, recovery, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, moved: 0, converted: null, link, intimidateBonus,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus,
   };
 }
 
@@ -413,42 +427,69 @@ function evasionState(p: Plan, t: number): 'moving' | 'dodging' | null {
 function moveStep(me: Fighter, opp: Fighter, p: Plan, oppPlan: Plan, t: number, ev: Event[]): Vec {
   if (category(p) !== 'move' || p.converted || phase(p, t) !== 'active') return me.pos;
   const k = t - p.windup;
-  const target = Math.floor((p.moveTotal * (k + 1)) / p.active);
+  const target = Math.floor((p.moveTotal * Math.min(k + 1, p.travel)) / p.travel);
   const delta = target - p.moved;
+  // A Wyrm's leap is a hop: it rises for the first half of the window and lands by the end [Assumed].
+  if (p.spec.name === 'leap' && !me.sheet.flies) {
+    const half = Math.max(1, Math.floor(p.active / 2));
+    const peak = Math.floor(p.moveTotal / 2);
+    const z = k < half ? Math.floor((peak * (k + 1)) / half) : Math.max(0, Math.floor((peak * (p.active - k - 1)) / (p.active - half)));
+    return { ...me.pos, z };
+  }
   if (delta <= 0) return me.pos;
 
+  // Approach, Retreat and Strafe move across the floor; Leap and Dive change altitude [Doc]: three degrees of freedom.
   const v = sub(me.pos, opp.pos);
-  const sep = len(v);
+  const flatV = flat(v);
+  const flatSep = flatLen(v);
   let np: Vec;
   switch (p.spec.name) {
     case 'approach': {
       const both = oppPlan.spec.name === 'approach' && oppPlan.converted === null && phase(oppPlan, t) === 'active';
-      if (both && sep <= R.MELEE_EDGE) {
+      if (both && len(v) <= R.MELEE_EDGE) {
         p.converted = 'dodge';
         ev.push({ kind: 'note', tick: t, side: me.side, text: 'Both advanced: stops at Melee and converts to a dodge.' });
         return me.pos;
       }
-      np = add(opp.pos, scaleTo(v, Math.max(R.BODY_GAP, sep - delta)));
+      if (flatSep === 0) return me.pos; // directly above or below: nothing left to close across the floor
+      // Stop where the bodies would touch, counting the height difference.
+      const minFlat = isqrt(Math.max(0, R.BODY_GAP * R.BODY_GAP - v.z * v.z));
+      np = { ...add(flat(opp.pos), scaleTo(flatV, Math.max(minFlat, flatSep - delta))), z: me.pos.z };
       break;
     }
     case 'retreat': {
-      if (sep + delta > R.LEASH) {
+      if (flatSep === 0) return me.pos;
+      np = { ...add(flat(opp.pos), scaleTo(flatV, flatSep + delta)), z: me.pos.z };
+      if (dist(np, opp.pos) > R.LEASH) {
         p.converted = 'roar';
         ev.push({ kind: 'note', tick: t, side: me.side, text: 'The leash holds: the retreat becomes an impotent roar.' });
         return me.pos;
       }
-      np = add(opp.pos, scaleTo(v, sep + delta));
       break;
     }
     case 'strafe': {
-      const tangent = p.spec.dir === 'cw' ? { x: v.y, y: -v.x } : { x: -v.y, y: v.x };
-      np = add(opp.pos, scaleTo(add(v, scaleTo(tangent, delta)), sep));
+      if (flatSep === 0) return me.pos;
+      const tangent = p.spec.dir === 'cw' ? vec(flatV.y, -flatV.x) : vec(-flatV.y, flatV.x);
+      np = { ...add(flat(opp.pos), scaleTo(add(flatV, scaleTo(tangent, delta)), flatSep)), z: me.pos.z };
+      break;
+    }
+    case 'leap': {
+      const z = Math.min(R.MAX_ALTITUDE, me.pos.z + delta);
+      if (z === me.pos.z) return me.pos;
+      np = { ...me.pos, z };
+      if (dist(np, opp.pos) > R.LEASH) return me.pos; // the leash holds in every direction [Doc]
+      break;
+    }
+    case 'dive': {
+      const z = Math.max(0, me.pos.z - delta);
+      if (z === me.pos.z) return me.pos;
+      np = { ...me.pos, z };
       break;
     }
     default:
       return me.pos;
   }
-  if (len(np) > R.ARENA_RADIUS) {
+  if (flatLen(np) > R.ARENA_RADIUS) {
     p.converted = 'dodge';
     ev.push({ kind: 'note', tick: t, side: me.side, text: 'Blocked by the arena wall; converts to a dodge.' });
     return me.pos;

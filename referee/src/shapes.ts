@@ -1,4 +1,5 @@
-// Attack shapes. Each test takes a "grow" amount so the same shape also draws Accuracy's phantom band.
+// Attack shapes, in three dimensions: "off-axis" is distance from the aim line in any direction.
+// Each test takes a "grow" amount so the same shape also draws Accuracy's phantom band.
 
 import type { ActionName } from './actions.ts';
 import type { CoreStone, StatSheet } from './hatch.ts';
@@ -17,15 +18,15 @@ export function shapeOf(action: ActionName, sheet: StatSheet): Shape {
 }
 
 export function inShape(shape: Shape, sheet: StatSheet, origin: Vec, aim: Vec, target: Vec, grow: number): boolean {
-  const { forward: f, lateral } = frame(origin, aim, target);
-  const l = Math.abs(lateral);
+  const { forward: f, offAxis: l } = frame(origin, aim, target);
   switch (shape) {
     case 'bite':
       return f > 0 && f <= R.BITE_REACH + grow && l <= R.BITE_HALF_WIDTH + grow;
     case 'claw':
       return dist(origin, target) <= R.CLAW_REACH + grow && f >= -R.CLAW_BACK - grow;
     case 'stomp':
-      return dist(origin, target) <= R.STOMP_RADIUS[sheet.age] + grow;
+      // A ground quake: it misses anything aloft [Doc].
+      return target.z === 0 && dist(origin, target) <= R.STOMP_RADIUS[sheet.age] + grow;
     case 'line':
       return f > 0 && f <= R.BREATH.line.reach + grow && l <= R.BREATH.line.halfWidth + grow;
     case 'narrowCone':

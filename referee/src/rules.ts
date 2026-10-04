@@ -21,6 +21,7 @@ export const LEASH = 4 * BAND; // [Doc] separation can't exceed Very Far's outer
 export const ARENA_RADIUS = 12 * PACE; // [Doc] §5 radius equals the leash
 export const BODY_GAP = 1 * PACE; // [Assumed] closest two dragon centers can get
 export const RIM_DEPTH = 3 * PACE; // [Assumed] how far in from the wall the pillars' pulse reaches
+export const MAX_ALTITUDE = 3 * BAND; // [Assumed] arena ceiling: 9 paces
 export const START_SEPARATION = Math.floor(6.5 * PACE); // [Doc] Far, just outside Bite range
 
 // ---- Movement ----
@@ -50,9 +51,9 @@ export const RATTLED_WINDUP = 3;
 export const BLINDED_ACCURACY = 3;
 
 // ---- Attack shapes ----
-// Measured from the attacker along its aim ("forward") and to either side ("lateral").
+// Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").
 export const BITE_REACH = 5 * PACE; // [Assumed] Melee into Close; starts just outside at Far
-export const BITE_HALF_WIDTH = PACE / 2; // [Assumed] narrow
+export const BITE_HALF_WIDTH = PACE / 2; // [Assumed] narrow: how far off the aim line it still catches
 export const CLAW_REACH = Math.floor((10 * PACE) / 3); // [Assumed] arc edge reaches just into Close
 export const CLAW_BACK = PACE / 2; // [Assumed] arc wraps slightly behind the shoulders
 export const STOMP_RADIUS = { wyrmling: 2 * PACE, adult: 3 * PACE, venerable: 4 * PACE }; // [Assumed] contact + 1/2/3 paces

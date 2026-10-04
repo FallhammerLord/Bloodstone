@@ -141,7 +141,7 @@ Radial menus suit this well: the same thumb or mouse flick every time, and they 
 
 ### 4.4 The Revision Window
 - During resolution, the slot-3 card stays lit and editable. One tap opens the same menus.
-- Revisions flash on both players' screens, as the design requires.
+- Revisions flash on both players' screens, as the design requires. The flash shows only that a revision happened; the new action stays hidden until it plays.
 - Iron Will, Cold Reader, and the Yinglong Aspect change what this card allows; the Scripter should show those changes on the card itself.
 
 ### 4.5 Clock and Defaults

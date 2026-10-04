@@ -37,7 +37,7 @@ export function rosterLines(bout: Bout, controllers?: Record<Side, Controller>):
     const f = bout.fighters[s];
     const h = f.sheet;
     const who = controllers ? `, played by ${controllers[s].name}` : '';
-    lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference})${who}`);
+    lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference}, ${h.flies ? 'flies' : 'grounded'})${who}`);
     lines.push(`   Wounds ${h.wounds}  Evasion ${h.evasion}  Hardness ${h.hardness}  Accuracy ${h.accuracy}`);
     lines.push(`   Claw ${h.claw}  Bite ${h.bite}  Breath ${h.breath}  Affinity ${h.affinity}  Acumen ${h.acumen}`);
   }
@@ -89,7 +89,7 @@ export function report(bout: Bout, events: Event[]): string[] {
         buffer.push(`${at(e.tick)}${label(e.attacker)}'s ${ACTIONS[e.action].label} whiffs.`);
         break;
       case 'trace':
-        buffer.push(`${at(e.tick)}A (${paces(e.positions.A.x)}, ${paces(e.positions.A.y)})  B (${paces(e.positions.B.x)}, ${paces(e.positions.B.y)})`);
+        buffer.push(`${at(e.tick)}A (${paces(e.positions.A.x)}, ${paces(e.positions.A.y)}, up ${paces(e.positions.A.z)})  B (${paces(e.positions.B.x)}, ${paces(e.positions.B.y)}, up ${paces(e.positions.B.z)})`);
         break;
       case 'slotEnd': {
         out.push('', `── Slot ${e.slot} ──`);
@@ -104,12 +104,14 @@ export function report(bout: Bout, events: Event[]): string[] {
             `Wounds ${name('A')} ${Math.max(0, e.wounds.A)}, ${name('B')} ${Math.max(0, e.wounds.B)}. ` +
             `Acumen meters ${e.meters.A} / ${e.meters.B}.`,
         );
+        const aloft = (['A', 'B'] as Side[]).filter((s) => e.positions[s].z > 0);
+        if (aloft.length) out.push(`  Aloft: ${aloft.map((s) => `${label(s)} ${paces(e.positions[s].z)} paces up`).join(', ')}.`);
         buffer = [];
         inSlot = false;
         break;
       }
       case 'revision':
-        say(`  ⚡ ${label(e.side)} revises slot 3 at the end of slot ${e.moment} (the slot flashes): ${e.from} → ${e.to}.`);
+        say(`  ⚡ ${label(e.side)} revises slot 3 at the end of slot ${e.moment}. The opponent sees only the flash. (Replay view: ${e.from} → ${e.to}.)`);
         break;
       case 'pulse':
         say(`  ◎ Rim pulse ${e.pulse} strikes ${label(e.side)} on the outer rim for ${e.damage}${e.capped ? ' (this pulse can\'t kill)' : ''} → ${Math.max(0, e.woundsLeft)}.`);

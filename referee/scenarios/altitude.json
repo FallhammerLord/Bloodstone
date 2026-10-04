@@ -1,0 +1,11 @@
+{
+  "title": "Altitude: the Wyvern takes the air",
+  "note": "Leap rises, Dive descends; the Wyrm is grounded, so its Leap is a hop. Stomp misses anything aloft. Distances, reach and the leash all count height.",
+  "separation": 3,
+  "A": { "name": "Coil", "morph": "wyrm", "stone": "earth" },
+  "B": { "name": "Gale", "morph": "wyvern", "stone": "water" },
+  "exchanges": [
+    { "A": ["bite", "stomp", "leap"], "B": ["leap", "hold", "breath"] },
+    { "A": ["bite", "scales", "bite"], "B": ["dive", "claw:left", "leap"] }
+  ]
+}

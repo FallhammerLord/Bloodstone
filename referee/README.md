@@ -34,7 +34,7 @@ A scenario is a small text file in `scenarios/`. Copy one and edit it.
 - **separation:** starting distance in paces. Melee is up to 3, Close up to 6, Far up to 9, Very Far up to 12.
 - **morph:** `true-dragon`, `wyvern`, `wyrm`. **stone:** `water`, `earth`, `fire`, `air`.
 - **exchanges:** three actions per side per exchange. Add more exchanges to fight on toward a KO.
-- **Actions:** `bite`, `claw:left`, `claw:right`, `breath`, `stomp`, `approach`, `retreat`, `strafe:cw`, `strafe:ccw`, `dodge`, `scales`, `intimidate`, `hold`.
+- **Actions:** `bite`, `claw:left`, `claw:right`, `breath`, `stomp`, `approach`, `retreat`, `strafe:cw`, `strafe:ccw`, `leap`, `dive`, `dodge`, `scales`, `intimidate`, `hold`.
 - **separation** is optional; it defaults to 6.5 paces (Far, just outside Bite range).
 
 **Full bouts.** Add `"bout": true` to play until a KO or the exchange limit (8), with rim pulses in the final three exchanges and the timeout rule at the end. `"exchangeLimit"` changes the limit. `"timeout": "mostWounds"` gives an open-lobby timeout to the dragon with more Wounds; the default is that the challenger forfeits. `"challenged"` is `"A"` or `"B"` (default B). Exchanges you don't script are played by the side's AI, or held.
@@ -62,7 +62,11 @@ A  Claw (left)  ------###############=========
 B  Bite         ------xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-`-` wind-up, `#` active, `=` recovery, `x` cancelled by an interrupt. Below the bars, every hit shows its arithmetic. ⚡ marks a revision (the slot flash); ◎ marks a rim pulse.
+`-` wind-up, `#` active, `=` recovery, `x` cancelled by an interrupt. Below the bars, every hit shows its arithmetic. ⚡ marks a revision. In play the opponent sees only the flash; the report is a replay seen from above, so it also shows the new action. ◎ marks a rim pulse. "Aloft" lines show altitude.
+
+## Altitude
+
+Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Approach, Retreat and Strafe move across the floor. Distances, reach, range bands and the leash all count height. The Wyrm is grounded: its Leap is a hop that lands by the end of the slot, and it can't Dive. Stomp misses anything aloft, and a dragon in the air can't Stomp. Evasion beyond the one-band move cap makes moves finish sooner.
 
 ## Where the numbers live
 
@@ -75,11 +79,11 @@ Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came fr
 
 `npm run tourney` fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
 
-The AIs are crude, so the numbers mean "strong in crude hands." The Wyvern is also missing its kit: it owns altitude, and this build has no Leap or Dive.
+The AIs are crude, so the numbers mean "strong in crude hands." The Wyvern still lacks its Aspect (talons on dives) and its shards.
 
 ## Not built yet
 
-Altitude (Leap, Dive), obstacles, crunch, charge, compounds, breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
+Morph Aspects, obstacles, crunch, charge, compounds, breath verbs (push, burn, pools), claw sweep timing, Acumen-scaled punishes, shards, and growth past wyrmling.
 
 ## Files
 

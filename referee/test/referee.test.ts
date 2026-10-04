@@ -146,3 +146,16 @@ test('the same scripts always produce the same fight', () => {
       ['breath', 'approach', 'bite'], ['strafe:cw', 'approach', 'claw:left']).events;
   assert.deepEqual(run(), run());
 });
+
+test('Evasion beyond the one-band cap buys timing: the move finishes sooner', () => {
+  // Wyvern + Fire (Evasion 12) and Wyvern + Water (Evasion 9) both retreat one band; 12 gets there first.
+  const at = (stone: 'fire' | 'water', tick: number) => {
+    const bout = newBout(TD_WATER, { name: 'G', morph: 'wyvern', stone }, 4);
+    const ev = runExchange(bout, { A: ['hold'].map(parseAction), B: ['retreat'].map(parseAction) }, { trace: true });
+    const tr = ev.find((e) => e.kind === 'trace' && e.tick === tick);
+    return tr && tr.kind === 'trace' ? tr.positions.B.x : NaN;
+  };
+  assert.equal(at('fire', 20), at('fire', 29), 'Evasion 12 has finished by tick 20');
+  assert.ok(at('water', 20) < at('water', 26), 'Evasion 9 is still moving');
+  assert.equal(at('fire', 29), at('water', 29), 'both carry exactly one band');
+});

@@ -205,7 +205,7 @@ Each morph prefers one element and dislikes the element that beats it.
 ## 4. Combat
 
 ### Exchange and Scripting
-- Each exchange has 3 action slots, scripted simultaneously. Slots 1 and 2 lock; slot 3 can be revised live while slots 1 and 2 resolve, once per exchange. A revision makes the slot flash on screen. Default: no change.
+- Each exchange has 3 action slots, scripted simultaneously. Slots 1 and 2 lock; slot 3 can be revised live while slots 1 and 2 resolve, once per exchange. A revision makes the slot flash on screen; the opponent sees that a revision happened, never what it was. Default: no change.
 - **Unfilled slots** hold position when the clock runs out, so an idle dragon gets punished. **[Proposed]** Intimidate is the alternative default.
 - Each action opens a menu of sub-actions and directions. A ghost preview shows the first few frames; confirm sends the set.
 - Scripting clock: 30 seconds in PvP, unlimited in campaign.

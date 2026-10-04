@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction, type ActionSpec } from '../src/actions.ts';
 import { aiController, STYLES } from '../src/ai.ts';
-import { DEFAULT_RULES, rimPulse, runBout, type Controller } from '../src/bout.ts';
+import { DEFAULT_RULES, rimPulse, runBout, viewOf, type Controller } from '../src/bout.ts';
 import { newBout, runExchange, type Event, type FighterSetup } from '../src/referee.ts';
 import * as R from '../src/rules.ts';
 
@@ -24,6 +24,13 @@ test('a revision replaces slot 3 and flashes', () => {
   });
   assert.ok(ev.some((e) => e.kind === 'revision' && e.side === 'A' && e.to === 'Bite'));
   assert.equal(hits(ev).length, 1);
+});
+
+test('a side sees that the opponent revised, never what to', () => {
+  // Controllers see the board and a yes/no flash. No script, revised or not, is part of what they see.
+  const view = viewOf(newBout(TD_WATER, TD_WATER, 4), 'A');
+  assert.deepEqual(Object.keys(view).sort(), ['exchange', 'globalSlot', 'history', 'me', 'opp', 'separation', 'side', 'startWounds']);
+  assert.ok(!JSON.stringify(view).includes('slots'));
 });
 
 test('one revision per exchange', () => {
@@ -57,7 +64,7 @@ test('a revised slot 3 gets no chain bonus', () => {
 // ---- Late pressure (§5) ----
 
 function onRim(bout: ReturnType<typeof newBout>) {
-  bout.fighters.A.pos = { x: -(R.ARENA_RADIUS - R.PACE), y: 0 };
+  bout.fighters.A.pos = { x: -(R.ARENA_RADIUS - R.PACE), y: 0, z: 0 };
 }
 
 test('pulse 1 can\'t kill: it leaves 1 point at worst', () => {

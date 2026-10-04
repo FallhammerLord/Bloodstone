@@ -2,7 +2,7 @@
 
 export type ActionName =
   | 'bite' | 'claw' | 'breath' | 'stomp'
-  | 'approach' | 'retreat' | 'strafe'
+  | 'approach' | 'retreat' | 'strafe' | 'leap' | 'dive'
   | 'dodge' | 'scales'
   | 'intimidate'
   | 'hold';
@@ -25,6 +25,8 @@ export const ACTIONS: Record<ActionName, ActionDef> = {
   approach: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Approach' }, // [Assumed]
   retreat: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Retreat' }, // [Assumed]
   strafe: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Strafe' }, // [Assumed]
+  leap: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Leap' }, // [Assumed]
+  dive: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Dive' }, // [Assumed]
   dodge: { category: 'guard', profile: [3, 9, 18], cooldown: 1, label: 'Dodge' }, // [Assumed]; cooldown [Proposed]
   scales: { category: 'guard', profile: [3, 24, 3], cooldown: 0, label: 'Scales' }, // [Assumed]
   intimidate: { category: 'intimidate', profile: [9, 12, 9], cooldown: 0, label: 'Intimidate' }, // [Assumed]
@@ -46,9 +48,6 @@ export const HOLD: ActionSpec = { name: 'hold' };
 /** Reads "bite", "strafe:cw", "claw:left", and so on. */
 export function parseAction(text: string): ActionSpec {
   const [raw, detail] = text.trim().toLowerCase().split(':');
-  if (raw === 'leap' || raw === 'dive') {
-    throw new Error(`"${raw}" needs altitude, which this build doesn't model yet.`);
-  }
   if (!(raw in ACTIONS)) throw new Error(`Unknown action "${text}".`);
   const name = raw as ActionName;
   if (name === 'strafe') {

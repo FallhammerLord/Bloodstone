@@ -1,7 +1,7 @@
 // The bout: exchanges until a KO or the exchange limit, with late pressure and the timeout rule.
 
 import type { ActionSpec } from './actions.ts';
-import { len } from './geometry.ts';
+import { flatLen, len, sub } from './geometry.ts';
 import { SIDES, checkKO, other, runExchange, type Bout, type Event, type Fighter, type Moment, type Side } from './referee.ts';
 import * as R from './rules.ts';
 
@@ -38,7 +38,7 @@ export function viewOf(bout: Bout, side: Side): View {
     globalSlot: bout.globalSlot,
     me: copy(me),
     opp: copy(opp),
-    separation: len({ x: me.pos.x - opp.pos.x, y: me.pos.y - opp.pos.y }),
+    separation: len(sub(me.pos, opp.pos)),
     startWounds: { ...bout.startWounds },
     history: { A: [...bout.history.A], B: [...bout.history.B] },
   };
@@ -76,7 +76,7 @@ export function rimPulse(bout: Bout, rules: Ruleset): Event[] {
   if (pulse < 1 || pulse > 3) return ev;
   for (const s of SIDES) {
     const f = bout.fighters[s];
-    if (len(f.pos) < R.ARENA_RADIUS - R.RIM_DEPTH) continue;
+    if (flatLen(f.pos) < R.ARENA_RADIUS - R.RIM_DEPTH) continue;
     let damage = Math.floor(f.sheet.wounds / 3);
     const canKill = pulse === 3 || (pulse === 2 && f.pulsed);
     const capped = !canKill && damage >= f.wounds;

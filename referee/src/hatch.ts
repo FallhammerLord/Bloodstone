@@ -13,6 +13,8 @@ export interface StatSheet {
   stone: CoreStone;
   age: Age;
   preference: Preference;
+  /** winged morphs fly; the Wyrm is serpentine and grounded [Doc] */
+  flies: boolean;
   wounds: number;
   evasion: number;
   hardness: number;
@@ -61,7 +63,7 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
   m[m.peak] -= (m.peak === 'wounds' ? 6 : 3) * sign;
 
   return {
-    morph, stone, age, preference: pref,
+    morph, stone, age, preference: pref, flies: morph !== 'wyrm',
     wounds: m.wounds, evasion: m.evasion, hardness: m.hardness,
     claw: s.claw, bite: s.bite, breath: s.breath,
     accuracy: m.evasion + m.accuracyMod,
