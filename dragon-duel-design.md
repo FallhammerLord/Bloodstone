@@ -206,6 +206,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 ### Exchange and Scripting
 - Each exchange has 3 action slots, scripted simultaneously. Slots 1 and 2 lock; slot 3 can be revised live while slots 1 and 2 resolve, once per exchange. A revision makes the slot flash on screen. Default: no change.
+- **Unfilled slots** hold position when the clock runs out, so an idle dragon gets punished. **[Proposed]** Intimidate is the alternative default.
 - Each action opens a menu of sub-actions and directions. A ghost preview shows the first few frames; confirm sends the set.
 - Scripting clock: 30 seconds in PvP, unlimited in campaign.
 - **[Proposed]** Directions are scripted relative to the orbit (clockwise or counterclockwise), so camera swings never flip inputs.
@@ -411,7 +412,7 @@ Dragons don't age naturally; tamers force their growth through dragon magic.
 - The dragon tamer's weir, kept stocked by immortal egg layers of each basic morph.
 - A tamer with no dragon and no stone receives a starter egg and stone; with a stone but no dragon, an egg only. **[Proposed]** Unhatched eggs count too.
 - Basic morphs: True Dragon, Wyvern, Wyrm. Basic stones: Water, Earth, Fire, Air. Everything else is earned.
-- Early play is one dragon at a time; more dragons come from resting venerables. Future: dragon lairs at the weir.
+- One dragon per bout. A tamer's total dragons are limited by their lair. Early play is one dragon at a time; more dragons come from resting venerables and lair growth.
 
 ### Tutorial
 - The opening fight is a tutorial with no death.
@@ -421,7 +422,7 @@ Dragons don't age naturally; tamers force their growth through dragon magic.
 ### Modes
 | Mode | Progression | Death | Rules |
 |---|---|---|---|
-| Open lobby | None | None | Player-set; any dragon |
+| Open lobby | None | None | Player-set; any dragon; local hot-seat between save profiles |
 | Ranked ladder | Shards | Permadeath | Locked track; age brackets |
 | Campaign | Shards | Permadeath | Player-paced |
 
@@ -460,6 +461,9 @@ Blank cells are plain sub-model variants. Zilant and Mordiford placements fill g
 ---
 
 ## 10. Presentation and Tech [Proposed]
+- **Platform:** PC and Linux, private build, local play first. Online play comes later.
+- **Art direction:** hand-drawn watercolor, ink-blot, and ink-stamp. Brief artists and animators against that, not a Monster Hunter look.
+- **[Open]** The clip-set approach below assumes 3D. Watercolor art may favor 2D cutout rigs or painted dragons in a 3D space; settle with the artists.
 - **Resolve, then choreograph:** the outcome is known before animation starts.
 - Authored clip sets per morph skeleton, adapted at runtime: motion warping steers attacks (Accuracy as warp tolerance), root-motion scaling carries moves (Evasion as distance and speed), IK handles footing and aim, blend spaces mix by speed and distance.
 - Shards change proportions, surfaces, and attachments, never topology, which keeps animation authored rather than fully procedural.

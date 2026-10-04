@@ -12,7 +12,7 @@ Every part of the game falls into one of four layers. Keeping them apart is the 
 | Rules engine | **The Referee** | Takes two dragons and two scripts, works out exactly what happens, tick by tick. Pure math. | Draw anything, play sound, or know what screen it's on. |
 | Presentation | **The Stage** | Reads the Referee's results and performs them: animation, camera, sound, UI. | Decide outcomes. If the Stage and Referee disagree, the Referee is right. |
 | Records | **The Ledger** | Saves everything that persists: tamers, eggs, stones, dragons, shards, Ichor, ladder standing. | Run fights. |
-| Networking | **The Courier** | Carries scripts between players and a server, and results back. | Interpret anything it carries. |
+| Networking | **The Courier** | Carries scripts between players and a server, and results back. Not needed while play is local. | Interpret anything it carries. |
 
 **Why this split matters for this game specifically**
 - **Replays are free.** A replay is two input logs plus a map seed. Feed them to the Referee and it reproduces the fight exactly. The design doc already wants this.
@@ -28,7 +28,7 @@ Every part of the game falls into one of four layers. Keeping them apart is the 
 
 These are the nouns. Each is a record the Ledger stores or the Referee reads.
 
-- **Tamer:** the player's account. Owns everything below, plus MMR and ladder record.
+- **Tamer:** one save profile. Owns everything below, plus a lair (which caps how many dragons it can keep) and, later, MMR and ladder record. A machine can hold many tamers.
 - **Egg:** a morph (True Dragon, Wyvern, Wyrm, and later extended morphs), an array shape, and structural cosmetics. Waits in the Weir until hatched.
 - **Bloodstone:** an element, up to five memories (scars and lineage seams), carved seams, an optional shiny. Outlives its dragons.
 - **Dragon:** an egg and a stone joined. Holds age, attributes, Acumen, its array, and its record. Can die.
@@ -46,8 +46,12 @@ These are the nouns. Each is a record the Ledger stores or the Referee reads.
 
 The core loop, as the player walks it. Each stage lists what the player does and what runs underneath.
 
+### 3.0 Profile Select
+- **Player:** picks which tamer (save profile) to play as, or makes a new one. For a local lobby bout, a second player picks a second profile.
+- **Underneath:** the Ledger loads one or two save files.
+
 ### 3.1 The Weir (home)
-- **Player:** sees their eggs, stones, living dragons, resting venerables, and Ichor. Chooses where to go.
+- **Player:** sees their eggs, stones, living dragons, resting venerables, and Ichor. Chooses where to go. The lair shows how many dragons the tamer can keep.
 - **Underneath:** the Ledger loads the tamer. Starter rules apply here: no dragon and no stone means a starter egg and stone; a stone with no dragon means an egg.
 
 ### 3.2 The Hatchery
@@ -142,12 +146,20 @@ Radial menus suit this well: the same thumb or mouse flick every time, and they 
 
 ### 4.5 Clock and Defaults
 - A visible 30-second countdown. A "ready" button ends early when both players confirm.
-- **[Open]** What an unfilled slot becomes at timeout. Options: repeat last exchange's slot, Guard with Scales, or hold position. Holding position is the most honest default; a Scales default quietly rewards stalling.
+- An unfilled slot holds position. An idle dragon is a dead dragon. (Intimidate is the alternative default; it also punishes inactivity, since it leaves the dragon open.)
 
 ### 4.6 Readability Rules
 - Every category gets a color **and** a shape, so color is never the only signal.
 - Icons first, short labels second, numbers on hover or hold.
 - Campaign can offer a "step" mode that pauses at each tick of a resolution, which doubles as the tutorial's teaching tool.
+
+### 4.7 Two Players, One Screen
+Local PvP has to keep scripts secret on a shared screen. That's the hardest UI problem in the project.
+- **Scripting by handoff.** Player 1 scripts while Player 2 looks away, then a blank "pass" screen, then Player 2 scripts. Each gets the full 30 seconds. Simple and reliable.
+- **The revision window is live,** so a handoff doesn't fit. Two options:
+  - **Blind flick:** each player holds their own controller. A revision is a radial flick with no menu drawn on screen; only the flash appears. This rewards learning the radial by feel, which suits the fighting-game DNA.
+  - **Revision pause:** in local play only, a revision freezes the fight and hands the screen over briefly. Safer for new players; breaks the live feel.
+- **[Open]** Blind flick, revision pause, or both as a lobby option.
 
 ---
 
@@ -155,7 +167,8 @@ Radial menus suit this well: the same thumb or mouse flick every time, and they 
 
 | Screen | Purpose |
 |---|---|
-| Title | Start, settings, account. |
+| Title | Start, settings. |
+| Profile Select | Pick one tamer, or two for a local lobby bout. |
 | Weir | Home hub: eggs, stones, dragons, venerables, Ichor. |
 | Hatchery | Pair egg and stone, preview, confirm. |
 | Dragon Sheet | Attributes, Aspect, record, Acumen. |
@@ -164,8 +177,8 @@ Radial menus suit this well: the same thumb or mouse flick every time, and they 
 | Stone Vault | Stones, their memories and seams, fusion previews. |
 | Mode Select | Campaign, Ranked, Open Lobby. |
 | Campaign Map | Rival tamers, hunts, the tutorial elder. |
-| Ranked Queue | Track, bracket, MMR, queue status. |
-| Lobby | Room settings, invites, any dragon, no stakes. |
+| Ranked Queue (later) | Track, bracket, MMR, queue status. |
+| Lobby | Two local profiles, any dragons, room settings, no stakes. |
 | Arena | Scripter, resolution, revision window. |
 | Aftermath | Spoils pick, scars, Ichor, ladder change. |
 | Lineage | A stone's history: every dragon it held, how each died. |
@@ -179,21 +192,25 @@ The **Lineage** screen is cheap to build and does a lot of emotional work in a p
 
 One Referee, one Scripter, one Aftermath. Modes only flip switches.
 
-| Switch | Tutorial | Campaign | Ranked | Open Lobby |
+| Switch | Tutorial | Campaign | Open Lobby (local) | Ranked (later) |
 |---|---|---|---|---|
-| Permadeath | Off | On | On | Off |
-| Spoils | Off | On | On | Off |
-| Ledger writes | Shiny only | Yes | Yes | No |
-| Clock | None | None | 30 s | Host's choice |
-| Opponent | Scripted elder | AI tamers | Matched player | Invited player |
-| Who runs the Referee | Your machine | Your machine | Server | Server or host |
-| Timeout rule | n/a | Challenger forfeits | Challenger forfeits | Host's choice |
+| Permadeath | Off | On | Off | On |
+| Spoils | Off | On | Off | On |
+| Ledger writes | Shiny only | Yes | No | Yes |
+| Clock | None | None | Lobby option, default 30 s | 30 s |
+| Opponent | Scripted elder | AI tamers | Second local profile | Matched player |
+| Who runs the Referee | Your machine | Your machine | Your machine | Server |
+| Timeout rule | n/a | Challenger forfeits | Lobby option | Challenger forfeits |
+
+Local lobby bouts never kill or transfer anything, which keeps the collusion closure intact: two profiles on one machine can't feed each other shards.
 
 **The AI opponent** is its own engine: it writes scripts. Campaign tamers can start simple, with fixed patterns and a few "if they're at Far, breathe" rules. The tutorial elder is the simplest case: a readable pattern by design. Smarter AI can come much later; the Referee already lets you test it by running AI against AI.
 
 ---
 
-## 7. Online Play
+## 7. Online Play (Later)
+
+The build is local-only for now. This section records why online play will be easy when it comes.
 
 Simultaneous turns make online play much simpler than in a real-time fighter.
 - **No rollback netcode needed.** Each player sends one script per exchange. A delay of a fraction of a second is invisible.
@@ -215,34 +232,62 @@ A "game engine" is the toolkit that handles drawing, sound, input, and loading a
 | **Unity** | Industry standard, huge library of tutorials and assets. | Licensing has shifted before; heavier than Godot. |
 | **Unreal** | Best-in-class visuals and animation tools. | Steep learning curve; overkill for a small team. |
 
-**Recommendation**
-1. **Build the Referee first, as its own program, in TypeScript.** It runs in a browser for the mockup and on a server for ranked play.
-2. **Build the mockup in the browser** with a flat top-down view: circles for dragons, shapes for attacks, the real Scripter UI. This is where the combat gets proven.
-3. **Pick the production engine later**, once the combat is fun in flat shapes. Godot is the likely fit. The Referee stays on the server either way; the production game would need its own copy for previews, which is a known porting job.
+**Recommendation for a private PC and Linux build**
+1. **Build the Referee first, as its own program, in TypeScript.** It runs anywhere, including a future server.
+2. **Build the mockup in the browser** with a flat top-down view: circles for dragons, shapes for attacks, the real Scripter UI. It runs on Linux with nothing to install, and saves can live in local files.
+3. **Godot is the likely production engine.** It exports natively to Linux and Windows, and its 2D tools suit hand-drawn art. Moving the Referee into Godot is a known porting job; choose when the combat is fun in flat shapes.
 
 ---
 
-## 9. Suggested Build Order
+## 9. Art Direction
+
+**Hand-drawn watercolor, ink-blot, and ink-stamp.** The brief for artists and animators. It also shapes the technical side.
+
+**How it maps onto the game**
+- **Elements as pigments.** Each element owns an ink: indigo water, ochre earth, vermilion fire, a pale wash for air, with the intermediates as mixes on the wheel. Breath becomes a wash thrown across the page.
+- **Lingering areas bleed.** Burning zones, corrosive pools, and caustic clouds read naturally as ink spreading into wet paper.
+- **The bloodstone as an ink-blot.** Blots are symmetrical, like the chest crater. Seams and scars can be drawn as lines and cracks in the blot.
+- **Seating a shard is pressing a seal.** The array board becomes a page of chops: each shard a stamp, overlap a stamp pressed over another. Locked seating feels right when it's ink.
+- **Revisions flash as fresh, wet ink** on the slot card.
+- **Cosmetic parts are separate brush layers** (head, wings, tail, ridges), which fits the per-part detail roster.
+
+**What it means for animation**
+- The design doc's animation plan assumes 3D models. Watercolor art usually goes one of two ways:
+  - **2D cutout rigs:** painted parts on a skeleton, like a puppet. Cheap to vary per body part, and Godot handles it well. Altitude and orbiting need clever staging.
+  - **Painted dragons in a 3D space:** flat painted figures or painterly shaders in a 3D arena. Keeps the orbiting camera; harder to make look hand-made.
+- References to bring to artists: Ōkami (sumi-e brushwork), Gris (watercolor), Hollow Knight (hand-drawn 2D animation).
+- **[Open]** 2D cutout or painted 3D. The artists should weigh in before the production engine gets chosen.
+
+---
+
+## 10. Suggested Build Order
 
 Each step is playable or testable before the next starts.
 
 1. **Referee, text only:** two fixed dragons, one exchange, printed tick by tick. Proves the timeline, hit detection, and damage.
 2. **Full bout in text:** exchanges until KO, the leash, range bands, cooldowns, chains.
-3. **Browser Scripter:** the real slot UI over a top-down map. Two players at one screen.
+3. **Browser Scripter:** the real slot UI over a top-down map. Two players at one screen, using the handoff.
 4. **Hatchery and Stat Sheet:** make any core morph and stone pairing and fight with it.
 5. **Simple AI:** a pattern-based opponent, then the tutorial elder.
-6. **Aftermath and Ledger:** death, scars, a saved Weir.
+6. **Aftermath and Ledger:** death, scars, multiple save profiles, a saved Weir, local lobby bouts between profiles.
 7. **Arrays and shards:** start with Body and Bloodstone chips, then Techniques.
 8. **Balance harness:** the Referee running thousands of AI-vs-AI fights and reporting pick and win rates.
-9. **Online:** server Referee, two browsers, then async.
+9. **Online (later):** server Referee, two machines, then async.
 
 Steps 1 to 4 match the vertical slice in the design doc: the three core morphs, the four core elements, shards later.
 
 ---
 
-## 10. Decisions Needed Before Building
+## 11. Settled and Open
 
-- **Timeout default** for unfilled slots (section 4.5).
-- **Platform target:** PC, console, mobile, or browser first. It changes the Scripter's input design more than anything else.
-- **Team:** solo with AI help, or with collaborators. It decides how much the engine choice should favor ease over power.
-- **Art direction for the mockup:** plain shapes are enough to prove combat; the question is when real dragons need to appear for playtesters to care.
+**Settled**
+- Platform: PC and Linux, private, local play first.
+- Unfilled slots hold position.
+- One dragon per bout; the lair caps total dragons.
+- Local PvP between save profiles, in lobby bouts.
+- Art: hand-drawn watercolor, ink-blot, ink-stamp.
+
+**Open**
+- Revision input in local PvP: blind flick, revision pause, or both (section 4.7).
+- 2D cutout or painted 3D (section 9).
+- Lair size and how it grows.
