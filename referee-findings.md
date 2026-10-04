@@ -41,7 +41,7 @@ Probes: a Bite chain against a retreating Wyrm hits at Melee, hits at Close, and
 **Open questions:**
 - Teach general brains the Approach-Bite sequence, then rerun before touching the lunge's size.
 - Fire under mandatory charge: lift the −2, or give its burning zone more weight.
-- Timeouts went up with charge (33%); the lunge pulls them back to 29%. Still above the 25% we were aiming under.
+- Timeouts went up with charge (33%); the lunge pulls them back to 29%, still above the 28% baseline.
 
 ## Round 4: attack roles
 
