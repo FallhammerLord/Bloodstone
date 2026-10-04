@@ -1,6 +1,43 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 6: everything at once
+
+Added since Round 5, all in one run (master, 1,752 bouts):
+- **Pounce:** a Claw right after a Strafe advances up to one band during its active window, sweeping its arc, and pierces 3. An airborne Wyvern that strafes into its stoop pierces too.
+- **Water's Claw 3 → 6.** A Claw of 3 hurt nothing.
+- **Brains plan setups:** Approach-Bite, Strafe-Claw and two-slot charges are weighed as two-slot ideas, by each style's taste for both halves.
+- Elemental bite dropped.
+
+| | Round 5 (charge + lunge) | Round 6 (all) |
+|---|---|---|
+| Breath's share of damage | 45% | 22% |
+| Bite's share | 42% | 51% |
+| Claw's share | 12% | 27% |
+| Lands: Breath / Bite / Claw | 70 / 45 / 61% | 66 / 50 / 66% |
+| Timeouts | 29% | 20% |
+| Exchanges per bout | 5.7 | 5.1 |
+| Bites after an Approach | 14% | 23% |
+| Claws after a Strafe | — | 29% |
+| claw-focus / bite-focus / breath-focus | 47 / 67 / 34% | 63 / 48 / 26% |
+| Morphs (TD / Wyrm / Wyvern) | 51 / 52 / 47 | 50 / 56 / 45 |
+| Stones (Air / Earth / Fire / Water) | 64 / 48 / 39 / 49 | 69 / 49 / 43 / 39 |
+| Pairing spread | 32–70% | 33–74% |
+| Crunchling vs plain | 58% | 64% (crunches in 17% of slots) |
+
+**What it shows** (one run, so attribution is by reasoning, not isolation):
+- **The pendulum swung to melee.** Claw's share more than doubled and Breath's halved. Timeouts fell to 20%, the lowest yet. The Dragonseeds range trap is gone, and Breath is now the weak attack: breath-focus wins 26%.
+- **Brains use the setups.** Bites after an Approach rose from 14% to 23%; 29% of Claws follow a Strafe. Bite-focus fell from 67% to 48% as general styles learned the same sequence, so the Round 5 overshoot was mostly a brain gap.
+- **Claw-focus now overshoots (63%, 60% against general styles).** A pounce reaches from Close and pierces; with a Claw of 6–9 it out-damages most answers.
+- **Stones now track Claw.** Air (Claw 9) leads at 69%; Water (Breath and Affinity, its strengths) fell to 39% despite the Claw raise. With Breath this small, Affinity protects little.
+- **Crunchlings climbed to 64%**: Raking Talons rides the Claw meta.
+- **Morphs hold within 45–56%.** The Wyvern holds its niche at 45%.
+
+**Levers, in the order I'd try them:**
+1. **Relax mandatory charge.** It was the fix for Breath dominance, which no longer exists. Plain Breath again, with the two-slot charge still earning +3, would lift Breath and Water together.
+2. **Trim the pounce** if Claw still leads: pierce only, without the advance, or a 2-pace reach.
+3. Revisit Water's valley once Breath recovers.
+
 ## Round 5: charge and lunge, reworked
 
 Settled from Round 4:
