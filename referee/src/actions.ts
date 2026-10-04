@@ -47,6 +47,10 @@ export interface ActionSpec {
   charge?: boolean;
   /** set by the Referee on the slot a charge releases in */
   released?: boolean;
+  /** set by the Referee: the released charge was held two slots [Proposed] */
+  full?: boolean;
+  /** brains only: a charge held two slots, then released */
+  long?: boolean;
   /** a crunch: the attack twice in one slot, 15 ticks each; needs Raking Talons or Gnashing Teeth [Doc] */
   crunch?: boolean;
 }

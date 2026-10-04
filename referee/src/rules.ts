@@ -109,9 +109,8 @@ export const BREATH = {
 // Claw catches strafes; Bite catches retreats and armor; Breath catches dodges; Stomp catches burrows and the grounded.
 const variantEnv = (typeof process !== 'undefined' ? process.env.REFEREE_VARIANT ?? '' : '').split(',');
 export const VARIANT = {
-  breathCharge: variantEnv.includes('charge'), // Breath must charge: a plain Breath is read as a charge
-  biteTracking: variantEnv.includes('tracking'), // a Bite begun at Close locks its aim when the wind-up ends
-  biteLunge: variantEnv.includes('lunge'), // a Bite carries the dragon 1 pace forward during its wind-up
+  breathCharge: variantEnv.includes('charge'), // Breath must charge; a charge earns +3 only on its second slot (Bellows Chest restores it for Breath)
+  biteLunge: variantEnv.includes('lunge'), // a Bite right after an Approach carries the dragon 1 pace forward during its wind-up
   elementalBite: variantEnv.includes('elemental'), // a Bite carries the stone matchup unless a Breath is charged
 };
 export const BITE_LUNGE = PACE;

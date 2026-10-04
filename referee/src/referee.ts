@@ -55,9 +55,11 @@ export interface Marks {
   /** Baleful Eye: this exchange's reveal, by grade rank */
   eye: number | null;
   /** a charge on the board: it releases next slot. Visible to both sides. */
-  charge: { action: 'bite' | 'breath'; sweep?: 'left' | 'right' } | null;
+  charge: { action: 'bite' | 'breath'; sweep?: 'left' | 'right'; slots: number } | null;
+  /** an Approach that moved last slot: the next Bite lunges [Proposed] */
+  advanced: boolean;
 }
-const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null });
+const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false });
 
 export interface Chain {
   action: ActionName | null;
@@ -242,10 +244,8 @@ interface Plan {
   stoop: { from: Vec; to: Vec; target: Vec } | null;
   /** a lunging Bite [Proposed]: carries the dragon forward during its wind-up */
   lunge: { from: Vec; to: Vec } | null;
-  /** a Bite begun at Close re-aims as its wind-up ends [Proposed] */
-  track: boolean;
-  /** this Bite lunged (even if cut short): it catches a retreat [Proposed] */
-  lunged: boolean;
+  /** this Bite follows an Approach and may lunge [Proposed] */
+  lunges: boolean;
   /** Sidewinder Spine: distance to shift along the line while strafing, and how far it has */
   shiftTotal: number;
   shifted: number;
@@ -328,12 +328,24 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   let spec = requested;
   const note = (text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, text });
 
-  // A charge begun last slot releases now, whatever this slot scripted.
+  // A charge begun last slot releases now, whatever this slot scripted. With the charge variant [Proposed],
+  // scripting the same charge again holds it a second slot (not into slot 3), and that second slot earns the bonus.
+  let holding = false;
   if (f.marks.charge) {
-    spec = { name: f.marks.charge.action, sweep: f.marks.charge.sweep, released: true };
-    f.marks.charge = null;
-    note(`Releases the charged ${ACTIONS[spec.name].label}.`);
+    const c = f.marks.charge;
+    if (R.VARIANT.breathCharge && requested.charge && requested.name === c.action && c.slots === 1 && slot < 2) {
+      spec = { name: c.action, sweep: c.sweep, charge: true };
+      holding = true;
+      note(`Holds the ${ACTIONS[spec.name].label} charge a second slot.`);
+    } else {
+      spec = { name: c.action, sweep: c.sweep, released: true, full: !R.VARIANT.breathCharge || c.slots >= 2 };
+      f.marks.charge = null;
+      note(`Releases the charged ${ACTIONS[spec.name].label}.`);
+    }
   }
+  // Lunge [Proposed]: a Bite right after an Approach that moved carries the dragon forward.
+  const lunges = R.VARIANT.biteLunge && f.marks.advanced;
+  f.marks.advanced = false;
   // Mandatory charge [Proposed]: a Breath always takes two slots.
   if (R.VARIANT.breathCharge && spec.name === 'breath' && !spec.charge && !spec.released) {
     spec = { ...spec, charge: true };
@@ -446,7 +458,8 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   let intimidateBonus = false;
   let diveBonus = false;
   const charging = spec.charge === true;
-  if (charging) f.marks.charge = { action: spec.name as 'bite' | 'breath', sweep: spec.sweep };
+  if (charging && !holding) f.marks.charge = { action: spec.name as 'bite' | 'breath', sweep: spec.sweep, slots: 1 };
+  if (holding && f.marks.charge) f.marks.charge.slots = 2;
   // Crunched halves carry no modifier: the reward is doing the thing twice [Doc]. Raking Talons Venerable counts the pair as a link.
   const crunchLink = spec.crunch && spec.name === 'claw' && crunchTech >= V;
   if (def.category === 'attack' && !charging && (!spec.crunch || crunchLink)) {
@@ -467,7 +480,7 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   return {
     spec, windup: w0, active: a0, recovery: r0, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null, lunge: null, track: false, lunged: false,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null, lunge: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
     charging, halves, landedHalves: 0,
   };
@@ -642,6 +655,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
       ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: 'Stooping Pinions: +3 to the next attack.' });
     }
     bout.history[s].push(p.spec.name);
+    f.marks.advanced = p.spec.name === 'approach' && p.converted === null && p.moved > 0;
   }
   bout.record.push({
     exchange: bout.exchange, slot, separation: startSep, z: startZ, wounds: startWounds,
@@ -718,16 +732,10 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       p.aim = sub(F[other(s)].pos, F[s].pos);
       ev.push({ kind: 'aim', tick: t, side: s, action: p.spec.name, distance: len(p.aim) });
       if (!p.halves) beginStoop(F[s], F[other(s)], p, t, ev);
-      if (!p.halves && t === 0) beginBite(F[s], F[other(s)], p, ev);
+      if (p.lunges && t === 0) beginLunge(F[s], p, ev);
     }
-    // A lunging or tracking Bite strikes from where the wind-up carried it; a tracking Bite re-aims there too.
-    if (p.spec.name === 'bite' && !p.halves && (R.VARIANT.biteLunge || p.track) && t === p.windup && phase(p, t) === 'active') {
-      p.origin = { ...F[s].pos };
-      if (p.track) {
-        p.aim = sub(F[other(s)].pos, F[s].pos);
-        ev.push({ kind: 'aim', tick: t, side: s, action: p.spec.name, distance: len(p.aim) });
-      }
-    }
+    // A lunging Bite strikes from where the wind-up carried it, along the line it locked.
+    if (p.lunges && t === p.windup && phase(p, t) === 'active') p.origin = { ...F[s].pos };
     // A stooping Wyvern strikes from wherever it actually landed, toward where the target stood.
     if (p.stoop && t === p.windup && phase(p, t) === 'active') {
       p.origin = { ...F[s].pos };
@@ -767,11 +775,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       }
       // Breath and Stomp skip Evasion [Doc]. Bite and Claw test it against a moving or dodging target.
       const evading = evasionState(plans[other(s)], t);
-      // Bite variants [Proposed]: a tracking Bite follows a strafe; a lunging Bite runs down a retreat.
-      const caught = p.spec.name === 'bite' && evading === 'moving'
-        && ((p.track && defPlan.spec.name === 'strafe') || (p.lunged && defPlan.spec.name === 'retreat'));
-      if (caught) ev.push({ kind: 'note', tick: t, side: s, text: `The Bite ${p.track ? 'tracks the strafe' : 'runs down the retreat'}: no Evasion.` });
-      if ((p.spec.name === 'bite' || p.spec.name === 'claw') && evading && !caught) {
+      if ((p.spec.name === 'bite' || p.spec.name === 'claw') && evading) {
         // Wyrm Serpentine [Assumed reading of §2]: it owns lateral movement, so its strafe evades like a dodge.
         const serpentine = def.sheet.aspect === 'serpentine' && plans[other(s)].spec.name === 'strafe' && evading === 'moving';
         let evasion = eff(def, 'evasion', {}).value + (evading === 'dodging' || serpentine ? R.DODGE_BONUS : 0);
@@ -975,7 +979,7 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
         v += m;
         if (m) parts.push(`${m > 0 ? '+' : ''}${m} elemental bite`);
       }
-      if (p.spec.released) {
+      if (p.spec.released && p.spec.full) {
         v += R.CHARGE_BONUS;
         parts.push(`+${R.CHARGE_BONUS} charged`);
       }
@@ -1019,8 +1023,10 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
         // Bellows Chest: +3 more, then +6 more, then double Potency from Adult.
         const bel = tech(att, 'bellows-chest');
         const extra = bel >= A ? breath.value : bel === J ? 6 : bel === W ? 3 : 0;
-        v += R.CHARGE_BONUS + extra;
-        parts.push(`+${R.CHARGE_BONUS + extra} charged${bel >= W ? ' (Bellows Chest)' : ''}`);
+        // Under the charge variant a one-slot charge earns nothing; Bellows Chest restores the +3.
+        const base = p.spec.full || bel >= W ? R.CHARGE_BONUS : 0;
+        v += base + extra;
+        if (base + extra) parts.push(`+${base + extra} charged${bel >= W ? ' (Bellows Chest)' : ''}`);
       }
       if (tech(att, 'smoldering-maw') >= W) {
         v -= 3;
@@ -1258,22 +1264,18 @@ function beginStoop(att: Fighter, def: Fighter, p: Plan, t: number, ev: Event[])
 }
 
 /**
- * Bite variants [Proposed]. Tracking: a Bite begun at Close locks its aim as the wind-up ends, not as it
- * starts; at Melee, Claw keeps the strafe-catching job. Lunge: the wind-up carries the dragon up to 1 pace
- * along its aim, so a Bite catches a retreat; bodies, obstacles and the wall cut it short.
+ * Lunge [Proposed]: a Bite right after an Approach carries the dragon up to 1 pace along its locked line
+ * during the wind-up. Pure geometry: a retreat that outruns it still escapes, and Evasion still applies.
+ * Bodies, obstacles and the wall cut it short.
  */
-function beginBite(att: Fighter, def: Fighter, p: Plan, ev: Event[]) {
-  if (p.spec.name !== 'bite' || !p.aim) return;
-  const sep = dist(att.pos, def.pos);
-  if (R.VARIANT.biteTracking && sep > R.MELEE_EDGE && sep <= R.CLOSE_EDGE) p.track = true;
-  if (!R.VARIANT.biteLunge || p.windup < 2) return;
+function beginLunge(att: Fighter, p: Plan, ev: Event[]) {
+  if (!p.aim || p.windup < 2) return;
   const ahead = flat(p.aim);
   const room = Math.min(R.BITE_LUNGE, Math.max(0, flatLen(ahead) - R.BODY_GAP));
   if (room <= 0 || flatLen(ahead) === 0) return;
   let to = add(att.pos, scaleTo(ahead, room));
   if (flatLen(to) > R.ARENA_RADIUS) to = { ...scaleTo(flat(to), R.ARENA_RADIUS), z: att.pos.z };
   p.lunge = { from: { ...att.pos }, to };
-  p.lunged = true;
   ev.push({ kind: 'note', tick: 0, side: att.side, text: `Lunges ${(dist(att.pos, to) / R.PACE).toFixed(1)} paces into the Bite.` });
 }
 

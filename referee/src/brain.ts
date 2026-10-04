@@ -175,6 +175,11 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
     out.push({ name: 'bite', charge: true });
     if ((s.readyAt.breath ?? 0) <= s.globalSlot + 1) out.push({ name: 'breath', charge: true });
   }
+  // With the charge variant, a charge held two slots earns the bonus; it must start in slot 1.
+  if (R.VARIANT.breathCharge && s.globalSlot % R.SLOTS_PER_EXCHANGE === 0) {
+    out.push({ name: 'bite', charge: true, long: true });
+    if ((s.readyAt.breath ?? 0) <= s.globalSlot + 1) out.push({ name: 'breath', charge: true, long: true });
+  }
   // Crunches come only from shards (a Wyrmling-grade crunch needs a landed hit first, so it isn't planned).
   const grade = (id: string) => s.f.loadout.techniques.find((t) => t.id === id)?.grade;
   const g1 = grade('raking-talons');
@@ -186,7 +191,11 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
 
 /** Appends an action to a script being built, filling a charge's release slot too. */
 function place(out: ActionSpec[], s: Situation, a: ActionSpec): Situation {
-  out.push(a);
+  if (a.long) {
+    out.push({ name: a.name, charge: true });
+    s = advance(s, { name: 'hold' });
+  }
+  out.push(a.long ? { name: a.name, charge: true } : a);
   let next = advance(s, a.charge ? { name: 'hold' } : a);
   if (a.charge && out.length < R.SLOTS_PER_EXCHANGE) {
     out.push({ name: a.name });
@@ -409,7 +418,7 @@ function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, gues
     let best: ActionSpec = { name: 'hold' };
     let bestValue = -Infinity;
     // Under mandatory charge a Breath is weighed across both its slots, per slot.
-    const twoSlot = (x: ActionSpec) => x.charge === true && x.name === 'breath' && R.VARIANT.breathCharge && i + 1 < R.SLOTS_PER_EXCHANGE;
+    const twoSlot = (x: ActionSpec) => x.charge === true && !x.long && x.name === 'breath' && R.VARIANT.breathCharge && i + 1 < R.SLOTS_PER_EXCHANGE;
     for (const a of legalActions(s, rng).filter((x) => (!x.charge || twoSlot(x)) && allowed(style, x))) {
       const trial = structuredClone(b);
       const events = simulateSlot(trial, { [me]: a, [them]: guess[i] } as Record<Side, ActionSpec>);

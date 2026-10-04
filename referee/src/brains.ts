@@ -102,6 +102,8 @@ console.log(`Damage by attack: ${['breath', 'bite', 'claw', 'stomp'].map((k) => 
   const [aimed, landed, dmg] = byAttack[k] ?? [0, 0, 0];
   return `${k} ${pct(dmg, st[3])} (lands ${pct(landed, aimed)})`;
 }).join(', ')}.`);
+const setup = results.reduce((a, r) => [a[0] + r.setup[0], a[1] + r.setup[1]], [0, 0]);
+console.log(`Bites right after an Approach: ${pct(setup[0], setup[1])} of ${setup[1]} Bites.`);
 
 // 1.
 const crudeJobs = jobs.filter((j) => j.group === 'crude');

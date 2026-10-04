@@ -36,6 +36,8 @@ export interface Result {
   dealt: Record<Side, number>;
   /** per attack: [aimed, landed, damage] */
   byAttack: Record<string, [number, number, number]>;
+  /** [Bites right after an Approach, all Bites] */
+  setup: [number, number];
 }
 
 const controller = (p: Player): Controller =>
@@ -71,10 +73,19 @@ for (const job of workerData.jobs as Job[]) {
       }
     }
   }
+  // Bites right after the same side's Approach: how often the lunge's setup comes for free.
+  const setup: [number, number] = [0, 0];
+  bout.record.forEach((r, i) => {
+    for (const s of ['A', 'B'] as const) {
+      if (r.actions[s] !== 'bite') continue;
+      setup[1]++;
+      if (i > 0 && bout.record[i - 1].actions[s] === 'approach') setup[0]++;
+    }
+  });
   for (const r of bout.record) for (const s of ['A', 'B'] as const) {
     stats[5]++;
     if (r.actions[s] === 'scales') stats[4]++;
   }
-  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack });
+  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup });
 }
 parentPort!.postMessage(results);
