@@ -1,6 +1,35 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 9: Water's jet
+
+Changes from Round 8 [Proposed]: Water's jet pushes a whole band (3 paces, was 1); a push that meets the wall or an obstacle slams for 3; the jet shoves a boulder a band instead of breaking it (a Water Breath of 9 shattered every boulder, so shoving needed that). Any landed hit already broke a charge, so no change was needed there. Master, 1,752 bouts.
+
+Accuracy by stone before the change (Round 8 rules), first figure lands, ×figure damage per landed hit:
+
+| Stone | Breath | Bite | Claw | Breath taken | Bite taken | Claw taken |
+|---|---|---|---|---|---|---|
+| Air | 78% ×6.0 | 44% ×8.6 | 57% ×6.4 | 55% ×6.9 | 48% ×8.7 | 82% ×3.2 |
+| Earth | 50% ×8.7 | 46% ×10.7 | 72% ×3.7 | 63% ×9.7 | 54% ×8.5 | 76% ×4.1 |
+| Fire | 46% ×6.9 | 50% ×5.8 | 80% ×4.0 | 42% ×7.6 | 41% ×8.6 | 60% ×4.5 |
+| Water | 52% ×9.6 | 50% ×8.9 | 86% ×1.6 | 63% ×3.9 | 49% ×9.2 | 73% ×4.3 |
+
+Water's line lands mid-pack and hits hardest; its Affinity cuts Breath taken to 3.9 a hit. Its Claw (×1.6) is the hole, and it takes the hardest Bites (the preferred Wyrm + Water swings Hardness 6 → 3).
+
+| | Round 8 | Round 9 |
+|---|---|---|
+| Stones (Air / Fire / Earth / Water) | 65 / 49 / 48 / 37 | 66 / 48 / 46 / 40 |
+| Water pairings (TD / Wyvern / Wyrm) | 38 / 38 / 36 | 44 / 41 / 35 |
+| Damage: Breath / Bite / Claw | 35 / 42 / 23% | 38 / 38 / 23% |
+| breath-focus | 34% | 39% |
+| Timeouts | 14% | 16% |
+
+- **Water gained 3 points (37 → 40%)**, and Breath's share rose to 38%. The push helps, but modestly.
+- **Brains don't plan slams.** They value damage and range band one slot deep; a push that sets up a slam or spoils a lunge isn't something they aim for. The slam itself counts as damage once it happens.
+- **A band of push is double-edged:** it sends the target out of Water's own Bite range, and the Breath cooldown leaves Water little to follow with.
+- **Rule check:** Water's +2 Breath came from "harmless extras earn points." The slam is now a harmful extra, so by that rule the +2 should shrink.
+- Wyrm + Water stays bottom (35%): its preferred swing trades Hardness for Affinity, and Bites dominate.
+
 ## Round 8: Water's Claw back to 3, Fire's burn to 3
 
 Changes from Round 7: Water's Claw returns to 3 (its valley; Air's Claw of 9 is its stone peak, not a boost), and Fire's burning zone deals 3 at slot's end instead of 1 (up to 6 if the target stays grounded in it through the next slot). Fire keeps its −2 Breath. Master, 1,752 bouts.
