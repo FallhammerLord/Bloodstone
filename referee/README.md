@@ -79,7 +79,7 @@ Each morph bends one rule (design doc §2). The True Dragon's Aspect is having n
 ## Breath effects
 
 At wyrmling strength (design doc §3):
-- **Water** pushes the target back 1 pace. **Air** shoves it 1 pace sideways. Walls, obstacles and the leash stop the push early.
+- **Water** pushes the target back a whole band (3 paces) [Proposed]; a push that meets the wall or an obstacle slams for 3. Its jet shoves a boulder a band instead of breaking it. **Air** shoves the target 1 pace sideways. Walls, obstacles and the leash stop a push early. Any landed hit breaks a charge.
 - **Breath damage by element:** Water +2, Air +2, Earth +1, Fire −2. Harmless extras earn points; harmful ones cost them.
 - **Fire** leaves a burning zone where it lands; **Earth** leaves a corrosive pool. Zones last through the next slot. A grounded dragon inside one at a slot's end takes 1 damage (burning) or loses 3 Hardness for the next slot (corrosive), whoever breathed it.
 

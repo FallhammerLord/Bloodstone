@@ -1151,7 +1151,9 @@ function obstacleDamage(att: Fighter, action: ActionName): number {
  * is destroyed, it carries on to the target. Returns the sides whose attack carries on.
  */
 function strikeObstacles(bout: Bout, plans: Record<Side, Plan>, blocked: { s: Side; o: Obstacle }[], t: number, ev: Event[]): Side[] {
-  const dealt = blocked.map(({ s, o }) => (o.wounds === null ? 0 : obstacleDamage(bout.fighters[s], plans[s].spec.name)));
+  // Water's jet shoves a boulder rather than breaking it [Proposed]; Earth's slurry eats through.
+  const jet = (s: Side) => plans[s].spec.name === 'breath' && bout.fighters[s].sheet.stone === 'water';
+  const dealt = blocked.map(({ s, o }) => (o.wounds === null || jet(s) ? 0 : obstacleDamage(bout.fighters[s], plans[s].spec.name)));
   blocked.forEach(({ o }, i) => {
     if (o.wounds !== null) o.wounds -= dealt[i];
   });
@@ -1161,6 +1163,7 @@ function strikeObstacles(bout: Bout, plans: Record<Side, Plan>, blocked: { s: Si
     const destroyed = o.wounds !== null && o.wounds <= 0;
     const through = destroyed && p.spec.name === 'breath' && bout.fighters[s].sheet.stone === 'earth';
     ev.push({ kind: 'obstacle', tick: t, attacker: s, action: p.spec.name, obstacle: describeObstacle(o), damage: dealt[i], destroyed, through });
+    if (!destroyed && jet(s) && p.aim) shoveObstacle(bout, o, p.aim, t, s, ev);
     if (through) carryOn.push(s);
     else p.resolved = true;
   });
@@ -1169,19 +1172,38 @@ function strikeObstacles(bout: Bout, plans: Record<Side, Plan>, blocked: { s: Si
 }
 
 /** Moves a dragon across the floor in ⅓-pace steps until the full distance or something stops it. */
-function shove(bout: Bout, side: Side, dir: Vec, amount: number): number {
+/** Moves a dragon up to `amount` along `dir`; reports how far, and the wall or obstacle that stopped it, if one did. */
+function shove(bout: Bout, side: Side, dir: Vec, amount: number): { moved: number; slam: string | null } {
   const f = bout.fighters[side];
   const opp = bout.fighters[other(side)];
-  if (flatLen(dir) === 0) return 0;
+  if (flatLen(dir) === 0) return { moved: 0, slam: null };
   let moved = 0;
   while (moved < amount) {
     const step = Math.min(R.NOTCH, amount - moved);
     const np = add(f.pos, scaleTo(flat(dir), step));
-    if (flatLen(np) > R.ARENA_RADIUS || obstacleAt(bout.arena, np) || dist(np, opp.pos) < R.BODY_GAP || dist(np, opp.pos) > R.LEASH) break;
+    if (flatLen(np) > R.ARENA_RADIUS) return { moved, slam: 'the arena wall' };
+    const o = obstacleAt(bout.arena, np);
+    if (o) return { moved, slam: describeObstacle(o) };
+    if (dist(np, opp.pos) < R.BODY_GAP || dist(np, opp.pos) > R.LEASH) break;
     f.pos = np;
     moved += step;
   }
-  return moved;
+  return { moved, slam: null };
+}
+
+/** Water's jet shoves a boulder it strikes a band along the aim; it stops at the wall, other obstacles and dragons. */
+function shoveObstacle(bout: Bout, o: Obstacle, dir: Vec, t: number, s: Side, ev: Event[]) {
+  if (o.kind !== 'boulder' || flatLen(dir) === 0) return;
+  let moved = 0;
+  while (moved < R.WATER_OBSTACLE_PUSH) {
+    const np = add(o.pos, scaleTo(flat(dir), Math.min(R.NOTCH, R.WATER_OBSTACLE_PUSH - moved)));
+    if (flatLen(np) + o.radius > R.ARENA_RADIUS) break;
+    if (bout.arena.obstacles.some((q) => q !== o && flatLen(sub(np, q.pos)) < q.radius + o.radius)) break;
+    if (SIDES.some((d) => flatLen(sub(np, bout.fighters[d].pos)) < o.radius + R.BODY_RADIUS)) break;
+    moved += Math.min(R.NOTCH, R.WATER_OBSTACLE_PUSH - moved);
+    o.pos = { ...np, z: 0 };
+  }
+  if (moved > 0) ev.push({ kind: 'note', tick: t, side: s, text: `The jet shoves ${describeObstacle(o)} ${(moved / R.PACE).toFixed(1)} paces.` });
 }
 
 /** The breath's verb on a hit [Doc] §3: Water pushes back, Air shoves sideways. Fire and Earth act through zones. */
@@ -1189,14 +1211,18 @@ function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]) {
   const att = bout.fighters[s];
   const def = bout.fighters[other(s)];
   if (att.sheet.stone === 'water') {
-    const moved = shove(bout, def.side, aim, R.WATER_PUSH);
+    const { moved, slam } = shove(bout, def.side, aim, R.WATER_PUSH);
     ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The jet pushes it back ${(moved / R.PACE).toFixed(1)} paces.` : 'The jet pushes, but something holds it in place.' });
+    if (slam) {
+      def.wounds -= R.WATER_SLAM;
+      ev.push({ kind: 'note', tick: t, side: def.side, text: `Slammed into ${slam}: takes ${R.WATER_SLAM}.` });
+    }
   } else if (att.sheet.stone === 'air') {
     // Shove away from the gust's center line; dead center goes counterclockwise.
     const d = sub(def.pos, att.pos);
     const side = aim.x * d.y - aim.y * d.x;
     const perp = side >= 0 ? vec(-aim.y, aim.x) : vec(aim.y, -aim.x);
-    const moved = shove(bout, def.side, perp, R.AIR_SHOVE);
+    const { moved } = shove(bout, def.side, perp, R.AIR_SHOVE);
     ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The gust shoves it sideways ${(moved / R.PACE).toFixed(1)} paces.` : 'The gust shoves, but something holds it in place.' });
   }
 }
@@ -1236,7 +1262,7 @@ function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Ev
         f.wounds -= R.TECHNIQUE_POINTS;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.TECHNIQUE_POINTS, woundsLeft: f.wounds });
         const away = sub(f.pos, z.center);
-        if (z.element === 'water') shove(bout, s, away, R.WATER_PUSH);
+        if (z.element === 'water') shove(bout, s, away, R.SMOLDER_PUSH);
         if (z.element === 'air') shove(bout, s, vec(-away.y, away.x), R.AIR_SHOVE);
         if (z.element === 'earth') f.pending.corroded = true;
       }

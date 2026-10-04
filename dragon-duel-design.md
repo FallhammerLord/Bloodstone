@@ -187,7 +187,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 | Element | Shape | Substance and verb |
 |---|---|---|
-| Water | Line | High-pressure jet; pushes the target back |
+| Water | Line | High-pressure jet; pushes the target back a band, slamming it into walls and obstacles (3); shoves boulders **[Proposed]** |
 | Earth | Narrow cone | Acidic slurry; eats obstacles and leaves a corrosive pool |
 | Fire | Ranged blast | Flame; leaves a burning zone |
 | Air | Wide cone | Scouring gust; shoves sideways and disperses clouds |

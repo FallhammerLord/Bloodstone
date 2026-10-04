@@ -159,3 +159,45 @@ test('a flyer above a boulder passes over it', () => {
   const ev = run(bout, ['approach'], ['hold']);
   assert.ok(!ev.some((e) => e.kind === 'note' && e.text.startsWith('Blocked')));
 });
+
+// ---- Water's jet [Proposed]: a band of push, a slam into barriers, and boulders shoved ----
+
+const TD_AIR: FighterSetup = { name: 'Gust', morph: 'true-dragon', stone: 'air' };
+
+test('Water\'s jet pushes the target back a whole band', () => {
+  const bout = newBout(TD_WATER, TD_AIR, 5);
+  const x0 = bout.fighters.B.pos.x;
+  run(bout, ['breath'], ['hold']);
+  assert.equal(bout.fighters.B.pos.x - x0, R.WATER_PUSH);
+});
+
+test('a push into the arena wall slams for 3', () => {
+  const bout = newBout(TD_WATER, TD_AIR, 5);
+  bout.fighters.A.pos = { x: R.ARENA_RADIUS - 6 * R.PACE, y: 0, z: 0 };
+  bout.fighters.B.pos = { x: R.ARENA_RADIUS - R.PACE, y: 0, z: 0 };
+  const w0 = bout.fighters.B.wounds;
+  const ev = run(bout, ['breath'], ['hold']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text === `Slammed into the arena wall: takes ${R.WATER_SLAM}.`));
+  assert.equal(w0 - bout.fighters.B.wounds, hits(ev)[0].damage + R.WATER_SLAM);
+});
+
+test('a push into an obstacle slams for 3', () => {
+  const bout = newBout(TD_WATER, TD_AIR, 5, 'B', { obstacles: [{ size: 'large', x: 5, y: 0 }] });
+  const ev = run(bout, ['breath'], ['hold']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Slammed into') && e.text.endsWith(`takes ${R.WATER_SLAM}.`)));
+});
+
+test('Water\'s jet shoves a boulder it strikes', () => {
+  const bout = newBout(TD_WATER, TD_AIR, 6, 'B', { obstacles: [{ size: 'large', x: 0, y: 0 }] });
+  const ev = run(bout, ['breath'], ['hold']);
+  assert.ok(ev.some((e) => e.kind === 'obstacle'));
+  const boulder = bout.arena.obstacles.find((o) => o.kind === 'boulder')!;
+  assert.ok(boulder.pos.x > 0, 'the boulder moved toward B');
+  assert.equal(boulder.wounds, 9, 'shoved, not broken');
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The jet shoves')));
+});
+
+test('a landed jet breaks a charge', () => {
+  const ev = run(newBout(TD_WATER, TD_AIR, 5), ['breath', 'hold'], ['charge:breath', 'breath']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
+});

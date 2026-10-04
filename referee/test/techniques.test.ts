@@ -84,7 +84,9 @@ test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pie
 test('Smoldering Maw: −3 on the hit, then the area lingers and stings at slot end', () => {
   const ev = run(newBout(withTech(TD_WATER, 'Smoldering Maw', 'juvenile'), TD_WATER, 4), ['breath', 'hold'], ['hold', 'hold']);
   assert.equal(hits(ev)[0].damage, 2, 'Water into Water: 9 − 6 + 2 Water − 3 Smoldering');
-  const stings = ev.filter((e) => e.kind === 'zoneEffect' && e.zone === 'smolder');
+  // Water's push now carries the target a band, out of the lingering area; an Earth breath leaves it standing in it.
+  const earth = run(newBout(withTech({ ...TD_WATER, stone: 'earth' }, 'Smoldering Maw', 'juvenile'), TD_WATER, 4), ['breath', 'hold'], ['hold', 'hold']);
+  const stings = earth.filter((e) => e.kind === 'zoneEffect' && e.zone === 'smolder');
   assert.equal(stings.length, 2, 'the slot it lands and the next');
 });
 

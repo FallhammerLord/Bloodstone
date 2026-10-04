@@ -71,7 +71,10 @@ export const BLINDED_ACCURACY = 3;
 export const ELEMENT_BREATH_MOD = { water: 2, air: 2, earth: 1, fire: -2 }; // push, shove, corrode, burn
 
 // ---- Breath effects, wyrmling strength ---- [Doc] §3 element table; numbers [Assumed]
-export const WATER_PUSH = PACE; // Water: the jet pushes the target back
+export const WATER_PUSH = BAND; // [Proposed; was 1 pace] Water: the jet pushes the target back a whole band
+export const WATER_SLAM = 3; // [Proposed] true damage when the push drives the target into the wall or an obstacle
+export const WATER_OBSTACLE_PUSH = BAND; // [Proposed] the jet shoves a boulder it strikes instead of breaking it; pillars don't move
+export const SMOLDER_PUSH = PACE; // Smoldering Maw's lingering water still nudges 1 pace
 export const AIR_SHOVE = PACE; // Air: the gust shoves the target sideways
 export const ZONE_RADIUS = PACE; // Fire's burning zone and Earth's corrosive pool
 export const ZONE_SLOTS = 1; // a zone lingers through this many slots after the one it lands in
