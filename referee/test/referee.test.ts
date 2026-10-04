@@ -159,3 +159,29 @@ test('Evasion beyond the one-band cap buys timing: the move finishes sooner', ()
   assert.ok(at('water', 20) < at('water', 26), 'Evasion 9 is still moving');
   assert.equal(at('fire', 29), at('water', 29), 'both carry exactly one band');
 });
+
+// ---- Chains across exchanges ----
+
+test('a chain carries across exchanges', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 4);
+  runExchange(bout, { A: ['bite', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  const ev = runExchange(bout, { A: ['bite', 'bite', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  assert.deepEqual(ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage), [6, 9]);
+});
+
+test('other actions don\'t break a chain', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 4);
+  const ev = runExchange(bout, { A: ['bite', 'scales', 'bite'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  const ev2 = runExchange(bout, { A: ['retreat', 'approach', 'bite'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  const dmg = [...ev, ...ev2].filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage);
+  assert.deepEqual(dmg, [6, 6, 9]);
+});
+
+test('a chain lapses only after a whole exchange without a landed hit', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 4);
+  runExchange(bout, { A: ['bite', 'bite', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  const quiet = runExchange(bout, { A: ['hold', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  assert.ok(quiet.some((e) => e.kind === 'note' && e.text.includes('chain lapses')));
+  const ev = runExchange(bout, { A: ['bite', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  assert.deepEqual(ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage), [6], 'link 1 again, not link 3');
+});

@@ -33,11 +33,12 @@ test('Snapping Jaw Elder: a Bite that interrupts deals +3', () => {
   assert.equal(h.damage, 6 + 3);
 });
 
-test('Lockjaw: a landed Bite Pins; the biter\'s next slot locks to Bite (Venerable: +3)', () => {
-  const ev = run(newBout(withTech(TD_WATER, 'Lockjaw', 'venerable'), TD_WATER, 4), ['bite', 'claw:left'], ['hold', 'retreat']);
-  assert.ok(notes(ev).some((n) => n.startsWith('Lockjaw keeps its grip')));
-  assert.ok(notes(ev).some((n) => n.startsWith('Pinned')));
-  assert.deepEqual(hits(ev).map((h) => h.damage).slice(0, 2), [6, 6 + 3]);
+test('Lockjaw: a landed Bite Pins; nothing is forced; a Venerable\'s next Bite gains +3', () => {
+  const free = run(newBout(withTech(TD_WATER, 'Lockjaw', 'juvenile'), TD_WATER, 4), ['bite', 'claw:left'], ['hold', 'retreat']);
+  assert.ok(notes(free).some((n) => n.startsWith('Pinned')), 'the target is Pinned');
+  assert.ok(!notes(free).some((n) => n.includes('becomes a Bite')), 'the biter keeps its scripted Claw');
+  const ven = run(newBout(withTech(TD_WATER, 'Lockjaw', 'venerable'), TD_WATER, 4), ['bite', 'bite'], ['hold', 'hold']);
+  assert.ok(hits(ven)[1].parts.includes('+3 Lockjaw follow-up'));
 });
 
 test('Hamstring Hooks: a landed Claw Staggers; Venerable keeps it from Leaping', () => {
@@ -54,9 +55,15 @@ test('Scything Forelimbs: the claw arc widens', () => {
   assert.equal(hits(scy).length, 1);
 });
 
-test('Ratchet Claws Elder: a Claw chain pauses through Scales and resumes 3 ticks faster', () => {
-  const ev = run(newBout(withTech(TD_WATER, 'Ratchet Claws', 'elder'), TD_WATER, 2), ['claw:left', 'scales', 'claw:left'], ['hold', 'hold', 'hold']);
-  assert.equal(slotPlans(ev)[2].A.windup, 6 - 3);
+test('Ratchet Claws Elder: a Claw chain holds through a hitless exchange and resumes 3 ticks faster', () => {
+  const air: FighterSetup = { name: 'Ash', morph: 'true-dragon', stone: 'air' };
+  const bout = newBout(withTech(air, 'Ratchet Claws', 'elder'), TD_WATER, 2);
+  run(bout, ['claw:left', 'claw:left', 'hold'], ['hold', 'hold', 'hold']);
+  const quiet = run(bout, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.ok(notes(quiet).some((n) => n.startsWith('Ratchet Claws')));
+  const ev = run(bout, ['claw:left', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.equal(slotPlans(ev)[0].A.windup, 6 - 3);
+  assert.ok(hits(ev)[0].parts.some((x) => x.includes('Ratchet Claws')), 'the third link\'s bonus pays for the hold');
 });
 
 test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pierces Affinity from Juvenile', () => {

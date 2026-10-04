@@ -72,11 +72,11 @@ A hidden baseline; each morph and each stone takes one +3 peak and one −3 vall
 |---|---|---|---|---|
 | Baseline | 30 | 6 | 3 | 6 (+0) |
 | True Dragon | 36 | 3 | 3 | 6 (+3) |
-| Wyvern | 30 | 9 | 0 | 6 (−3) |
+| Wyvern | 24 | 9 | 3 | 6 (−3) |
 | Wyrm | 30 | 6 | 6 | 3 (−3) |
 
 - **True Dragon outlasts:** the most Wounds, paid for in mobility. Its generalism lives in its kit.
-- **Wyvern is never where you aimed:** the highest Evasion, no Hardness.
+- **Wyvern is never where you aimed:** the highest Evasion, the fewest Wounds. Its valley sits on Wounds rather than a defense, so Evasion is never its only protection.
 - **Wyrm shrugs:** the highest Hardness, a narrow phantom band.
 
 | Stone | Claw | Bite | Breath | Affinity (stone) |
@@ -290,7 +290,7 @@ Each morph prefers one element and dislikes the element that beats it.
 **Ceilings against a True Dragon:** chained bites 21 (58%); crunched claws through Raking Talons 18 (50%); crunched bites through Gnashing Teeth 36, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs.
 
 ### Chains, Cooldowns, Crunch, Charge
-- **Chains:** repeating an input 2 or 3 times improves efficacy. **[Proposed]** Each bonus requires the previous link to land; a Guard in any slot breaks the combo; a revised slot 3 caps the bonus. **[Proposed]** Crunched slots don't count toward chains unless a shard says otherwise.
+- **Chains:** repeating an input 2 or 3 times improves efficacy. Each link counts only when it lands. Chains carry across exchanges: other actions in between don't break one, and a different attack starts a new one. A chain lapses only when a whole exchange passes without a landed hit. **[Proposed]** A revised slot 3 caps the bonus. **[Proposed]** Crunched slots don't count toward chains unless a shard says otherwise.
 - **Cooldowns** replace stamina. Breath and Stomp default to 2; shards shift them. **[Proposed]** Dodge cooldown 1; cooldown actions can't chain. An action used in a slot returns N+1 slots later, so cooldown 2 locks to the same slot each exchange, a rhythm readable between exchanges.
 - **Crunch:** an action done twice, or two actions, back to back in one slot, 15 ticks each. Crunching comes only from dragonshard builds, never innate to an action class; the Chimera's Aspect is the one morph exception. No cooldown debt: a cooldown action can't crunch with itself. Compounds are crunches of two different actions in order (approach then bite is a Pounce; bite then retreat is a hit-and-run). **[Proposed]** A crunch's first half winds up faster and gains priority, so crunch access stays gated; counterplay lives between halves.
 - **Charge:** one action across two slots. A charge stays visible: readable during the revision window when it releases in slot 3, and between exchanges. Charging grants a defensive bonus mirroring the crunch's offense, a function of Scales. **[Proposed]** The charge slot counts as a Scales guard; an interrupt still cancels the charge.

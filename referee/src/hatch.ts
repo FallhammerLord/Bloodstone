@@ -31,7 +31,7 @@ export interface StatSheet {
 // [Proposed] §2 Starting Attributes
 const MORPHS: Record<Morph, { wounds: number; evasion: number; hardness: number; accuracyMod: number; peak: 'wounds' | 'evasion' | 'hardness' }> = {
   'true-dragon': { wounds: 36, evasion: 3, hardness: 3, accuracyMod: 3, peak: 'wounds' },
-  wyvern: { wounds: 30, evasion: 9, hardness: 0, accuracyMod: -3, peak: 'evasion' },
+  wyvern: { wounds: 24, evasion: 9, hardness: 3, accuracyMod: -3, peak: 'evasion' }, // valley on Wounds, so Evasion isn't its only defense
   wyrm: { wounds: 30, evasion: 6, hardness: 6, accuracyMod: -3, peak: 'hardness' },
 };
 

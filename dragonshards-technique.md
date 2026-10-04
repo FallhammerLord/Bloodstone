@@ -48,12 +48,12 @@ Bite winds up faster and recovers slower.
 - **Venerable:** as Elder; an interrupted Breath still triggers its cooldown
 
 ### Lockjaw · Control
-A landed Bite Pins the target. Your next slot locks to Bite.
+A landed Bite Pins the target. **[Open]** Its price: the forced follow-up Bite was cut because it looped (each landed Bite re-locked the next slot). Lockjaw needs a new cost, such as Bite recovery +5 ticks (+3 from Adult), mirroring Hamstring Hooks.
 - **Wyrmling:** triggers only on a chain's final link
 - **Juvenile:** any landed Bite
-- **Adult:** your next slot locks to Bite or Guard
+- **Adult:** better terms once a price is set
 - **Elder:** as Adult; the Pinned target tests Evasion at −3
-- **Venerable:** as Elder; the locked follow-up Bite gains +3
+- **Venerable:** as Elder; a Bite next slot gains +3
 
 ### Gnashing Teeth · Crunch
 Bite can crunch with itself: two bites in one slot. Recovery after a crunched pair +6 ticks.
@@ -84,12 +84,12 @@ The claw arc widens by 1 pace, catching strafes. Claw tests Accuracy at −3.
 - **Venerable:** as Elder; the arc also reaches 1 pace higher
 
 ### Ratchet Claws · Chain
-A Claw chain survives one Guard, pausing instead of breaking. Final-link bonus −3.
-- **Wyrmling:** survives Scales only
-- **Juvenile:** survives any one Guard
-- **Adult:** the −3 applies only if the chain paused
+A Claw chain survives one hitless exchange, holding instead of lapsing. Final-link bonus −3. *(Rewritten for the chain rule: chains already survive Guards and other actions; only a hitless exchange ends one.)*
+- **Wyrmling:** only if you guarded with Scales during that exchange
+- **Juvenile:** any one hitless exchange
+- **Adult:** the −3 applies only if the chain held
 - **Elder:** as Adult; a resumed chain winds up 3 ticks faster
-- **Venerable:** as Elder; can also pause through one Move slot
+- **Venerable:** as Elder; holds through two hitless exchanges
 
 ### Raking Talons · Crunch
 Claw can crunch with itself: two claws in one slot. Recovery after a crunched pair +6 ticks.

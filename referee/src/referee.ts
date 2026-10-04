@@ -39,8 +39,8 @@ const noStatuses = (): Statuses => ({ pinned: false, staggered: false, rattled: 
 
 /** Lingering effects of Techniques, carried between slots. All visible on the board. */
 export interface Marks {
-  /** Lockjaw: the next slot must be one of these; Venerable adds +3 to the locked Bite */
-  forced: { allowed: ActionName[]; bonus: boolean } | null;
+  /** Lockjaw Venerable: a Bite next slot, against the Pinned target, gains +3 */
+  lockjawFollow: boolean;
   /** Sapping Bellow on this dragon: its next chain bonus is stripped */
   sapped: 'claw' | 'any' | null;
   /** Goading Roar on this dragon: a Retreat next slot (or Dodge, from an Elder roar) stings; the grade rank */
@@ -55,7 +55,22 @@ export interface Marks {
   /** Baleful Eye: this exchange's reveal, by grade rank */
   eye: number | null;
 }
-const noMarks = (): Marks => ({ forced: null, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null });
+const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null });
+
+export interface Chain {
+  action: ActionName | null;
+  /** links landed so far */
+  links: number;
+  /** a hit landed this exchange (any attack, grazes included) */
+  hitThisExchange: boolean;
+  /** guarded with Scales this exchange (a Wyrmling Ratchet Claws needs it) */
+  scalesThisExchange: boolean;
+  /** times Ratchet Claws carried this chain through a hitless exchange */
+  saves: number;
+  /** the next Claw resumes a saved chain (Ratchet Claws Elder: winds up faster) */
+  resumed: boolean;
+}
+const noChain = (): Chain => ({ action: null, links: 0, hitThisExchange: false, scalesThisExchange: false, saves: 0, resumed: false });
 
 // Grade ranks, for reading technique terms.
 const W = 0, J = 1, A = 2, E = 3, V = 4;
@@ -80,7 +95,11 @@ export interface Fighter {
   status: Statuses;
   pending: Statuses;
   intimidateBonus: boolean;
-  chain: { action: ActionName | null; links: number; lastLanded: boolean; paused: boolean; pauseUsed: boolean };
+  /**
+   * The current chain: repeating an attack builds it, one landed link at a time. Other actions don't break it;
+   * a different attack starts a new one. It lapses only when a whole exchange passes without a landed hit.
+   */
+  chain: Chain;
   marks: Marks;
   /** hit by a rim pulse this bout */
   pulsed: boolean;
@@ -135,7 +154,7 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
       side, name: setup.name, sheet, loadout, pos: vec(x, 0),
       wounds: sheet.wounds, meter: sheet.acumen, readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
-      chain: { action: null, links: 0, lastLanded: false, paused: false, pauseUsed: false }, marks: noMarks(), pulsed: false,
+      chain: noChain(), marks: noMarks(), pulsed: false,
     };
   };
   const fighters = { A: make('A', a, -half), B: make('B', b, half) };
@@ -207,7 +226,7 @@ interface Plan {
   startZ: number;
   /** a Bite or Claw aimed at this dragon missed while it evaded (Riposte, Sidewinder) */
   evaded: boolean;
-  /** this chain paused through a Guard (Ratchet Claws) */
+  /** this chain was carried through a hitless exchange (Ratchet Claws) */
   chainPaused: boolean;
   lockjawBonus: boolean;
   diveBonus: boolean;
@@ -243,17 +262,9 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev
   let spec = requested;
   const note = (text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, text });
 
-  // Lockjaw: the slot after a landed Bite is locked.
-  let lockjawBonus = false;
-  if (f.marks.forced) {
-    const { allowed, bonus } = f.marks.forced;
-    f.marks.forced = null;
-    if (!allowed.includes(spec.name)) {
-      note(`Lockjaw keeps its grip: ${describe(spec)} becomes a Bite.`);
-      spec = { name: 'bite' };
-    }
-    lockjawBonus = bonus && spec.name === 'bite';
-  }
+  // Lockjaw Venerable: a Bite the slot after a landed Lockjaw Bite gains +3. Nothing is forced.
+  const lockjawBonus = f.marks.lockjawFollow && spec.name === 'bite';
+  f.marks.lockjawFollow = false;
   const ready = f.readyAt[spec.name] ?? 0;
   if (ready > g) {
     note(`${describe(spec)} is still cooling down; holds instead.`);
@@ -315,7 +326,7 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev
     wShift -= 3;
     f.marks.quick = null;
   }
-  if (spec.name === 'claw' && tech(f, 'ratchet-claws') >= E && f.chain.paused) wShift -= 3;
+  if (spec.name === 'claw' && tech(f, 'ratchet-claws') >= E && f.chain.resumed && f.chain.action === 'claw') wShift -= 3;
   const [windup, active, recovery] = timing(def.profile, wShift, rShift);
 
   let moveTotal = 0;
@@ -343,8 +354,8 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev
   let intimidateBonus = false;
   let diveBonus = false;
   if (def.category === 'attack') {
-    const continues = f.chain.action === spec.name && f.chain.lastLanded && def.cooldown === 0 && f.chain.links < 3;
-    link = continues ? f.chain.links + 1 : 1;
+    // Cooldown actions can't chain [Proposed]; they neither build nor break one.
+    link = def.cooldown === 0 && f.chain.action === spec.name ? f.chain.links + 1 : 1;
     intimidateBonus = f.intimidateBonus;
     f.intimidateBonus = false;
     diveBonus = f.marks.diveBonus;
@@ -355,7 +366,7 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, ev
     spec, windup, active, recovery, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
     moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null,
-    shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.pauseUsed, lockjawBonus, diveBonus,
+    shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
   };
 }
 
@@ -392,7 +403,8 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
   ev.push({ kind: 'exchangeStart', exchange: bout.exchange });
   for (const s of SIDES) {
     const f = bout.fighters[s];
-    f.chain = { action: null, links: 0, lastLanded: false, paused: false, pauseUsed: false }; // [Assumed] chains live within one exchange
+    f.chain.hitThisExchange = false;
+    f.chain.scalesThisExchange = false;
     f.marks.eye = null;
     bout.startWounds[s] = f.wounds;
     if (f.marks.revisionLockedFor === bout.exchange) ev.push({ kind: 'note', tick: 0, side: s, text: "Ash Gland: can't revise this exchange." });
@@ -428,7 +440,27 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
       }
     }
   }
+  if (!bout.over) for (const s of SIDES) chainAtExchangeEnd(bout.fighters[s], ev);
   return ev;
+}
+
+/**
+ * A chain lapses only when a whole exchange passes without a landed hit. Ratchet Claws carries a Claw
+ * chain through one such exchange (Wyrmling: only if it guarded with Scales; Venerable: two).
+ */
+function chainAtExchangeEnd(f: Fighter, ev: Event[]) {
+  const c = f.chain;
+  if (c.hitThisExchange || c.links === 0) return;
+  const rat = tech(f, 'ratchet-claws');
+  const saves = rat >= V ? 2 : 1;
+  if (c.action === 'claw' && rat >= W && c.saves < saves && (rat >= J || c.scalesThisExchange)) {
+    c.saves++;
+    c.resumed = true;
+    ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, text: `Ratchet Claws: the Claw chain (${c.links} link${c.links > 1 ? 's' : ''}) holds through a hitless exchange.` });
+    return;
+  }
+  ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, text: `A whole exchange without a hit: the ${ACTIONS[c.action ?? 'hold'].label} chain lapses.` });
+  f.chain = noChain();
 }
 
 /** Ends the bout if anyone is down. A double KO goes to the challenged [Proposed]. */
@@ -463,17 +495,19 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
   for (const s of SIDES) {
     const p = plans[s];
     const f = F[s];
-    if (category(p) === 'attack') {
-      f.chain = { action: p.spec.name, links: p.link, lastLanded: p.landed, paused: false, pauseUsed: p.link > 1 && f.chain.pauseUsed };
-    } else {
-      // Ratchet Claws: a Claw chain survives one Guard (Wyrmling: Scales only; Venerable: a Move too), pausing.
-      const rat = tech(f, 'ratchet-claws');
-      const cat = category(p);
-      const pauses = f.chain.action === 'claw' && !f.chain.pauseUsed && rat >= W &&
-        (p.spec.name === 'scales' || (rat >= J && cat === 'guard') || (rat >= V && cat === 'move'));
-      f.chain = pauses
-        ? { ...f.chain, paused: true, pauseUsed: true }
-        : { action: null, links: 0, lastLanded: false, paused: false, pauseUsed: false };
+    if (p.landed) f.chain.hitThisExchange = true;
+    if (p.spec.name === 'scales') f.chain.scalesThisExchange = true;
+    if (category(p) === 'attack' && ACTIONS[p.spec.name].cooldown === 0) {
+      const c = f.chain;
+      if (c.action !== p.spec.name) {
+        // A different attack starts a new chain.
+        f.chain = { ...noChain(), hitThisExchange: c.hitThisExchange, scalesThisExchange: c.scalesThisExchange, action: p.spec.name, links: p.landed ? 1 : 0 };
+      } else if (p.landed) {
+        c.links = p.link;
+        c.resumed = false;
+        // A third link completes the chain; the next repeat starts a fresh one.
+        if (c.links >= 3) f.chain = { ...noChain(), hitThisExchange: true, scalesThisExchange: c.scalesThisExchange };
+      }
     }
     // Riposte Talons Adult: the Dodge cooldown penalty applies only after a failed dodge.
     if (p.spec.name === 'dodge' && !p.evaded && tech(f, 'riposte-talons') >= A) f.readyAt.dodge = (f.readyAt.dodge ?? 0) + 1;
@@ -1077,7 +1111,7 @@ function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: number, 
   const lj = p.spec.name === 'bite' ? tech(att, 'lockjaw') : -1;
   if (lj >= W && (lj >= J || p.link === 3)) {
     def.pending.pinned = true;
-    att.marks.forced = { allowed: lj >= A ? ['bite', 'scales', 'dodge'] : ['bite'], bonus: lj >= V };
+    if (lj >= V) att.marks.lockjawFollow = true;
     note(def.side, 'Lockjaw: Pinned next slot.');
   }
   // Hamstring Hooks: a landed Claw Staggers (Elder: slows its next move; Venerable: no Leap).
