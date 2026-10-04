@@ -3,7 +3,7 @@
 import type { ActionSpec } from './actions.ts';
 import type { Arena } from './arena.ts';
 import { flatLen, len, sub } from './geometry.ts';
-import { SIDES, checkKO, other, runExchange, type Bout, type Event, type Fighter, type Moment, type Side } from './referee.ts';
+import { SIDES, checkKO, other, runExchange, type Bout, type Event, type Fighter, type Moment, type Side, type SlotRecord } from './referee.ts';
 import * as R from './rules.ts';
 
 export interface Ruleset {
@@ -29,6 +29,8 @@ export interface View {
   history: Record<Side, string[]>;
   /** obstacles and lingering zones: all visible */
   arena: Arena;
+  /** what each dragon did in every slot so far, and from where */
+  record: SlotRecord[];
 }
 
 export function viewOf(bout: Bout, side: Side): View {
@@ -45,6 +47,7 @@ export function viewOf(bout: Bout, side: Side): View {
     startWounds: { ...bout.startWounds },
     history: { A: [...bout.history.A], B: [...bout.history.B] },
     arena: structuredClone(bout.arena),
+    record: bout.record.map((r) => structuredClone(r)),
   };
 }
 

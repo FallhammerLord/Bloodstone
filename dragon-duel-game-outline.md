@@ -204,7 +204,7 @@ One Referee, one Scripter, one Aftermath. Modes only flip switches.
 
 Local lobby bouts never kill or transfer anything, which keeps the collusion closure intact: two profiles on one machine can't feed each other shards.
 
-**The AI opponent** is its own engine: it writes scripts. Campaign tamers can start simple, with fixed patterns and a few "if they're at Far, breathe" rules. The tutorial elder is the simplest case: a readable pattern by design. Smarter AI can come much later; the Referee already lets you test it by running AI against AI.
+**The AI opponent** is its own engine: it writes scripts. A brain reads the opponent's visible habits, imagines the exchange in the Referee, and chooses by its style's values (built in `referee/src/brain.ts`). Styles borrow boxing's vocabulary: swarmer, out-boxer, slugger, counterpuncher, boxer-puncher, plus the aerialist and the reader. Each keeps a tell a player can learn, and a skill level (novice, adept, master) sets how much it imagines and how often the tell shows. A campaign rival is a style, a loadout, a tell and a skill. The tutorial elder is a counterpuncher with a loud tell.
 
 ---
 

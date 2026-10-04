@@ -39,7 +39,7 @@ A scenario is a small text file in `scenarios/`. Copy one and edit it.
 
 **Full bouts.** Add `"bout": true` to play until a KO or the exchange limit (8), with rim pulses in the final three exchanges and the timeout rule at the end. `"exchangeLimit"` changes the limit. `"timeout": "mostWounds"` gives an open-lobby timeout to the dragon with more Wounds; the default is that the challenger forfeits. `"challenged"` is `"A"` or `"B"` (default B). Exchanges you don't script are played by the side's AI, or held.
 
-**AI sides.** Add `"ai": "brawler"` (and optionally `"seed": 7`) to a side. Styles:
+**AI sides.** Add `"ai": "brawler"` (and optionally `"seed": 7`) to a side. Brain styles are below, under Brains. The crude styles, kept for comparison:
 - **brawler:** closes in and hits. Claw up close, Bite at Close, Breath at Far.
 - **skirmisher:** keeps range. Breathes at Far, backs off when crowded.
 - **guardian:** waits for you to commit. Guards, dodges, counters up close.
@@ -104,6 +104,34 @@ A wyrmling's array is one valence of three pips (pips 0, 1 and 2), treated as a 
 - Supports wait for seams, and Traits are Elder-and-Venerable rule bends; neither is built yet.
 - Strafe shifts for Sidewinder Spine are written `strafe:cw:in` or `strafe:ccw:out`. Baleful Eye's reveal can drive a scripted revision: `"if": "revealed attack"`.
 
+## Brains
+
+Brains are AI tamers that think. Give a side `"ai": "swarmer"` (any style below) and optionally `"skill": "novice" | "adept" | "master"` and `"seed"`. See `scenarios/brains.json`.
+
+How a brain decides, each exchange:
+1. **Read.** It tallies the opponent's habits from the public slot record: what it did, by range band and slot. Old habits fade.
+2. **Imagine.** It writes candidate scripts, mostly in its style's lean, and guesses the opponent's scripts from its read. Then it plays each pairing out in a copy of the bout, in the real Referee.
+3. **Value.** It scores each imagined outcome by its style's priorities.
+4. **Choose.** It picks among good scripts with weighted chance, so it can bluff and isn't perfectly predictable.
+5. **Revise.** At the end of slot 2 it imagines slot 3 again, using a Baleful Eye reveal if it has one, and revises when a new idea is clearly better.
+6. **Tell.** Each style keeps one readable habit. Novices show it 90% of the time, adepts 50%, masters 15%.
+
+It sees only what a player sees: the board, the record, and its own script.
+
+| Style | Plays like | Values | Tell |
+|---|---|---|---|
+| swarmer | pressure, claws and chains up close | being in Melee, live chains | beyond Close, it opens by closing in |
+| out-boxer | range, breath, footwork | being at Far; hates being hit | at Close or nearer, it opens by backing off |
+| slugger | few hits, each one big | big hits, punishes, a banked Intimidate | it intimidates right before its big Bite |
+| counterpuncher | guard, make them miss, punish | the opponent's misses, punishes; hates being hit | after taking a hit, it opens with Scales |
+| boxer-puncher | balanced | damage dealt against taken | after an exchange that went its way, it repeats the script |
+| aerialist | altitude and stoops | being aloft above a grounded opponent | on the ground, it opens by taking to the air |
+| reader | information | locking the opponent's revision, a Baleful Eye reveal | it opens by intimidating |
+
+Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how tightly it sticks to its best idea, and how long it remembers your habits.
+
+`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles.
+
 ## Where the numbers live
 
 Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came from:
@@ -134,7 +162,9 @@ Supports, Traits, Gnashing Teeth, Raking Talons and Bellows Chest; crunch, charg
 | `src/random.ts` | Seeded random numbers for AI and map layout |
 | `src/referee.ts` | The tick-by-tick resolver and the revision window |
 | `src/bout.ts` | Exchanges to a KO, rim pulses, timeouts; what each side can see |
-| `src/ai.ts` | AI tamers |
+| `src/ai.ts` | Crude AI tamers: habits only |
+| `src/brain.ts` | Brain AI tamers: read, imagine, value, choose, tell |
+| `src/brains.ts`, `src/brains-worker.ts` | The brain tournament, in parallel |
 | `src/scenario.ts` | Scenario files, scripted revisions |
 | `src/shards.ts` | Shard catalog, the array, seating and overlap, compiling a loadout |
 | `src/tourney.ts` | The balance harness |

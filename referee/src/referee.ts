@@ -115,6 +115,8 @@ export interface Bout {
   startWounds: Record<Side, number>;
   /** every action each side has used, in order; public, since everyone watched it happen */
   history: Record<Side, ActionName[]>;
+  /** one entry per slot: where each dragon stood when it began and what each did; public, for reading habits */
+  record: SlotRecord[];
   arena: Arena;
   over: boolean;
   winner: Side | null;
@@ -125,6 +127,19 @@ export interface ShardSetup {
   /** Techniques need a grade; Body and Bloodstone names carry theirs */
   grade?: Grade;
   pips: number[];
+}
+
+export interface SlotRecord {
+  exchange: number;
+  /** 0, 1 or 2 */
+  slot: number;
+  /** separation and altitudes when the slot began */
+  separation: number;
+  z: Record<Side, number>;
+  /** each side's Wounds when the slot began */
+  wounds: Record<Side, number>;
+  actions: Record<Side, ActionName>;
+  landed: Record<Side, boolean>;
 }
 
 export interface FighterSetup {
@@ -162,7 +177,7 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
     fighters,
     arena: makeArena(arena, [fighters.A.pos, fighters.B.pos]),
     challenged, exchange: 0, globalSlot: 0, over: false, winner: null,
-    startWounds: { A: 0, B: 0 }, history: { A: [], B: [] },
+    startWounds: { A: 0, B: 0 }, history: { A: [], B: [] }, record: [],
   };
 }
 
@@ -463,6 +478,16 @@ function chainAtExchangeEnd(f: Fighter, ev: Event[]) {
   f.chain = noChain();
 }
 
+/**
+ * Plays one slot on a bout, for an AI imagining the rest of an exchange. The real fight never calls this;
+ * it runs whole exchanges. The slot number is the next one in the current exchange.
+ */
+export function simulateSlot(bout: Bout, specs: Record<Side, ActionSpec>): Event[] {
+  const ev: Event[] = [];
+  if (!bout.over) runSlot(bout, bout.globalSlot % R.SLOTS_PER_EXCHANGE, specs, ev, false);
+  return ev;
+}
+
 /** Ends the bout if anyone is down. A double KO goes to the challenged [Proposed]. */
 export function checkKO(bout: Bout, ev: Event[], tick: number): void {
   const F = bout.fighters;
@@ -483,6 +508,9 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     F[s].status = F[s].pending;
     F[s].pending = noStatuses();
   }
+  const startSep = dist(F.A.pos, F.B.pos);
+  const startZ = { A: F.A.pos.z, B: F.B.pos.z };
+  const startWounds = { A: F.A.wounds, B: F.B.wounds };
   const plans: Record<Side, Plan> = { A: makePlan(F.A, F.B, specs.A, g, ev), B: makePlan(F.B, F.A, specs.B, g, ev) };
   checkKO(bout, ev, 0); // a goaded retreat can be the last straw
 
@@ -520,6 +548,10 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     }
     bout.history[s].push(p.spec.name);
   }
+  bout.record.push({
+    exchange: bout.exchange, slot, separation: startSep, z: startZ, wounds: startWounds,
+    actions: { A: plans.A.spec.name, B: plans.B.spec.name }, landed: { A: plans.A.landed, B: plans.B.landed },
+  });
 
   const info = (p: Plan): PlanInfo => ({
     label: describe(p.spec) + (p.spec.revised ? ' (revised)' : '') + (p.converted === 'dodge' ? ' → dodge' : p.converted === 'roar' ? ' → roar' : ''),

@@ -8,6 +8,7 @@
     "duel": "node --experimental-strip-types --no-warnings src/cli.ts",
     "test": "node --experimental-strip-types --no-warnings --test test/*.test.ts",
     "tourney": "node --experimental-strip-types --no-warnings src/tourney.ts",
+    "brains": "node --experimental-strip-types --no-warnings src/brains.ts",
     "check": "tsc --noEmit"
   },
   "devDependencies": {

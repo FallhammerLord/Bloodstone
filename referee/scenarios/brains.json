@@ -1,0 +1,7 @@
+{
+  "title": "Two brains: a swarmer against an out-boxer",
+  "note": "Brains read their opponent's habits, imagine the exchange in the Referee, and pick among good scripts by their style's values. Each has a tell: the swarmer always opens by closing in from beyond Close; the out-boxer always opens by backing off at Close or nearer. Try other styles: swarmer, out-boxer, slugger, counterpuncher, boxer-puncher, aerialist, reader; skills: novice, adept, master.",
+  "bout": true,
+  "A": { "name": "Hound", "morph": "wyrm", "stone": "earth", "ai": "swarmer", "skill": "adept", "seed": 3 },
+  "B": { "name": "Kite", "morph": "wyvern", "stone": "air", "ai": "out-boxer", "skill": "adept", "seed": 9 }
+}
