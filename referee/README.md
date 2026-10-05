@@ -145,7 +145,26 @@ It sees only what a player sees: the board, the record, and its own script.
 
 Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how tightly it sticks to its best idea, and how long it remembers your habits.
 
-`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate, every action's share of slots, and what came of them (revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, grazes, setups). Arenas throw 1d4+2 boulders.
+`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate, every action's share of slots, and what came of them (revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, setups). Arenas throw 1d4+2 boulders.
+
+### When a rule changes, update the brains
+
+A brain playing by old patch notes can't play well. For each kind of rule change, the brain code to check:
+
+| Rule area | Brain code |
+|---|---|
+| A new or changed action, or its cooldown | `brain/options.ts` `legalActions` and `advance`; `brain/styles.ts` `LEAN`; `brain/read.ts` `prior` |
+| Movement (band moves, depth, altitude) | `brain/options.ts` `legalActions` (depth) and `advance` (altitude) |
+| Attack reach, shapes, damage | `brain/styles.ts` `idealBand` (rough damage per attempt); `brain/controller.ts` `tell` (reach thresholds); `brain/read.ts` `prior` |
+| Charges, lunges, pounces, crunches | `brain/options.ts` `legalActions` and `place`; `brain/controller.ts` `counterScript` (two-slot ideas); `brain/styles.ts` `CHARGE_LEAN` |
+| The Acumen meter | `brain/value.ts` `SHARED.meterGain` and the meter-focus `WEIGHTS`; `brain/read.ts` (the meter-full context) |
+| Forced movement and slams | `brain/value.ts` `pinned` and `SHARED.pinned` |
+| Intimidate, demoralize, carry-over | `brain/value.ts` `SHARED` pending terms |
+| Aspects (stoop, Stalwart, Serpentine) | `brain/options.ts` `advance`; `brain/value.ts` aerialist `perch`; `brain/read.ts` (the aloft context) |
+| Late game (rim pulses, timeouts) | `brain/value.ts` `SHARED.rim` |
+| A new style | `brain/styles.ts` (`TASTE`, `LEAN`, `MISS_TASTE`); `brain/value.ts` `WEIGHTS`; `brain/controller.ts` `tell` |
+
+Every value weight is named in `brain/value.ts` (`SHARED` for all styles, `WEIGHTS` per style), with its reason. `test/brain-behavior.test.ts` checks a few clear choices (a claw-focus claws at Melee, a full meter pulls toward Breath at Close), so a rule change that breaks a style shows up there.
 
 ## Attack roles
 
@@ -181,21 +200,24 @@ Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps
 
 | File | Job |
 |---|---|
-| `src/rules.ts` | Every number |
+| `src/rules.ts` | Units and `DEFAULT_RULES`, every dial |
 | `src/actions.ts` | The action menu and timing profiles |
 | `src/hatch.ts` | Egg + stone → stat sheet; the element wheel |
 | `src/shapes.ts` | Attack shapes and the phantom band |
 | `src/geometry.ts` | Whole-number vector math, in 3D |
 | `src/arena.ts` | Pillars, boulders, lingering zones |
 | `src/random.ts` | Seeded random numbers for AI and map layout |
-| `src/referee.ts` | The tick-by-tick resolver and the revision window |
+| `src/referee.ts` | The resolver's public face |
+| `src/referee/` | The resolver: `state` (fighters, bouts), `events`, `plan` (an action's timing and bends), `exchange` (slots, revisions), `tick` (the resolution order), `movement`, `damage`, `elements`, `meter`, `riders`, `techniques` |
 | `src/bout.ts` | Exchanges to a KO, rim pulses, timeouts; what each side can see |
 | `src/ai.ts` | Crude AI tamers: habits only |
-| `src/brain.ts` | Brain AI tamers: read, imagine, value, choose, tell |
+| `src/brain.ts` | Brain AI tamers' public face |
+| `src/brain/` | `styles` (tastes, leanings, skill), `read`, `options` (legal scripts), `value` (named weights), `controller` (imagine, choose, revise, tell) |
 | `src/brains.ts`, `src/brains-worker.ts` | The brain tournament, in parallel |
 | `src/scenario.ts` | Scenario files, scripted revisions |
 | `src/shards.ts` | Shard catalog, the array, seating and overlap, compiling a loadout |
 | `src/tourney.ts` | The balance harness |
 | `src/report.ts` | Turns the event log into text |
 | `src/cli.ts` | Runs a scenario file |
+| `src/golden.ts` | Golden masters: `npm run golden` checks a refactor changed nothing |
 | `test/*.test.ts` | Design-doc claims as tests |

@@ -1,0 +1,49 @@
+// Brain behavior: fixed spots where a style's choice is clear. Each runs 20 seeds at master skill with tells off,
+// so these check what the values and leanings choose, and stay robust to a near-tie or two.
+
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { brainController, type BrainStyle } from '../src/brain.ts';
+import { viewOf } from '../src/bout.ts';
+import { newBout, type Bout, type FighterSetup } from '../src/referee.ts';
+
+const TD: FighterSetup = { name: 'T', morph: 'true-dragon', stone: 'water' };
+
+/** How often each action opens the style's script, over 20 seeds. */
+function openers(style: BrainStyle, sep: number, tweak: (b: Bout) => void = () => {}): Record<string, number> {
+  const tally: Record<string, number> = {};
+  for (let seed = 1; seed <= 20; seed++) {
+    const bout = newBout(TD, TD, sep);
+    tweak(bout);
+    const first = brainController(style, 'master', seed, 0).script(viewOf(bout, 'A'))[0].name;
+    tally[first] = (tally[first] ?? 0) + 1;
+  }
+  return tally;
+}
+
+test('claw-focus at Melee opens with a Claw', () => {
+  assert.ok((openers('claw-focus', 2).claw ?? 0) >= 15);
+});
+
+test('bite-focus at Close opens with a Bite', () => {
+  assert.ok((openers('bite-focus', 4).bite ?? 0) >= 16);
+});
+
+test('breath-focus at Far opens with a Breath', () => {
+  assert.ok((openers('breath-focus', 7).breath ?? 0) >= 13);
+});
+
+test('a swarmer beyond Close closes in', () => {
+  assert.ok((openers('swarmer', 7).approach ?? 0) >= 17);
+});
+
+test('an out-boxer at Melee never closes in or claws', () => {
+  const t = openers('out-boxer', 2);
+  assert.equal((t.approach ?? 0) + (t.claw ?? 0), 0);
+});
+
+test('a full Acumen meter pulls a brain toward the attack that lands it: Breath at Close', () => {
+  const empty = openers('boxer-puncher', 4, (b) => (b.fighters.A.meter = 0)).breath ?? 0;
+  const full = openers('boxer-puncher', 4, (b) => (b.fighters.A.meter = 100)).breath ?? 0;
+  assert.ok(full >= empty + 10, `Breath openers: ${empty} empty, ${full} full`);
+});
