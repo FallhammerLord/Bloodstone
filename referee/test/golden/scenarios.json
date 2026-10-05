@@ -86,9 +86,9 @@
  {
   "name": "push-and-shove.json",
   "winner": "-",
-  "exchanges": 1,
-  "wounds": "23/31",
-  "hash": "74bf87b31fcc9cc7"
+  "exchanges": 2,
+  "wounds": "18/26",
+  "hash": "5fc895d778bcfbfc"
  },
  {
   "name": "revision-read.json",

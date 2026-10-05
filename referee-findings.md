@@ -1,6 +1,26 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+**Index.** Newest first. The earliest build notes (decisions, what's built, open questions) follow Round 2.
+
+| Round | What changed |
+|---|---|
+| [16](#round-16-trimmed-stalwart-½-pace-snap-brains-that-value-position) | trimmed Stalwart, ½-pace snap, brains that value position |
+| [15](#round-15-band-movement-and-the-breath-first-true-dragon) | band movement and the breath-first True Dragon |
+| [14](#round-14-stalwart-steadies-charges) | Stalwart steadies charges |
+| [13](#round-13-gravity-demoralize-stomp-crunch-cap) | gravity, demoralize, Stomp, crunch cap |
+| [12](#round-12-the-affinity-ladder) | the Affinity ladder |
+| [11](#round-11-claws-3-vortex-½-pace-swings-move-wounds) | Claws +3, vortex ½ pace, swings move Wounds |
+| [10](#round-10-airs-vortex) | Air's vortex |
+| [9](#round-9-waters-jet) | Water's jet |
+| [8](#round-8-waters-claw-back-to-3-fires-burn-to-3) | Water's Claw back to 3, Fire's burn to 3 |
+| [7](#round-7-breath-charge-optional-again) | Breath charge optional again |
+| [6](#round-6-everything-at-once) | everything at once |
+| [5](#round-5-charge-and-lunge-reworked) | charge and lunge, reworked |
+| [4](#round-4-attack-roles) | attack roles |
+| [3](#round-3-focus-brains) | focus brains |
+| [2](#round-2-update) | update |
+
 ## Round 16: trimmed Stalwart, ½-pace snap, brains that value position
 
 Changes since Round 15 [Proposed] (master, 2,544 bouts; the style matrix adds a kite-focus brain):
@@ -632,8 +652,10 @@ Guarding with Scales rarely pays: it costs a whole slot to save 3 points, and br
 From `referee/` (Node.js 22+):
 
 ```sh
-npm test                        # 96 tests pinning design-doc rules
+npm test                        # rule tests, brain behavior, and the scenario goldens
 npm run duel -- scenarios/talons.json
-npm run tourney -- --shards     # crude AI, random loadouts
 npm run brains -- --skill master
+npm run golden                  # 144 fixed-seed brain bouts: did anything change?
 ```
+
+Earlier rounds ran their [Proposed] rules behind a `REFEREE_VARIANT` switch; charge, lunge and pounce are now the rules everywhere, and the switch is gone. To try a dial without editing the defaults, pass `--rule KEY=VALUE` to the tournament (see `referee/README.md`, "Tools for balance work").

@@ -2,6 +2,8 @@
 
 The Dragon Duel rules engine. It takes two dragons and their scripts and works out exactly what happens, tick by tick. It draws nothing and rolls no dice: the same scripts always produce the same fight.
 
+Also here: `PRINCIPLES.md` (the checklist for every rule change), `DIALS.md` (every [Proposed] and [Assumed] number, from `npm run dials`), and `ROADMAP.md` (the cleanup plan).
+
 ## Running it
 
 Needs [Node.js](https://nodejs.org) 22 or newer. From this folder:
@@ -24,6 +26,7 @@ npm run brains -- --skill master --rule BREATH.blast.radius=1p --json out.json
 npm run diag:pairing -- --morph true-dragon --stone fire --bouts 40   # one pairing against the field, and why
 npm run diag:movement -- --bouts 4                     # how each morph moves, and what it costs
 npm run ladder -- HEAD~2 HEAD~1 HEAD -- brains --skill novice         # one script at several commits
+npm run dials > DIALS.md                               # the [Proposed]/[Assumed] audit
 ```
 
 - `--rule KEY=VALUE` changes one dial for a whole run, without editing `DEFAULT_RULES`. KEY is a path into the rules (`BURN_DAMAGE`, `BREATH.blast.radius`); VALUE is in the rule's own units, or paces with a `p` suffix. Repeat it for several dials. The brains tournament and both diagnostics take it.
@@ -239,4 +242,5 @@ Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps
 | `src/harness.ts` | Shared tooling: `--rule` overrides, worker threads, win-rate margins |
 | `src/diagnostics/` | `pairing` (a pairing against the field) and `movement` (the movement census) |
 | `src/ladder.ts` | One npm script across several commits |
+| `src/dials.ts` | Writes `DIALS.md`, the [Proposed]/[Assumed] audit |
 | `test/*.test.ts` | Design-doc claims as tests |
