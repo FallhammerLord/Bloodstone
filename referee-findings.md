@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Baseline](#baseline-random-loadouts-and-the-hatch) | Fresh baseline: random wyrmling loadouts, and brains that draft their own builds |
 | [21](#round-21-whole-band-reaches-breath-loses-melee-the-guard-reversal-hard-landings) | Whole-band reaches, Breath loses Melee, the guard reversal, hard landings |
 | [20](#round-20-brains-look-ahead-stoops-fall-harder-serpentine-slips-breath-stomp-catches-movers) | Brains look ahead, stoops fall harder, Serpentine slips Breath, Stomp catches movers |
 | [19](#round-19-earth-corrodes-and-the-wheel-holds-everywhere) | Earth corrodes, and the wheel holds everywhere |
@@ -25,6 +26,39 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Baseline: random loadouts and the hatch
+
+A fresh start for the ladder data. Earlier rounds stay below as history. Two master tournaments, one run each (seed 2026):
+- **Random:** `npm run brains -- --skill master --shards`. 2,544 bouts; every dragon carries a random 3-pip loadout of **wyrmling-grade** shards. This measures balance: builds are dealt, not chosen.
+- **Hatch:** `npm run draft -- --skill master`. 2,496 bouts; every style fights every other, and each brain drafts its egg, bloodstone and 3 pips of wyrmling shards by its playstyle. This measures the meta: what styles build and how those builds fare.
+
+Changes since Round 21:
+- **Stomp has no near misses.** Accuracy's phantom band belongs to aimed attacks. An out-of-range Stomp is still a gambit on an advance; it no longer fills the meter.
+- **Shards in tests are wyrmling grade.** Higher grades on wyrmlings were what made Gnashing Teeth look dominant.
+- **The hatchery** (`src/brain/hatchery.ts`). A brain scores each of the 12 sheets by its style's attacks and body wants, and each shard by its style's tags. It then draws with a softmax: temperature by skill (novice 1, adept 0.6, master 0.35), plus a novelty bonus (1.5) toward what its style has picked least. Ladders draft 0, 1 and 3 pips.
+
+| | Random | Hatch |
+|---|---|---|
+| Morphs (TD / Wyvern / Wyrm) | **56** / 50 / **44** (±6) | 48 / **57** / **41** (±2–3) |
+| Morph pick rate | dealt evenly | 31 / 43 / 26% |
+| Stones (Fire / Air / Earth / Water) | 57 / 55 / 52 / **37** (±7) | 46 / 57 / 50 / **42** (±2–4) |
+| Stone pick rate | dealt evenly | 26 / 32 / 28 / 13% |
+| Pairing spread | 30–64% (±12) | 30–60% (±3–10) |
+| Style range | 39–60% (±6) | 39–66% (±5) |
+| Shard range | 45–59% (±4) | 44–56% (±4–5) |
+| Timeouts | 9% | 5% |
+
+**What it shows:**
+- **Water and the Wyrm are last in both.** Water fell 10 points from Round 21's plain run (47 → 37 in random play), and Wyrm + Water is the bottom pairing in both runs (30%). This is the clearest signal of the baseline.
+- **Fire's rank flips with who picks it.** Dealt at random, Fire is the top stone (57%) and True Dragon + Fire the top pairing (64% ±11). Drafted, Fire wins 46%, because the styles that pick it (breath-focus, meter-focus, charge-focus) are the weakest styles. The hatch confounds a build with its pilot; the random run is the balance read.
+- **The aerialist's Wyvern + Air is the meta.** Aerialists draft it 87% of the time and win 66%; claw-focus drafts it 87% too. Wyvern + Air is a quarter of all drafts and wins 60% ±3. In random play it is ordinary (55% ±12), so a style that knows the build drives its strength.
+- **Most styles explore.** Spreads run 3.5–7.5 effective builds; only the aerialist (1.6) and claw-focus (1.7) lock in, since only one sheet fits their wants.
+- **No shard dominates at wyrmling grade.** Snapping Jaw tops both runs (59%, 56%). Ash Gland and Bellows Chest trail in both (45–48%). Gnashing Teeth's lead was a grade artifact.
+- **Stomp stopped pumping the meter.** It takes 4% of slots and lands 36% of the time.
+- **The boxing triangle is still reversed** (swarmer over out-boxer 29%). Bite-focus and breath-focus are the weakest styles in both runs.
+
+These are single runs. Pairing margins in random play are ±12, so read pairings as tiers. Pool with `npm run pool` before acting on a gap smaller than its margin.
 
 ## Round 21: whole-band reaches, Breath loses Melee, the guard reversal, hard landings
 
