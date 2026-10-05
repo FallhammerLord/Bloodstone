@@ -52,7 +52,7 @@
 | Tertiary | Accuracy, Affinity, Acumen | Derived at hatching, then grown |
 
 - **Wounds:** the health pool. 3 points make one Wound.
-- **Evasion:** how far and fast a dragon moves; tested on dodge and strafe.
+- **Evasion:** how fast and finely a dragon moves; tested on dodge and strafe. **[Proposed]** Approach, Retreat, Leap and Dive carry a full band for every dragon; Evasion buys where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves (72 ÷ Evasion ticks), how long it counts as evading (2 × Evasion ticks of active window), and how far a Strafe carries (⅓ pace per point).
 - **Hardness:** damage reduction; improved when guarding.
 - **Claw Sharpness, Bite Force, Breath Potency:** attack damage.
 - **Accuracy:** tracking and reach without leaving position; sets the phantom band around hitboxes.
@@ -129,7 +129,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Aspect** is the player-facing name for that bend ("bend" stays as design shorthand).
 - Morphs offer interesting choices and never overshadow base dragons. A True Dragon stands alongside an Ouroboros proudly. Unlock depth measures cost in lifetimes, never power.
 - No RPS at the egg or morph level.
-- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 45. Its charges hold: a hit breaks a True Dragon's charge only if it deals 6 or more after the charging guard.
+- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 45. A True Dragon breathes first: its Breath winds up 3 ticks sooner (and recovers 3 later), its own zones never harm it, and each charging slot widens its released Breath by ½ pace.
 - **[Proposed]** Readability balances specialists: an Aspect telegraphs through the silhouette.
 - **[Proposed]** Audit rule: an Aspect may change its holder's own actions or respond to generic attack types, never another morph's features.
 - Balance watches pick rate against win rate across every choice. No Aspect should be an obvious best pick.
@@ -237,7 +237,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - An action reaches at least its minimum distance within its band; modifiers extend reach to the band's outer edge, never beyond.
 - **Three degrees of freedom:** advance or retreat along the line between dragons, strafe around the opponent, leap or fly. Altitude is ordinary movement.
 - Obstacles restrict movement, and so does the opponent's body. Obstructions are physical: **[Proposed]** an attack shape stops where it meets an obstacle and damages it instead.
-- **[Proposed]** A move carries at most one band per action; Evasion beyond that buys timing.
+- **[Proposed]** Approach, Retreat, Leap and Dive carry exactly one band (3 paces), adjusted short or long by Evasion; Strafe carries Evasion × ⅓ pace. Bands are the range game; paces are hit geometry, which settles near misses (a lunge's extra pace can still reach into the next band).
 
 **Threat map**
 | Band | Bite | Claw | Breath | Stomp |
@@ -298,7 +298,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 **Collision triangle [Proposed]:** Guard beats Attack; Attack beats Intimidate; Intimidate beats Guard; Move wins no slot outright but gains position. Attack against Attack resolves by the timeline.
 
-**Statuses:** Pinned (can't Move next slot); Staggered (Evasion distance halved next slot); Rattled (next wind-up +3 ticks); Blinded (Accuracy −3 next slot).
+**Statuses:** Pinned (can't Move next slot); Staggered (Evasion halved for next slot's move: slower, shorter evasive window, shorter strafe); Rattled (next wind-up +3 ticks); Blinded (Accuracy −3 next slot).
 
 **Currencies** that Techniques trade: attributes, tempo, chain ceiling, coverage, exposure, priority, persistence, information, charge. Information carries the steepest price.
 

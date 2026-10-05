@@ -90,15 +90,16 @@ test('chained bites deal 30 to a True Dragon: 9 + 9 + 12 (Bite pierces 3 Hardnes
 });
 
 test('a chain needs each link to land', () => {
-  // B steps in during the first bite, which misses; the next two bites count as links 1 and 2, so no +3.
-  const { hits } = fight(TD_WATER, TD_WATER, 6, ['bite', 'bite', 'bite'], ['approach', 'hold', 'hold']);
+  // The first bite starts out of reach and misses while B steps in a band; the next two count as links 1 and 2, so no +3.
+  const { hits } = fight(TD_WATER, TD_WATER, 7, ['bite', 'bite', 'bite'], ['approach', 'hold', 'hold']);
   assert.deepEqual(hits.map((h) => h.damage), [9, 9]);
 });
 
 test('breath skips Evasion and applies the matchup', () => {
-  // Wyrm + Water (Breath 9) against True Dragon + Earth (Affinity 0): 9 − 0 + 3.
+  // Wyrm + Water (Breath 12) against a strafing True Dragon + Earth (Affinity 3): 12 − 3 + 3 + 2. The strafe's evasive
+  // window has closed by tick 12, so the Breath also catches it in recovery (+3 punish).
   const { hits } = fight({ name: 'Tide', morph: 'wyrm', stone: 'water' }, { name: 'Clod', morph: 'true-dragon', stone: 'earth' }, 7, ['breath'], ['strafe:cw']);
-  assert.equal(hitsBy(hits, 'A')[0].damage, 9 - 0 + 3 + 2, 'Potency 9, Affinity 0, +3 matchup, +2 Water');
+  assert.equal(hitsBy(hits, 'A')[0].damage, 12 - 3 + 3 + 2 + 3, 'Potency 12, Affinity 3, +3 matchup, +2 Water, +3 punish');
 });
 
 test('breath cooldown 2: a second breath in the same exchange holds instead', () => {
@@ -128,11 +129,12 @@ test('a strafe during the wind-up slips a bite', () => {
   assert.equal(hits.length, 0);
 });
 
-test('stomp deals 3 + Hardness ÷ 3 true damage and Staggers: the next move goes half as far', () => {
-  // Wyrm + Air has Evasion 6: a retreat normally carries 2 paces; Staggered, 1.
-  const { hits, bout } = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['stomp', 'hold'], ['hold', 'retreat']);
+test('stomp deals 3 + Hardness ÷ 3 true damage and Staggers: the next move runs on half its Evasion', () => {
+  // Wyrm + Air has Evasion 6: a strafe normally carries 2 paces; Staggered, Evasion 3 carries 1.
+  const { hits, bout } = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['stomp', 'hold'], ['hold', 'strafe:cw']);
   assert.equal(hits[0].damage, 3 + 1); // True Dragon Hardness 3
-  assert.equal(bout.fighters.B.pos.x - bout.fighters.A.pos.x, Math.round(2.5 * 300));
+  const free = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['hold', 'hold'], ['hold', 'strafe:cw']).bout;
+  assert.ok(Math.abs(bout.fighters.B.pos.y) < Math.abs(free.fighters.B.pos.y), 'the staggered strafe carries less');
 });
 
 test('the leash turns a retreat at Very Far into a roar', () => {
@@ -148,7 +150,7 @@ test('the same scripts always produce the same fight', () => {
   assert.deepEqual(run(), run());
 });
 
-test('Evasion beyond the one-band cap buys timing: the move finishes sooner', () => {
+test('band moves carry one band for everyone; Evasion buys speed', () => {
   // A Wyvern at Evasion 12 (as a shard might give) and one at its base 9 both retreat one band; 12 gets there first.
   const at = (stone: 'fire' | 'water', tick: number) => {
     const bout = newBout(TD_WATER, { name: 'G', morph: 'wyvern', stone }, 4);
@@ -157,8 +159,8 @@ test('Evasion beyond the one-band cap buys timing: the move finishes sooner', ()
     const tr = ev.find((e) => e.kind === 'trace' && e.tick === tick);
     return tr && tr.kind === 'trace' ? tr.positions.B.x : NaN;
   };
-  assert.equal(at('fire', 20), at('fire', 29), 'Evasion 12 has finished by tick 20');
-  assert.ok(at('water', 20) < at('water', 26), 'Evasion 9 is still moving');
+  assert.equal(at('fire', 9), at('fire', 29), 'Evasion 12 travels 72 ÷ 12 = 6 ticks: done by tick 9');
+  assert.ok(at('water', 9) < at('water', 29), 'Evasion 9 travels 8 ticks: still moving at tick 9');
   assert.equal(at('fire', 29), at('water', 29), 'both carry exactly one band');
 });
 

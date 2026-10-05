@@ -61,18 +61,31 @@ test('Serpentine: a strafing Wyrm evades like a dodge; a retreating one does not
   assert.equal(hits(ev).length, 1);
 });
 
-test('the True Dragon\'s Aspect, Stalwart: its 45 Wounds are base, and a hit under 6 can\'t break its charge', () => {
-  const td = newBout(TD_WATER, TD_WATER, 4).fighters.A.sheet;
-  assert.equal(td.aspect, 'stalwart');
-  assert.equal(td.wounds, 45);
-  // A Wyrm + Water Claw of 3 into a charging True Dragon (Hardness 3 + 3 guarding) deals the floor of 1: the charge holds.
-  const chip = newBout(TD_WATER, { name: 'H', morph: 'wyrm', stone: 'water' }, 2);
-  const ev = run(chip, ['charge:breath', 'breath'], ['claw:left', 'hold']);
-  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Stalwart: the charge holds')));
-  assert.equal(hits(ev).filter((h) => h.attacker === 'A').length, 1, 'the Breath still releases');
-  // An Earth Bite of 12 into the same guard deals 9: that breaks it. A Wyvern's charge breaks to any hit.
-  const big = newBout(TD_WATER, { name: 'E', morph: 'true-dragon', stone: 'earth' }, 2);
-  assert.ok(run(big, ['charge:breath', 'breath'], ['bite', 'hold']).some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
+test('the True Dragon\'s Aspect, Stalwart: 45 base Wounds, and its Breath winds up 3 ticks sooner', () => {
+  const td = newBout(TD_WATER, TD_WATER, 5);
+  assert.equal(td.fighters.A.sheet.aspect, 'stalwart');
+  assert.equal(td.fighters.A.sheet.wounds, 45);
+  assert.equal(hits(run(td, ['breath'], ['hold']))[0].tick, 12 - 3);
+  const wyrm = newBout({ name: 'H', morph: 'wyrm', stone: 'water' }, TD_WATER, 5);
+  assert.equal(hits(run(wyrm, ['breath'], ['hold']))[0].tick, 12);
+});
+
+test('Stalwart: a True Dragon\'s own zones never harm it', () => {
+  // A Fire True Dragon breathes at a target at Melee: the burning zone covers both, and only the target burns.
+  const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 1.5);
+  const ev = run(bout, ['breath', 'hold'], ['hold', 'hold']);
+  const burns = ev.filter((e) => e.kind === 'zoneEffect' && e.zone === 'burning');
+  assert.ok(burns.length > 0 && burns.every((e) => e.kind === 'zoneEffect' && e.side === 'B'));
+});
+
+test('Stalwart: each charging slot widens a True Dragon\'s released Breath by ½ pace', () => {
+  // Fire's blast has a ½-pace radius. A slow target retreating out of it slips a plain blast; a charged one is widened.
+  Object.assign(R.VARIANT, { breathCharge: true });
+  const plain = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['hold', 'breath'], ['hold', 'retreat']);
+  const charged = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['charge:breath', 'breath'], ['hold', 'retreat']);
+  Object.assign(R.VARIANT, { breathCharge: false });
+  assert.equal(hits(plain).filter((h) => h.attacker === 'A').length, 0, 'the plain blast misses the retreat');
+  assert.equal(hits(charged).filter((h) => h.attacker === 'A').length, 1, 'the charged, widened blast catches it');
 });
 
 // ---- Breath effects (§3) ----
@@ -111,7 +124,8 @@ test('the vortex lowers a flier a band but never grounds it', () => {
 });
 
 test('a push and a pull in the same moment cancel', () => {
-  const bout = newBout(TD_WATER, AIR_WYRM, 7);
+  // Both verbs must take hold to meet: a Wyvern + Water (Affinity 9) ties the Wyrm + Air's Potency 9, so the pull lands.
+  const bout = newBout({ name: 'T', morph: 'wyvern', stone: 'water' }, AIR_WYRM, 7);
   const a0 = { ...bout.fighters.A.pos };
   const b0 = { ...bout.fighters.B.pos };
   const ev = run(bout, ['breath'], ['breath']);

@@ -43,6 +43,9 @@ export interface Result {
   actions: Record<string, number>;
   /** what came of them: revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, and more */
   outcomes: Record<string, number>;
+  /** movement census: per morph [paces traveled, bouts, bouts that stayed within 1½ paces of the start]; slots per band */
+  travel: Record<string, [number, number, number]>;
+  bands: Record<string, number>;
   /** [Bites right after an Approach, all Bites, Claws right after a Strafe, all Claws] */
   setup: [number, number, number, number];
 }
@@ -53,6 +56,7 @@ const controller = (p: Player): Controller =>
 const results: Result[] = [];
 for (const job of workerData.jobs as Job[]) {
   const bout = newBout(job.A, job.B, R.START_SEPARATION / R.PACE, job.challenged, { boulders: standardBoulders(job.arenaSeed), seed: job.arenaSeed });
+  const startPos = { A: { ...bout.fighters.A.pos }, B: { ...bout.fighters.B.pos } };
   const ev = runBout(bout, { A: controller(job.playerA), B: controller(job.playerB) });
   const end = ev.find((e) => e.kind === 'boutEnd');
   const ending = end?.kind === 'boutEnd' && end.reason.startsWith('timeout') ? 'timeout' : ev.some((e) => e.kind === 'pulse' && e.woundsLeft <= 0) ? 'pulse' : 'ko';
@@ -142,10 +146,36 @@ for (const job of workerData.jobs as Job[]) {
     }
   });
   for (const r of bout.record) for (const s of ['A', 'B'] as const) actions[r.actions[s]] = (actions[r.actions[s]] ?? 0) + 1;
+  // Movement census: how far each dragon travels, and at what range the fight happens.
+  const travel: Result['travel'] = {};
+  const bands: Result['bands'] = {};
+  const start = startPos;
+  for (const s of ['A', 'B'] as const) {
+    let path = 0;
+    let far = 0;
+    let prev = start[s];
+    for (const e of ev) {
+      if (e.kind !== 'slotEnd') continue;
+      const p = e.positions[s];
+      path += Math.hypot(p.x - prev.x, p.y - prev.y, p.z - prev.z);
+      far = Math.max(far, Math.hypot(p.x - start[s].x, p.y - start[s].y, p.z - start[s].z));
+      prev = p;
+    }
+    const m = bout.fighters[s].sheet.morph;
+    const t = (travel[m] ??= [0, 0, 0]);
+    t[0] += path / R.PACE;
+    t[1]++;
+    if (far < 1.5 * R.PACE) t[2]++;
+  }
+  for (const e of ev) {
+    if (e.kind !== 'slotEnd') continue;
+    const b = e.separation <= R.MELEE_EDGE ? 'melee' : e.separation <= R.CLOSE_EDGE ? 'close' : e.separation <= R.FAR_EDGE ? 'far' : 'very far';
+    bands[b] = (bands[b] ?? 0) + 1;
+  }
   for (const r of bout.record) for (const s of ['A', 'B'] as const) {
     stats[5]++;
     if (r.actions[s] === 'scales') stats[4]++;
   }
-  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, outcomes });
+  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, outcomes, travel, bands });
 }
 parentPort!.postMessage(results);

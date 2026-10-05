@@ -19,10 +19,10 @@ import * as R from './rules.ts';
 
 export type BrainStyle =
   | 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' | 'boxer-puncher' | 'aerialist' | 'reader'
-  | 'claw-focus' | 'bite-focus' | 'breath-focus' | 'meter-focus';
+  | 'claw-focus' | 'bite-focus' | 'breath-focus' | 'meter-focus' | 'charge-focus';
 export const BRAIN_STYLES: readonly BrainStyle[] = [
   'swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher', 'aerialist', 'reader',
-  'claw-focus', 'bite-focus', 'breath-focus', 'meter-focus',
+  'claw-focus', 'bite-focus', 'breath-focus', 'meter-focus', 'charge-focus',
 ];
 
 /**
@@ -80,6 +80,8 @@ const LEAN: Record<BrainStyle, Partial<Record<ActionName, number>> | ((band: Ban
   // Meter-focus [Proposed]: a diagnostic. Any attack is open; it guards, dodges and breathes to fill the Acumen
   // meter, then lands its true-damage hit. If it beats the general styles, the meter loop is too strong.
   'meter-focus': (b) => (b === 'melee' ? { scales: 3, dodge: 2, bite: 2, claw: 1 } : b === 'close' ? { breath: 3, scales: 2, bite: 2, dodge: 1 } : b === 'far' ? { breath: 4, scales: 2, approach: 1 } : { approach: 3, breath: 1 }),
+  // Charge-focus [Proposed]: a diagnostic. It plans two-slot charges of Breath and Bite and plays around their release.
+  'charge-focus': (b) => (b === 'melee' ? { bite: 3, scales: 2, retreat: 2, claw: 1 } : b === 'close' ? { breath: 3, bite: 3, scales: 1, strafe: 1 } : b === 'far' ? { breath: 4, approach: 1, strafe: 1 } : { approach: 3 }),
   'breath-focus': (b) => (b === 'far' ? { breath: 5, strafe: 2, scales: 1 } : b === 'veryFar' ? { approach: 3, breath: 1 } : { retreat: 4, leap: 1, breath: 2, dodge: 1 }),
 };
 
@@ -167,16 +169,18 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   const ready = (a: ActionName) => (s.readyAt[a] ?? 0) <= s.globalSlot;
   const side = (): 'left' | 'right' => (rng() < 0.5 ? 'left' : 'right');
   const turn = (): 'cw' | 'ccw' => (rng() < 0.5 ? 'cw' : 'ccw');
+  // Band moves land where Evasion lets them: plain, short, or long.
+  const depth = (): 'short' | 'long' | undefined => { const r = rng(); return r < 0.34 ? undefined : r < 0.67 ? 'short' : 'long'; };
   const out: ActionSpec[] = [
-    { name: 'bite' }, { name: 'claw', sweep: side() }, { name: 'approach' }, { name: 'retreat' },
+    { name: 'bite' }, { name: 'claw', sweep: side() }, { name: 'approach', depth: depth() }, { name: 'retreat', depth: depth() },
     { name: 'strafe', dir: turn() }, { name: 'scales' }, { name: 'intimidate' },
   ];
   // With mandatory charge, Breath is only ever planned as a charge.
   if (ready('breath') && !R.VARIANT.breathMandatory) out.push({ name: 'breath' });
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });
   if (ready('dodge')) out.push({ name: 'dodge' });
-  if (s.f.sheet.flies && s.z < R.MAX_ALTITUDE) out.push({ name: 'leap' });
-  if (s.z > 0) out.push({ name: 'dive' });
+  if (s.f.sheet.flies && s.z < R.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
+  if (s.z > 0) out.push({ name: 'dive', depth: depth() });
   // A charge takes this slot and the next; it must release by slot 3.
   if (s.globalSlot % R.SLOTS_PER_EXCHANGE < 2) {
     out.push({ name: 'bite', charge: true });
@@ -227,7 +231,7 @@ function advance(s: Situation, a: ActionSpec): Situation {
   const readyAt = { ...s.readyAt };
   const cd = ACTIONS[a.name].cooldown;
   if (cd > 0) readyAt[a.name] = s.globalSlot + cd + 1;
-  const step = Math.min(s.f.sheet.evasion * R.EVASION_STEP, R.MOVE_CAP);
+  const step = R.BAND_MOVE; // a Leap or Dive carries a band
   const z = a.name === 'leap' && s.f.sheet.flies ? Math.min(R.MAX_ALTITUDE, s.z + step) : a.name === 'dive' ? Math.max(0, s.z - step) : a.name === 'claw' && s.f.sheet.aspect === 'talons' ? 0 : s.z;
   return { ...s, globalSlot: s.globalSlot + 1, z, readyAt };
 }
@@ -315,6 +319,10 @@ function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me
       return dealt - taken + (me1.pos.z > 0 && op1.pos.z === 0 && sep <= R.STOOP_RANGE ? 0.06 : 0) + rim;
     case 'reader':
       return dealt - taken + (op1.marks.revisionLockedFor > o.after.exchange ? 0.05 : 0) + (me1.marks.eye !== null ? 0.03 : 0) + rim;
+    case 'charge-focus': {
+      const released = o.events.filter((e) => e.kind === 'hit' && e.attacker === o.me && e.parts.some((p) => p.includes('charged'))).length;
+      return dealt - taken + 0.06 * released + (me1.marks.charge ? 0.03 : 0) + rim;
+    }
     case 'meter-focus': {
       const me0 = o.before.fighters[o.me];
       const spent = o.events.filter((e) => e.kind === 'note' && e.side === o.me && e.text.startsWith('The Acumen meter empties')).length;
@@ -354,7 +362,7 @@ function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter, sep: n
     const weights = legal.map((a) => {
       // A setup sequence is weighed by the style's taste for both halves, so each style keeps its flavor.
       const w = styled ? (a.setup ? ((lean[a.setup] ?? 0.4) + (lean[a.name] ?? 0.4)) / 2 : (lean[a.name] ?? 0.4)) : 1;
-      return a.charge ? w * (style === 'slugger' || style === 'out-boxer' || style === 'meter-focus' || (R.VARIANT.breathMandatory && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
+      return a.charge ? w * (style === 'charge-focus' ? (a.long ? 3 : 1.5) : style === 'slugger' || style === 'out-boxer' || style === 'meter-focus' || (R.VARIANT.breathMandatory && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
     });
     s = place(out, s, pick(legal, weights, rng));
   }

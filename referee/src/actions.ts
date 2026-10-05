@@ -55,6 +55,8 @@ export interface ActionSpec {
   setup?: 'approach' | 'strafe';
   /** a crunch: the attack twice in one slot, 15 ticks each; needs Raking Talons or Gnashing Teeth [Doc] */
   crunch?: boolean;
+  /** a band move landing short of or past the band's 3 paces, as far as Evasion allows [Proposed] */
+  depth?: 'short' | 'long';
 }
 
 export const HOLD: ActionSpec = { name: 'hold' };
@@ -83,6 +85,11 @@ export function parseAction(text: string): ActionSpec {
     if (sweep !== 'left' && sweep !== 'right') throw new Error(`Claw sweep is "left" or "right".`);
     return { name, sweep };
   }
+  if (name === 'approach' || name === 'retreat' || name === 'leap' || name === 'dive') {
+    if (detail === undefined) return { name };
+    if (detail !== 'short' && detail !== 'long') throw new Error(`A band move lands "short" or "long": "${name}:long".`);
+    return { name, depth: detail };
+  }
   if (detail !== undefined) throw new Error(`"${raw}" takes no detail.`);
   return { name };
 }
@@ -92,5 +99,6 @@ export function describe(spec: ActionSpec): string {
   const label = spec.charge ? `${base} (charging)` : spec.released ? `${base} (charged)` : spec.crunch ? `${base} ×2 (crunched)` : base;
   if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''})`;
   if (spec.sweep) return `${label} (${spec.sweep})`;
+  if (spec.depth) return `${label} (${spec.depth})`;
   return label;
 }

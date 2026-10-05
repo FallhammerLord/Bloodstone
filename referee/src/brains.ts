@@ -111,6 +111,17 @@ for (const r of results) {
 const totalSlots = Object.values(actionSlots).reduce((a, b) => a + b, 0);
 console.log(`Every action, share of all slots: ${Object.entries(actionSlots).sort((x, y) => y[1] - x[1]).map(([k, v]) => `${k} ${pct(v, totalSlots).trim()}`).join(', ')}.`);
 console.log(`What came of them, per bout: ${Object.entries(outcomeCounts).sort((x, y) => y[1] - x[1]).map(([k, v]) => `${k} ${(v / results.length).toFixed(2)}`).join(', ')}.`);
+const travel: Record<string, [number, number, number]> = {};
+const bands: Record<string, number> = {};
+for (const r of results) {
+  for (const [m, v] of Object.entries(r.travel)) {
+    const t = (travel[m] ??= [0, 0, 0]);
+    for (let i = 0; i < 3; i++) t[i] += v[i];
+  }
+  for (const [b, v] of Object.entries(r.bands)) bands[b] = (bands[b] ?? 0) + v;
+}
+const bandSlots = Object.values(bands).reduce((a, b) => a + b, 0);
+console.log(`Movement: ${Object.entries(travel).map(([m, [p, n, s]]) => `${m} travels ${(p / n).toFixed(1)} paces a bout (${pct(s, n).trim()} never leave 1½ paces of the start)`).join('; ')}. Fights at ${['melee', 'close', 'far', 'very far'].map((b) => `${b} ${pct(bands[b] ?? 0, bandSlots).trim()}`).join(', ')}.`);
 const setup = results.reduce((a, r) => a.map((v, i) => v + r.setup[i]), [0, 0, 0, 0]);
 console.log(`Bites right after an Approach: ${pct(setup[0], setup[1])} of ${setup[1]} Bites. Claws right after a Strafe: ${pct(setup[2], setup[3])} of ${setup[3]} Claws.`);
 
@@ -148,7 +159,7 @@ const rate = (x: string, y: string) => {
   return (100 * t.w) / t.n;
 };
 console.log('\n── Style against style (identical dragons; row\'s win rate against column) ──');
-const short: Record<BrainStyle, string> = { swarmer: 'swarm', 'out-boxer': 'outbx', slugger: 'slug', counterpuncher: 'count', 'boxer-puncher': 'boxpn', aerialist: 'aeria', reader: 'readr', 'claw-focus': 'claw', 'bite-focus': 'bite', 'breath-focus': 'brth', 'meter-focus': 'metr' };
+const short: Record<BrainStyle, string> = { swarmer: 'swarm', 'out-boxer': 'outbx', slugger: 'slug', counterpuncher: 'count', 'boxer-puncher': 'boxpn', aerialist: 'aeria', reader: 'readr', 'claw-focus': 'claw', 'bite-focus': 'bite', 'breath-focus': 'brth', 'meter-focus': 'metr', 'charge-focus': 'chrg' };
 console.log(`  ${''.padEnd(15)}${BRAIN_STYLES.map((s) => short[s].padStart(6)).join('')}`);
 for (const a of BRAIN_STYLES) {
   console.log(`  ${a.padEnd(15)}${BRAIN_STYLES.map((b) => (a === b ? '     ·' : `${rate(a, b).toFixed(0).padStart(5)}%`)).join('')}`);
@@ -166,7 +177,7 @@ const overallStyle = BRAIN_STYLES.map((a) => {
   return { a, p: (100 * w) / n };
 }).sort((x, y) => y.p - x.p);
 for (const { a, p } of overallStyle) console.log(`    ${p.toFixed(0).padStart(3)}%  ${a}`);
-console.log('\n  Focus brains (one attack only; meter-focus plays the Acumen meter), against the general styles and each other:');
+console.log('\n  Focus brains (one attack only; meter-focus plays the Acumen meter, charge-focus plays two-slot charges), against the general styles and each other:');
 for (const f of BRAIN_STYLES.filter((x) => x.endsWith('-focus'))) {
   const vs = (group: readonly BrainStyle[]) => {
     let w = 0;

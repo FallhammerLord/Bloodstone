@@ -101,12 +101,13 @@ test('Wardskin: +3 Affinity against elements that beat your stone', () => {
   assert.equal(d(plain) - d(warded), Math.min(6, d(plain) - 1), 'Wardskin: +3 Affinity flat, +3 more from its rider');
 });
 
-test('Galewing: +3 Evasion, and +3 more while aloft, carries a flyer farther', () => {
+test('Galewing: +3 Evasion, and +3 more while aloft, lets a flyer land a long Leap higher', () => {
   const lift = (shards: FighterSetup['shards']) => {
     const bout = newBout({ name: 'G', morph: 'true-dragon', stone: 'water', shards }, TD_WATER, 6);
     bout.fighters.A.pos = { ...bout.fighters.A.pos, z: R.PACE };
-    runExchange(bout, { A: ['leap'].map(parseAction), B: ['hold'].map(parseAction) });
+    runExchange(bout, { A: ['leap:long'].map(parseAction), B: ['hold'].map(parseAction) });
     return bout.fighters.A.pos.z;
   };
-  assert.equal(lift([{ shard: 'Galewing', pips: [0, 1] }]) - lift([]), 6 * R.EVASION_STEP);
+  // A long band move adds Evasion ÷ 6 paces: Evasion 3 adds ½ pace, Evasion 9 adds 1½.
+  assert.equal(lift([{ shard: 'Galewing', pips: [0, 1] }]) - lift([]), R.PACE);
 });

@@ -27,8 +27,9 @@ const slots = (flags: Partial<typeof OFF>, b: FighterSetup, sep: number, A: stri
 };
 const BELLOWS: FighterSetup = { ...TD_WATER, shards: [{ shard: 'Bellows Chest', grade: 'wyrmling', pips: [0, 1] }] };
 
-test('a bite chain catches a retreat at Melee and Close, then misses once it reaches Far', () => {
-  assert.deepEqual(slots({}, WYRM, 2, ['bite', 'bite', 'bite'], ['retreat', 'retreat', 'retreat']), [1, 1, 0]);
+test('a bite catches a Wyrm\'s retreat only before it finishes: a band move outruns a bite chain', () => {
+  // A retreat now carries a band; Evasion 6 finishes it in 12 ticks, as the Bite lands at the edge of its reach.
+  assert.deepEqual(slots({}, WYRM, 2, ['bite', 'bite', 'bite'], ['retreat', 'retreat', 'retreat']), [1, 0, 0]);
 });
 
 test('mandatory charge: a plain Breath charges one slot and releases with no bonus', () => {
@@ -93,7 +94,7 @@ test('only the first Bite after an Approach lunges', () => {
 });
 
 test('lunge stops at the other body', () => {
-  const { ev } = run({ biteLunge: true }, TD_WATER, 2.5, ['approach', 'bite'], ['hold', 'hold']);
+  const { ev } = run({ biteLunge: true }, TD_WATER, 4.5, ['approach', 'bite'], ['hold', 'hold']);
   assert.ok(ev.some((e) => e.kind === 'note' && /^Lunges 0\.\d/.test(e.text)));
 });
 

@@ -66,6 +66,10 @@ B  Bite         ------xxxxxxxxxxxxxxxxxxxxxxxx
 
 `-` wind-up, `#` active, `=` recovery, `x` cancelled by an interrupt. Below the bars, every hit shows its arithmetic. ⚡ marks a revision. In play the opponent sees only the flash; the report is a replay seen from above, so it also shows the new action. ◎ marks a rim pulse. "Aloft" lines show altitude.
 
+## Movement
+
+Bands are the range game; paces are hit geometry [Proposed]. Approach, Retreat, Leap and Dive carry one band (3 paces) for every dragon; a script may land `short` or `long` (`retreat:long`), by up to Evasion ÷ 6 paces. Strafe carries Evasion × ⅓ pace. A move's wind-up is followed by an evasive active window of 2 × Evasion ticks, then recovery; travel takes 72 ÷ Evasion ticks and can run on into recovery for slow dragons, where a hit counts as a punish. Staggered halves Evasion for the next move. The brain tournament reports how far each morph travels and at what range fights happen.
+
 ## Altitude
 
 Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Approach, Retreat and Strafe move across the floor. Distances, reach, range bands and the leash all count height. The Wyrm is grounded: its Leap is a hop that lands by the end of the slot, and it can't Dive. Stomp misses anything aloft, and a dragon in the air can't Stomp. Evasion beyond the one-band move cap makes moves finish sooner.
@@ -73,7 +77,7 @@ Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Appr
 ## Aspects
 
 Each morph bends one rule (design doc §2).
-- **True Dragon, Stalwart** [Proposed]: its charges hold. A hit breaks a True Dragon's charge only if it deals 6 or more after the charging guard. Its 45 Wounds are base (the old +9 Aspect is folded in).
+- **True Dragon, Stalwart** [Proposed]: it breathes first. Its Breath winds up 3 ticks sooner (and recovers 3 later), its own zones never harm it, and each charging slot widens its released Breath by ½ pace. Its 45 Wounds are base (the old +9 Aspect is folded in).
 - **Wyvern, Talons:** it bends the one-band move rule. A Claw from the air against a grounded opponent anywhere within Far is a stoop: the Wyvern flies to the ground during the wind-up, lands at Melee, and swipes both ways. Against an airborne opponent it simply claws. Its price is positional: it must have been aloft since the exchange began, and it lands in Bite range. From the ground its Claw reaches only 2 paces (forelimbs are wings).
 - **Wyrm, Serpentine:** its Strafe tests Evasion with Dodge's +3. It is grounded: its Leap is a hop, and it can't Dive.
 

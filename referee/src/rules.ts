@@ -40,7 +40,14 @@ export const START_SEPARATION = Math.floor(6.5 * PACE); // [Doc] Far, just outsi
 
 // ---- Movement ----
 export const MOVE_CAP = BAND; // [Proposed] a move carries at most one band
-export const EVASION_STEP = NOTCH; // [Assumed] each point of Evasion moves ⅓ pace (Evasion 9 = one band)
+export const EVASION_STEP = NOTCH; // [Assumed] a Strafe carries ⅓ pace per point of Evasion (Evasion 9 = one band)
+// Band moves [Proposed]: Approach, Retreat, Leap and Dive each carry one band (3 paces), for every dragon. Evasion buys
+// where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves
+// (72 ÷ Evasion ticks), and how long it counts as evading (2 × Evasion ticks of active window).
+export const BAND_MOVE = BAND;
+export const MOVE_DEPTH_DIVISOR = 6;
+export const MOVE_SPEED = 72;
+export const EVADE_TICKS_PER_POINT = 2;
 
 // ---- Damage ---- [Doc] §4 Damage, Modifiers
 export const INTIMIDATE_BONUS = 3;
@@ -51,7 +58,10 @@ export const MATCHUP = 3;
 export const DAMAGE_FLOOR = 1;
 export const STOMP_DAMAGE = 3;
 export const BITE_PIERCE = 3; // [Doc] Bite is piercing; [Assumed] it ignores 3 Hardness
-export const STALWART_BREAK = 6; // [Proposed] the True Dragon's Aspect, Stalwart: only a hit of 6 or more (after the charging guard) breaks its charge
+// The True Dragon's Aspect, Stalwart [Proposed]: its Breath winds up 3 ticks sooner (and recovers 3 later), its own
+// zones never harm it, and each charging slot widens the released Breath by ½ pace.
+export const STALWART_BREATH_SHIFT = 3;
+export const STALWART_WIDEN = Math.floor(PACE / 2);
 
 // ---- Guards ----
 export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales

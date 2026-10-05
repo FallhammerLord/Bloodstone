@@ -452,26 +452,35 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
     wShift -= 3;
     f.marks.quick = null;
   }
-  const [windup, active, recovery] = timing(def.profile, wShift, rShift);
+  // Stalwart: a True Dragon breathes first, and recovers later for it [Proposed].
+  if (spec.name === 'breath' && f.sheet.aspect === 'stalwart') {
+    wShift -= R.STALWART_BREATH_SHIFT;
+    rShift += R.STALWART_BREATH_SHIFT;
+  }
+  let [windup, active, recovery] = timing(def.profile, wShift, rShift);
 
   let moveTotal = 0;
   let travel = active;
   let shiftTotal = 0;
   if (def.category === 'move') {
-    let raw = eff(f, 'evasion', {}).value * R.EVASION_STEP;
-    let cap = R.MOVE_CAP;
-    // Bounding Haunches: an Approach carries up to two bands [Doc]; read here as double distance [Assumed].
-    if (bounding) {
-      raw *= 2;
-      cap *= 2;
+    // Evasion buys a move's timing and finesse, not (for band moves) its reach [Proposed]. Staggered halves it.
+    const evasion = Math.max(1, Math.floor(eff(f, 'evasion', {}).value / (f.status.staggered ? 2 : 1)));
+    if (spec.name === 'strafe') {
+      moveTotal = Math.min(evasion * R.EVASION_STEP, R.MOVE_CAP);
+    } else {
+      // Approach, Retreat, Leap and Dive carry a band; Evasion picks the landing within it.
+      const finesse = Math.floor((evasion * R.PACE) / R.MOVE_DEPTH_DIVISOR);
+      moveTotal = R.BAND_MOVE + (spec.depth === 'long' ? finesse : spec.depth === 'short' ? -finesse : 0);
+      // Bounding Haunches: an Approach carries two bands [Doc].
+      if (bounding) moveTotal += R.BAND_MOVE;
     }
-    moveTotal = Math.min(raw, cap);
-    // A move carries at most one band; Evasion beyond that buys timing [Proposed]: the move finishes sooner.
-    if (raw > cap) travel = Math.max(1, Math.floor((active * cap) / raw));
+    // Wind-up, then an evasive active window of 2 × Evasion ticks, then recovery; travel runs 72 ÷ Evasion ticks.
+    active = Math.min(R.TICKS_PER_SLOT - windup, Math.max(R.MIN_ACTIVE, R.EVADE_TICKS_PER_POINT * evasion));
+    recovery = R.TICKS_PER_SLOT - windup - active;
+    travel = Math.min(R.TICKS_PER_SLOT - windup, Math.max(1, Math.round(R.MOVE_SPEED / evasion)));
     if (spec.name === 'strafe' && sw >= W && (sw < A || spec.shift)) moveTotal = Math.max(0, moveTotal - R.PACE);
     if (spec.shift) shiftTotal = (sw >= A ? 2 : 1) * R.PACE;
-    if (f.status.staggered) moveTotal = Math.floor(moveTotal / 2);
-    if (f.status.slowed) travel = Math.min(active, travel + 3);
+    if (f.status.slowed) travel = Math.min(R.TICKS_PER_SLOT - windup, travel + 3);
     if (spec.name === 'dive' && tech(f, 'stooping-pinions') >= E) travel = Math.max(1, travel - 3);
   }
 
@@ -821,7 +830,9 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     };
 
     // Bellows Chest Elder: a charged breath's area grows.
-    const area = p.spec.released && p.spec.name === 'breath' && tech(att, 'bellows-chest') >= E ? R.PACE : 0;
+    const area = (p.spec.released && p.spec.name === 'breath' && tech(att, 'bellows-chest') >= E ? R.PACE : 0)
+      // Stalwart: each charging slot widens a True Dragon's released Breath by ½ pace [Proposed].
+      + (p.spec.released && p.spec.name === 'breath' && att.sheet.aspect === 'stalwart' ? (p.spec.full ? 2 : 1) * R.STALWART_WIDEN : 0);
     if (inShape(shape, att.sheet, p.origin, p.aim, def.pos, area, mods)) {
       // An attack shape stops where it meets an obstacle and damages it instead [Proposed]. Stomp shakes the ground under it.
       // Lance Throat from Adult punches through one obstacle.
@@ -905,6 +916,11 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   checkKO(bout, ev, t);
 }
 
+/** A move is under way from the end of its wind-up until its travel ticks run out (into recovery, for slow dragons). */
+function traveling(p: Plan, t: number): boolean {
+  return phase(p, t) !== 'idle' && t >= p.windup && t < p.windup + p.travel;
+}
+
 function evasionState(p: Plan, t: number): 'moving' | 'dodging' | null {
   if (phase(p, t) !== 'active') return null;
   if (p.spec.name === 'dodge' || p.converted === 'dodge') return 'dodging';
@@ -913,15 +929,15 @@ function evasionState(p: Plan, t: number): 'moving' | 'dodging' | null {
 }
 
 function moveStep(me: Fighter, opp: Fighter, p: Plan, oppPlan: Plan, t: number, ev: Event[]): Vec {
-  if (category(p) !== 'move' || p.converted || phase(p, t) !== 'active') return me.pos;
+  if (category(p) !== 'move' || p.converted || !traveling(p, t)) return me.pos;
   const k = t - p.windup;
   const target = Math.floor((p.moveTotal * Math.min(k + 1, p.travel)) / p.travel);
   const delta = target - p.moved;
   // A Wyrm's leap is a hop: it rises for the first half of the window and lands by the end [Assumed].
   if (p.spec.name === 'leap' && !me.sheet.flies) {
-    const half = Math.max(1, Math.floor(p.active / 2));
+    const half = Math.max(1, Math.floor(p.travel / 2));
     const peak = Math.floor(p.moveTotal / 2);
-    const z = k < half ? Math.floor((peak * (k + 1)) / half) : Math.max(0, Math.floor((peak * (p.active - k - 1)) / (p.active - half)));
+    const z = k < half ? Math.floor((peak * (k + 1)) / half) : Math.max(0, Math.floor((peak * (p.travel - k - 1)) / Math.max(1, p.travel - half)));
     return { ...me.pos, z };
   }
   if (delta <= 0) return me.pos;
@@ -933,7 +949,7 @@ function moveStep(me: Fighter, opp: Fighter, p: Plan, oppPlan: Plan, t: number, 
   let np: Vec;
   switch (p.spec.name) {
     case 'approach': {
-      const both = oppPlan.spec.name === 'approach' && oppPlan.converted === null && phase(oppPlan, t) === 'active';
+      const both = oppPlan.spec.name === 'approach' && oppPlan.converted === null && traveling(oppPlan, t);
       if (both && len(v) <= R.MELEE_EDGE) {
         p.converted = 'dodge';
         ev.push({ kind: 'note', tick: t, side: me.side, text: 'Both advanced: stops at Melee and converts to a dodge.' });
@@ -1176,13 +1192,8 @@ function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number,
   p.landedHalves++;
   def.wounds -= total;
   if (defPlan.charging && def.marks.charge) {
-    // Stalwart [Proposed]: a True Dragon's charge shrugs off a hit under 6.
-    if (def.sheet.aspect === 'stalwart' && total < R.STALWART_BREAK) {
-      ev.push({ kind: 'note', tick: t, side: def.side, text: `Stalwart: the charge holds through a hit of ${total}.` });
-    } else {
-      def.marks.charge = null;
-      ev.push({ kind: 'note', tick: t, side: def.side, text: 'The hit breaks the charge.' });
-    }
+    def.marks.charge = null;
+    ev.push({ kind: 'note', tick: t, side: def.side, text: 'The hit breaks the charge.' });
   }
   if (p.halves && p.landedHalves === 2 && p.spec.name === 'bite' && tech(bout.fighters[s], 'gnashing-teeth') >= V) {
     def.pending.rattled = true;
@@ -1386,6 +1397,8 @@ function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Ev
       const f = bout.fighters[s];
       if (!inZone(z, f.pos)) continue;
       if (plans[s].spec.name === 'scales' && tech(f, 'mantle-wings') >= E) continue;
+      // Stalwart: a True Dragon's own zones never harm it [Proposed].
+      if (z.owner === s && f.sheet.aspect === 'stalwart') continue;
       // The zone's element contests the dragon's Affinity, as the breath did [Proposed].
       const held = elementHolds(bout.fighters[z.owner], f, plans[s].spec.name === 'scales');
       if (held && z.kind !== 'smolder') {
