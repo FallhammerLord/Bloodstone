@@ -170,7 +170,8 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
       }
     }
     return 'hit';
-  } else if (inShape(bout.rules, shape, att.sheet, p.origin, p.aim, def.pos, area + Math.max(0, accuracy) * R.NOTCH, mods)) {
+    // Accuracy's phantom band belongs to aimed attacks: a Stomp's quake has no near misses [Doc].
+  } else if (p.spec.name !== 'stomp' && inShape(bout.rules, shape, att.sheet, p.origin, p.aim, def.pos, area + Math.max(0, accuracy) * R.NOTCH, mods)) {
     p.nearMiss = true;
   }
   return null;

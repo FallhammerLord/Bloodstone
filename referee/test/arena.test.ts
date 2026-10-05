@@ -507,3 +507,11 @@ test('a hard landing from two bands up comes all the way down and Stomps for fre
   low.fighters.A.pos = { ...low.fighters.A.pos, z: R.BAND };
   assert.equal(hits(run(low, ['dive:hard'], ['hold'])).length, 0);
 });
+
+test('a Stomp has no near misses: an unaimed quake earns no meter for missing', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 7);
+  const meter = bout.fighters.A.meter;
+  const ev = run(bout, ['stomp'], ['hold']);
+  assert.ok(!ev.some((e) => e.kind === 'nearMiss'));
+  assert.equal(bout.fighters.A.meter, meter);
+});

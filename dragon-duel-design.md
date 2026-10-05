@@ -271,7 +271,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 ### Hits
 - A dragon outside an attack's active area during its active window takes no hit.
-- **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). **[Proposed]** They fill the Acumen meter; the graze is retired.
+- **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). **[Proposed]** They fill the Acumen meter; the graze is retired. The phantom band belongs to aimed attacks: a Stomp's quake has no near misses, so a Stomp thrown from beyond its reach is a gambit on an advance, never a meter pump.
 - **Acumen meter:** visible to both players. **[Proposed]** Affinity fuels it, so Water dragons fill it best. It starts at age bracket × 10 + 3 × Affinity (wyrmling 1 through venerable 5; a wyrmling Wyrm + Water starts at 37). Each trigger adds Affinity + 9: a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath (the breather's meter). Full at 100, the next landed Bite, Claw or Breath deals true damage, ignoring Hardness and Affinity (and so any verb contest), plus a steroid of Affinity ÷ 3, and drains it to 0. A miss spends nothing; a Stomp or a Technique's side-hit never spends it. Acumen itself still breaks ties. Deterministic and streak-free.
 
 **Evasive resolution**

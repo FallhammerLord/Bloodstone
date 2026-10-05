@@ -235,12 +235,19 @@ export function compile(base: StatSheet, array: DragonArray): { sheet: StatSheet
   return { sheet, loadout };
 }
 
+/** Every built shard a dragon could seat: attribute chips and Techniques, at one grade or (null) all of them. */
+export function shardPool(grade: Grade | null = 'wyrmling'): Shard[] {
+  const all = [...allAttrShards(), ...builtTechniques().flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
+  return grade ? all.filter((s) => s.grade === grade) : all;
+}
+
 /**
- * A random, legal loadout for a tournament: the array's pips filled with attribute chips and built Techniques at
- * any grade, a shard at a time until no pip is free. Seeded, so a run replays.
+ * A random, legal loadout for a tournament: the array's pips filled with attribute chips and built Techniques, a
+ * shard at a time until no pip is free. Grades track the defeated dragon's age [Doc], so a wyrmling's shards are
+ * wyrmling grade unless asked otherwise. Seeded, so a run replays.
  */
-export function randomLoadout(rng: () => number, pips = WYRMLING_PIPS): { shard: string; grade: Grade; pips: number[] }[] {
-  const pool: Shard[] = [...allAttrShards(), ...builtTechniques().flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
+export function randomLoadout(rng: () => number, pips = WYRMLING_PIPS, grade: Grade | null = 'wyrmling'): { shard: string; grade: Grade; pips: number[] }[] {
+  const pool = shardPool(grade);
   const out: { shard: string; grade: Grade; pips: number[] }[] = [];
   let free = Array.from({ length: pips }, (_, i) => i);
   while (free.length > 0) {
