@@ -12,20 +12,33 @@ import { eff } from './riders.ts';
 import { A, type Bout, E, type Fighter, J, type Side, V, W, other, tech } from './state.ts';
 import { techniqueOnHit } from './techniques.ts';
 
+/**
+ * What a landed hit deals: the attack's base against Hardness (or Affinity, for Breath), then every modifier.
+ * A full Acumen meter makes a Bite, Claw or Breath true damage [Proposed]. Never less than the floor.
+ */
 export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[]; bypass: boolean } {
-  const parts: string[] = [];
-  // A full Acumen meter makes the next landed Bite, Claw or Breath true damage: no Hardness, no Affinity [Proposed].
-  const bypass = !graze && att.meter >= R.METER_MAX && (p.spec.name === 'bite' || p.spec.name === 'claw' || p.spec.name === 'breath') && p.landedHalves === 0;
-  const defPhase = phase(defPlan, t);
-  const scales = guarding(defPlan, t);
-  const corroded = def.status.corroded;
-  const crunched = p.halves !== null;
-  const sep = dist(att.pos, def.pos);
-
   // Ash Gland: the breath carries information, not harm (3 points from Adult).
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
   if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`], bypass: false };
 
+  const parts: string[] = [];
+  const bypass = !graze && att.meter >= R.METER_MAX && (p.spec.name === 'bite' || p.spec.name === 'claw' || p.spec.name === 'breath') && p.landedHalves === 0;
+  const scales = guarding(defPlan, t);
+  const { hardness, label } = hardnessFelt(rules, att, def, p, t, scales, bypass);
+  if (bypass) parts.push('true damage (full Acumen meter)');
+  let v = baseDamage(rules, att, def, p, hardness, label, scales, bypass, parts);
+  v += modifiers(rules, att, def, p, defPlan, t, graze, bypass, parts);
+  if (v < rules.DAMAGE_FLOOR) {
+    v = rules.DAMAGE_FLOOR;
+    parts.push(`floor ${rules.DAMAGE_FLOOR}`);
+  }
+  return { total: v, parts, bypass };
+}
+
+/** The Hardness a hit meets: Scales, corrosion and guard techniques; none at all for a true-damage hit. */
+function hardnessFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: number, scales: boolean, bypass: boolean): { hardness: number; label: string } {
+  const corroded = def.status.corroded;
+  const crunched = p.halves !== null;
   // Guard techniques change Hardness while guarding with Scales.
   let guardShift = 0;
   const guardNotes: string[] = [];
@@ -48,8 +61,14 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
     guardNotes.push('Gnashing Teeth');
   }
   const hardness = bypass ? 0 : Math.max(0, hard.value + (scales ? rules.SCALES_HARDNESS : 0) - (corroded ? rules.CORRODE_HARDNESS : 0) + guardShift);
-  if (bypass) parts.push('true damage (full Acumen meter)');
-  const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${guardNotes.length ? ` (−3 ${guardNotes.join(', ')})` : ''}${hard.note}`;
+  const label = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${guardNotes.length ? ` (−3 ${guardNotes.join(', ')})` : ''}${hard.note}`;
+  return { hardness, label };
+}
+
+/** Each attack's own damage against what it meets, with its own riders (pierce, chain escalation, charge, matchup). */
+function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness: number, hardLabel: string, scales: boolean, bypass: boolean, parts: string[]): number {
+  const crunched = p.halves !== null;
+  const sep = dist(att.pos, def.pos);
   let v = 0;
   switch (p.spec.name) {
     case 'bite': {
@@ -119,6 +138,14 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
       break;
     }
   }
+  return v;
+}
+
+/** Modifiers on top of any attack: Acumen, Intimidate and demoralize, chains, technique bonuses, punishes. */
+function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean, bypass: boolean, parts: string[]): number {
+  const crunched = p.halves !== null;
+  const defPhase = phase(defPlan, t);
+  let v = 0;
   // A full meter also adds a steroid: a third of the attacker's Affinity [Proposed].
   if (bypass) {
     const steroid = Math.floor(Math.max(0, eff(att, 'affinity', {}).value) / rules.METER_STEROID_DIVISOR);
@@ -180,11 +207,7 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
     v -= rules.GRAZE_PENALTY;
     parts.push(`−${rules.GRAZE_PENALTY} graze`);
   }
-  if (v < rules.DAMAGE_FLOOR) {
-    v = rules.DAMAGE_FLOOR;
-    parts.push(`floor ${rules.DAMAGE_FLOOR}`);
-  }
-  return { total: v, parts, bypass };
+  return v;
 }
 
 export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], t: number, graze: boolean, trade: boolean, ev: Event[], verbs: { s: Side; aim: Vec }[] | null = null) {
