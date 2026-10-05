@@ -56,6 +56,8 @@ const bump = (m: Map<string, Map<string, number>>, style: string, k: string) => 
   inner.set(k, (inner.get(k) ?? 0) + 1);
   m.set(style, inner);
 };
+const loadoutRates = new Map<string, Rate>();
+const loadoutWins = new Map<string, Map<string, Rate>>();
 const ends = { ko: 0, pulse: 0, timeout: 0 };
 for (const j of jobs) {
   const r = byId.get(j.id)!;
@@ -68,6 +70,11 @@ for (const j of jobs) {
     tally(morphRates, setup.morph, won);
     tally(stoneRates, setup.stone, won);
     bump(styleBuilds, style, pairing);
+    const loadout = `${style} · ${pairing} · ${(setup.shards ?? []).map((s) => s.shard).sort().join(', ') || 'no shards'}`;
+    tally(loadoutRates, loadout, won);
+    const against = loadoutWins.get(loadout) ?? new Map<string, Rate>();
+    tally(against, style === j.playerA.style ? j.playerB.style : j.playerA.style, won);
+    loadoutWins.set(loadout, against);
     for (const s of setup.shards ?? []) {
       tally(shardRates, s.shard, won);
       bump(styleShards, style, s.shard);
@@ -105,6 +112,22 @@ if (shardRates.size) {
   for (const [k, t] of sorted(shardRates).filter(([, t]) => t.n >= 30)) console.log(`  ${rateWithMargin(t.w, t.n)}  ${k.padEnd(20)} on ${pickRate(shardRates, k).toFixed(0)}% of dragons`);
 }
 
+/** Wilson lower bound at 95%: ranks a 7–1 record below a 30–6 one. */
+const wilson = (t: Rate) => {
+  const z = 1.96, p = t.w / t.n;
+  return (p + z * z / (2 * t.n) - z * Math.sqrt((p * (1 - p) + z * z / (4 * t.n)) / t.n)) / (1 + z * z / t.n);
+};
+const champions = [...loadoutRates.entries()].filter(([, t]) => t.n >= 6).sort((a, b) => wilson(b[1]) - wilson(a[1]));
+console.log('\n── Champions: whole drafted dragons (style · build · shards), 6+ bouts, ranked by the low end of their 95% range ──');
+for (const [k, t] of champions.slice(0, 15)) {
+  const lost = [...loadoutWins.get(k)!.entries()].filter(([, r]) => r.w < r.n).sort((a, b) => (b[1].n - b[1].w) - (a[1].n - a[1].w)).slice(0, 3).map(([s, r]) => `${s} ${r.n - r.w}`).join(', ');
+  console.log(`  ${String(t.w).padStart(2)}–${String(t.n - t.w).padEnd(2)} ${rateWithMargin(t.w, t.n)}  ${k}${lost ? `   lost to: ${lost}` : ''}`);
+}
+console.log('\n  Each style\'s champion:');
+for (const style of BRAIN_STYLES) {
+  const best = champions.find(([k]) => k.startsWith(`${style} ·`));
+  if (best) console.log(`    ${String(best[1].w).padStart(2)}–${String(best[1].n - best[1].w).padEnd(2)} ${rateWithMargin(best[1].w, best[1].n)}  ${best[0]}`);
+}
 
 if (jsonFile) {
   const obj = (m: Map<string, Rate>) => Object.fromEntries(m);
@@ -112,6 +135,7 @@ if (jsonFile) {
     skill, seed, bouts: jobs.length, endings: ends,
     styles: obj(styleRates), pairings: obj(pairingRates), morphs: obj(morphRates), stones: obj(stoneRates), shards: obj(shardRates),
     builds: Object.fromEntries([...styleBuilds].map(([s, m]) => [s, Object.fromEntries(m)])),
+    loadouts: obj(loadoutRates),
     shardPicks: Object.fromEntries([...styleShards].map(([s, m]) => [s, Object.fromEntries(m)])),
   }, null, 1) + '\n');
   console.log(`\nWrote ${jsonFile}.`);
