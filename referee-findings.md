@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Living ladder](#the-living-ladder) | Tamers raise wyrmlings rung by rung on spoils; does Air Wyvern survive selection? |
 | [Baseline](#baseline-random-loadouts-and-the-hatch) | Fresh baseline: random wyrmling loadouts, and brains that draft their own builds |
 | [21](#round-21-whole-band-reaches-breath-loses-melee-the-guard-reversal-hard-landings) | Whole-band reaches, Breath loses Melee, the guard reversal, hard landings |
 | [20](#round-20-brains-look-ahead-stoops-fall-harder-serpentine-slips-breath-stomp-catches-movers) | Brains look ahead, stoops fall harder, Serpentine slips Breath, Stomp catches movers |
@@ -26,6 +27,40 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## The living ladder
+
+`npm run gauntlet`: 250 tamers, 80 rounds, 10,058 bouts, seed 2026. Each tamer is one brain style (spread evenly) raising one wyrmling at a time:
+- **Each round,** a dragon fights a random dragon on its own rung (its pips of shards), or an unclaimed drafted dragon when the rung has an odd count.
+- **A loss is death.** Wounds heal between fights.
+- **Three straight wins** earn one pick from the last victim's spoils: its morph's Body shard, its stone's Bloodstone shard, and its intact array. Then the dragon steps up a rung.
+- **A full three-pip array** makes a wyrmling champion, who retires.
+- **Tamers learn.** They are novices until they first reach rung 1, adepts there, and masters from rung 2. Their drafts lean toward builds that won for them (+0.15 a win) and away from builds that died (−0.6 a death).
+
+10,133 dragons hatched. 13% earned a first shard, and 20 became champions.
+
+| Build | Win rate | Hatched | 1st shard | Champions | Rung 0 / 1 / 2 win rate | Field share, rung 0 / 1 / 2 |
+|---|---|---|---|---|---|---|
+| Wyvern + Air | 56% ±2 | 16% | 18% | 7 | 56 / 54 / 61% | 17 / 23 / **31%** |
+| True Dragon + Fire | 55% ±2 | 13% | 18% | 4 | 56 / 52 / 42% | 14 / 19 / 19% |
+| Wyvern + Earth | 51% ±2 | 11% | 12% | 4 | 50 / 56 / 58% | 11 / 11 / 16% |
+| Wyrm + Earth | 48% ±2 | 11% | 12% | 0 | 48 / 44 / 19% | 11 / 9 / 6% |
+| Wyrm + Fire / Air / Water | 40–42% | 4–7% each | 8% | 1 | 38–51% at rung 1; never fought on rung 2 | 2% each at rung 2 |
+
+Rung 2 saw 340 fights, so its rates carry wide margins (Wyvern + Air ±9 on 102 fights).
+
+**What it shows:**
+- **Wyvern + Air survives selection.** It grows from 17% of the field on rung 0 to 31% on rung 2, and keeps winning there (61% ±9) while it meets more of its own mirror. It is not only good in a vacuum. The Wyvern raised 14 of the 20 champions, the True Dragon 5, and the Wyrm 1.
+- **True Dragon + Fire climbs, then stalls.** It is level with the Air Wyvern on rung 0 (56%) and fades as the field gets better (42% on rung 2). It is strong against novices, weaker against masters.
+- **The Wyrm doesn't climb.** All four Wyrm builds win 40–48% on rung 0 and thin out above it. Wyrm + Earth drops to 19% on rung 2.
+- **Skill matters more than build.** On the same rungs, dragons of novice tamers win 40%, adept 50% and master 60%. The best build is worth about 6 points; a step of skill is worth 10.
+- **Spoils hand out only attribute chips.** Of 1,566 spoils picks, one was a Technique (Gnashing Teeth). Rung-0 victims carry no shards, so the first pick is always a chip. Climbers then meet other climbers, whose arrays are chips too. Techniques reach the ladder only through unclaimed dragons, which are rare. In a closed ladder, the spoils economy never mints Techniques.
+- **Learning barely moved the hatch.** Air Wyvern hatches went 16% → 15% → 17% across the run's thirds. Each tamer's record is spread thin across 12 builds, and the novelty bonus (1.5) outweighs what a few wins or deaths add.
+- **Styles track the tournaments.** Aerialist 66% (5 champions), kite-focus 59% (4); reader 35% and bite-focus 32% raised none.
+
+**Open questions:**
+- How do Techniques enter the economy? Options include a Technique drop at some rate, an Ichor shop, or unclaimed dragons that carry Techniques.
+- Should learning outweigh novelty once a tamer has a record?
 
 ## Baseline: random loadouts and the hatch
 
