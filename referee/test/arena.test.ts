@@ -296,7 +296,7 @@ test('a full meter makes the next landed hit true damage, then empties; a miss s
   const whiff = run(bout, ['stomp'], ['hold']);
   assert.ok(hits(whiff).length === 1 && bout.fighters.A.meter === R.METER_MAX, 'a Stomp never spends it');
   const ev = run(bout, ['claw:left'], ['hold']);
-  assert.equal(hits(ev)[0].damage, 3, 'Claw 3 straight through Hardness 6');
+  assert.equal(hits(ev)[0].damage, 3 + 2, 'Claw 3 straight through Hardness 6, +2 for Affinity 6 ÷ 3');
   assert.ok(hits(ev)[0].parts.includes('true damage (full Acumen meter)'));
   assert.equal(bout.fighters.A.meter, 0);
 });

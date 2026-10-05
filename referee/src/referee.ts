@@ -1055,6 +1055,14 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       parts.push(`Stomp ${R.STOMP_DAMAGE} true damage`);
       break;
   }
+  // A full meter also adds a steroid: a third of the attacker's Affinity [Proposed].
+  if (bypass) {
+    const steroid = Math.floor(Math.max(0, eff(att, 'affinity', {}).value) / R.METER_STEROID_DIVISOR);
+    if (steroid) {
+      v += steroid;
+      parts.push(`+${steroid} Acumen (Affinity ÷ ${R.METER_STEROID_DIVISOR})`);
+    }
+  }
   if (crunched) parts.push('crunched: no modifiers');
   if (p.intimidateBonus) {
     v += R.INTIMIDATE_BONUS;
