@@ -1,6 +1,34 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 15: band movement and the breath-first True Dragon
+
+Two changes since Round 14, in one run [Proposed] (master, 2,256 bouts; the style matrix now includes a charge-focus brain):
+- **Band movement:** Approach, Retreat, Leap and Dive carry a band (3 paces) for every dragon, landing short or long by Evasion ÷ 6 paces. Strafe carries Evasion × ⅓ pace. A move winds up, evades for 2 × Evasion ticks, then recovers; travel takes 72 ÷ Evasion ticks and can run into recovery (punishable). Previously Evasion set distance (⅓ pace per point), so a True Dragon moved 1 pace per action.
+- **Stalwart:** a True Dragon's Breath winds up 3 ticks sooner (recovers 3 later), its own zones never harm it, and each charging slot widens its released Breath by ½ pace.
+
+**Movement census before the change** (528 diagnostic bouts, Round 14 rules): a True Dragon moved 1.05 paces per move and 4.5 paces a bout, and in 22% of bouts never left 1½ paces of its start. Wyrms moved 1.75 paces per move, Wyverns 2.48.
+
+| | Round 14 | Round 15 |
+|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 44 / 51 / 55 | **60** / 45 / 45 |
+| True Dragon pairings (Air / Earth / Water / Fire) | 64 / 47 / 38 / 27 | 67 / 61 / 61 / **53** |
+| Travel per bout (TD / Wyrm / Wyvern) | 4.5 / 8.5 / 14.9 paces | 10.8 / 12.7 / 14.7 |
+| Never leave 1½ paces of the start (TD / Wyrm / Wyvern) | 22 / 7 / 1% | 9 / 3 / 4% |
+| Fights at Melee / Close / Far / Very Far | 41 / 33 / 20 / 5% | 42 / 32 / 19 / 7% |
+| Stones (Air / Water / Earth / Fire) | 61 / 48 / 49 / 41 | 64 / 47 / 46 / 42 |
+| Bottom pairings | TD + Fire 27 | Wyvern + Fire 27, Wyrm + Earth 33 |
+| Timeouts | 14% | 14% |
+| claw-focus / charge-focus / meter-focus vs general | 52 / — / 51% | 54 / 44 / 39% |
+
+**What it shows:**
+- **The True Dragon overshot: 44 → 60%.** True Dragon + Fire nearly doubled (27 → 53%), and every True Dragon pairing sits at 53–67%. The Wyrm and Wyvern both fell to 45%.
+- **True Dragons move now** (10.8 paces a bout, up from 4.5), but **fights didn't spread out**: Melee and Close still hold 74% of slots. Approach carries a band too, so pressure keeps pace with retreat, and the leash bounds kiting.
+- **So the True Dragon's gain is more likely the breath-first Aspect than range.** A Breath active at tick 9 interrupts Bites and slower Breaths, and its zones no longer burn it. The run can't separate the two changes; an ablation (band movement without Stalwart) would.
+- **The rim isn't crowding fights:** 1.4% rim-pulse KOs, 0.06 slams and 0.77 blocked moves per bout. No case yet for a wider arena.
+- **Charge-focus is viable but not dominant** (44% against general styles). Meter-focus fell to 39%.
+- **Still open:** Air leads the stones (64%), and bite-focus trails (30% against general).
+
 ## Round 14: Stalwart steadies charges
 
 One change from Round 13 [Proposed]: the True Dragon's old Aspect (+9 Wounds) is folded into a base 45, and **Stalwart** now means a hit breaks a True Dragon's charge only if it deals 6 or more after the charging guard. Master, 1,992 bouts.
