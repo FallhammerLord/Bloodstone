@@ -52,7 +52,7 @@ test('overlap: one covered pip strips the rider (and a Venerable\'s related poin
   assert.ok(notes[0].includes('rider'));
   const { sheet, loadout } = compile(hatch('true-dragon', 'water'), a);
   assert.equal(sheet.claw, 3 + 3 + 3, 'Sundering keeps its value; Razor Talons adds 3');
-  assert.equal(sheet.affinity, 6, 'the related point is gone');
+  assert.equal(sheet.affinity, 9, 'the related point is gone');
   assert.equal(loadout.riders.length, 0);
   seat(a, findShard('Heartgrit'), [2]);
   assert.equal(compile(hatch('true-dragon', 'water'), a).loadout.names.some((n) => n.startsWith('Razor')), false);
@@ -61,7 +61,7 @@ test('overlap: one covered pip strips the rider (and a Venerable\'s related poin
 test('shards add to attributes but tertiaries don\'t re-derive', () => {
   // More Breath Potency doesn't raise Affinity; more Evasion doesn't raise Accuracy [Doc].
   const { sheet } = buildSheet({ ...TD_WATER, shards: [{ shard: 'Furnace Gland', pips: [0] }, { shard: 'Swept Pinions', pips: [1] }] });
-  assert.deepEqual([sheet.breath, sheet.affinity, sheet.evasion, sheet.accuracy], [12, 6, 6, 6]);
+  assert.deepEqual([sheet.breath, sheet.affinity, sheet.evasion, sheet.accuracy], [15, 9, 6, 6]);
 });
 
 // ---- Riders in play ----

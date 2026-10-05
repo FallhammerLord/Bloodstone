@@ -23,16 +23,16 @@ const hitsBy = (hits: Extract<Event, { kind: 'hit' }>[], side: Side) => hits.fil
 
 test('swing table: every pairing in the design doc, with derived knock-ons', () => {
   const td = hatch('true-dragon', 'fire');
-  assert.deepEqual([td.breath, td.wounds, td.affinity], [15, 30 + 9, 6]);
+  assert.deepEqual([td.breath, td.wounds, td.affinity], [18, 30 + 9, 9]);
   const tdE = hatch('true-dragon', 'earth');
   assert.deepEqual([tdE.bite, tdE.wounds], [9, 42 + 9]);
   // The body side of every swing is Wounds: signature defenses stay at base, and Accuracy doesn't move.
   const wa = hatch('wyvern', 'air');
   assert.deepEqual([wa.claw, wa.wounds, wa.evasion, wa.accuracy], [12, 18, 9, 6]);
   const wf = hatch('wyvern', 'fire');
-  assert.deepEqual([wf.breath, wf.wounds, wf.evasion, wf.affinity, wf.accuracy], [9, 30, 9, 0, 6]);
+  assert.deepEqual([wf.breath, wf.wounds, wf.evasion, wf.affinity, wf.accuracy], [12, 30, 9, 3, 6]);
   const ww = hatch('wyrm', 'water');
-  assert.deepEqual([ww.affinity, ww.wounds, ww.hardness], [9, 24, 6]);
+  assert.deepEqual([ww.affinity, ww.wounds, ww.hardness], [12, 24, 6]);
   const wr = hatch('wyrm', 'air');
   assert.deepEqual([wr.claw, wr.wounds, wr.hardness], [6, 36, 6]);
 });
@@ -41,7 +41,7 @@ test('neutral pairings keep the base tables', () => {
   const h = hatch('true-dragon', 'water');
   assert.equal(h.preference, 'neutral');
   assert.deepEqual([h.wounds, h.evasion, h.hardness, h.accuracy], [36 + 9, 3, 3, 6]);
-  assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [3, 9, 9, 6]);
+  assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [3, 9, 12, 9]);
 });
 
 test('element wheel: each element beats the three clockwise of it; opposites are neutral', () => {

@@ -81,11 +81,11 @@ A hidden baseline; each morph and each stone takes one +3 peak and one −3 vall
 
 | Stone | Claw | Bite | Breath | Affinity (stone) |
 |---|---|---|---|---|
-| Baseline | 6 | 9 | 9 | 3 (−6) |
-| Water | 3 | 9 | 9 | 6 (−3) |
-| Earth | 6 | 12 | 9 | 0 (−9) |
-| Fire | 6 | 6 | 12 | 3 (−9) |
-| Air | 9 | 9 | 6 | 3 (−3) |
+| Baseline | 6 | 9 | 12 | 6 (−6) |
+| Water | 3 | 9 | 12 | 9 (−3) |
+| Earth | 6 | 12 | 12 | 3 (−9) |
+| Fire | 6 | 6 | 15 | 6 (−9) |
+| Air | 9 | 9 | 9 | 6 (−3) |
 
 - **Water endures, Earth crushes, Fire scorches, Air rakes.**
 - The element that beats you peaks where you're weakest, so matchup stacks reach two layers at most.
@@ -111,11 +111,11 @@ Each morph prefers one element and dislikes the element that beats it.
 
 | Pairing | Swing | Derived knock-on |
 |---|---|---|
-| True Dragon + Fire | Breath 12 → 15, Wounds 36 → 30: a breath cannon | Affinity 3 → 6 |
+| True Dragon + Fire | Breath 15 → 18, Wounds 36 → 30: a breath cannon | Affinity 6 → 9 |
 | True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill | |
 | Wyvern + Air | Claw 9 → 12, Wounds 24 → 18 | |
-| Wyvern + Fire | Breath 12 → 9, Wounds 24 → 30: the toughest Wyvern | Affinity 3 → 0 |
-| Wyrm + Water | Affinity 6 → 9, Wounds 30 → 24: a sea serpent the elements slide off | |
+| Wyvern + Fire | Breath 15 → 12, Wounds 24 → 30: the toughest Wyvern | Affinity 6 → 3 |
+| Wyrm + Water | Affinity 9 → 12, Wounds 30 → 24: a sea serpent the elements slide off | |
 | Wyrm + Air | Claw 9 → 6, Wounds 30 → 36 | |
 
 **[Open]** Derivation still amplifies swings that touch Breath Potency: True Dragon + Fire gains Affinity on top of its Breath. Swings no longer touch Evasion.
@@ -281,7 +281,7 @@ Each morph prefers one element and dislikes the element that beats it.
 ### Damage [Proposed]
 - **Bite:** Bite Force − Hardness. Bite is piercing: it ignores 3 Hardness. Baseline 9 − (3 − 3) = 9.
 - **Claw:** one hit, Claw Sharpness − Hardness. Baseline 6 − 3 = 3; it earns its keep by landing often, its long active window catching strafes.
-- **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 9 − 3 = 6.
+- **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 12 − 6 = 6. **[Proposed]** Every Breath rose 3, and Affinity with it (it derives from Breath), so Breath damage nets out the same while every Affinity, and so every Acumen meter, gains.
 - **Stomp:** 3 true damage plus Staggered.
 - **Floor:** every landed hit deals at least 1 point.
 - A True Dragon's 45 points (36 plus Stalwart's 9) fall to five landed bites or eight landed breaths.
