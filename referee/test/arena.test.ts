@@ -284,8 +284,8 @@ test('zones contest Affinity too: a burning zone can\'t take hold of high Affini
 
 test('the meter starts at age bracket × 10 + 3 × Affinity', () => {
   const bout = newBout(TD_WATER, { name: 'H', morph: 'wyrm', stone: 'water' }, 6);
-  assert.equal(bout.fighters.A.meter, 10 + 3 * 9, 'True Dragon + Water, Affinity 9');
-  assert.equal(bout.fighters.B.meter, 10 + 3 * 12, 'Wyrm + Water, Affinity 12');
+  assert.equal(bout.fighters.A.meter, R.DEFAULT_RULES.AGE_BRACKET.wyrmling * R.DEFAULT_RULES.METER_START_PER_AGE + 3 * 9, 'True Dragon + Water, Affinity 9');
+  assert.equal(bout.fighters.B.meter, R.DEFAULT_RULES.AGE_BRACKET.wyrmling * R.DEFAULT_RULES.METER_START_PER_AGE + 3 * 12, 'Wyrm + Water, Affinity 12');
 });
 
 test('Scales, Dodge and a Breath charge held to the end each fill Affinity + the base fill', () => {
@@ -315,7 +315,7 @@ test('a full meter makes the next landed hit true damage, then empties; a miss s
   const whiff = run(bout, ['stomp'], ['hold']);
   assert.ok(hits(whiff).length === 1 && bout.fighters.A.meter === R.METER_MAX, 'a Stomp never spends it');
   const ev = run(bout, ['claw:left'], ['hold']);
-  assert.equal(hits(ev)[0].damage, 3 + 3, 'Claw 3 straight through Hardness 6, +3 for Affinity 9 ÷ 3');
+  assert.equal(hits(ev)[0].damage, 3 + Math.floor(9 / R.DEFAULT_RULES.METER_STEROID_DIVISOR), 'Claw 3 straight through Hardness 6, +3 for Affinity 9 ÷ 3');
   assert.ok(hits(ev)[0].parts.includes('true damage (full Acumen meter)'));
   assert.equal(bout.fighters.A.meter, 0);
 });
@@ -354,7 +354,7 @@ test('a Wyvern can\'t Leap and stoop in the same exchange', () => {
 test('Stomp deals 3 + Hardness ÷ 3, and its quake shatters boulders inside its radius', () => {
   const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 1.5, 'B', { obstacles: [{ size: 'small', x: -1.5, y: -1.5 }] });
   const ev = run(bout, ['stomp'], ['hold']);
-  assert.equal(hits(ev)[0].damage, 3 + 2, 'a Wyrm\'s Hardness 6 adds 2');
+  assert.equal(hits(ev)[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(6 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR), 'a Wyrm\'s Hardness 6 adds 2');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The quake shatters')));
   assert.equal(bout.arena.obstacles.filter((o) => o.kind === 'boulder').length, 0);
 });

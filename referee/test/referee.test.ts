@@ -100,7 +100,7 @@ test('breath skips Evasion and applies the matchup', () => {
   // Wyrm + Water (Breath 12) against a strafing True Dragon + Earth (Affinity 3): 12 − 3 + 3 + 2. The strafe's evasive
   // window has closed by tick 12, so the Breath also catches it in recovery (+3 punish).
   const { hits } = fight({ name: 'Tide', morph: 'wyrm', stone: 'water' }, { name: 'Clod', morph: 'true-dragon', stone: 'earth' }, 7, ['breath'], ['strafe:cw']);
-  assert.equal(hitsBy(hits, 'A')[0].damage, 12 - 3 + 3 + 2 + 3, 'Potency 12, Affinity 3, +3 matchup, +2 Water, +3 punish');
+  assert.equal(hitsBy(hits, 'A')[0].damage, 12 - 3 + R.DEFAULT_RULES.MATCHUP + R.DEFAULT_RULES.ELEMENT_BREATH_MOD.water + R.DEFAULT_RULES.PUNISH_BONUS, 'Potency 12, Affinity 3, +3 matchup, +2 Water, +3 punish');
 });
 
 test('breath cooldown 2: a second breath in the same exchange holds instead', () => {
@@ -116,13 +116,13 @@ test('every landed hit deals at least 1', () => {
 
 test('Intimidate adds +3 to the next attack, demoralizes the target, and attacks punish it', () => {
   const { hits } = fight(TD_WATER, TD_WATER, 4, ['intimidate', 'bite', 'intimidate'], ['hold', 'hold', 'bite']);
-  assert.equal(hitsBy(hits, 'A')[0].damage, 12); // 9 + 3 Intimidate
-  assert.equal(hitsBy(hits, 'B')[0].damage, 9); // 9 + 3 punish − 3 demoralized
+  assert.equal(hitsBy(hits, 'A')[0].damage, 9 + R.DEFAULT_RULES.INTIMIDATE_BONUS);
+  assert.equal(hitsBy(hits, 'B')[0].damage, 9 + R.DEFAULT_RULES.PUNISH_BONUS - R.DEFAULT_RULES.DEMORALIZE);
 });
 
 test('Scales adds Hardness while guarding', () => {
   const { hits } = fight(TD_WATER, TD_WATER, 4, ['bite'], ['scales']);
-  assert.equal(hits[0].damage, 6); // 9 − (3 + 3, pierced to 3)
+  assert.equal(hits[0].damage, 9 - (3 + R.DEFAULT_RULES.SCALES_HARDNESS - R.DEFAULT_RULES.BITE_PIERCE)); // Bite 9 against Hardness 3 + Scales, pierced
 });
 
 test('a strafe during the wind-up slips a bite', () => {
@@ -133,7 +133,7 @@ test('a strafe during the wind-up slips a bite', () => {
 test('stomp deals 3 + Hardness ÷ 3 true damage and Staggers: the next move runs on half its Evasion', () => {
   // Wyrm + Air has Evasion 6: a strafe normally carries 2 paces; Staggered, Evasion 3 carries 1.
   const { hits, bout } = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['stomp', 'hold'], ['hold', 'strafe:cw']);
-  assert.equal(hits[0].damage, 3 + 1); // True Dragon Hardness 3
+  assert.equal(hits[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(3 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR)); // True Dragon Hardness 3
   const free = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['hold', 'hold'], ['hold', 'strafe:cw']).bout;
   assert.ok(Math.abs(bout.fighters.B.pos.y) < Math.abs(free.fighters.B.pos.y), 'the staggered strafe carries less');
 });

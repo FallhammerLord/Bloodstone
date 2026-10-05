@@ -1,5 +1,6 @@
 // Charges (one action across two slots) and crunches (two attacks in one slot), design doc §4.
 
+import * as R from '../src/rules.ts';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction } from '../src/actions.ts';
@@ -21,7 +22,7 @@ test('a one-slot Bite charge releases next slot, whatever that slot scripted, wi
 test('the charging slot guards like Scales, and a landed hit breaks the charge', () => {
   // A Wyvern charges (a True Dragon's Stalwart charge would hold through this hit).
   const { ev } = run({ name: 'V', morph: 'wyvern', stone: 'water' }, { name: 'A', morph: 'true-dragon', stone: 'air' }, 2, ['charge:bite', 'hold'], ['claw:left', 'hold']);
-  assert.equal(hits(ev)[0].damage, 9 - (3 + 3), 'Claw 9 against Hardness 3 + 3 guarding');
+  assert.equal(hits(ev)[0].damage, 9 - (3 + R.DEFAULT_RULES.SCALES_HARDNESS), 'Claw 9 against Hardness 3 + 3 guarding');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
   assert.equal(hits(ev).length, 1, 'no release');
 });
