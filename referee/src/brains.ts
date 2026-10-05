@@ -1,6 +1,7 @@
 // The brain tournament: does thinking beat habit, do the styles form a triangle, and how do the
 // pairings fare when both sides think?
-//   npm run brains [-- --skill novice|adept|master] [--rule KEY=VALUE ...] [--json file] [--seed N]
+//   npm run brains [-- --skill novice|adept|master] [--rule KEY=VALUE ...] [--json file] [--seed N] [--shards]
+//   --shards gives every dragon a random, seeded 3-pip loadout (crunchling bouts excepted) and ranks the shards.
 //   --rule changes one dial for the whole run (BREATH.blast.radius=1p); --json also writes the numbers to a file.
 
 import { writeFileSync } from 'node:fs';
@@ -11,6 +12,7 @@ import { seededRandom } from './random.ts';
 import type { FighterSetup, Side } from './referee.ts';
 import type { Job, Player, Result } from './brains-worker.ts';
 import { flag, inWorkers, rateWithMargin, rulesFromArgs, WORKERS } from './harness.ts';
+import { findShard, randomLoadout } from './shards.ts';
 
 const argv = process.argv.slice(2);
 const skill = flag(argv, '--skill', 'adept') as Skill;
@@ -29,13 +31,17 @@ const pairings: { label: string; setup: FighterSetup }[] = MORPHS.flatMap((m) =>
 
 const seed = Number(flag(argv, '--seed', '2026'));
 const rng = seededRandom(seed);
+const withShards = argv.includes('--shards');
+// Loadouts draw from their own stream, so a run without --shards replays exactly as before.
+const loadRng = seededRandom(seed * 7 + 1);
+const kit = (f: FighterSetup): FighterSetup => (withShards ? { ...f, shards: randomLoadout(loadRng) } : f);
 // The general styles; the focus brains (claw, bite, breath only) join the style matrix.
 const GENERAL = BRAIN_STYLES.filter((x) => !x.endsWith('-focus'));
 const jobs: Job[] = [];
 const brain = (style: string, s: number): Player => ({ kind: 'brain', style, skill, seed: s + (seed - 2026) * 100003 });
 const crude = (style: string, s: number): Player => ({ kind: 'crude', style, skill, seed: s + (seed - 2026) * 100003 });
 const add = (group: string, A: FighterSetup, B: FighterSetup, playerA: Player, playerB: Player, challenged?: Side) =>
-  jobs.push({ id: jobs.length, group, A, B, playerA, playerB, challenged: challenged ?? (jobs.length % 2 ? 'A' : 'B'), arenaSeed: jobs.length * 31 + 7 + (seed - 2026) * 100003 });
+  jobs.push({ id: jobs.length, group, A: group.startsWith('crunch|') ? A : kit(A), B: group.startsWith('crunch|') ? B : kit(B), playerA, playerB, challenged: challenged ?? (jobs.length % 2 ? 'A' : 'B'), arenaSeed: jobs.length * 31 + 7 + (seed - 2026) * 100003 });
 
 // 1. Thinking against habit: a balanced brain against each crude style, every pairing against every other.
 for (const a of pairings) for (const b of pairings) {
@@ -82,6 +88,7 @@ const byId = new Map(results.map((r) => [r.id, r]));
 const pct = (w: number, n: number) => `${((100 * w) / Math.max(1, n)).toFixed(0).padStart(3)}%`;
 console.log(`Brain tournament at ${skill} skill, ${rulesLabel}: ${jobs.length} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
 console.log('Win rates carry a 95% margin (±): two rates whose margins overlap may not differ.');
+if (withShards) console.log('Loadouts: every dragon (crunchlings aside) carries a random, seeded 3-pip loadout of attribute chips and built Techniques at any grade.');
 const ends = { ko: 0, pulse: 0, timeout: 0 };
 let ex = 0;
 for (const r of results) {
@@ -265,6 +272,28 @@ console.log('\n── Crunchlings (Raking Talons, Juvenile) against identical pl
 console.log(`  The crunchling wins ${rateWithMargin(cw, crunchJobs.length).trim()} of ${crunchJobs.length} bouts and crunches in ${pct(crunchSlots, slots)} of its slots.`);
 console.log(`  Damage dealt per bout: crunchling ${(cDealt / crunchJobs.length).toFixed(1)}, plain ${(pDealt / crunchJobs.length).toFixed(1)}.`);
 
+// Shards, by the win rate of dragons carrying them. Technique grades differ in power, so each grade is its own row.
+const shardRates = new Map<string, { w: number; n: number }>();
+if (withShards) {
+  for (const j of jobs.filter((x) => !x.group.startsWith('crunch|'))) {
+    const r = byId.get(j.id)!;
+    for (const [setup, side] of [[j.A, 'A'], [j.B, 'B']] as const) {
+      for (const sh of setup.shards ?? []) {
+        const key = sh.grade && findShard(sh.shard, sh.grade).kind.family === 'technique' ? `${sh.shard} (${sh.grade})` : sh.shard;
+        const t = shardRates.get(key) ?? { w: 0, n: 0 };
+        t.n++;
+        if (r.winner === side) t.w++;
+        shardRates.set(key, t);
+      }
+    }
+  }
+  const rows = [...shardRates.entries()].filter(([, t]) => t.n >= 40).sort((x, y) => y[1].w / y[1].n - x[1].w / x[1].n);
+  console.log(`\n── Shards, by win rate of dragons carrying them (${rows.length} with 40+ bouts) ──`);
+  for (const [k, t] of rows.slice(0, 12)) console.log(`  ${rateWithMargin(t.w, t.n)}  ${k}`);
+  if (rows.length > 20) console.log('  ...');
+  for (const [k, t] of rows.slice(Math.max(12, rows.length - 8))) console.log(`  ${rateWithMargin(t.w, t.n)}  ${k}`);
+}
+
 if (jsonFile) {
   Object.assign(json, {
     bouts: results.length,
@@ -279,6 +308,7 @@ if (jsonFile) {
     stones: Object.fromEntries(group((l) => l.split(' + ')[1])),
     byStone: stones,
     crunchling: { w: cw, n: crunchJobs.length },
+    ...(withShards ? { shards: Object.fromEntries(shardRates) } : {}),
   });
   writeFileSync(jsonFile, JSON.stringify(json, null, 1) + '\n');
   console.log(`\nWrote ${jsonFile}.`);

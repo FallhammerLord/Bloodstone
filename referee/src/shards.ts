@@ -234,3 +234,20 @@ export function compile(base: StatSheet, array: DragonArray): { sheet: StatSheet
   }
   return { sheet, loadout };
 }
+
+/**
+ * A random, legal loadout for a tournament: the array's pips filled with attribute chips and built Techniques at
+ * any grade, a shard at a time until no pip is free. Seeded, so a run replays.
+ */
+export function randomLoadout(rng: () => number, pips = WYRMLING_PIPS): { shard: string; grade: Grade; pips: number[] }[] {
+  const pool: Shard[] = [...allAttrShards(), ...builtTechniques().flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
+  const out: { shard: string; grade: Grade; pips: number[] }[] = [];
+  let free = Array.from({ length: pips }, (_, i) => i);
+  while (free.length > 0) {
+    const options = pool.filter((s) => s.pips <= free.length);
+    const s = options[Math.floor(rng() * options.length)];
+    out.push({ shard: s.name, grade: s.grade, pips: free.slice(0, s.pips) });
+    free = free.slice(s.pips);
+  }
+  return out;
+}

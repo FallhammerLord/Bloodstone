@@ -29,6 +29,7 @@ npm run ladder -- HEAD~2 HEAD~1 HEAD -- brains --skill novice         # one scri
 npm run dials > DIALS.md                               # the [Proposed]/[Assumed] audit
 npm run brains -- --skill master --seed 2027 --json b.json  # an independent run; then:
 npm run pool -- a.json b.json                          # pool runs for tighter margins
+npm run brains -- --skill master --shards              # every dragon carries a random 3-pip loadout; ranks the shards
 ```
 
 - `--rule KEY=VALUE` changes one dial for a whole run, without editing `DEFAULT_RULES`. KEY is a path into the rules (`BURN_DAMAGE`, `BREATH.blast.radius`); VALUE is in the rule's own units, or paces with a `p` suffix. Repeat it for several dials. The brains tournament and both diagnostics take it.

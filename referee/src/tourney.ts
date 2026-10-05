@@ -8,7 +8,7 @@ import type { CoreStone, Morph } from './hatch.ts';
 import { newBout, type FighterSetup, type Side } from './referee.ts';
 import { standardBoulders } from './arena.ts';
 import { seededRandom } from './random.ts';
-import { allAttrShards, builtTechniques, findShard, GRADES, type Shard } from './shards.ts';
+import { findShard, randomLoadout } from './shards.ts';
 import * as R from './rules.ts';
 
 const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
@@ -31,21 +31,6 @@ const roundsArg = argv.indexOf('--rounds');
 const rounds = roundsArg >= 0 ? Number(argv[roundsArg + 1]) : 1;
 const withShards = argv.includes('--shards');
 
-/** A random, legal wyrmling loadout: three pips, filled with chips or a splinter and a chip. */
-function randomLoadout(rng: () => number): FighterSetup['shards'] {
-  const pool: Shard[] = [...allAttrShards(), ...builtTechniques().flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
-  const fits = (n: number) => pool.filter((s) => s.pips <= n);
-  const out: NonNullable<FighterSetup['shards']> = [];
-  let free = [0, 1, 2];
-  while (free.length > 0) {
-    const options = fits(free.length);
-    const s = options[Math.floor(rng() * options.length)];
-    const pips = free.slice(0, s.pips);
-    free = free.slice(s.pips);
-    out.push({ shard: s.name, grade: s.grade, pips });
-  }
-  return out;
-}
 const shardTally = new Map<string, { wins: number; bouts: number }>();
 
 interface Tally {
