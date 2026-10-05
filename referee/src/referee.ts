@@ -452,11 +452,6 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
     wShift -= 3;
     f.marks.quick = null;
   }
-  // Stalwart: a True Dragon breathes first, and recovers later for it [Proposed].
-  if (spec.name === 'breath' && f.sheet.aspect === 'stalwart') {
-    wShift -= R.STALWART_BREATH_SHIFT;
-    rShift += R.STALWART_BREATH_SHIFT;
-  }
   let [windup, active, recovery] = timing(def.profile, wShift, rShift);
 
   let moveTotal = 0;
@@ -600,6 +595,28 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
   return ev;
 }
 
+/**
+ * Between slots, the separation across the floor snaps to the nearest ½ pace [Proposed], both dragons shifting
+ * equally along their line. Nothing snaps through a wall, an obstacle, the other body or the leash.
+ */
+function snapSeparation(bout: Bout) {
+  const A = bout.fighters.A;
+  const B = bout.fighters.B;
+  const line = flat(sub(B.pos, A.pos));
+  const d = flatLen(line);
+  if (d === 0) return;
+  const target = Math.round(d / R.SNAP) * R.SNAP;
+  const diff = target - d;
+  if (diff === 0) return;
+  const half = scaleTo(line, Math.trunc(diff / 2));
+  const nA = { ...sub(A.pos, half), z: A.pos.z };
+  const nB = { ...add(B.pos, scaleTo(line, diff - Math.trunc(diff / 2))), z: B.pos.z };
+  const ok = (p: Vec) => flatLen(p) <= R.ARENA_RADIUS && !obstacleAt(bout.arena, p);
+  if (!ok(nA) || !ok(nB) || dist(nA, nB) < R.BODY_GAP || dist(nA, nB) > R.LEASH) return;
+  A.pos = nA;
+  B.pos = nB;
+}
+
 /** Gravity [Proposed]: a flier that didn't Leap this exchange drops a band at its end, landing on anything below. */
 function gravity(bout: Bout, s: Side, ev: Event[]) {
   const f = bout.fighters[s];
@@ -678,6 +695,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
     if (trace) ev.push({ kind: 'trace', tick: t, positions: { A: { ...F.A.pos }, B: { ...F.B.pos } } });
   }
   if (!bout.over) zonesAtSlotEnd(bout, plans, g, ev);
+  if (!bout.over) snapSeparation(bout);
 
   for (const s of SIDES) {
     const p = plans[s];

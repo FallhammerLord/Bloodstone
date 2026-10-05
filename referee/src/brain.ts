@@ -19,11 +19,43 @@ import * as R from './rules.ts';
 
 export type BrainStyle =
   | 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' | 'boxer-puncher' | 'aerialist' | 'reader'
-  | 'claw-focus' | 'bite-focus' | 'breath-focus' | 'meter-focus' | 'charge-focus';
+  | 'claw-focus' | 'bite-focus' | 'breath-focus' | 'meter-focus' | 'charge-focus' | 'kite-focus';
 export const BRAIN_STYLES: readonly BrainStyle[] = [
   'swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher', 'aerialist', 'reader',
-  'claw-focus', 'bite-focus', 'breath-focus', 'meter-focus', 'charge-focus',
+  'claw-focus', 'bite-focus', 'breath-focus', 'meter-focus', 'charge-focus', 'kite-focus',
 ];
+
+/**
+ * Each style's taste for each attack [Proposed]. With the dragon's own attacks it sets the style's ideal band:
+ * Claw wants Melee, Bite wants Close, Breath wants Far. A swarmer with an Earth Bite wants Close; an out-boxer
+ * with a Fire Breath wants Far.
+ */
+const TASTE: Record<BrainStyle, { claw: number; bite: number; breath: number }> = {
+  swarmer: { claw: 1.2, bite: 1.2, breath: 0.6 },
+  'out-boxer': { claw: 0.4, bite: 0.6, breath: 1.5 },
+  slugger: { claw: 0.8, bite: 1.5, breath: 0.8 },
+  counterpuncher: { claw: 1, bite: 1, breath: 1 },
+  'boxer-puncher': { claw: 1, bite: 1, breath: 1 },
+  aerialist: { claw: 1.3, bite: 0.7, breath: 1 },
+  reader: { claw: 1, bite: 1, breath: 1 },
+  'claw-focus': { claw: 1, bite: 0, breath: 0 },
+  'bite-focus': { claw: 0, bite: 1, breath: 0 },
+  'breath-focus': { claw: 0, bite: 0, breath: 1 },
+  'meter-focus': { claw: 0.8, bite: 1, breath: 1.2 },
+  'charge-focus': { claw: 0.6, bite: 1.1, breath: 1.3 },
+  'kite-focus': { claw: 0.3, bite: 0.5, breath: 1.5 },
+};
+
+/** How much each style values forcing the opponent to miss (a whiff, near miss or evade) [Proposed]. */
+const MISS_TASTE: Partial<Record<BrainStyle, number>> = { 'out-boxer': 1.5, counterpuncher: 1.5, 'kite-focus': 2, reader: 1, 'boxer-puncher': 1, aerialist: 1, swarmer: 0.3, slugger: 0.3 };
+
+/** The band a dragon wants: its rough damage per attempt with each attack, by land rate, times the style's taste. */
+function idealBand(f: Fighter, taste: { claw: number; bite: number; breath: number }): Band {
+  const claw = Math.max(1, f.sheet.claw - 4) * 0.68 * taste.claw;
+  const bite = Math.max(1, f.sheet.bite - 1) * 0.45 * taste.bite;
+  const breath = Math.max(1, f.sheet.breath - 6) * 0.5 * taste.breath;
+  return claw >= bite && claw >= breath ? 'melee' : bite >= breath ? 'close' : 'far';
+}
 
 /**
  * Focus brains attack with one thing only: Claw at Melee, Bite at Close, or Breath at Far. Every move,
@@ -77,6 +109,9 @@ const LEAN: Record<BrainStyle, Partial<Record<ActionName, number>> | ((band: Ban
   reader: (b) => (b === 'far' || b === 'veryFar' ? { intimidate: 3, breath: 2, approach: 2 } : { intimidate: 3, scales: 2, bite: 2, claw: 2 }),
   'claw-focus': (b) => (b === 'melee' ? { claw: 5, dodge: 1, scales: 1, strafe: 1 } : { approach: 4, strafe: 1, dodge: 1 }),
   'bite-focus': (b) => (b === 'close' ? { bite: 5, strafe: 1, scales: 1, intimidate: 1 } : b === 'melee' ? { retreat: 3, bite: 2, dodge: 1 } : { approach: 4, strafe: 1 }),
+  // Kite-focus [Proposed]: a diagnostic. Position first: it backs off and slips sideways to hold Far, breathes from
+  // there, and bites or claws only when caught. It measures whether kiting holds up.
+  'kite-focus': (b) => (b === 'melee' ? { retreat: 4, strafe: 2, dodge: 1, claw: 1 } : b === 'close' ? { retreat: 3, breath: 2, strafe: 2 } : b === 'far' ? { breath: 4, strafe: 2, retreat: 1, scales: 1 } : { breath: 2, approach: 1, strafe: 1 }),
   // Meter-focus [Proposed]: a diagnostic. Any attack is open; it guards, dodges and breathes to fill the Acumen
   // meter, then lands its true-damage hit. If it beats the general styles, the meter loop is too strong.
   'meter-focus': (b) => (b === 'melee' ? { scales: 3, dodge: 2, bite: 2, claw: 1 } : b === 'close' ? { breath: 3, scales: 2, bite: 2, dodge: 1 } : b === 'far' ? { breath: 4, scales: 2, approach: 1 } : { approach: 3, breath: 1 }),
@@ -275,8 +310,20 @@ export function value(style: BrainStyle, o: Outcome): number {
     // Carry-over: what's pending when the slot or exchange ends still counts, so delayed payoffs aren't undervalued.
     + (me1.intimidateBonus ? 0.03 : 0) - (op1.intimidateBonus ? 0.03 : 0)
     + (op1.marks.demoralized ? 0.03 : 0) - (me1.marks.demoralized ? 0.03 : 0)
-    + (me1.marks.advanced || me1.marks.strafed ? 0.02 : 0);
+    + (me1.marks.advanced || me1.marks.strafed ? 0.02 : 0)
+    // Position [Proposed]: ending in your own ideal band is worth something, and so is keeping the opponent out of theirs.
+    + positionValue(style, band, me1, op1)
+    // Forcing a miss, by style [Proposed].
+    + 0.02 * (MISS_TASTE[style] ?? 0.6) * theirMisses;
   return leverage + styleValue(style, o, { dealt, taken, band, sep, me1, op1, big, punishes, theirMisses, rim });
+}
+
+const BAND_ORDER: Band[] = ['melee', 'close', 'far', 'veryFar'];
+function positionValue(style: BrainStyle, band: Band, me: Fighter, op: Fighter): number {
+  const mine = BAND_ORDER.indexOf(idealBand(me, TASTE[style]));
+  const theirs = BAND_ORDER.indexOf(idealBand(op, { claw: 1, bite: 1, breath: 1 }));
+  const at = BAND_ORDER.indexOf(band);
+  return (at === mine ? 0.04 : -0.015 * Math.abs(at - mine)) + (at !== theirs ? 0.015 : 0);
 }
 
 /** A wall or obstacle within a band behind this dragon, measured away from the other one. */
@@ -319,6 +366,8 @@ function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me
       return dealt - taken + (me1.pos.z > 0 && op1.pos.z === 0 && sep <= R.STOOP_RANGE ? 0.06 : 0) + rim;
     case 'reader':
       return dealt - taken + (op1.marks.revisionLockedFor > o.after.exchange ? 0.05 : 0) + (me1.marks.eye !== null ? 0.03 : 0) + rim;
+    case 'kite-focus':
+      return dealt - 1.2 * taken + (band === 'far' ? 0.08 : band === 'close' ? 0 : band === 'melee' ? -0.08 : 0.02) + 0.05 * theirMisses + rim;
     case 'charge-focus': {
       const released = o.events.filter((e) => e.kind === 'hit' && e.attacker === o.me && e.parts.some((p) => p.includes('charged'))).length;
       return dealt - taken + 0.06 * released + (me1.marks.charge ? 0.03 : 0) + rim;

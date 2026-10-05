@@ -58,10 +58,12 @@ export const MATCHUP = 3;
 export const DAMAGE_FLOOR = 1;
 export const STOMP_DAMAGE = 3;
 export const BITE_PIERCE = 3; // [Doc] Bite is piercing; [Assumed] it ignores 3 Hardness
-// The True Dragon's Aspect, Stalwart [Proposed]: its Breath winds up 3 ticks sooner (and recovers 3 later), its own
-// zones never harm it, and each charging slot widens the released Breath by ½ pace.
-export const STALWART_BREATH_SHIFT = 3;
+// The True Dragon's Aspect, Stalwart [Proposed]: its own zones never harm it, and each charging slot widens its
+// released Breath by ½ pace. (A 3-tick faster Breath was tried and overshot.)
 export const STALWART_WIDEN = Math.floor(PACE / 2);
+// Between slots, separation snaps to the nearest ½ pace [Proposed]: where a dragon lands in a band matters only for
+// that action, and the edge cases of drift (2.96 paces against 3.04) clean up before the next.
+export const SNAP = Math.floor(PACE / 2);
 
 // ---- Guards ----
 export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales

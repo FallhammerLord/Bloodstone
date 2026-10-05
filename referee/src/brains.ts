@@ -159,7 +159,7 @@ const rate = (x: string, y: string) => {
   return (100 * t.w) / t.n;
 };
 console.log('\n── Style against style (identical dragons; row\'s win rate against column) ──');
-const short: Record<BrainStyle, string> = { swarmer: 'swarm', 'out-boxer': 'outbx', slugger: 'slug', counterpuncher: 'count', 'boxer-puncher': 'boxpn', aerialist: 'aeria', reader: 'readr', 'claw-focus': 'claw', 'bite-focus': 'bite', 'breath-focus': 'brth', 'meter-focus': 'metr', 'charge-focus': 'chrg' };
+const short: Record<BrainStyle, string> = { swarmer: 'swarm', 'out-boxer': 'outbx', slugger: 'slug', counterpuncher: 'count', 'boxer-puncher': 'boxpn', aerialist: 'aeria', reader: 'readr', 'claw-focus': 'claw', 'bite-focus': 'bite', 'breath-focus': 'brth', 'meter-focus': 'metr', 'charge-focus': 'chrg', 'kite-focus': 'kite' };
 console.log(`  ${''.padEnd(15)}${BRAIN_STYLES.map((s) => short[s].padStart(6)).join('')}`);
 for (const a of BRAIN_STYLES) {
   console.log(`  ${a.padEnd(15)}${BRAIN_STYLES.map((b) => (a === b ? '     ·' : `${rate(a, b).toFixed(0).padStart(5)}%`)).join('')}`);
@@ -177,7 +177,7 @@ const overallStyle = BRAIN_STYLES.map((a) => {
   return { a, p: (100 * w) / n };
 }).sort((x, y) => y.p - x.p);
 for (const { a, p } of overallStyle) console.log(`    ${p.toFixed(0).padStart(3)}%  ${a}`);
-console.log('\n  Focus brains (one attack only; meter-focus plays the Acumen meter, charge-focus plays two-slot charges), against the general styles and each other:');
+console.log('\n  Focus brains (one attack only; meter-focus plays the Acumen meter, charge-focus two-slot charges, kite-focus position), against the general styles and each other:');
 for (const f of BRAIN_STYLES.filter((x) => x.endsWith('-focus'))) {
   const vs = (group: readonly BrainStyle[]) => {
     let w = 0;

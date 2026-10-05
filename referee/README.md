@@ -68,7 +68,7 @@ B  Bite         ------xxxxxxxxxxxxxxxxxxxxxxxx
 
 ## Movement
 
-Bands are the range game; paces are hit geometry [Proposed]. Approach, Retreat, Leap and Dive carry one band (3 paces) for every dragon; a script may land `short` or `long` (`retreat:long`), by up to Evasion ÷ 6 paces. Strafe carries Evasion × ⅓ pace. A move's wind-up is followed by an evasive active window of 2 × Evasion ticks, then recovery; travel takes 72 ÷ Evasion ticks and can run on into recovery for slow dragons, where a hit counts as a punish. Staggered halves Evasion for the next move. The brain tournament reports how far each morph travels and at what range fights happen.
+Bands are the range game; paces are hit geometry [Proposed]. Approach, Retreat, Leap and Dive carry one band (3 paces) for every dragon; a script may land `short` or `long` (`retreat:long`), by up to Evasion ÷ 6 paces. Strafe carries Evasion × ⅓ pace. A move's wind-up is followed by an evasive active window of 2 × Evasion ticks, then recovery; travel takes 72 ÷ Evasion ticks and can run on into recovery for slow dragons, where a hit counts as a punish. Staggered halves Evasion for the next move. Between slots, separation snaps to the nearest ½ pace, so where a dragon lands in a band matters only for that action. The brain tournament reports how far each morph travels and at what range fights happen.
 
 ## Altitude
 
@@ -77,7 +77,7 @@ Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Appr
 ## Aspects
 
 Each morph bends one rule (design doc §2).
-- **True Dragon, Stalwart** [Proposed]: it breathes first. Its Breath winds up 3 ticks sooner (and recovers 3 later), its own zones never harm it, and each charging slot widens its released Breath by ½ pace. Its 45 Wounds are base (the old +9 Aspect is folded in).
+- **True Dragon, Stalwart** [Proposed]: master of the charged Breath. Its own zones never harm it, and each charging slot widens its released Breath by ½ pace. Its 45 Wounds are base (the old +9 Aspect is folded in).
 - **Wyvern, Talons:** it bends the one-band move rule. A Claw from the air against a grounded opponent anywhere within Far is a stoop: the Wyvern flies to the ground during the wind-up, lands at Melee, and swipes both ways. Against an airborne opponent it simply claws. Its price is positional: it must have been aloft since the exchange began, and it lands in Bite range. From the ground its Claw reaches only 2 paces (forelimbs are wings).
 - **Wyrm, Serpentine:** its Strafe tests Evasion with Dodge's +3. It is grounded: its Leap is a hop, and it can't Dive.
 
@@ -153,7 +153,7 @@ Four [Proposed] changes sit behind a switch, so a run can add them one at a time
 - **lunge:** a Bite right after an Approach that moved carries the dragon up to 1 pace along its line during the wind-up. Pure geometry: Evasion still applies, and a retreat that outruns it escapes. Only the first Bite after the Approach lunges.
 - **pounce:** a Claw right after a Strafe that moved advances up to one band along its line during the active window, sweeping its arc as it goes, and pierces 3 Hardness. It stops 1½ paces short of where the target stood. An airborne Wyvern that strafes into its stoop gets the pierce on the stoop.
 
-Brains are updated with every rule change, so none plays by old patch notes. Their value counts what's pending when a slot or exchange ends (an Intimidate bonus, a demoralize, a setup), and their reads key on whether the opponent is aloft and whether its meter is full. A meter-focus brain plays the Acumen meter as a diagnostic. They plan the setups as two-slot ideas (Approach then Bite, Strafe then Claw, a two-slot charge), weighed by their style's taste for both halves, and every style reads leverage: a target pinned within a band of the wall or an obstacle, its own exposure, and charges broken. The brain tournament prints how often a Bite follows an Approach and a Claw follows a Strafe. Tests flip the switches at runtime in `test/variants.test.ts`.
+Brains are updated with every rule change, so none plays by old patch notes. Their value counts what's pending when a slot or exchange ends (an Intimidate bonus, a demoralize, a setup), and their reads key on whether the opponent is aloft and whether its meter is full. Every style has an ideal band, from its taste for each attack and its own dragon's attacks (Claw at Melee, Bite at Close, Breath at Far), and values forcing misses by style. Diagnostic brains: meter-focus plays the Acumen meter, charge-focus two-slot charges, kite-focus position. They plan the setups as two-slot ideas (Approach then Bite, Strafe then Claw, a two-slot charge), weighed by their style's taste for both halves, and every style reads leverage: a target pinned within a band of the wall or an obstacle, its own exposure, and charges broken. The brain tournament prints how often a Bite follows an Approach and a Claw follows a Strafe. Tests flip the switches at runtime in `test/variants.test.ts`.
 
 ## Where the numbers live
 

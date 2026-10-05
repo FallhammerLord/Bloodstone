@@ -129,7 +129,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Aspect** is the player-facing name for that bend ("bend" stays as design shorthand).
 - Morphs offer interesting choices and never overshadow base dragons. A True Dragon stands alongside an Ouroboros proudly. Unlock depth measures cost in lifetimes, never power.
 - No RPS at the egg or morph level.
-- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 45. A True Dragon breathes first: its Breath winds up 3 ticks sooner (and recovers 3 later), its own zones never harm it, and each charging slot widens its released Breath by ½ pace.
+- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 45. Its own zones never harm it, and each charging slot widens its released Breath by ½ pace: the master of the charged Breath. (A Breath that wound up 3 ticks sooner was tried and overshot.)
 - **[Proposed]** Readability balances specialists: an Aspect telegraphs through the silhouette.
 - **[Proposed]** Audit rule: an Aspect may change its holder's own actions or respond to generic attack types, never another morph's features.
 - Balance watches pick rate against win rate across every choice. No Aspect should be an obvious best pick.
@@ -237,7 +237,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - An action reaches at least its minimum distance within its band; modifiers extend reach to the band's outer edge, never beyond.
 - **Three degrees of freedom:** advance or retreat along the line between dragons, strafe around the opponent, leap or fly. Altitude is ordinary movement.
 - Obstacles restrict movement, and so does the opponent's body. Obstructions are physical: **[Proposed]** an attack shape stops where it meets an obstacle and damages it instead.
-- **[Proposed]** Approach, Retreat, Leap and Dive carry exactly one band (3 paces), adjusted short or long by Evasion; Strafe carries Evasion × ⅓ pace. Bands are the range game; paces are hit geometry, which settles near misses (a lunge's extra pace can still reach into the next band).
+- **[Proposed]** Approach, Retreat, Leap and Dive carry exactly one band (3 paces), adjusted short or long by Evasion; Strafe carries Evasion × ⅓ pace. Bands are the range game; paces are hit geometry, which settles near misses (a lunge's extra pace can still reach into the next band). Where a dragon lands in a band matters only for that action: between slots, separation snaps to the nearest ½ pace.
 
 **Threat map**
 | Band | Bite | Claw | Breath | Stomp |

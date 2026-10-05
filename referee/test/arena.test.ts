@@ -61,13 +61,11 @@ test('Serpentine: a strafing Wyrm evades like a dodge; a retreating one does not
   assert.equal(hits(ev).length, 1);
 });
 
-test('the True Dragon\'s Aspect, Stalwart: 45 base Wounds, and its Breath winds up 3 ticks sooner', () => {
+test('the True Dragon\'s Aspect, Stalwart: 45 base Wounds, and its Breath keeps the usual timing', () => {
   const td = newBout(TD_WATER, TD_WATER, 5);
   assert.equal(td.fighters.A.sheet.aspect, 'stalwart');
   assert.equal(td.fighters.A.sheet.wounds, 45);
-  assert.equal(hits(run(td, ['breath'], ['hold']))[0].tick, 12 - 3);
-  const wyrm = newBout({ name: 'H', morph: 'wyrm', stone: 'water' }, TD_WATER, 5);
-  assert.equal(hits(run(wyrm, ['breath'], ['hold']))[0].tick, 12);
+  assert.equal(hits(run(td, ['breath'], ['hold']))[0].tick, 12);
 });
 
 test('Stalwart: a True Dragon\'s own zones never harm it', () => {
@@ -82,10 +80,10 @@ test('Stalwart: each charging slot widens a True Dragon\'s released Breath by ½
   // Fire's blast has a ½-pace radius. A slow target retreating out of it slips a plain blast; a charged one is widened.
   Object.assign(R.VARIANT, { breathCharge: true });
   const plain = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['hold', 'breath'], ['hold', 'retreat']);
-  const charged = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['charge:breath', 'breath'], ['hold', 'retreat']);
+  const charged = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['charge:breath', 'charge:breath', 'breath'], ['hold', 'hold', 'retreat']);
   Object.assign(R.VARIANT, { breathCharge: false });
   assert.equal(hits(plain).filter((h) => h.attacker === 'A').length, 0, 'the plain blast misses the retreat');
-  assert.equal(hits(charged).filter((h) => h.attacker === 'A').length, 1, 'the charged, widened blast catches it');
+  assert.equal(hits(charged).filter((h) => h.attacker === 'A').length, 1, 'two charging slots widen it a pace: it catches the retreat');
 });
 
 // ---- Breath effects (§3) ----
@@ -109,11 +107,11 @@ test('Air\'s vortex pulls the target a band toward the breather', () => {
 test('the pull stops at Close: the vortex at the breather\'s heart throws Melee back out', () => {
   const close = newBout(AIR_WYRM, TD_WATER, 4.5);
   run(close, ['breath'], ['hold']);
-  assert.equal(Math.round(sepOf(close)), R.MELEE_EDGE + R.NOTCH, 'pulled only to the edge of Close');
+  assert.ok(sepOf(close) > R.MELEE_EDGE && sepOf(close) <= R.MELEE_EDGE + R.SNAP, 'pulled only to the edge of Close');
   const melee = newBout(AIR_WYRM, TD_WATER, 2);
   const ev = run(melee, ['breath'], ['hold']);
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The vortex at its heart throws it out')));
-  assert.equal(Math.round(sepOf(melee)), R.MELEE_EDGE + R.NOTCH);
+  assert.ok(sepOf(melee) > R.MELEE_EDGE && sepOf(melee) <= R.MELEE_EDGE + R.SNAP);
 });
 
 test('the vortex lowers a flier a band but never grounds it', () => {
@@ -360,4 +358,11 @@ test('Stomp deals 3 + Hardness ÷ 3, and its quake shatters boulders inside its 
   assert.equal(hits(ev)[0].damage, 3 + 2, 'a Wyrm\'s Hardness 6 adds 2');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The quake shatters')));
   assert.equal(bout.arena.obstacles.filter((o) => o.kind === 'boulder').length, 0);
+});
+
+test('between slots, separation snaps to the nearest ½ pace', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 6.2);
+  run(bout, ['hold'], ['hold']);
+  assert.equal(Math.round(sepOf(bout)) % R.SNAP, 0);
+  assert.equal(Math.round(sepOf(bout)), 6 * R.PACE);
 });
