@@ -1,6 +1,40 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 10: Air's vortex
+
+Changes from Round 9 [Proposed]:
+- **Air's Breath is a ranged vortex**, centered where it's aimed, 2 paces across (was a wide cone).
+- **It pulls the target a band toward the breather**, lowering a flier without grounding it. A second vortex in the breather's own space throws anything at Melee out to Close, so the pull ends at Close.
+- **Air's +2 Breath is gone.**
+- **Any forced movement into the wall or an obstacle slams for 3** (was Water-only). A push and a pull in the same moment cancel.
+- **Brains read leverage:** every style values a pinned target (wall or obstacle within a band behind it), avoids being pinned, and credits breaking a charge.
+
+Master, 1,752 bouts.
+
+| | Round 9 | Round 10 |
+|---|---|---|
+| Stones (Air / Fire / Earth / Water) | 66 / 48 / 46 / 40 | 67 / 49 / 45 / 39 |
+| Air pairings (TD / Wyrm / Wyvern) | 65 / 71 / 61 | 73 / 68 / 59 |
+| Air Breath: lands, damage per hit | 79% ×5.9 | 75% ×3.8 |
+| Damage: Breath / Bite / Claw | 38 / 38 / 23% | 34 / 40 / 25% |
+| Morphs (TD / Wyrm / Wyvern) | 50 / 54 / 47 | 53 / 50 / 47 |
+| claw-focus / bite-focus / breath-focus | 57 / 40 / 39% | 63 / 37 / 34% |
+| Timeouts | 16% | 18% |
+| Crunchling vs plain | 72% | 71% |
+
+**What it shows:**
+- **Air's lead didn't move (67%).** Its Breath now hits for the least damage of any stone (3.8 a hit) and still lands 75%: a 1-pace vortex aimed at the target's position is hard to slip, since most dragons move about a pace by the time it's active.
+- **The pull feeds Air's Claw.** Air is the only stone whose Claw works against Hardness: 9 against 3–6 (12 on a Wyvern). Every other stone's Claw is 6 or 3 and does 0–3 a hit. Air led in every era (60% in the cone baseline, 64–69% since), and its Claw is the common thread. Dragging targets to Close only adds to it.
+- **Wyrm + Air fell (71 → 68%)**, True Dragon + Air rose (65 → 73%): the TD has Claw 9 with 45 Wounds.
+- **Water stays last (39%)** and Wyrm + Water is still the bottom pairing.
+- **Leverage didn't swing results.** The brains now value pins, but the arena offers few, and slams stay rare.
+
+**Levers:**
+1. **Claw against Hardness** is the root: either raise every Claw by 3 (the original intent), so Air's peak stops being the only Claw that works, or give Claw a little pierce of its own.
+2. **Vortex radius:** 1 pace lands 75%; Fire's ½ pace lands 47%. ¾ pace would put the pull's reliability in between.
+3. The Wyrm Wounds swing (from the analysis) for Wyrm + Water at the bottom.
+
 ## Round 9: Water's jet
 
 Changes from Round 8 [Proposed]: Water's jet pushes a whole band (3 paces, was 1); a push that meets the wall or an obstacle slams for 3; the jet shoves a boulder a band instead of breaking it (a Water Breath of 9 shattered every boulder, so shoving needed that). Any landed hit already broke a charge, so no change was needed there. Master, 1,752 bouts.
