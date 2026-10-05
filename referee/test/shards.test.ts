@@ -51,7 +51,7 @@ test('overlap: one covered pip strips the rider (and a Venerable\'s related poin
   const notes = seat(a, findShard('Deep Keel'), [1]);
   assert.ok(notes[0].includes('rider'));
   const { sheet, loadout } = compile(hatch('true-dragon', 'water'), a);
-  assert.equal(sheet.claw, 6 + 3 + 3, 'Sundering keeps its value; Razor Talons adds 3');
+  assert.equal(sheet.claw, 3 + 3 + 3, 'Sundering keeps its value; Razor Talons adds 3');
   assert.equal(sheet.affinity, 6, 'the related point is gone');
   assert.equal(loadout.riders.length, 0);
   seat(a, findShard('Heartgrit'), [2]);
@@ -82,7 +82,7 @@ test('Ironheart: +3 Hardness at half Wounds or below', () => {
 test('Reaver Hooks: +3 Claw Sharpness on a chain\'s final link', () => {
   const bout = newBout({ ...TD_WATER, shards: [{ shard: 'Reaver Hooks', pips: [0, 1] }] }, TD_WATER, 2);
   const ev = runExchange(bout, { A: ['claw:left', 'claw:left', 'claw:left'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 12], 'Claw 9 (Water 6 + Reaver 3): 6, 6, then 9 + 3 rider + 3 chain − 3');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [3, 3, 9], 'Claw 6: 3, 3, then 6 + 3 rider + 3 chain − 3');
 });
 
 test('Cauldron Gullet: +3 Breath Potency against targets at Far', () => {

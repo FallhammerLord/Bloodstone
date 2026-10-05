@@ -56,10 +56,10 @@ test('Scything Forelimbs: the claw arc widens', () => {
 });
 
 test('Ratchet Claws: each landed Claw link adds +1 to the next; the final link\'s bonus pays for it', () => {
-  // True Dragon + Air claws 12 against Hardness 3: 9 a hit. Links: 9, 9 + 1, 9 + 2 + (3 − 3).
+  // True Dragon + Air claws 9 against Hardness 3: 6 a hit. Links: 6, 6 + 1, 6 + 2 + (3 − 3).
   const air: FighterSetup = { name: 'Ash', morph: 'true-dragon', stone: 'air' };
   const ev = run(newBout(withTech(air, 'Ratchet Claws', 'juvenile'), TD_WATER, 2), ['claw:left', 'claw:left', 'claw:left'], ['hold', 'hold', 'hold']);
-  assert.deepEqual(hits(ev).map((h) => h.damage), [9, 10, 11]);
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 7, 8]);
 });
 
 test('Ratchet Claws Elder: the escalating chain holds through a hitless exchange', () => {
@@ -69,7 +69,7 @@ test('Ratchet Claws Elder: the escalating chain holds through a hitless exchange
   const quiet = run(bout, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
   assert.ok(notes(quiet).some((n) => n.startsWith('Ratchet Claws')));
   const ev = run(bout, ['claw:left', 'hold', 'hold'], ['hold', 'hold', 'hold']);
-  assert.equal(hits(ev)[0].damage, 9 + 2 + (3 - 1), 'link 3: +2 escalation, and an Adult-or-better chain bonus of +2');
+  assert.equal(hits(ev)[0].damage, 6 + 2 + (3 - 1), 'link 3: +2 escalation, and an Adult-or-better chain bonus of +2');
 });
 
 test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pierces Affinity from Juvenile', () => {

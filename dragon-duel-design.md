@@ -81,17 +81,16 @@ A hidden baseline; each morph and each stone takes one +3 peak and one −3 vall
 
 | Stone | Claw | Bite | Breath | Affinity (stone) |
 |---|---|---|---|---|
-| Baseline | 9 | 9 | 9 | 3 (−6) |
-| Water | 6 | 9 | 9 | 6 (−3) |
-| Earth | 9 | 12 | 9 | 0 (−9) |
-| Fire | 9 | 6 | 12 | 3 (−9) |
-| Air | 12 | 9 | 6 | 3 (−3) |
+| Baseline | 6 | 9 | 9 | 3 (−6) |
+| Water | 3 | 9 | 9 | 6 (−3) |
+| Earth | 6 | 12 | 9 | 0 (−9) |
+| Fire | 6 | 6 | 12 | 3 (−9) |
+| Air | 9 | 9 | 6 | 3 (−3) |
 
 - **Water endures, Earth crushes, Fire scorches, Air rakes.**
 - The element that beats you peaks where you're weakest, so matchup stacks reach two layers at most.
 - Intermediates sum their parents' tilts: Salt +Bite −Claw; Magma +Breath −Affinity; Lightning +Claw −Bite; Storm +Affinity −Breath.
 - Each dragon gets the same allotment, varying only slightly with lineage.
-- **[Proposed]** Every Claw rose 3 in testing: against Hardness 3–6, Claws of 3–6 did 0–3 a hit, and only Air's Claw worked.
 
 ### Elemental Preference
 Each morph prefers one element and dislikes the element that beats it.
@@ -114,10 +113,10 @@ Each morph prefers one element and dislikes the element that beats it.
 |---|---|---|
 | True Dragon + Fire | Breath 12 → 15, Wounds 36 → 30: a breath cannon | Affinity 3 → 6 |
 | True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill | |
-| Wyvern + Air | Claw 12 → 15, Wounds 24 → 18 | |
+| Wyvern + Air | Claw 9 → 12, Wounds 24 → 18 | |
 | Wyvern + Fire | Breath 12 → 9, Wounds 24 → 30: the toughest Wyvern | Affinity 3 → 0 |
 | Wyrm + Water | Affinity 6 → 9, Wounds 30 → 24: a sea serpent the elements slide off | |
-| Wyrm + Air | Claw 12 → 9, Wounds 30 → 36 | |
+| Wyrm + Air | Claw 9 → 6, Wounds 30 → 36 | |
 
 **[Open]** Derivation still amplifies swings that touch Breath Potency: True Dragon + Fire gains Affinity on top of its Breath. Swings no longer touch Evasion.
 
@@ -192,7 +191,7 @@ Each morph prefers one element and dislikes the element that beats it.
 | Water | Line | High-pressure jet; pushes the target back a band, slamming it into walls and obstacles (3); shoves boulders **[Proposed]** |
 | Earth | Narrow cone | Acidic slurry; eats obstacles and leaves a corrosive pool |
 | Fire | Ranged blast | Flame; leaves a burning zone |
-| Air | Ranged vortex **[Proposed]** | Vortex at the target, 2 paces across; pulls the target a band toward the breather (lowering, never grounding, a flier), while a vortex in the breather's own space throws Melee out to Close; disperses clouds |
+| Air | Ranged vortex **[Proposed]** | Vortex at the target, 1 pace across; pulls the target a band toward the breather (lowering, never grounding, a flier), while a vortex in the breather's own space throws Melee out to Close; disperses clouds |
 | Salt | Line blooming into a cloud **[Proposed]** | Caustic gas; Blinds dragons inside |
 | Magma | Narrow cone that pools **[Proposed]** | Molten spray; burns, then cools into a low ridge |
 | Lightning | Forking blast **[Proposed]** | Instant arc; jumps through cover |

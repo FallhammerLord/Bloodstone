@@ -20,7 +20,7 @@ test('a charged Bite releases next slot for +3, whatever that slot scripted', ()
 
 test('the charging slot guards like Scales, and a landed hit breaks the charge', () => {
   const { ev } = run(TD_WATER, { name: 'A', morph: 'true-dragon', stone: 'air' }, 2, ['charge:bite', 'hold'], ['claw:left', 'hold']);
-  assert.equal(hits(ev)[0].damage, 12 - (3 + 3), 'Claw 12 against Hardness 3 + 3 guarding');
+  assert.equal(hits(ev)[0].damage, 9 - (3 + 3), 'Claw 9 against Hardness 3 + 3 guarding');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
   assert.equal(hits(ev).length, 1, 'no release');
 });
@@ -38,7 +38,7 @@ test('a charged Breath starts its cooldown on release', () => {
 
 test('a crunch lands two claws in one slot, with no modifiers', () => {
   const { ev } = run(CRUNCHLING, TD_WATER, 2, ['crunch:claw'], ['hold']);
-  assert.deepEqual(hits(ev).map((h) => h.damage), [9, 9]);
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6]);
   assert.ok(hits(ev).every((h) => h.parts.includes('crunched: no modifiers')));
 });
 
@@ -51,7 +51,7 @@ test('crunching needs Raking Talons or Gnashing Teeth', () => {
 test('a Wyrmling Raking Talons crunches only after a landed Claw the slot before', () => {
   const young: FighterSetup = { ...CRUNCHLING, shards: [{ shard: 'Raking Talons', grade: 'wyrmling', pips: [0] }] };
   const { ev } = run(young, TD_WATER, 2, ['crunch:claw', 'claw:left', 'crunch:claw'], ['hold', 'hold', 'hold']);
-  assert.deepEqual(hits(ev).map((h) => h.damage), [9, 9, 9, 9], 'first crunch attacks once; the third slot crunches');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 6, 6], 'first crunch attacks once; the third slot crunches');
 });
 
 test('crunched slots don\'t build chains', () => {
