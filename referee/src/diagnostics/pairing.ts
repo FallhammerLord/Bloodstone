@@ -57,6 +57,8 @@ function run(o: Opts, part: number, parts: number): Record<string, Tally> {
           for (const tag of e.tags) bump(t.takenTags, tag);
         }
         if (e.kind === 'zoneEffect' && e.side === me) bump(t.taken, `zone: ${e.zone}`, e.damage);
+        // Zone damage the opponent takes (in a mirror match, some may be its own fire).
+        if (e.kind === 'zoneEffect' && e.side === them && e.damage) bump(t.dealt, `zone: ${e.zone}`, e.damage);
         if (e.kind === 'note' && e.side === me && e.tag === 'slam') bump(t.taken, 'slam', bout.rules.SLAM_DAMAGE);
         if (e.kind === 'slotEnd') {
           t.slots++;
