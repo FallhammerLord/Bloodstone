@@ -60,8 +60,14 @@ export interface Marks {
   advanced: boolean;
   /** a Strafe that moved last slot: the next Claw pounces [Proposed] */
   strafed: boolean;
+  /** aloft when this exchange began: only then can a Wyvern stoop [Proposed] */
+  aloftAtStart: boolean;
+  /** an opponent's Intimidate reached: the next Bite or Claw loses 3 [Proposed] */
+  demoralized: boolean;
+  /** the exchange this dragon last crunched in: one crunch per exchange [Proposed] */
+  crunchedIn: number;
 }
-const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false });
+const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1 });
 
 export interface Chain {
   action: ActionName | null;
@@ -148,6 +154,8 @@ export interface SlotRecord {
   landed: Record<Side, boolean>;
   /** whether each side's Breath was off cooldown when the slot began */
   breathReady: Record<Side, boolean>;
+  /** whether each side's Acumen meter was full when the slot began */
+  meterFull?: Record<Side, boolean>;
 }
 
 export interface FighterSetup {
@@ -242,6 +250,8 @@ interface Plan {
   converted: 'dodge' | 'roar' | null;
   link: number;
   intimidateBonus: boolean;
+  /** this Bite or Claw was demoralized by an Intimidate: −3 [Proposed] */
+  demoralized: boolean;
   /** a Wyvern stoop: flies from the air to land at Melee during the wind-up */
   stoop: { from: Vec; to: Vec; target: Vec } | null;
   /** a lunging Bite (during the wind-up) or a pouncing Claw (during the active window) [Proposed] */
@@ -392,6 +402,10 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   }
   // Crunching comes only from shards [Doc]: Raking Talons for Claw, Gnashing Teeth for Bite.
   const crunchTech = spec.name === 'claw' ? tech(f, 'raking-talons') : spec.name === 'bite' ? tech(f, 'gnashing-teeth') : -1;
+  if (spec.crunch && crunchTech >= 0 && f.marks.crunchedIn === Math.floor(g / R.SLOTS_PER_EXCHANGE)) {
+    note(`One crunch per exchange: the ${ACTIONS[spec.name].label} attacks once.`);
+    spec = { ...spec, crunch: undefined };
+  }
   if (spec.crunch && (crunchTech < 0 || (crunchTech === W && !prevLanded))) {
     note(crunchTech < 0
       ? `Crunching a ${ACTIONS[spec.name].label} needs ${spec.name === 'claw' ? 'Raking Talons' : 'Gnashing Teeth'}: attacks once.`
@@ -463,6 +477,7 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
 
   let link = 0;
   let intimidateBonus = false;
+  let demoralized = false;
   let diveBonus = false;
   const charging = spec.charge === true;
   if (charging && !holding) f.marks.charge = { action: spec.name as 'bite' | 'breath', sweep: spec.sweep, slots: 1 };
@@ -476,9 +491,14 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   if (def.category === 'attack' && !charging && !spec.crunch) {
     intimidateBonus = f.intimidateBonus;
     f.intimidateBonus = false;
+    if (spec.name === 'bite' || spec.name === 'claw') {
+      demoralized = f.marks.demoralized;
+      f.marks.demoralized = false;
+    }
     diveBonus = f.marks.diveBonus;
     f.marks.diveBonus = false;
   }
+  if (spec.crunch) f.marks.crunchedIn = Math.floor(g / R.SLOTS_PER_EXCHANGE);
   const halves: [number, number, number][] | null = spec.crunch
     ? [halfTiming(def.profile, 0), halfTiming(def.profile, crunchTech >= A ? 3 : 6)]
     : null;
@@ -487,7 +507,7 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   return {
     spec, windup: w0, active: a0, recovery: r0, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
     pounces: pounces && spec.name === 'claw' && !spec.crunch,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
     charging, halves, landedHalves: 0,
@@ -525,6 +545,7 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
   if (bout.over) return ev;
   bout.exchange++;
   ev.push({ kind: 'exchangeStart', exchange: bout.exchange });
+  for (const s of SIDES) bout.fighters[s].marks.aloftAtStart = bout.fighters[s].pos.z > 0;
   for (const s of SIDES) {
     const f = bout.fighters[s];
     f.chain.hitThisExchange = false;
@@ -566,7 +587,19 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
     }
   }
   if (!bout.over) for (const s of SIDES) chainAtExchangeEnd(bout.fighters[s], ev);
+  if (!bout.over) for (const s of SIDES) gravity(bout, s, ev);
   return ev;
+}
+
+/** Gravity [Proposed]: a flier that didn't Leap this exchange drops a band at its end, landing on anything below. */
+function gravity(bout: Bout, s: Side, ev: Event[]) {
+  const f = bout.fighters[s];
+  if (f.pos.z === 0 || bout.history[s].slice(-R.SLOTS_PER_EXCHANGE).includes('leap')) return;
+  let z = Math.max(0, f.pos.z - R.GRAVITY_DROP);
+  const below = obstacleAt(bout.arena, { ...f.pos, z });
+  if (below) z = Math.max(z, below.height);
+  f.pos = { ...f.pos, z };
+  ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: z === 0 ? 'No Leap this exchange: gravity brings it down to land.' : `No Leap this exchange: gravity drops it to ${(z / R.PACE).toFixed(1)} paces.` });
 }
 
 /**
@@ -622,6 +655,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
   const startZ = { A: F.A.pos.z, B: F.B.pos.z };
   const startWounds = { A: F.A.wounds, B: F.B.wounds };
   const breathReady = { A: (F.A.readyAt.breath ?? 0) <= g, B: (F.B.readyAt.breath ?? 0) <= g };
+  const meterFull = { A: F.A.meter >= R.METER_MAX, B: F.B.meter >= R.METER_MAX };
   const prev = bout.record.at(-1);
   const prevLanded = (s: Side) => !!prev && prev.landed[s] && prev.actions[s] === specs[s].name;
   const plans: Record<Side, Plan> = {
@@ -671,7 +705,7 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
   }
   bout.record.push({
     exchange: bout.exchange, slot, separation: startSep, z: startZ, wounds: startWounds,
-    actions: { A: plans.A.spec.name, B: plans.B.spec.name }, landed: { A: plans.A.landed, B: plans.B.landed }, breathReady,
+    actions: { A: plans.A.spec.name, B: plans.B.spec.name }, landed: { A: plans.A.landed, B: plans.B.landed }, breathReady, meterFull,
   });
 
   const info = (p: Plan): PlanInfo => ({
@@ -753,6 +787,13 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     // A pouncing Claw sweeps its arc from wherever the pounce has carried it, tick by tick.
     if (p.pounces && !p.stoop && phase(p, t) === 'active') p.origin = { ...F[s].pos };
     // A stooping Wyvern strikes from wherever it actually landed, toward where the target stood.
+    // A Stomp's quake shatters the boulders inside its radius as it lands [Proposed]; pillars stand.
+    if (p.spec.name === 'stomp' && t === p.windup && phase(p, t) === 'active') {
+      const reach = R.STOMP_RADIUS[F[s].sheet.age];
+      const shattered = bout.arena.obstacles.filter((o) => o.kind === 'boulder' && flatLen(sub(o.pos, F[s].pos)) <= reach + o.radius);
+      for (const o of shattered) ev.push({ kind: 'note', tick: t, side: s, text: `The quake shatters ${describeObstacle(o)}.` });
+      if (shattered.length) bout.arena.obstacles = bout.arena.obstacles.filter((o) => !shattered.includes(o));
+    }
     if (p.stoop && t === p.windup && phase(p, t) === 'active') {
       p.origin = { ...F[s].pos };
       p.aim = sub(p.stoop.target, F[s].pos);
@@ -1050,10 +1091,13 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
       if (m < 0) parts.push(`${m} matchup`);
       break;
     }
-    case 'stomp':
-      v = R.STOMP_DAMAGE;
-      parts.push(`Stomp ${R.STOMP_DAMAGE} true damage`);
+    case 'stomp': {
+      // Stomp grows with Hardness [Proposed]: 3 + Hardness ÷ 3, true damage.
+      const heft = Math.floor(Math.max(0, eff(att, 'hardness', {}).value) / R.STOMP_HARDNESS_DIVISOR);
+      v = R.STOMP_DAMAGE + heft;
+      parts.push(`Stomp ${R.STOMP_DAMAGE} + ${heft} (Hardness ÷ ${R.STOMP_HARDNESS_DIVISOR}) true damage`);
       break;
+    }
   }
   // A full meter also adds a steroid: a third of the attacker's Affinity [Proposed].
   if (bypass) {
@@ -1067,6 +1111,10 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
   if (p.intimidateBonus) {
     v += R.INTIMIDATE_BONUS;
     parts.push(`+${R.INTIMIDATE_BONUS} Intimidate`);
+  }
+  if (p.demoralized) {
+    v -= R.DEMORALIZE;
+    parts.push(`−${R.DEMORALIZE} demoralized`);
   }
   if (p.link === 3 && !p.spec.revised && !crunched) {
     const sapped = att.marks.sapped === 'any' || (att.marks.sapped === 'claw' && p.spec.name === 'claw');
@@ -1380,6 +1428,11 @@ function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Ev
 function beginStoop(att: Fighter, def: Fighter, p: Plan, t: number, ev: Event[]) {
   if (p.spec.name !== 'claw' || att.sheet.aspect !== 'talons' || att.pos.z === 0 || def.pos.z !== 0) return;
   if (dist(att.pos, def.pos) > R.STOOP_RANGE) return;
+  // A stoop needs an exchange already spent aloft [Proposed]: no Leap and stoop in the same exchange.
+  if (!att.marks.aloftAtStart) {
+    ev.push({ kind: 'note', tick: t, side: att.side, text: 'Not aloft since the exchange began: too soon to stoop.' });
+    return;
+  }
   const target = { ...def.pos };
   const back = flat(sub(att.pos, target));
   const offset = flatLen(back) === 0 ? vec(R.STOOP_LANDING, 0) : scaleTo(back, R.STOOP_LANDING);
@@ -1550,6 +1603,9 @@ function intimidateLands(bout: Bout, s: Side, t: number, ev: Event[]) {
   const note = (text: string) => ev.push({ kind: 'note', tick: t, side: s, text });
   const sep = dist(f.pos, opp.pos);
   if (sep > R.FAR_EDGE) return note('Intimidate falls short: the opponent is beyond Far.');
+  // Whatever form it takes, an Intimidate that reaches demoralizes: the target's next Bite or Claw loses 3 [Proposed].
+  opp.marks.demoralized = true;
+  ev.push({ kind: 'note', tick: t, side: opp.side, text: `Demoralized: its next Bite or Claw loses ${R.DEMORALIZE}.` });
   const sap = tech(f, 'sapping-bellow');
   const eye = tech(f, 'baleful-eye');
   const goad = tech(f, 'goading-roar');

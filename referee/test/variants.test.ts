@@ -118,10 +118,10 @@ test('pounce is geometry only: a swift retreat still escapes it', () => {
 
 test('an airborne Wyvern that strafes into its stoop pierces', () => {
   Object.assign(R.VARIANT, OFF, { clawPounce: true });
+  // A stoop needs an exchange already aloft: Leap in one exchange, strafe into the stoop in the next.
   const bout = newBout(WYVERN, WYRM, 6);
-  simulateSlot(bout, { A: parseAction('leap'), B: parseAction('hold') });
-  simulateSlot(bout, { A: parseAction('strafe:cw'), B: parseAction('hold') });
-  const ev = simulateSlot(bout, { A: parseAction('claw:left'), B: parseAction('hold') });
+  runExchange(bout, { A: ['leap', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  const ev = runExchange(bout, { A: ['strafe:cw', 'claw:left', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Strafed into the stoop')));
   assert.ok(hits(ev)[0].parts.some((x) => x.includes('pierced')));
 });

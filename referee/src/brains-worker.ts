@@ -80,6 +80,11 @@ for (const job of workerData.jobs as Job[]) {
     ['pounce', (t) => t.startsWith('Pounces') || t.startsWith('Strafed into the stoop')],
     ['stoop', (t) => t.startsWith('Stoops')],
     ['blocked move → dodge', (t) => t.includes('converts to a dodge')],
+    ['gravity drop', (t) => t.startsWith('No Leap this exchange')],
+    ['stoop too soon', (t) => t.startsWith('Not aloft since the exchange began')],
+    ['demoralized', (t) => t.startsWith('Demoralized')],
+    ['crunch capped', (t) => t.startsWith('One crunch per exchange')],
+    ['quake shatters boulder', (t) => t.startsWith('The quake shatters')],
   ];
   const stoneTally = (s: Side, a: string) => ((byStone[bout.fighters[s].sheet.stone] ??= {})[a] ??= [0, 0, 0]);
   for (const e of ev) {
@@ -88,6 +93,7 @@ for (const job of workerData.jobs as Job[]) {
     if (e.kind === 'zoneEffect') bump(`zone: ${e.zone}`);
     if (e.kind === 'hit' && e.graze) bump('graze');
     if (e.kind === 'hit' && e.parts.some((p) => p.includes('Intimidate'))) bump('intimidate cashed');
+    if (e.kind === 'hit' && e.parts.some((p) => p.includes('demoralized'))) bump('demoralize felt');
     if (e.kind === 'note') for (const [k, test] of NOTES) if (test(e.text)) bump(k);
     if (e.kind === 'aim') {
       tally(e.action)[0]++;

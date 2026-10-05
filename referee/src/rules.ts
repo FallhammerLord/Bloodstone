@@ -65,6 +65,9 @@ export const ACUMEN_START = 10; // [Assumed] starting Acumen for every hatchling
 // Full, the next landed Bite, Claw or Breath deals true damage (no Hardness or Affinity) and drains it. A miss spends nothing.
 export const METER_BASE_FILL = 9; // [Proposed] raised from 3 so low-Affinity stones still fill
 export const METER_START_PER_AGE = 10;
+export const GRAVITY_DROP = BAND; // [Proposed] a flier that doesn't Leap during an exchange drops a band at its end
+export const DEMORALIZE = 3; // [Proposed] an Intimidate that reaches also takes 3 off the target's next Bite or Claw
+export const STOMP_HARDNESS_DIVISOR = 3; // [Proposed] Stomp deals 3 + Hardness ÷ 3, and shatters boulders inside its radius
 export const METER_STEROID_DIVISOR = 3; // a full meter's hit also adds Affinity ÷ 3 [Proposed]
 export const AGE_BRACKET = { wyrmling: 1, adult: 3, venerable: 5 } as const; // of five: wyrmling, juvenile, adult, elder, venerable
 export const BOULDERS_PER_ARENA = { dice: 4, plus: 2 }; // [Proposed] standard arenas throw 1d4+2 boulders: never an open floor

@@ -55,8 +55,14 @@ test('a Wyrmling Raking Talons crunches only after a landed Claw the slot before
 });
 
 test('crunched slots don\'t build chains', () => {
-  const { bout } = run(CRUNCHLING, TD_WATER, 2, ['crunch:claw', 'crunch:claw', 'crunch:claw'], ['hold', 'hold', 'hold']);
+  const { bout } = run(CRUNCHLING, TD_WATER, 2, ['crunch:claw', 'hold', 'hold'], ['hold', 'hold', 'hold']);
   assert.equal(bout.fighters.A.chain.links, 0);
+});
+
+test('one crunch per exchange: later crunches attack once', () => {
+  const { ev } = run(CRUNCHLING, TD_WATER, 2, ['crunch:claw', 'crunch:claw', 'crunch:claw'], ['hold', 'hold', 'hold']);
+  assert.equal(ev.filter((e) => e.kind === 'note' && e.text.startsWith('One crunch per exchange')).length, 2);
+  assert.equal(hits(ev).length, 2 + 1 + 1);
 });
 
 test('element breath modifiers: harmless extras add, harmful ones subtract', () => {

@@ -112,10 +112,10 @@ test('every landed hit deals at least 1', () => {
   assert.equal(hits[0].damage, 1);
 });
 
-test('Intimidate adds +3 to the next attack, and attacks punish it', () => {
+test('Intimidate adds +3 to the next attack, demoralizes the target, and attacks punish it', () => {
   const { hits } = fight(TD_WATER, TD_WATER, 4, ['intimidate', 'bite', 'intimidate'], ['hold', 'hold', 'bite']);
   assert.equal(hitsBy(hits, 'A')[0].damage, 12); // 9 + 3 Intimidate
-  assert.equal(hitsBy(hits, 'B')[0].damage, 12); // 9 + 3 punish
+  assert.equal(hitsBy(hits, 'B')[0].damage, 9); // 9 + 3 punish − 3 demoralized
 });
 
 test('Scales adds Hardness while guarding', () => {
@@ -128,10 +128,10 @@ test('a strafe during the wind-up slips a bite', () => {
   assert.equal(hits.length, 0);
 });
 
-test('stomp deals 3 true damage and Staggers: the next move goes half as far', () => {
+test('stomp deals 3 + Hardness ÷ 3 true damage and Staggers: the next move goes half as far', () => {
   // Wyrm + Air has Evasion 6: a retreat normally carries 2 paces; Staggered, 1.
   const { hits, bout } = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['stomp', 'hold'], ['hold', 'retreat']);
-  assert.equal(hits[0].damage, 3);
+  assert.equal(hits[0].damage, 3 + 1); // True Dragon Hardness 3
   assert.equal(bout.fighters.B.pos.x - bout.fighters.A.pos.x, Math.round(2.5 * 300));
 });
 

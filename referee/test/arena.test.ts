@@ -44,13 +44,13 @@ test('Talons: the stoop swipes both ways, catching a target that steps to either
 test('Talons: no stoop beyond Far, and none against an airborne opponent', () => {
   const far = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 10);
   far.fighters.A.pos = { ...far.fighters.A.pos, z: 3 * R.PACE };
-  run(far, ['claw:left'], ['hold']);
+  simulateSlot(far, { A: parseAction('claw:left'), B: parseAction('hold') });
   assert.equal(far.fighters.A.pos.z, 3 * R.PACE, 'stays aloft');
 
   const air = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, { name: 'H', morph: 'wyvern', stone: 'water' }, 6);
   air.fighters.A.pos = { ...air.fighters.A.pos, z: 3 * R.PACE };
   air.fighters.B.pos = { ...air.fighters.B.pos, z: 3 * R.PACE };
-  const ev = run(air, ['claw:left'], ['hold']);
+  const ev = simulateSlot(air, { A: parseAction('claw:left'), B: parseAction('hold') });
   assert.equal(hits(ev).length, 0, 'a plain claw at 6 paces misses');
   assert.equal(air.fighters.A.pos.z, 3 * R.PACE);
 });
@@ -98,7 +98,7 @@ test('the pull stops at Close: the vortex at the breather\'s heart throws Melee 
 test('the vortex lowers a flier a band but never grounds it', () => {
   const bout = newBout(AIR_WYRM, { name: 'W', morph: 'wyvern', stone: 'water' }, 8);
   bout.fighters.B.pos = { ...bout.fighters.B.pos, z: 2 * R.PACE };
-  run(bout, ['breath'], ['hold']);
+  simulateSlot(bout, { A: parseAction('breath'), B: parseAction('hold') });
   assert.ok(bout.fighters.B.pos.z > 0 && bout.fighters.B.pos.z < 2 * R.PACE);
 });
 
@@ -311,4 +311,31 @@ test('a true-damage Breath ignores Affinity, and its verb can\'t be held', () =>
 test('standard arenas throw 1d4+2 boulders', () => {
   const counts = new Set(Array.from({ length: 200 }, (_, i) => standardBoulders(i)));
   assert.deepEqual([...counts].sort(), [3, 4, 5, 6]);
+});
+
+// ---- Gravity, the delayed stoop, and the Stomp's quake [Proposed] ----
+
+test('gravity: a flier that doesn\'t Leap during an exchange drops a band at its end', () => {
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 8);
+  bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 6 * R.PACE };
+  run(bout, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.equal(bout.fighters.A.pos.z, 3 * R.PACE);
+  run(bout, ['leap', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.equal(bout.fighters.A.pos.z, 6 * R.PACE, 'a Leap holds it up for the exchange');
+});
+
+test('a Wyvern can\'t Leap and stoop in the same exchange', () => {
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 6);
+  const ev = run(bout, ['leap', 'claw:left', 'hold'], ['hold', 'hold', 'hold']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'Not aloft since the exchange began: too soon to stoop.'));
+  const next = run(bout, ['claw:left', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.ok(next.some((e) => e.kind === 'note' && e.text.startsWith('Stoops from')), 'aloft since the exchange began: it stoops');
+});
+
+test('Stomp deals 3 + Hardness ÷ 3, and its quake shatters boulders inside its radius', () => {
+  const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 1.5, 'B', { obstacles: [{ size: 'small', x: -1.5, y: -1.5 }] });
+  const ev = run(bout, ['stomp'], ['hold']);
+  assert.equal(hits(ev)[0].damage, 3 + 2, 'a Wyrm\'s Hardness 6 adds 2');
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The quake shatters')));
+  assert.equal(bout.arena.obstacles.filter((o) => o.kind === 'boulder').length, 0);
 });

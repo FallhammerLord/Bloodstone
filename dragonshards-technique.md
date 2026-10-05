@@ -56,7 +56,7 @@ A landed Bite Pins the target. **[Open]** Its price: the forced follow-up Bite w
 - **Venerable:** as Elder; a Bite next slot gains +3
 
 ### Gnashing Teeth · Crunch
-Bite can crunch with itself: two bites in one slot. Recovery after a crunched pair +6 ticks.
+Bite can crunch with itself: two bites in one slot. Recovery after a crunched pair +6 ticks. **[Proposed]** One crunch per exchange; a crunch never lunges, pounces or stoops.
 - **Wyrmling:** only after a landed Bite in the previous slot
 - **Juvenile:** in any slot
 - **Adult:** recovery +3 ticks
@@ -92,7 +92,7 @@ An escalating chain: each landed Claw link adds +1 to the next. The final link's
 - **Venerable:** as Elder; each landed link adds +2
 
 ### Raking Talons · Crunch
-Claw can crunch with itself: two claws in one slot. Recovery after a crunched pair +6 ticks.
+Claw can crunch with itself: two claws in one slot. Recovery after a crunched pair +6 ticks. **[Proposed]** One crunch per exchange; a crunch never lunges, pounces or stoops.
 - **Wyrmling:** only after a landed Claw in the previous slot
 - **Juvenile:** in any slot
 - **Adult:** recovery +3 ticks

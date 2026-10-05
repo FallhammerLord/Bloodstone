@@ -19,10 +19,10 @@ import * as R from './rules.ts';
 
 export type BrainStyle =
   | 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' | 'boxer-puncher' | 'aerialist' | 'reader'
-  | 'claw-focus' | 'bite-focus' | 'breath-focus';
+  | 'claw-focus' | 'bite-focus' | 'breath-focus' | 'meter-focus';
 export const BRAIN_STYLES: readonly BrainStyle[] = [
   'swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher', 'aerialist', 'reader',
-  'claw-focus', 'bite-focus', 'breath-focus',
+  'claw-focus', 'bite-focus', 'breath-focus', 'meter-focus',
 ];
 
 /**
@@ -77,6 +77,9 @@ const LEAN: Record<BrainStyle, Partial<Record<ActionName, number>> | ((band: Ban
   reader: (b) => (b === 'far' || b === 'veryFar' ? { intimidate: 3, breath: 2, approach: 2 } : { intimidate: 3, scales: 2, bite: 2, claw: 2 }),
   'claw-focus': (b) => (b === 'melee' ? { claw: 5, dodge: 1, scales: 1, strafe: 1 } : { approach: 4, strafe: 1, dodge: 1 }),
   'bite-focus': (b) => (b === 'close' ? { bite: 5, strafe: 1, scales: 1, intimidate: 1 } : b === 'melee' ? { retreat: 3, bite: 2, dodge: 1 } : { approach: 4, strafe: 1 }),
+  // Meter-focus [Proposed]: a diagnostic. Any attack is open; it guards, dodges and breathes to fill the Acumen
+  // meter, then lands its true-damage hit. If it beats the general styles, the meter loop is too strong.
+  'meter-focus': (b) => (b === 'melee' ? { scales: 3, dodge: 2, bite: 2, claw: 1 } : b === 'close' ? { breath: 3, scales: 2, bite: 2, dodge: 1 } : b === 'far' ? { breath: 4, scales: 2, approach: 1 } : { approach: 3, breath: 1 }),
   'breath-focus': (b) => (b === 'far' ? { breath: 5, strafe: 2, scales: 1 } : b === 'veryFar' ? { approach: 3, breath: 1 } : { retreat: 4, leap: 1, breath: 2, dodge: 1 }),
 };
 
@@ -98,7 +101,9 @@ export class Read {
       const weight = Math.pow(memory, Math.max(0, view.exchange - r.exchange));
       const band = bandOf(r.separation);
       const ready = r.breathReady?.[them] ?? false;
-      for (const key of [`${band}|${r.slot}|${ready}`, `${band}|${ready}`, band]) {
+      // Context: whether they were aloft and whether their meter was full shape what they do next.
+      const ctx = `ctx|${band}|${r.z[them] > 0}|${r.meterFull?.[them] ?? false}`;
+      for (const key of [`${band}|${r.slot}|${ready}`, `${band}|${ready}`, band, ctx]) {
         const m = this.counts.get(key) ?? new Map<ActionName, number>();
         m.set(r.actions[them], (m.get(r.actions[them]) ?? 0) + weight);
         this.counts.set(key, m);
@@ -107,21 +112,22 @@ export class Read {
   }
 
   /** A likely opponent action here, from what it could do and what it has done. */
-  guess(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[], rng: () => number): ActionSpec {
-    return pick(legal, this.weights(band, slot, breathReady, legal), rng);
+  guess(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[], rng: () => number, ctx = ''): ActionSpec {
+    return pick(legal, this.weights(band, slot, breathReady, legal, ctx), rng);
   }
 
   /** The single likeliest action here. */
-  likeliest(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[]): ActionSpec {
-    const w = this.weights(band, slot, breathReady, legal);
+  likeliest(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[], ctx = ''): ActionSpec {
+    const w = this.weights(band, slot, breathReady, legal, ctx);
     return legal[w.indexOf(Math.max(...w))];
   }
 
-  private weights(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[]): number[] {
+  private weights(band: Band, slot: number, breathReady: boolean, legal: ActionSpec[], ctx: string): number[] {
     const exact = this.counts.get(`${band}|${slot}|${breathReady}`);
     const ready = this.counts.get(`${band}|${breathReady}`);
     const general = this.counts.get(band);
-    return legal.map((a) => prior(band, a) + 3 * (exact?.get(a.name) ?? 0) + 2 * (ready?.get(a.name) ?? 0) + (general?.get(a.name) ?? 0));
+    const context = ctx ? this.counts.get(`ctx|${band}|${ctx}`) : undefined;
+    return legal.map((a) => prior(band, a) + 3 * (exact?.get(a.name) ?? 0) + 2 * (ready?.get(a.name) ?? 0) + (general?.get(a.name) ?? 0) + 2 * (context?.get(a.name) ?? 0));
   }
 }
 
@@ -261,7 +267,11 @@ export function value(style: BrainStyle, o: Outcome): number {
     + 0.04 * o.events.filter((e) => e.kind === 'note' && e.side === them && e.text === 'The hit breaks the charge.').length
     // Filling the Acumen meter brings a true-damage hit closer; the opponent's fills are worth denying. Spending a
     // full meter costs nothing here, so no style hoards it or waits on it before attacking.
-    + 0.0015 * Math.max(0, me1.meter - me0.meter) - 0.0008 * Math.max(0, op1.meter - op0.meter);
+    + 0.0015 * Math.max(0, me1.meter - me0.meter) - 0.0008 * Math.max(0, op1.meter - op0.meter)
+    // Carry-over: what's pending when the slot or exchange ends still counts, so delayed payoffs aren't undervalued.
+    + (me1.intimidateBonus ? 0.03 : 0) - (op1.intimidateBonus ? 0.03 : 0)
+    + (op1.marks.demoralized ? 0.03 : 0) - (me1.marks.demoralized ? 0.03 : 0)
+    + (me1.marks.advanced || me1.marks.strafed ? 0.02 : 0);
   return leverage + styleValue(style, o, { dealt, taken, band, sep, me1, op1, big, punishes, theirMisses, rim });
 }
 
@@ -305,6 +315,11 @@ function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me
       return dealt - taken + (me1.pos.z > 0 && op1.pos.z === 0 && sep <= R.STOOP_RANGE ? 0.06 : 0) + rim;
     case 'reader':
       return dealt - taken + (op1.marks.revisionLockedFor > o.after.exchange ? 0.05 : 0) + (me1.marks.eye !== null ? 0.03 : 0) + rim;
+    case 'meter-focus': {
+      const me0 = o.before.fighters[o.me];
+      const spent = o.events.filter((e) => e.kind === 'note' && e.side === o.me && e.text.startsWith('The Acumen meter empties')).length;
+      return dealt - taken + 0.004 * Math.max(0, me1.meter - me0.meter) + 0.06 * spent + rim;
+    }
     case 'claw-focus':
     case 'bite-focus':
     case 'breath-focus': {
@@ -339,7 +354,7 @@ function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter, sep: n
     const weights = legal.map((a) => {
       // A setup sequence is weighed by the style's taste for both halves, so each style keeps its flavor.
       const w = styled ? (a.setup ? ((lean[a.setup] ?? 0.4) + (lean[a.name] ?? 0.4)) / 2 : (lean[a.name] ?? 0.4)) : 1;
-      return a.charge ? w * (style === 'slugger' || style === 'out-boxer' || (R.VARIANT.breathMandatory && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
+      return a.charge ? w * (style === 'slugger' || style === 'out-boxer' || style === 'meter-focus' || (R.VARIANT.breathMandatory && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
     });
     s = place(out, s, pick(legal, weights, rng));
   }
@@ -387,8 +402,9 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
         }
         return g.slice(0, R.SLOTS_PER_EXCHANGE);
       };
-      const guesses: ActionSpec[][] = [guessScript((legal, slot, ready) => read.likeliest(bandOf(sep), slot, ready, legal))];
-      while (guesses.length < level.guesses) guesses.push(guessScript((legal, slot, ready) => read.guess(bandOf(sep), slot, ready, legal, rng)));
+      const ctx = `${view.opp.pos.z > 0}|${view.opp.meter >= R.METER_MAX}`;
+      const guesses: ActionSpec[][] = [guessScript((legal, slot, ready) => read.likeliest(bandOf(sep), slot, ready, legal, ctx))];
+      while (guesses.length < level.guesses) guesses.push(guessScript((legal, slot, ready) => read.guess(bandOf(sep), slot, ready, legal, rng, ctx)));
 
       // Counter-scripts: the best answer, slot by slot, to its likeliest guesses.
       for (let i = 0; i < Math.min(level.counters, guesses.length); i++) candidates.push(counterScript(style, base, me, them, guesses[i], mine, rng));

@@ -63,7 +63,7 @@
 
 **Derivation.** Tertiaries derive once at hatching, after the elemental swing: Accuracy from Evasion plus an egg modifier, Affinity from Breath Potency plus a stone modifier, Acumen from a starting value. **[Proposed]** Acumen's starting value is seeded from egg and stone rather than rolled. After hatching, each attribute grows independently, so no attribute buys another.
 
-**Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. Every defense has an attack that ignores it, which answers concentration. Single-attribute builds are avoided by design; Stomp scales by age only for this reason. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
+**Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. Every defense has an attack that ignores it, which answers concentration. Single-attribute builds are avoided by design. **[Proposed]** Stomp now adds Hardness ÷ 3, kept small so Hardness stacking stays a minor gain; its radius still scales by age only. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
 
 ### Starting Attributes [Proposed]
 A hidden baseline; each morph and each stone takes one +3 peak and one −3 valley. Wounds runs on a doubled scale so a baseline hit is about a sixth of a pool.
@@ -136,7 +136,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 ### Core Morphs
 - **True Dragon:** four limbs plus wings. The generalist.
-- **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude. **Talons:** the Wyvern bends the one-band move rule. A Claw scripted while aloft, against a grounded opponent anywhere within Far, is a stoop: it flies to the ground during the wind-up, lands at Melee, and swipes both left and right. Against an airborne opponent it simply claws. Its price is positional: it must get airborne first, and it lands in Bite range. **[Proposed]** From the ground its Claw reaches only 2 paces (forelimbs are wings).
+- **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude. **Talons:** the Wyvern bends the one-band move rule. A Claw scripted while aloft, against a grounded opponent anywhere within Far, is a stoop: it flies to the ground during the wind-up, lands at Melee, and swipes both left and right. Against an airborne opponent it simply claws. Its price is positional: it must get airborne first, and it lands in Bite range. **[Proposed]** It must also have been aloft since the exchange began: no Leap and stoop in the same exchange. **[Proposed]** From the ground its Claw reaches only 2 paces (forelimbs are wings).
 - **Wyrm:** serpentine and grounded. Owns lateral movement and close range. **[Proposed] Serpentine:** its Strafe tests Evasion with Dodge's bonus. Its Leap is a hop that lands within the slot; it can't Dive.
 
 ### Extended Morphs (Aspects **[Proposed]** unless noted)
@@ -221,15 +221,15 @@ Each morph prefers one element and dislikes the element that beats it.
 | Category | Actions | Notes |
 |---|---|---|
 | Attack | Bite, Claw, Breath, Stomp | Shapes below |
-| Move | Approach, Retreat, Strafe, Leap, Dive | Three degrees of freedom |
+| Move | Approach, Retreat, Strafe, Leap, Dive | Three degrees of freedom. **[Proposed] Gravity:** a flier that doesn't Leap during an exchange drops a band at its end. |
 | Guard | Dodge, Scales | Dodge avoids harm (Evasion); Scales presents the hide: +Hardness against Bite and Claw, +Affinity against Breath and its verbs. **[Proposed]** A Scales or Dodge slot held to the end also fills the Acumen meter, the guard's answer to Intimidate. **[Open]** Scales may be renamed. |
-| Intimidate | Intimidate | +3 to the next attack; open for that action |
+| Intimidate | Intimidate | +3 to the next attack; open for that action. **[Proposed]** One that reaches (within Far) also demoralizes: the target's next Bite or Claw loses 3. |
 
 **Attack shapes**
 - **Bite:** forward and narrow, Melee into Close. High damage, piercing.
 - **Claw:** an arc sweeping right-to-left or left-to-right, Melee into Close on either side. Short wind-up, long active window, short recovery: the natural strafe punish.
 - **Breath:** a shaped area set by element. Skips Evasion. Reaches no further than Far. Cooldown 2.
-- **Stomp:** a ground-only Melee quake. Fixed damage; Staggers. Cooldown 2. Grows narrow, short, far (1, 2, 3 paces) at wyrmling, adult, and venerable; modified by age only. Misses anything aloft. **[Proposed]** Hits burrowed dragons and forces them up; its long wind-up leaves it open to interruption.
+- **Stomp:** a ground-only Melee quake. **[Proposed]** 3 + Hardness ÷ 3 true damage, and it shatters boulders inside its radius; Staggers. Cooldown 2. Grows narrow, short, far (1, 2, 3 paces) at wyrmling, adult, and venerable; modified by age only. Misses anything aloft. **[Proposed]** Hits burrowed dragons and forces them up; its long wind-up leaves it open to interruption.
 
 ### Space
 - Combatants always face one another.
