@@ -1,6 +1,40 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 13: gravity, demoralize, Stomp, crunch cap
+
+One fully patched run (master, 1,992 bouts: the style matrix now includes a meter-focus brain). Changes since Round 12, rung 5 [all Proposed]:
+- **Gravity:** a flier that doesn't Leap during an exchange drops a band at its end.
+- **The stoop** needs an exchange already aloft: no Leap and stoop in the same exchange.
+- **Intimidate** that reaches also demoralizes: the target's next Bite or Claw loses 3.
+- **Stomp** deals 3 + Hardness ÷ 3 and shatters boulders inside its radius.
+- **Crunches** come once per exchange (Raking Talons and Gnashing Teeth) and never lunge, pounce or stoop.
+- **Brains:** carry-over value for pending Intimidates, demoralizes and setups; reads keyed on altitude and a full meter; a meter-focus diagnostic style.
+
+| | Round 12, rung 5 | Round 13 |
+|---|---|---|
+| Stones (Air / Earth / Water / Fire) | 63 / 46 / 46 / 44 | 60 / 53 / 47 / 41 |
+| Morphs (TD / Wyrm / Wyvern) | 49 / 53 / 48 | 48 / 50 / 52 |
+| Top / bottom pairing | Wyvern + Air 73 / Wyvern + Earth 35 | Wyvern + Air 65 / **True Dragon + Fire 32** |
+| Pairing spread | 35–73% | 32–65% |
+| Damage: Breath / Bite / Claw / Stomp | 40 / 36 / 24 / 0 | 42 / 34 / 22 / 2 |
+| Timeouts / exchanges per bout | 16% / 4.8 | 15% / 4.7 |
+| Intimidate: share of slots, lands, cashed per bout | 2%, 0.49, 0.22 | 6%, 1.27, 0.60 (demoralize felt 0.41) |
+| Stomp: share of slots, lands | 1%, 26% | 2%, 36% |
+| Stoops per bout | 0.22 | 0.14 (+0.07 tried too soon); gravity drops 0.34 |
+| Crunchling vs plain, crunching | 72%, 15% of slots | 63%, 9% of slots |
+| Style range (identical dragons) | 38–62% | 32–58% |
+| claw-focus / meter-focus vs general | 56% / — | 55% / 51% |
+
+**What it shows:**
+- **Wyvern + Air came down 8 points**, and the Wyvern morph as a whole rose to 52%: the other Wyverns gained (Wyvern + Earth 35 → 47, Wyvern + Fire 41 → 47, Wyvern + Water 44 → 50). Gravity and the delayed stoop cut altitude camping, not the Wyvern.
+- **Intimidate came alive:** three times the use, and the styles that lean on it rose (slugger 42 → 48, reader 43 → 53). The aerialist fell from first (62 → 55).
+- **The crunch cap worked:** the crunchling fell from 72% to 63%. Brains adapted rather than hitting the cap (0.01 capped crunches per bout).
+- **The meter is healthy:** meter-focus wins 51% against general styles, a viable plan, not a dominant one.
+- **Stomp is now an action** (2% of slots, landing 36%), and Earth rose to 53%, likely through Wyrm and True Dragon Stomps and more grounded targets.
+- **New problem: True Dragon + Fire fell to 32%** (from 45%), the new bottom pairing, and Fire is the weakest stone (41%). Its plan is Breath from range (Breath 18, Wounds 39): demoralize does nothing to Breath, but Intimidate's +3 and more frequent Stomps from heavier dragons may punish the low-Wounds breather. Needs a look.
+- **Still open:** claw-focus leads the styles (55% against general), bite-focus (30%) and breath-focus (33%) trail, and Air (60%) still leads the stones.
+
 ## Round 12: the Affinity ladder
 
 Five master runs (1,752 bouts each), one per commit, each adding a layer:
