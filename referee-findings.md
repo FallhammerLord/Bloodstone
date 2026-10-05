@@ -1,6 +1,44 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 12: the Affinity ladder
+
+Five master runs (1,752 bouts each), one per commit, each adding a layer:
+1. **Baseline:** Round 11 with the +3 Claw reverted (½-pace vortex and Wounds swing kept).
+2. **Arena and contest:** 1d4+2 boulders; Affinity contests Breath verbs; a first Scales meter step; every action tracked.
+3. **Meter:** Affinity fuels the Acumen meter; a full meter makes the next landed Bite, Claw or Breath true damage; grazes retired (base fill 3).
+4. **Meter tuned:** base fill 9; a full meter's hit adds Affinity ÷ 3.
+5. **Breath +3:** every Breath +3, and so every Affinity +3.
+
+| | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| Stones (Air / Fire / Earth / Water) | 67 / 46 / 45 / 41 | 65 / 44 / 46 / 45 | 64 / 49 / 41 / 45 | 63 / 46 / 49 / 42 | 63 / 44 / 46 / 46 |
+| Morphs (TD / Wyrm / Wyvern) | 46 / 52 / 52 | 50 / 55 / 45 | 50 / 49 / 51 | 52 / 47 / 51 | 49 / 53 / 48 |
+| Wyrm + Water | 41% | 48% | 45% | 42% | **55%** |
+| Top / bottom pairing | Wyvern + Air 73 / 36 | Wyvern + Air 77 / Wyvern + Fire 30 | 73 / Wyvern + Earth 33 | 74 / 41 | 73 / Wyvern + Earth 35 |
+| Damage: Breath / Bite / Claw | 32 / 42 / 26 | 33 / 41 / 25 | 35 / 40 / 25 | 37 / 39 / 24 | 40 / 36 / 24 |
+| Timeouts | 20% | 20% | 21% | 18% | 16% |
+| Scales / Dodge (share of slots) | 2% / — | 5 / 1% | 4 / 3% | 5 / 4% | 5 / 4% |
+| Meter fills per bout (both sides) | — | — | 8.1 | 8.0 | 7.6 |
+| Meters filled / true-damage hits per bout | — | — | 0.23 / 0.17 | 0.63 / 0.44 | 0.92 / 0.68 |
+| Verbs held by Affinity per bout | — | 0.04 | 0.05 | 0.05 | 0.05 |
+| breath-focus vs general | 37% | 37% | 35% | 35% | 42% |
+| claw-focus vs general | 61% | 57% | 57% | 55% | 56% |
+| Crunchling vs plain | 69% | 67% | 66% | 66% | 72% |
+
+**By step** (±3 points on stones and morphs is noise; ±8 on single pairings):
+- **1 → 2, arena and contest:** Water +4. Scales use more than doubled (2 → 5%), from its meter step. Wyverns dipped (52 → 45) on the denser floor, Wyvern + Fire to 30%, then recovered in later rungs. **The verb contest almost never decides anything:** 0.04–0.05 verbs held per bout in every rung.
+- **2 → 3, the meter:** about 4 triggers per dragon per bout, but only 0.23 meters filled and 0.17 true-damage hits per bout at base fill 3. Dodge rose to 3% as a trigger. Morphs tightened to 49–51%.
+- **3 → 4, base 9 and the steroid:** meters filled nearly tripled (0.63 per bout) and true-damage hits reached 0.44. Stone moves are inside the noise.
+- **4 → 5, Breath +3:** the payoff step. 0.92 meters filled and 0.68 true-damage hits per bout; Breath's share rose to 40%, breath-focus to 42% against general styles, and timeouts fell to 16%. **Wyrm + Water jumped 42 → 55%**: Affinity 12 means a 46 start, 21 per trigger and a +4 steroid. The feared Fire cannon didn't appear (Fire 44%).
+
+**Across all five:**
+- **The meter is the mechanism that moved Water's flagship,** and it gave the guard layer back some use (Scales 5%, Dodge 4%, from 2% and about 1%).
+- **About a quarter of filled meters are never spent** (0.92 filled against 0.68 spent): those bouts end first.
+- **Air's lead is untouched (63–67%), and Wyvern + Air tops every rung (73–77%).** None of these layers touched Air's Claw-and-pull kit.
+- **Claw-focus still beats general styles (55–61%), and crunchlings stay at 66–72%.** Both are the melee loop's symptoms and remain open.
+- **Rarely used:** Intimidate (2% of slots, cashed 0.22 times per bout, falling short 0.08–0.13), Stomp (1%), Hold and Dive (about 0%).
+
 ## Round 11: Claws +3, vortex ½ pace, swings move Wounds
 
 Three changes since Round 10, in one run, so attribution is by reasoning:
