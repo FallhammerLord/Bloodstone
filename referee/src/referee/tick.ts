@@ -152,10 +152,14 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
     if (o) return o;
     // Breath and Stomp skip Evasion [Doc]. Bite and Claw test it against a moving or dodging target.
     const evading = evasionState(plans[other(s)], t);
-    if ((p.spec.name === 'bite' || p.spec.name === 'claw') && evading) {
-      // Wyrm Serpentine [Assumed reading of §2]: it owns lateral movement, so its strafe evades like a dodge.
-      const serpentine = def.sheet.aspect === 'serpentine' && plans[other(s)].spec.name === 'strafe' && evading === 'moving';
-      let evasion = eff(def, 'evasion', {}).value + (evading === 'dodging' || serpentine ? bout.rules.DODGE_BONUS : 0);
+    // Wyrm Serpentine [Assumed reading of §2]: it owns lateral movement, so its strafe evades like a dodge, and
+    // [Proposed] against Breath too.
+    const serpentine = def.sheet.aspect === 'serpentine' && plans[other(s)].spec.name === 'strafe' && evading === 'moving';
+    const tests = p.spec.name === 'bite' || p.spec.name === 'claw' || (p.spec.name === 'breath' && serpentine && bout.rules.SERPENTINE_BREATH);
+    if (tests && evading) {
+      const base = eff(def, 'evasion', {}).value;
+      // Staggered, it tests half its Evasion [Proposed].
+      let evasion = (def.status.staggered && bout.rules.STAGGER_EVASION_TEST ? Math.floor(base / 2) : base) + (evading === 'dodging' || serpentine ? bout.rules.DODGE_BONUS : 0);
       if (def.status.pinned && p.spec.name === 'bite' && tech(att, 'lockjaw') >= E) evasion -= 3; // Lockjaw Elder
       if (scy >= E && defPlan.spec.name === 'strafe') evasion -= 3; // Scything Elder: caught strafers
       const sw = tech(def, 'sidewinder-spine');

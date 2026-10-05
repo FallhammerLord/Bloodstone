@@ -48,6 +48,10 @@ export const SHARED = {
    * fraction of its Wounds; an opponent standing in yours counts the other way
    */
   zoneStanding: 1,
+  /** a Staggered opponent, per slot left (it moves and tests Evasion on half); being Staggered, the reverse */
+  staggerPending: 0.02,
+  /** a Wyvern ending aloft over a grounded opponent within Far: this share of the stoop it threatens next exchange */
+  stoopPending: 0.5,
   /** a corroded opponent: about one more hit's bonus (and its Acumen) before it wears off; being corroded, the reverse */
   corrodedPending: 1,
   /** a corrosive pool's threat (the old pool rule), in burn-equivalent points per slot (it costs Hardness, not Wounds) */
@@ -147,6 +151,8 @@ export function value(style: BrainStyle, o: Outcome): number {
     + (op1.marks.demoralized ? W.demoralizePending : 0) - (me1.marks.demoralized ? W.demoralizePending : 0)
     + (me1.marks.advanced || me1.marks.strafed ? W.setupPending : 0)
     + W.zoneStanding * (zoneThreat(o.after, op1) - zoneThreat(o.after, me1))
+    + W.staggerPending * (staggerLeft(op1) - staggerLeft(me1))
+    + W.stoopPending * (stoopThreat(o.after, me1, op1) - stoopThreat(o.after, op1, me1))
     + W.corrodedPending * ((op1.marks.corrosion?.bonus ?? 0) / op1.sheet.wounds - (me1.marks.corrosion?.bonus ?? 0) / me1.sheet.wounds)
     + positionValue(style, band, me1, op1)
     + W.forcedMiss * (MISS_TASTE[style] ?? W.missTasteDefault) * theirMisses;
@@ -159,6 +165,17 @@ export function positionValue(style: BrainStyle, band: Band, me: Fighter, op: Fi
   const theirs = BAND_ORDER.indexOf(idealBand(op, { claw: 1, bite: 1, breath: 1 }));
   const at = BAND_ORDER.indexOf(band);
   return (at === mine ? SHARED.idealBand : -SHARED.offBand * Math.abs(at - mine)) + (at !== theirs ? SHARED.denyBand : 0);
+}
+
+/** Slots of Stagger still ahead of a dragon. */
+const staggerLeft = (f: Fighter) => (f.pending.staggered ? 1 : 0) + f.marks.staggerExtra;
+
+/** The stoop a Wyvern aloft threatens a grounded target within Far next exchange, as a fraction of the target's Wounds. */
+function stoopThreat(b: Bout, f: Fighter, target: Fighter): number {
+  if (f.sheet.aspect !== 'talons' || f.pos.z === 0 || target.pos.z !== 0) return 0;
+  if (Math.hypot(f.pos.x - target.pos.x, f.pos.y - target.pos.y, f.pos.z) > b.rules.STOOP_RANGE) return 0;
+  const hit = f.sheet.claw + Math.floor((f.pos.z / R.PACE) * b.rules.STOOP_PER_PACE) - target.sheet.hardness;
+  return Math.max(b.rules.DAMAGE_FLOOR, hit) / target.sheet.wounds;
 }
 
 /** What the enemy's live floor zones threaten a dragon standing where it is: its next slot's burn, as a fraction of its Wounds. */

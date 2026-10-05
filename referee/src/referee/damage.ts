@@ -7,7 +7,7 @@ import * as R from '../rules.ts';
 import type { Rules } from '../rules.ts';
 import { affinityAgainst, breathVerb } from './elements.ts';
 import type { Event, HitTag } from './events.ts';
-import { type Plan, guarding, phase } from './plan.ts';
+import { type Plan, category, guarding, phase } from './plan.ts';
 import { eff } from './riders.ts';
 import { A, type Bout, E, type Fighter, J, type Side, V, W, other, tech } from './state.ts';
 import { techniqueOnHit } from './techniques.ts';
@@ -265,6 +265,10 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   techniqueOnHit(bout, s, p, defPlan, t, ev);
   if (p.spec.name === 'stomp') {
     def.pending.staggered = true;
-    ev.push({ kind: 'note', tick: t, side: def.side, tag: 'staggered', text: 'Staggered next slot: movement distance halved.' });
+    // Caught mid-move, it stays Staggered longer [Proposed].
+    const caught = category(defPlan) === 'move' && bout.rules.STOMP_MOVER_STAGGER > 1;
+    if (caught) def.marks.staggerExtra = Math.max(def.marks.staggerExtra, bout.rules.STOMP_MOVER_STAGGER - 1);
+    const slots = caught ? bout.rules.STOMP_MOVER_STAGGER : 1;
+    ev.push({ kind: 'note', tick: t, side: def.side, tag: 'staggered', text: `${caught ? 'Caught mid-move: ' : ''}Staggered for the next ${slots === 1 ? 'slot' : `${slots} slots`}: Evasion halved.` });
   }
 }

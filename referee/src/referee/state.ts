@@ -57,8 +57,10 @@ export interface Marks {
   crunchedIn: number;
   /** Earth's corrosion [Proposed]: each hit taken through slot `until` deals `bonus` more */
   corrosion: { bonus: number; until: number } | null;
+  /** Stomp caught it mid-move [Proposed]: Staggered for this many slots more after the next */
+  staggerExtra: number;
 }
-export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null });
+export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null, staggerExtra: 0 });
 
 export interface Chain {
   action: ActionName | null;

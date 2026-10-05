@@ -124,6 +124,11 @@ export const DEFAULT_RULES = {
   // ---- Aspects ---- [Doc] §2; numbers [Assumed]
   STOOP_RANGE: FAR_EDGE, // Wyvern Talons: a Claw from the air stoops on a grounded target anywhere within Far
   STOOP_LANDING: Math.floor(1.5 * PACE), // [Assumed] it lands on the ground this far short of where the target stood
+  // The Wyrm's Serpentine [Proposed]: its Strafe tests Evasion with Dodge's bonus, against Breath too (1; 0: Bite and Claw only).
+  SERPENTINE_BREATH: 1,
+  // Stomp catches movers [Proposed]: a Stomp that lands on a dragon whose slot is a move Staggers it this many slots (1: the usual one).
+  STOMP_MOVER_STAGGER: 2,
+  STAGGER_EVASION_TEST: 1, // [Proposed] 1: a Staggered dragon also tests half its Evasion (it already moves on half); 0: movement only
   STOOP_PER_PACE: 1, // [Proposed] a stoop deals +1 per pace it falls (+3 a band), like a charge paying for its setup; 0: off
   WYVERN_GROUND_CLAW_REACH: 2 * PACE, // [Assumed] forelimbs are wings, so its Claw from the ground is short
   // ---- Technique numbers ---- (dragonshards-technique.md gives most; these fill its gaps) [Assumed]

@@ -21,6 +21,8 @@ interface Tally {
   taken: Record<string, number>;
   /** hits taken, by what shaped them */
   takenTags: Record<string, number>;
+  /** slots spent on each action */
+  actions: Record<string, number>;
   /** against each opponent */
   vs: Record<string, { w: number; n: number }>;
 }
@@ -37,7 +39,7 @@ function run(o: Opts, part: number, parts: number): Record<string, Tally> {
     for (let i = 0; i < o.bouts; i++, job++) {
       if (job % parts !== part) continue;
       const { bout, ev, me, them } = play(s, opp, job, rules, o.skill);
-      const t = (out[label(s)] ??= { n: 0, w: 0, timeouts: 0, exchanges: 0, breathAimed: 0, breathLanded: 0, chargeSlots: 0, slots: 0, dealt: {}, taken: {}, takenTags: {}, vs: {} });
+      const t = (out[label(s)] ??= { n: 0, w: 0, timeouts: 0, exchanges: 0, breathAimed: 0, breathLanded: 0, chargeSlots: 0, slots: 0, dealt: {}, taken: {}, takenTags: {}, actions: {}, vs: {} });
       const won = bout.winner === me;
       t.n++;
       if (won) t.w++;
@@ -62,6 +64,7 @@ function run(o: Opts, part: number, parts: number): Record<string, Tally> {
         if (e.kind === 'note' && e.side === me && e.tag === 'slam') bump(t.taken, 'slam', bout.rules.SLAM_DAMAGE);
         if (e.kind === 'slotEnd') {
           t.slots++;
+          bump(t.actions, e.plans[me].label.split(' ')[0].toLowerCase());
           if (e.plans[me].label.includes('(charging)')) t.chargeSlots++;
         }
       }
@@ -86,6 +89,7 @@ if (!isMainThread) {
     console.log(`  Deals ${per(sum(t.dealt), t)} a bout: ${list(t.dealt)}.`);
     console.log(`  Takes ${per(sum(t.taken), t)} a bout: ${list(t.taken)}.`);
     console.log(`  Hits taken carried, per bout: ${list(t.takenTags) || 'nothing extra'}.`);
+    console.log(`  Slots: ${Object.entries(t.actions).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([x, v]) => `${x} ${(100 * v / t.slots).toFixed(0)}%`).join(', ')}.`);
     console.log(`  Breath lands ${t.breathLanded} of ${t.breathAimed} aimed; charging in ${(100 * t.chargeSlots / Math.max(1, t.slots)).toFixed(0)}% of slots.`);
     console.log(`  Against: ${Object.entries(t.vs).sort((a, b) => b[1].w / b[1].n - a[1].w / a[1].n).map(([x, { w, n }]) => `${x} ${(100 * w / n).toFixed(0)}%`).join(', ')}.`);
   }

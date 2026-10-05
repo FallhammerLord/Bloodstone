@@ -167,6 +167,11 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
   for (const s of SIDES) {
     F[s].status = F[s].pending;
     F[s].pending = noStatuses();
+    // A long stagger runs on past its first slot.
+    if (!F[s].status.staggered && F[s].marks.staggerExtra > 0) {
+      F[s].status.staggered = true;
+      F[s].marks.staggerExtra--;
+    }
   }
   const startSep = dist(F.A.pos, F.B.pos);
   const startZ = { A: F.A.pos.z, B: F.B.pos.z };

@@ -137,7 +137,7 @@ Each morph prefers one element and dislikes the element that beats it.
 ### Core Morphs
 - **True Dragon:** four limbs plus wings. The generalist.
 - **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude. **Talons:** the Wyvern bends the one-band move rule. A Claw scripted while aloft, against a grounded opponent anywhere within Far, is a stoop: it flies to the ground during the wind-up, lands at Melee, and swipes both left and right. Against an airborne opponent it simply claws. Its price is positional: it must get airborne first, and it lands in Bite range. **[Proposed]** A stoop hits harder the farther it falls: +1 per pace of altitude it starts from (+3 a band), like a charge paying for its setup. **[Proposed]** It must also have been aloft since the exchange began: no Leap and stoop in the same exchange. **[Proposed]** From the ground its Claw reaches only 2 paces (forelimbs are wings).
-- **Wyrm:** serpentine and grounded. Owns lateral movement and close range. **[Proposed] Serpentine:** its Strafe tests Evasion with Dodge's bonus. Its Leap is a hop that lands within the slot; it can't Dive.
+- **Wyrm:** serpentine and grounded. Owns lateral movement and close range. **[Proposed] Serpentine:** its Strafe tests Evasion with Dodge's bonus, against Breath too: a strafing Wyrm can slip a Breath that would otherwise skip Evasion. Its Leap is a hop that lands within the slot; it can't Dive.
 
 ### Extended Morphs (Aspects **[Proposed]** unless noted)
 - **Chimera:** three heads; a native cruncher.
@@ -231,7 +231,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Bite:** forward and narrow, Melee into Close. High damage, piercing.
 - **Claw:** an arc sweeping right-to-left or left-to-right, Melee into Close on either side. Short wind-up, long active window, short recovery: the natural strafe punish.
 - **Breath:** a shaped area set by element. Skips Evasion. Reaches no further than Far. Cooldown 2.
-- **Stomp:** a ground-only Melee quake. **[Proposed]** 3 + Hardness ÷ 3 true damage, and it shatters boulders inside its radius; Staggers. Cooldown 2. Grows narrow, short, far (1, 2, 3 paces) at wyrmling, adult, and venerable; modified by age only. Misses anything aloft. **[Proposed]** Hits burrowed dragons and forces them up; its long wind-up leaves it open to interruption.
+- **Stomp:** a ground-only Melee quake. **[Proposed]** 3 + Hardness ÷ 3 true damage, and it shatters boulders inside its radius; Staggers. Cooldown 2. Grows narrow, short, far (1, 2, 3 paces) at wyrmling, adult, and venerable; modified by age only. Misses anything aloft. **[Proposed]** Hits burrowed dragons and forces them up; its long wind-up leaves it open to interruption. **[Proposed]** A Stomp that lands on a dragon mid-move Staggers it for two slots, and a Staggered dragon tests half its Evasion: Stomp is the answer to a dragon that won't stop moving.
 
 ### Space
 - Combatants always face one another.

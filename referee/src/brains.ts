@@ -1,6 +1,6 @@
 // The brain tournament: does thinking beat habit, do the styles form a triangle, and how do the
 // pairings fare when both sides think?
-//   npm run brains [-- --skill novice|adept|master] [--rule KEY=VALUE ...] [--json file]
+//   npm run brains [-- --skill novice|adept|master] [--rule KEY=VALUE ...] [--json file] [--seed N]
 //   --rule changes one dial for the whole run (BREATH.blast.radius=1p); --json also writes the numbers to a file.
 
 import { writeFileSync } from 'node:fs';
@@ -16,7 +16,7 @@ const argv = process.argv.slice(2);
 const skill = flag(argv, '--skill', 'adept') as Skill;
 const { overrides, label: rulesLabel } = rulesFromArgs(argv);
 const jsonFile = flag(argv, '--json', '');
-const json: Record<string, unknown> = { skill, rules: rulesLabel };
+const json: Record<string, unknown> = { skill, rules: rulesLabel, seed: flag(argv, '--seed', '2026') };
 if (!SKILLS.includes(skill)) throw new Error(`Skill is one of ${SKILLS.join(', ')}.`);
 
 const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
@@ -27,14 +27,15 @@ const pairings: { label: string; setup: FighterSetup }[] = MORPHS.flatMap((m) =>
   STONES.map((s) => ({ label: `${NAMES[m]} + ${cap(s)}`, setup: { name: `${m}-${s}`, morph: m, stone: s } })),
 );
 
-const rng = seededRandom(2026);
+const seed = Number(flag(argv, '--seed', '2026'));
+const rng = seededRandom(seed);
 // The general styles; the focus brains (claw, bite, breath only) join the style matrix.
 const GENERAL = BRAIN_STYLES.filter((x) => !x.endsWith('-focus'));
 const jobs: Job[] = [];
-const brain = (style: string, seed: number): Player => ({ kind: 'brain', style, skill, seed });
-const crude = (style: string, seed: number): Player => ({ kind: 'crude', style, skill, seed });
+const brain = (style: string, s: number): Player => ({ kind: 'brain', style, skill, seed: s + (seed - 2026) * 100003 });
+const crude = (style: string, s: number): Player => ({ kind: 'crude', style, skill, seed: s + (seed - 2026) * 100003 });
 const add = (group: string, A: FighterSetup, B: FighterSetup, playerA: Player, playerB: Player, challenged?: Side) =>
-  jobs.push({ id: jobs.length, group, A, B, playerA, playerB, challenged: challenged ?? (jobs.length % 2 ? 'A' : 'B'), arenaSeed: jobs.length * 31 + 7 });
+  jobs.push({ id: jobs.length, group, A, B, playerA, playerB, challenged: challenged ?? (jobs.length % 2 ? 'A' : 'B'), arenaSeed: jobs.length * 31 + 7 + (seed - 2026) * 100003 });
 
 // 1. Thinking against habit: a balanced brain against each crude style, every pairing against every other.
 for (const a of pairings) for (const b of pairings) {

@@ -180,6 +180,8 @@ A brain playing by old patch notes can't play well. For each kind of rule change
 | Forced movement and slams | `brain/value.ts` `pinned` and `SHARED.pinned` |
 | Zones (burning lanes, pools: shape, duration, burn) | `brain/value.ts` `zoneThreat` and `SHARED.zoneStanding` |
 | Element verbs and debuffs (corrosion, the wheel in contests) | `brain/value.ts` `SHARED.corrodedPending`, `zoneThreat` |
+| Statuses that last (Stagger) | `brain/value.ts` `SHARED.staggerPending` |
+| The stoop (its reach and payoff) | `brain/value.ts` `stoopThreat` and `SHARED.stoopPending` |
 | Intimidate, demoralize, carry-over | `brain/value.ts` `SHARED` pending terms |
 | Aspects (stoop, Stalwart, Serpentine) | `brain/options.ts` `advance`; `brain/value.ts` aerialist `perch`; `brain/read.ts` (the aloft context) |
 | Late game (rim pulses, timeouts) | `brain/value.ts` `SHARED.rim` |

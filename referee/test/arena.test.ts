@@ -433,3 +433,29 @@ test('aim follows through the wind-up and settles 12 − Accuracy ticks out: rad
   assert.equal(fire(0.75, TD_WATER, 'retreat'), 1, 'a ¾-pace blast catches it');
   assert.equal(fire(1, { name: 'W', morph: 'wyvern', stone: 'water' }, 'retreat'), 0, "a Wyvern's quick move slips even 1 pace");
 });
+
+// ---- Serpentine against Breath, and Stomp catching movers [Proposed] ----
+
+test('Serpentine: a strafing Wyrm slips a Breath (Evasion 6 + 3 against Accuracy 6); a held one takes it', () => {
+  // Earth's cone is wide enough at 5 paces that the strafe stays inside it: geometry first, then the Evasion test.
+  const breathOn = (move: string) => {
+    const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5);
+    return run(bout, ['breath'], [move]);
+  };
+  const strafing = breathOn('strafe:cw');
+  assert.equal(hits(strafing).filter((h) => h.attacker === 'A').length, 0);
+  assert.ok(strafing.some((e) => e.kind === 'evade' && e.action === 'breath' && e.how === 'serpentine'));
+  assert.equal(hits(breathOn('hold')).filter((h) => h.attacker === 'A').length, 1);
+  const off = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5, 'B', {}, R.rulesWith({ SERPENTINE_BREATH: 0 }));
+  assert.equal(hits(run(off, ['breath'], ['strafe:cw'])).filter((h) => h.attacker === 'A').length, 1, 'with the dial off, Breath skips Evasion');
+});
+
+test('a Stomp that lands mid-move Staggers for two slots, and a Staggered Wyrm can\'t slip a Breath', () => {
+  // The Stomp lands at tick 15, after the strafe's evasive window: caught in recovery, Staggered two slots.
+  const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 1.5);
+  const ev = run(bout, ['stomp', 'breath', 'hold'], ['strafe:cw', 'strafe:cw', 'strafe:cw']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.tag === 'staggered' && e.text.startsWith('Caught mid-move')));
+  // Slot 2: Staggered, it tests 6 ÷ 2 + 3 = 6 against Accuracy 6, a tie on equal Acumen: the Breath lands.
+  assert.deepEqual(hits(ev).filter((h) => h.attacker === 'A').map((h) => h.action), ['stomp', 'breath']);
+  assert.equal(bout.fighters.B.marks.staggerExtra, 0, 'both slots spent');
+});
