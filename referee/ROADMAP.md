@@ -1,7 +1,23 @@
 # Referee cleanup and refactor roadmap
 
-Status: plan only. No code has changed for this roadmap yet.
 Baseline: commit `08a72ab` (Fire blast radius ¾). 139 tests pass; 20 scenarios run clean.
+
+## Status
+
+Phases 0–8 are done (commits `91ad6d8` to `ee22b53`); 144 tests pass. Phase 9 waits on the open questions below.
+
+| Phase | Done | Notes |
+|---|---|---|
+| 0 Safety net | ✓ | `npm run golden`: 144 brain bouts, 20 scenarios |
+| 1 Canonical ruleset | ✓ | All 144 brain bouts unchanged: the tournament already played these rules |
+| 2 Rules object | ✓ | Done after the split, to edit each function once. Bout's old `Ruleset` is now `Format` |
+| 3 Split referee | ✓ | `src/referee/`, 11 modules; `tick` and `damage` read as their steps |
+| 4 Structured events | ✓ | Note tags, hit tags, evade `how`; grazes removed. A tournament report came out identical line for line |
+| 5 Brains | ✓ | `src/brain/`, named weights, behavior tests, rule-to-brain checklist |
+| 6 Tooling | ✓ | `--rule`, `--json`, ± margins, `diag:pairing`, `diag:movement`, `ladder` |
+| 7 Docs | ✓ | `PRINCIPLES.md`, `DIALS.md`, findings index, push-and-pull scenario |
+| 8 Tests | ✓ | Rule dials read from `DEFAULT_RULES`. The crude AIs stay until question 3 is decided |
+| 9 Game-facing | — | Needs questions 1 and 2 |
 
 ## Goals
 
