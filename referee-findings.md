@@ -1,6 +1,36 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 16: trimmed Stalwart, ½-pace snap, brains that value position
+
+Changes since Round 15 [Proposed] (master, 2,544 bouts; the style matrix adds a kite-focus brain):
+- **Stalwart** drops the 3-tick faster Breath; it keeps own-zone immunity and ½ pace of widening per charging slot.
+- **Separation snaps to the nearest ½ pace between slots**, so where a dragon lands in a band matters only for that action.
+- **Brains value position:** each style's ideal band comes from its taste for each attack and its own dragon's attacks (Claw at Melee, Bite at Close, Breath at Far); keeping the opponent out of its band also counts. Every style values forcing misses, scaled by style.
+- **Kite-focus**, a diagnostic brain: position first, holding Far.
+
+A movement diagnostic before this round (528 bouts, Round 15 rules) found dragons moving in only 19–37% of slots, Retreat a small share of moves, and separation settling at the Melee/Close boundary (about 3.7 paces) by slot 7. True Dragons were hit in 24 of every 100 moves, mostly while still traveling into recovery, and never evaded mid-move.
+
+| | Round 15 | Round 16 |
+|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 60 / 45 / 45 | 56 / 47 / 47 |
+| Stones (Air / Earth / Water / Fire) | 64 / 46 / 47 / 42 | **56** / 51 / 49 / 44 |
+| Pairing spread | 27–67% | **36–65%** |
+| Fights at Melee / Close / Far / Very Far | 42 / 32 / 19 / 7% | **36 / 35 / 24 / 6%** |
+| Travel per bout (TD / Wyrm / Wyvern) | 10.8 / 12.7 / 14.7 | 11.2 / 14.8 / 16.6 paces |
+| claw-focus vs general | 54% | **48%** |
+| charge / kite / meter-focus vs general | 44 / — / 39% | 51 / 48 / 46% |
+| Style range (identical dragons) | 34–59% | 38–61% |
+| Crunchling vs plain | 63% | 57% |
+| Timeouts | 14% | 16% |
+
+**What it shows:**
+- **The tightest balance yet.** Stones span 12 points (Air 56 to Fire 44), down from 22; pairings 36–65%. Air's lead fell 8 points without touching Air: position-aware brains stop walking into its Claw range.
+- **Fights spread out:** Melee fell from 42% to 36% of slots, Far rose to 24%. Retreat rose to 6% of slots.
+- **No more dominant single plan.** Claw-focus fell to 48% against general styles; charge-, kite- and meter-focus all land 46–51%, viable without dominating. Only bite-focus (30%) and breath-focus (35%) trail.
+- **The True Dragon came down to 56%** with the faster Breath gone, still the strongest morph; True Dragon + Air (65%) is the top pairing.
+- **Fire is the weak stone (44%)**, with Wyvern + Fire (36%) and Wyrm + Fire (39%) at the bottom: Fire's Breath lands only 39%.
+
 ## Round 15: band movement and the breath-first True Dragon
 
 Two changes since Round 14, in one run [Proposed] (master, 2,256 bouts; the style matrix now includes a charge-focus brain):
