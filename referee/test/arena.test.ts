@@ -69,13 +69,15 @@ test('the True Dragon\'s Aspect, Stalwart: 45 base Wounds, and its Breath keeps 
 });
 
 test('Stalwart: a True Dragon\'s own zones never harm it', () => {
-  // A Fire True Dragon breathes at a target at Melee: the burning zone covers both, and only the target burns.
-  const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 1.5);
-  const ev = run(bout, ['breath', 'hold'], ['hold', 'hold']);
-  const burns = ev.filter((e) => e.kind === 'zoneEffect' && e.zone === 'burning');
-  assert.ok(burns.length > 0 && burns.every((e) => e.kind === 'zoneEffect' && e.side === 'B'));
+  // Each breathes a lane at a target 5 paces off, then advances a band into its own fire. Only the True Dragon walks it unharmed.
+  const own = (morph: 'true-dragon' | 'wyrm') => {
+    const bout = newBout({ name: 'E', morph, stone: 'fire' }, TD_WATER, 5);
+    const ev = run(bout, ['breath', 'approach', 'hold'], ['hold', 'hold', 'hold']);
+    return ev.filter((e) => e.kind === 'zoneEffect' && e.side === 'A').length;
+  };
+  assert.equal(own('true-dragon'), 0);
+  assert.ok(own('wyrm') > 0, 'a Wyrm burns in its own fire');
 });
-
 test('Stalwart: each charging slot widens a True Dragon\'s released Breath by ½ pace', () => {
   // At a ½-pace radius, a slow target retreating out of it slips a plain blast; a charged one is widened.
   const rules = R.rulesWith({ BREATH: { blast: { radius: Math.floor(R.PACE / 2) } } });
@@ -131,11 +133,15 @@ test('a push and a pull in the same moment cancel', () => {
   assert.deepEqual([bout.fighters.A.pos, bout.fighters.B.pos], [a0, b0]);
 });
 
-test('Fire leaves a burning zone that hurts grounded dragons inside at slot end, not those aloft', () => {
+test('Fire sets a lane burning through Close and Far: grounded dragons inside burn at slot end, not those aloft', () => {
+  // True Dragon + Fire, Potency 18: the lane lingers 18 ÷ 6 = 3 slots after the one it lands in, and burns for 18 ÷ 4 = 4.
+  const D = R.DEFAULT_RULES;
   const ground = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5);
-  const ev = run(ground, ['breath', 'hold'], ['hold', 'hold']);
-  const burns = ev.filter((e) => e.kind === 'zoneEffect' && e.zone === 'burning');
-  assert.equal(burns.length, 2, 'the slot it lands and the next');
+  const ev = run(ground, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  const burns = ev.filter((e): e is Extract<Event, { kind: 'zoneEffect' }> => e.kind === 'zoneEffect' && e.zone === 'burning');
+  assert.equal(burns.length, 3, 'every slot of the exchange');
+  assert.ok(burns.every((b) => b.damage === Math.floor(18 / D.BURN_DIVISOR)));
+  assert.ok(ground.arena.zones.some((z) => z.kind === 'burning' && z.end), 'the lane lingers into the next exchange');
 
   const air = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, { name: 'G', morph: 'wyvern', stone: 'water' }, 5);
   air.fighters.B.pos = { ...air.fighters.B.pos, z: 2 * R.PACE };
@@ -143,6 +149,28 @@ test('Fire leaves a burning zone that hurts grounded dragons inside at slot end,
   assert.equal(ev2.filter((e) => e.kind === 'zoneEffect').length, 0);
 });
 
+test('the lane starts at the Melee edge: a target at Melee takes the blast but not the burn', () => {
+  const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 2);
+  const ev = run(bout, ['breath', 'hold'], ['hold', 'hold']);
+  assert.ok(hits(ev).some((h) => h.attacker === 'A'));
+  assert.equal(ev.filter((e) => e.kind === 'zoneEffect').length, 0);
+});
+
+test('each charging slot adds an exchange to the fire; each dragon keeps at most ZONE_MAX', () => {
+  const lingers = (A: string[]) => {
+    const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5);
+    run(bout, A, A.map(() => 'hold'));
+    const z = bout.arena.zones.find((x) => x.kind === 'burning')!;
+    return z.lastSlot;
+  };
+  assert.equal(lingers(['charge:breath', 'charge:breath', 'breath']) - lingers(['hold', 'hold', 'breath']), 2 * R.DEFAULT_RULES.ZONE_CHARGE_SLOTS);
+
+  // With fires that linger long, a third Breath puts out the first.
+  const rules = R.rulesWith({ ZONE_DURATION_DIVISOR: 1 });
+  const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5, 'B', {}, rules);
+  for (let i = 0; i < 3; i++) runExchange(bout, { A: ['breath', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
+  assert.equal(bout.arena.zones.filter((z) => z.owner === 'A').length, rules.ZONE_MAX);
+});
 test('Earth leaves a corrosive pool: Hardness −3 the next slot', () => {
   // Wyrm + Earth breathes on Brine, then Brine's corroded Hardness is 0: a bite deals the full 12.
   const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 4);

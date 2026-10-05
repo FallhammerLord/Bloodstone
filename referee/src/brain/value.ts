@@ -1,6 +1,6 @@
 // 3. Values: how each style scores an imagined outcome.
 
-import { obstacleAt } from '../arena.ts';
+import { inZone, obstacleAt } from '../arena.ts';
 import { add, flat, flatLen, scaleTo, sub } from '../geometry.ts';
 import type { Bout, Event, Fighter, Side } from '../referee.ts';
 import * as R from '../rules.ts';
@@ -42,6 +42,13 @@ export const SHARED = {
   forcedMiss: 0.02,
   /** MISS_TASTE for a style that doesn't name one */
   missTasteDefault: 0.6,
+  /**
+   * ending a slot in an enemy's live floor zone: about one more burn (or a corrosion) unless it steps out, as a
+   * fraction of its Wounds; an opponent standing in yours counts the other way
+   */
+  zoneStanding: 1,
+  /** a corrosive pool's threat, in burn-equivalent points per slot (it costs Hardness, not Wounds) */
+  corrosionThreat: 1.5,
   /** standing on the outer rim when the pulses come */
   rim: -0.15,
 };
@@ -136,6 +143,7 @@ export function value(style: BrainStyle, o: Outcome): number {
     + (me1.intimidateBonus ? W.intimidatePending : 0) - (op1.intimidateBonus ? W.intimidatePending : 0)
     + (op1.marks.demoralized ? W.demoralizePending : 0) - (me1.marks.demoralized ? W.demoralizePending : 0)
     + (me1.marks.advanced || me1.marks.strafed ? W.setupPending : 0)
+    + W.zoneStanding * (zoneThreat(o.after, op1) - zoneThreat(o.after, me1))
     + positionValue(style, band, me1, op1)
     + W.forcedMiss * (MISS_TASTE[style] ?? W.missTasteDefault) * theirMisses;
   return leverage + styleValue(style, o, { dealt, taken, band, sep, me1, op1, big, punishes, theirMisses, rim });
@@ -147,6 +155,16 @@ export function positionValue(style: BrainStyle, band: Band, me: Fighter, op: Fi
   const theirs = BAND_ORDER.indexOf(idealBand(op, { claw: 1, bite: 1, breath: 1 }));
   const at = BAND_ORDER.indexOf(band);
   return (at === mine ? SHARED.idealBand : -SHARED.offBand * Math.abs(at - mine)) + (at !== theirs ? SHARED.denyBand : 0);
+}
+
+/** What the enemy's live floor zones threaten a dragon standing where it is: its next slot's burn, as a fraction of its Wounds. */
+function zoneThreat(b: Bout, f: Fighter): number {
+  let worst = 0;
+  for (const z of b.arena.zones) {
+    if (z.owner === f.side || z.kind === 'smolder' || z.lastSlot < b.globalSlot || !inZone(z, f.pos)) continue;
+    worst = Math.max(worst, z.kind === 'burning' ? (z.damage ?? b.rules.BURN_DAMAGE) : SHARED.corrosionThreat);
+  }
+  return worst / f.sheet.wounds;
 }
 
 /** A wall or obstacle within a band behind this dragon, measured away from the other one. */

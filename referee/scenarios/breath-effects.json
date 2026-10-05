@@ -1,6 +1,6 @@
 {
   "title": "Breath effects: burn and corrode",
-  "note": "Design doc §3: Fire leaves a burning zone, Earth a corrosive pool. Zones hit grounded dragons standing in them at slot's end, whoever breathed them. A corroded dragon's Hardness drops by 3 for a slot. (Water's push and Air's shove are in push-and-shove.json.)",
+  "note": "Design doc §3: Fire sets a lane burning along its line through Close and Far, as wide as the blast; Earth leaves a corrosive pool. Zones hit grounded dragons standing in them at slot's end and linger Potency ÷ 6 slots (more for a charged Breath); a burn deals Potency ÷ 4. A True Dragon's own fire never harms it. A corroded dragon's Hardness drops by 3 for a slot. (Water's push and Air's pull are in push-and-shove.json.)",
   "separation": 5,
   "A": { "name": "Ember", "morph": "true-dragon", "stone": "fire" },
   "B": { "name": "Clod", "morph": "wyrm", "stone": "earth" },

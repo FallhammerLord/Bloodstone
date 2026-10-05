@@ -200,7 +200,7 @@ function endOfWindow(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, 
   const p = plans[s];
   if (t !== lastActiveTick(p, t) || phase(p, t) !== 'active') return;
   if (p.spec.name === 'breath' && p.origin && p.aim) {
-    leaveZone(bout, s, p.origin, p.aim, t, ev);
+    leaveZone(bout, s, p, p.origin, p.aim, t, ev);
     smolder(bout, s, p.origin, p.aim, t, ev);
   }
   if (category(p) === 'attack' && !p.resolved) {

@@ -2,7 +2,7 @@
 
 import type { ActionName } from '../actions.ts';
 import { add, dist, flat, flatLen, len, scaleTo, sub, vec, type Vec } from '../geometry.ts';
-import { describeObstacle, inZone, obstacleAt, type Obstacle } from '../arena.ts';
+import { describeObstacle, inZone, obstacleAt, type Obstacle, type Zone } from '../arena.ts';
 import * as R from '../rules.ts';
 import type { Rules } from '../rules.ts';
 import type { Event } from './events.ts';
@@ -161,15 +161,31 @@ export function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Sid
   for (const v of verbs) breathVerb(bout, v.s, v.aim, t, ev);
 }
 
-/** Fire leaves a burning zone and Earth a corrosive pool where the breath lands, on the floor below [Doc] §3. */
-export function leaveZone(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, ev: Event[]) {
-  const stone = bout.fighters[s].sheet.stone;
+/**
+ * Fire leaves burning ground and Earth a corrosive pool, on the floor [Doc] §3. Fire's burns a lane along its line
+ * through Close and Far, as wide as the blast [Proposed]; Earth's pools where the breath lands. A zone lingers
+ * Potency ÷ 6 slots plus an exchange per charging slot, and each dragon keeps at most ZONE_MAX; the oldest goes out.
+ */
+export function leaveZone(bout: Bout, s: Side, p: Plan, origin: Vec, aim: Vec, t: number, ev: Event[]) {
+  const R2 = bout.rules;
+  const f = bout.fighters[s];
+  const stone = f.sheet.stone;
   if (stone !== 'fire' && stone !== 'earth') return;
-  const reach = stone === 'fire' ? bout.rules.BREATH.blast.maxCenter : bout.rules.BREATH.narrowCone.reach;
-  const center = flat(add(origin, scaleTo(aim, Math.min(len(aim), reach))));
-  const zone = stone === 'fire' ? 'burning' : 'corrosive';
-  bout.arena.zones.push({ kind: zone, center, radius: bout.rules.ZONE_RADIUS, lastSlot: bout.globalSlot - 1 + bout.rules.ZONE_SLOTS, owner: s });
-  ev.push({ kind: 'zone', tick: t, owner: s, zone, center });
+  const kind = stone === 'fire' ? 'burning' : 'corrosive';
+  const potency = eff(f, 'breath', {}).value;
+  const charged = p.spec.released ? (p.spec.full ? 2 : 1) : 0;
+  const linger = R2.ZONE_DURATION_DIVISOR ? Math.floor(potency / R2.ZONE_DURATION_DIVISOR) + charged * R2.ZONE_CHARGE_SLOTS : R2.ZONE_SLOTS;
+  const damage = kind === 'burning' ? (R2.BURN_DIVISOR ? Math.floor(potency / R2.BURN_DIVISOR) : R2.BURN_DAMAGE) : 0;
+  const along = (d: number) => flat(add(origin, scaleTo(aim, d)));
+  const zone: Zone = kind === 'burning' && R2.FIRE_LANE
+    ? { kind, center: along(R.MELEE_EDGE), end: along(R.FAR_EDGE), radius: R2.BREATH.blast.radius, damage, lastSlot: bout.globalSlot - 1 + linger, owner: s }
+    : { kind, center: along(Math.min(len(aim), stone === 'fire' ? R2.BREATH.blast.maxCenter : R2.BREATH.narrowCone.reach)), radius: R2.ZONE_RADIUS, damage, lastSlot: bout.globalSlot - 1 + linger, owner: s };
+  if (R2.ZONE_MAX) {
+    const mine = bout.arena.zones.filter((z) => z.owner === s && z.kind !== 'smolder');
+    if (mine.length >= R2.ZONE_MAX) bout.arena.zones = bout.arena.zones.filter((z) => !mine.slice(0, mine.length - R2.ZONE_MAX + 1).includes(z));
+  }
+  bout.arena.zones.push(zone);
+  ev.push({ kind: 'zone', tick: t, owner: s, zone: kind, center: zone.center, ...(zone.end ? { end: zone.end } : {}) });
 }
 
 /**
@@ -179,6 +195,8 @@ export function leaveZone(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number,
  */
 export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Event[]) {
   const smoldered = new Set<Side>();
+  // Overlapping fires burn a dragon once a slot.
+  const burned = new Set<Side>();
   for (const z of bout.arena.zones) {
     for (const s of SIDES) {
       const f = bout.fighters[s];
@@ -193,8 +211,12 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
         continue;
       }
       if (z.kind === 'burning') {
-        f.wounds -= bout.rules.BURN_DAMAGE;
-        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: bout.rules.BURN_DAMAGE, woundsLeft: f.wounds });
+        if (burned.has(s)) continue;
+        burned.add(s);
+        const burn = z.damage ?? bout.rules.BURN_DAMAGE;
+        f.wounds -= burn;
+        if (bout.rules.BURN_BLINDS) f.pending.blinded = true;
+        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: burn, woundsLeft: f.wounds });
       } else if (z.kind === 'corrosive') {
         f.pending.corroded = true;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: 0, woundsLeft: f.wounds });

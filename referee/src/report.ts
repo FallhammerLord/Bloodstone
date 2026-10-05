@@ -124,7 +124,9 @@ export function report(bout: Bout, events: Event[]): string[] {
         break;
       }
       case 'zone':
-        say(`${at(e.tick)}${label(e.owner)}'s breath leaves ${e.zone === 'burning' ? 'a burning zone' : e.zone === 'corrosive' ? 'a corrosive pool' : 'a smoldering area (Smoldering Maw)'} at (${paces(e.center.x)}, ${paces(e.center.y)}).`);
+        say(e.end
+          ? `${at(e.tick)}${label(e.owner)}'s breath sets the ground burning from (${paces(e.center.x)}, ${paces(e.center.y)}) to (${paces(e.end.x)}, ${paces(e.end.y)}).`
+          : `${at(e.tick)}${label(e.owner)}'s breath leaves ${e.zone === 'burning' ? 'a burning zone' : e.zone === 'corrosive' ? 'a corrosive pool' : 'a smoldering area (Smoldering Maw)'} at (${paces(e.center.x)}, ${paces(e.center.y)}).`);
         break;
       case 'zoneEffect':
         say(e.zone === 'burning'

@@ -27,9 +27,13 @@ export interface Zone {
   element?: 'water' | 'earth' | 'fire' | 'air';
   /** smolder only: Venerable Smoldering Maw lets overlapping areas stack */
   stacks?: boolean;
-  /** center on the floor (z = 0) */
+  /** center on the floor (z = 0); for a lane, where it starts */
   center: Vec;
+  /** a lane (Fire): where it ends; the zone is everything within radius of the segment */
+  end?: Vec;
   radius: number;
+  /** a burning zone: what it deals at slot's end */
+  damage?: number;
   /** the zone lingers through this global slot, then fades */
   lastSlot: number;
   owner: 'A' | 'B';
@@ -132,7 +136,14 @@ export function obstacleOnLine(arena: Arena, from: Vec, to: Vec, skip = 0): Obst
 export function inZone(zone: Zone, pos: Vec): boolean {
   // A lingering breath hangs where it was breathed; floor zones touch only grounded dragons.
   if (zone.kind === 'smolder') return dist(pos, zone.center) <= zone.radius;
-  return pos.z === 0 && flatLen(sub(pos, zone.center)) <= zone.radius;
+  if (pos.z !== 0) return false;
+  if (!zone.end) return flatLen(sub(pos, zone.center)) <= zone.radius;
+  // A lane: distance from the segment, measured on the floor.
+  const seg = sub(zone.end, zone.center);
+  const rel = sub({ ...pos, z: 0 }, zone.center);
+  const L2 = seg.x * seg.x + seg.y * seg.y;
+  const t = L2 === 0 ? 0 : Math.max(0, Math.min(1, (rel.x * seg.x + rel.y * seg.y) / L2));
+  return Math.hypot(rel.x - seg.x * t, rel.y - seg.y * t) <= zone.radius;
 }
 
 export function describeObstacle(o: Obstacle): string {

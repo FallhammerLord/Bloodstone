@@ -98,9 +98,18 @@ export const DEFAULT_RULES = {
   AIR_PULL: BAND, // [Proposed] Air: the vortex pulls the target a band toward the breather, fliers included (it lowers them, never grounds them)
   AIR_FLOOR: PACE, // a pulled flier stays at least this high (or where it was, if lower)
   SMOLDER_PULL: PACE, // Smoldering Maw's lingering air still tugs 1 pace
-  ZONE_RADIUS: PACE, // Fire's burning zone and Earth's corrosive pool
-  ZONE_SLOTS: 1, // a zone lingers through this many slots after the one it lands in
-  BURN_DAMAGE: 3, // [Proposed; was 1] true damage to a grounded dragon in a burning zone at slot's end
+  ZONE_RADIUS: PACE, // Earth's corrosive pool (and Fire's burning zone when FIRE_LANE is 0)
+  ZONE_SLOTS: 1, // a zone lingers through this many slots after the one it lands in, when ZONE_DURATION_DIVISOR is 0
+  BURN_DAMAGE: 3, // [Proposed; was 1] true damage to a grounded dragon in a burning zone at slot's end, when BURN_DIVISOR is 0
+  // Setting the world on fire [Proposed]: Fire's breath ignites a lane along its line through Close and Far (from the Melee
+  // edge to the Far edge), as wide as the blast. Zones linger Potency ÷ 6 slots, plus an exchange per charging slot; each
+  // dragon keeps at most ZONE_MAX, the oldest going out first. A burn deals Potency ÷ 4. Each is a dial: 0 restores the old rule.
+  FIRE_LANE: 1, // [Proposed] 1: a lane through Close and Far; 0: a ZONE_RADIUS circle at the target
+  ZONE_DURATION_DIVISOR: 6, // [Proposed] a floor zone lingers Potency ÷ this many slots after the one it lands in
+  ZONE_CHARGE_SLOTS: 3, // [Proposed] and this many more per charging slot of the Breath that laid it
+  ZONE_MAX: 2, // [Proposed] floor zones each dragon keeps at once; 0 for no cap
+  BURN_DIVISOR: 4, // [Proposed] a burn deals the breather's Potency ÷ this (18 → 4, 15 → 3, 12 → 3)
+  BURN_BLINDS: 0, // [Proposed] 1: a burn also Blinds for the next slot (−3 Accuracy). Off: a toggle for A:B runs
   CORRODE_HARDNESS: 3, // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
   EARTH_OBSTACLE_MULTIPLIER: 2, // Earth's slurry eats obstacles
   // ---- Aspects ---- [Doc] §2; numbers [Assumed]
