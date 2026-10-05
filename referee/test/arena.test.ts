@@ -27,21 +27,60 @@ test('reaches are whole bands: Bite through Close, Stomp through Close at wyrmli
   assert.equal(hits(run(newBout(TD_WATER, TD_WATER, 6), ['stomp'], ['hold'])).length, 1, 'Stomp at Close\'s edge');
 });
 
-test('Talons: from the air, a Wyvern stoops on a grounded target anywhere within Far, lands at Melee, and claws', () => {
-  // Wyvern + Air 3 paces up, 8 paces across the floor: 8.5 paces away, inside Far.
-  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 8);
+test('Talons: from the air, a stoop descends and carries at most a band forward, then claws', () => {
+  // Wyvern + Air 3 paces up, 5 paces across the floor: the stoop carries a band and lands 2 paces short.
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 5);
   bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
   const ev = run(bout, ['claw:left'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 12 - 3 + 3 * R.DEFAULT_RULES.STOOP_PER_PACE, 'Claw 12, Hardness 3, +3 for a 3-pace drop');
+  assert.equal(hits(ev)[0].damage, 12 - 3 + Math.floor(3 / R.DEFAULT_RULES.STOOP_PACES_PER_POINT), 'Claw 12, Hardness 3, +1 for a 3-pace fall');
+  assert.equal(hits(ev)[0].tick, 6 + 3 * R.DEFAULT_RULES.STOOP_TICKS_PER_PACE, 'the descent takes 2 ticks a pace');
   assert.ok(hits(ev)[0].tags.includes('stoop'));
   assert.equal(bout.fighters.A.pos.z, 0, 'lands on the ground');
-  assert.ok(Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x) <= R.MELEE_EDGE, 'at Melee');
+  assert.equal(Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x), 2 * R.PACE, 'a band forward, no further');
+});
+
+test('Talons: a stoop from Far carries only a band, and falls short', () => {
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 8);
+  bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
+  const ev = run(bout, ['claw:left'], ['hold']);
+  assert.equal(hits(ev).length, 0);
+  assert.equal(Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x), 5 * R.PACE, 'lands at Close, out of Claw reach');
+});
+
+test('Talons: a stoop can carry back a band instead, landing clear', () => {
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 2);
+  bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
+  const ev = run(bout, ['claw:left:back'], ['hold']);
+  assert.equal(hits(ev).length, 0);
+  assert.equal(bout.fighters.A.pos.z, 0);
+  assert.equal(Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x), 5 * R.PACE, 'a band back from 2 paces');
+});
+
+test('Talons: a Wyvern\'s Leap climbs two bands', () => {
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 8);
+  run(bout, ['leap', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.equal(bout.fighters.A.pos.z, 2 * R.BAND);
+  const td = newBout(TD_WATER, TD_WATER, 8);
+  run(td, ['leap', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.equal(td.fighters.A.pos.z, R.BAND, 'other fliers climb one');
+});
+
+test('Talons: a high stoop is slow enough for a Stomp to catch it landing; a low one beats the Stomp', () => {
+  const stoop = (z: number) => {
+    const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'air' }, TD_WATER, 4.5);
+    bout.fighters.A.pos = { ...bout.fighters.A.pos, z };
+    return hits(run(bout, ['claw:left'], ['stomp']));
+  };
+  const high = stoop(2 * R.BAND);
+  assert.deepEqual(high.map((h) => h.action), ['stomp'], 'two bands: lands at tick 17, the quake is still live, and the Claw never comes');
+  const low = stoop(R.BAND);
+  assert.deepEqual(low.map((h) => h.action), ['claw'], 'one band: the Claw lands at tick 12 and interrupts the Stomp');
 });
 
 test('Talons: the stoop swipes both ways, catching a target that steps to either side', () => {
   for (const dir of ['strafe:cw', 'strafe:ccw']) {
-    const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 6);
+    const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 4);
     bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
     const ev = run(bout, ['claw:left'], [dir]);
     assert.equal(hits(ev).length, 1, dir);
@@ -396,12 +435,12 @@ test('standard arenas throw 1d4+2 boulders', () => {
 // ---- Gravity, the delayed stoop, and the Stomp's quake [Proposed] ----
 
 test('gravity: a flier that doesn\'t Leap during an exchange drops a band at its end', () => {
-  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 8);
+  const bout = newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 6);
   bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 6 * R.PACE };
   run(bout, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
   assert.equal(bout.fighters.A.pos.z, 3 * R.PACE);
   run(bout, ['leap', 'hold', 'hold'], ['hold', 'hold', 'hold']);
-  assert.equal(bout.fighters.A.pos.z, 6 * R.PACE, 'a Leap holds it up for the exchange');
+  assert.equal(bout.fighters.A.pos.z, R.DEFAULT_RULES.MAX_ALTITUDE, 'a Leap holds it up for the exchange (two bands, to the ceiling)');
 });
 
 test('a Wyvern can\'t Leap and stoop in the same exchange', () => {

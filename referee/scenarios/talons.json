@@ -1,10 +1,11 @@
 {
   "title": "Aspect: Wyvern Talons, the stoop",
-  "note": "Design doc §2: the Wyvern's claws come from hind talons on dives. It pays with position: first it leaps. Then a Claw from the air stoops on a grounded target anywhere within Far, lands on the ground at Melee, and swipes both ways. Brine strafes, but the two-sided swipe catches it. Landed, the Wyvern is in Bite range.",
+  "note": "Design doc §2: the Wyvern's claws come from hind talons on dives. It pays with position. Its Leap climbs two bands, and aloft it closes to Close. Next exchange, a Claw from the air stoops: it descends to the ground, carrying at most a band, and swipes both ways. The fall from two bands takes time, so the Claw comes late (tick 18). Brine strafes, and the late Claw catches it in its recovery for a punish. Landed, the Wyvern is in Bite range.",
   "separation": 7,
   "A": { "name": "Gale", "morph": "wyvern", "stone": "air" },
   "B": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
   "exchanges": [
-    { "A": ["leap", "claw:left", "hold"], "B": ["hold", "strafe:cw", "bite"] }
+    { "A": ["leap", "approach", "hold"], "B": ["hold", "hold", "hold"] },
+    { "A": ["claw:left", "hold", "hold"], "B": ["strafe:cw", "bite", "hold"] }
   ]
 }

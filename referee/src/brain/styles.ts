@@ -96,7 +96,8 @@ export const LEAN: Record<BrainStyle, Partial<Record<ActionName, number>> | ((ba
   slugger: (b) => (b === 'melee' ? { stomp: 3, bite: 2, intimidate: 2, claw: 1 } : b === 'close' ? { bite: 4, intimidate: 3 } : { approach: 3, intimidate: 1, breath: 2 }),
   counterpuncher: (b) => (b === 'melee' ? { scales: 3, dodge: 2, claw: 2 } : b === 'close' ? { scales: 3, dodge: 2, bite: 2, strafe: 1 } : { breath: 2, scales: 1, strafe: 2 }),
   'boxer-puncher': {},
-  aerialist: (_b, aloft, oppAloft) => (aloft && !oppAloft ? { claw: 4, breath: 2, approach: 1 } : { leap: 4, breath: 2, dive: 1 }),
+  // A stoop carries only a band: from Far, close in aloft first; from Close, stoop.
+  aerialist: (b, aloft, oppAloft) => (aloft && !oppAloft ? (b === 'far' || b === 'veryFar' ? { approach: 4, breath: 2, claw: 1 } : { claw: 4, breath: 2, approach: 1 }) : { leap: 4, breath: 2, dive: 1 }),
   reader: (b) => (b === 'far' || b === 'veryFar' ? { intimidate: 3, breath: 2, approach: 2 } : { intimidate: 3, scales: 2, bite: 2, claw: 2 }),
   'claw-focus': (b) => (b === 'melee' ? { claw: 5, dodge: 1, scales: 1, strafe: 1 } : { approach: 4, strafe: 1, dodge: 1 }),
   'bite-focus': (b) => (b === 'close' ? { bite: 5, strafe: 1, scales: 1, intimidate: 1 } : b === 'melee' ? { retreat: 3, bite: 2, dodge: 1 } : { approach: 4, strafe: 1 }),

@@ -30,7 +30,7 @@ export interface Plan {
   intimidateBonus: boolean;
   /** this Bite or Claw was demoralized by an Intimidate: −3 [Proposed] */
   demoralized: boolean;
-  /** a Wyvern stoop: flies from the air to land at Melee during the wind-up */
+  /** a Wyvern stoop: descends from the air to the ground during the wind-up, carrying at most a band */
   stoop: { from: Vec; to: Vec; target: Vec } | null;
   /** the tick the aim settles: until then it follows the target [Proposed] */
   aimLock: number;
@@ -247,6 +247,8 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
       moveTotal = rules.BAND_MOVE + (spec.depth === 'long' ? finesse : spec.depth === 'short' ? -finesse : 0);
       // Bounding Haunches: an Approach carries two bands [Doc].
       if (bounding) moveTotal += rules.BAND_MOVE;
+      // Talons [Doc]: a Wyvern's Leap climbs up to two bands.
+      if (spec.name === 'leap' && f.sheet.aspect === 'talons') moveTotal += (rules.TALONS_LEAP_BANDS - 1) * rules.BAND_MOVE;
     }
     // Wind-up, then an evasive active window of 2 × Evasion ticks, then recovery; travel runs 72 ÷ Evasion ticks.
     active = Math.min(R.TICKS_PER_SLOT - windup, Math.max(rules.MIN_ACTIVE, rules.EVADE_TICKS_PER_POINT * evasion));

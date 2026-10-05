@@ -5,6 +5,7 @@ import { matchup } from '../hatch.ts';
 import { add, flat, flatLen, scaleTo, sub } from '../geometry.ts';
 import type { Bout, Event, Fighter, Side } from '../referee.ts';
 import * as R from '../rules.ts';
+import type { Rules } from '../rules.ts';
 import { type Band, type BrainStyle, MISS_TASTE, TASTE, bandOf, idealBand } from './styles.ts';
 
 export interface Outcome {
@@ -50,7 +51,7 @@ export const SHARED = {
   zoneStanding: 1,
   /** a Staggered opponent, per slot left (it moves and tests Evasion on half); being Staggered, the reverse */
   staggerPending: 0.02,
-  /** a Wyvern ending aloft over a grounded opponent within Far: this share of the stoop it threatens next exchange */
+  /** a Wyvern ending aloft within a stoop's reach of a grounded opponent (a band's carry plus Claw): this share of the stoop it threatens next exchange */
   stoopPending: 0.5,
   /** a corroded opponent: about one more hit's bonus (and its Acumen) before it wears off; being corroded, the reverse */
   corrodedPending: 1,
@@ -79,7 +80,7 @@ interface StyleWeights {
   punishes?: number;
   /** holding an Intimidate bonus */
   intimidateHeld?: number;
-  /** aloft over a grounded opponent within stoop range */
+  /** aloft within a stoop's reach of a grounded opponent */
   perch?: number;
   /** the opponent can't revise next exchange (Ash Gland) */
   revisionLocked?: number;
@@ -170,11 +171,20 @@ export function positionValue(style: BrainStyle, band: Band, me: Fighter, op: Fi
 /** Slots of Stagger still ahead of a dragon. */
 const staggerLeft = (f: Fighter) => (f.pending.staggered ? 1 : 0) + f.marks.staggerExtra;
 
-/** The stoop a Wyvern aloft threatens a grounded target within Far next exchange, as a fraction of the target's Wounds. */
+/**
+ * Whether a Wyvern aloft could stoop on a grounded target next: the stoop carries at most a band, then claws, so the
+ * target must be within a band plus Claw's reach across the floor. A Wyvern hovering at Far can't; at Close it can.
+ */
+export function inStoopReach(rules: Rules, f: Fighter, target: Fighter): boolean {
+  if (f.sheet.aspect !== 'talons' || f.pos.z === 0 || target.pos.z !== 0) return false;
+  if (Math.hypot(f.pos.x - target.pos.x, f.pos.y - target.pos.y, f.pos.z) > rules.STOOP_RANGE) return false;
+  return Math.hypot(f.pos.x - target.pos.x, f.pos.y - target.pos.y) <= rules.STOOP_CARRY + rules.CLAW_REACH;
+}
+
+/** The stoop a Wyvern aloft threatens a grounded target in reach next exchange, as a fraction of the target's Wounds. */
 function stoopThreat(b: Bout, f: Fighter, target: Fighter): number {
-  if (f.sheet.aspect !== 'talons' || f.pos.z === 0 || target.pos.z !== 0) return 0;
-  if (Math.hypot(f.pos.x - target.pos.x, f.pos.y - target.pos.y, f.pos.z) > b.rules.STOOP_RANGE) return 0;
-  const hit = f.sheet.claw + Math.floor((f.pos.z / R.PACE) * b.rules.STOOP_PER_PACE) - target.sheet.hardness;
+  if (!inStoopReach(b.rules, f, target)) return 0;
+  const hit = f.sheet.claw + (b.rules.STOOP_PACES_PER_POINT ? Math.floor(f.pos.z / (R.PACE * b.rules.STOOP_PACES_PER_POINT)) : 0) - target.sheet.hardness;
   return Math.max(b.rules.DAMAGE_FLOOR, hit) / target.sheet.wounds;
 }
 
@@ -225,7 +235,7 @@ function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me
     + (w.misses ? w.misses * theirMisses : 0)
     + (w.punishes ? w.punishes * punishes : 0)
     + (w.intimidateHeld && me1.intimidateBonus ? w.intimidateHeld : 0)
-    + (w.perch && me1.pos.z > 0 && op1.pos.z === 0 && sep <= o.after.rules.STOOP_RANGE ? w.perch : 0)
+    + (w.perch && inStoopReach(o.after.rules, me1, op1) ? w.perch : 0)
     + (w.revisionLocked && op1.marks.revisionLockedFor > o.after.exchange ? w.revisionLocked : 0)
     + (w.eye && me1.marks.eye !== null ? w.eye : 0)
     + (w.released ? w.released * count((e) => e.kind === 'hit' && e.attacker === o.me && e.tags.includes('charged')) : 0)

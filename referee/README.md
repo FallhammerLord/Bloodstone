@@ -106,7 +106,7 @@ Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Appr
 
 Each morph bends one rule (design doc §2).
 - **True Dragon, Stalwart** [Proposed]: master of the charged Breath. Its own zones never harm it, and each charging slot widens its released Breath by ½ pace. Its 45 Wounds are base (the old +9 Aspect is folded in).
-- **Wyvern, Talons:** it bends the one-band move rule. A Claw from the air against a grounded opponent anywhere within Far is a stoop: the Wyvern flies to the ground during the wind-up, lands at Melee, and swipes both ways. Against an airborne opponent it simply claws. Its price is positional: it must have been aloft since the exchange began, and it lands in Bite range. From the ground its Claw reaches only 2 paces (forelimbs are wings).
+- **Wyvern, Talons:** it bends the one-band move rule in its Leap, which climbs two bands. A Claw from the air against a grounded opponent within Far is a stoop: the Wyvern descends to the ground during the wind-up, carrying at most a band forward (never closer than 1½ paces short of the target) or a band back (`claw:left:back`), and swipes both ways. From Close it connects; from Far it falls short. The descent takes 2 ticks a pace, so a one-band stoop strikes at tick 12 and a two-band stoop at tick 18, late enough for a Stomp to catch it landing. It deals +1 per 2 paces fallen. Against an airborne opponent it simply claws. Its price is positional: it must have been aloft since the exchange began, and it lands in Bite range.
 - **Wyrm, Serpentine:** its Strafe tests Evasion with Dodge's +3. It is grounded: its Leap is a hop, and it can't Dive.
 
 ## Breath effects
@@ -186,11 +186,11 @@ A brain playing by old patch notes can't play well. For each kind of rule change
 | Zones (burning lanes, pools: shape, duration, burn) | `brain/value.ts` `zoneThreat` and `SHARED.zoneStanding` |
 | Element verbs and debuffs (corrosion, the wheel in contests) | `brain/value.ts` `SHARED.corrodedPending`, `zoneThreat` |
 | Statuses that last (Stagger) | `brain/value.ts` `SHARED.staggerPending` |
-| The stoop (its reach and payoff) | `brain/value.ts` `stoopThreat` and `SHARED.stoopPending` |
+| The stoop (its reach and payoff) | `brain/value.ts` `inStoopReach`, `stoopThreat` and `SHARED.stoopPending`; `brain/styles.ts` aerialist lean; `ai.ts` `altitudeHabit` |
 | Reaches (bands) and shapes | `brain/styles.ts` `idealBand`; `brain/controller.ts` `tell`; `brain/read.ts` `prior` |
 | New action forms (hard landing, reversal) | `brain/options.ts` `legalActions` and `advance`; the Referee's imagined fights do the rest |
 | Intimidate, demoralize, carry-over | `brain/value.ts` `SHARED` pending terms |
-| Aspects (stoop, Stalwart, Serpentine) | `brain/options.ts` `advance`; `brain/value.ts` aerialist `perch`; `brain/read.ts` (the aloft context) |
+| Aspects (stoop, Talons' two-band Leap, Stalwart, Serpentine) | `brain/options.ts` `legalActions` (the back stoop) and `advance` (Leap height); `brain/value.ts` aerialist `perch`; `brain/read.ts` (the aloft context) |
 | Late game (rim pulses, timeouts) | `brain/value.ts` `SHARED.rim` |
 | A new style | `brain/styles.ts` (`TASTE`, `LEAN`, `MISS_TASTE`); `brain/value.ts` `WEIGHTS`; `brain/controller.ts` `tell` |
 

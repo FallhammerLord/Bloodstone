@@ -57,6 +57,8 @@ export interface ActionSpec {
   crunch?: boolean;
   /** a band move landing short of or past the band's 3 paces, as far as Evasion allows [Proposed] */
   depth?: 'short' | 'long';
+  /** Claw from the air: the stoop carries back a band instead of forward */
+  back?: boolean;
   /** Dive: a hard landing, all the way down from two bands up or more, with a free Stomp where it lands [Doc] */
   hard?: boolean;
 }
@@ -85,7 +87,8 @@ export function parseAction(text: string): ActionSpec {
   if (name === 'claw') {
     const sweep = detail ?? 'left';
     if (sweep !== 'left' && sweep !== 'right') throw new Error(`Claw sweep is "left" or "right".`);
-    return { name, sweep };
+    if (extra !== undefined && extra !== 'back') throw new Error(`A Claw stoops forward, or "back": "claw:left:back".`);
+    return extra ? { name, sweep, back: true } : { name, sweep };
   }
   if (name === 'dive' && detail === 'hard') return { name, hard: true };
   if (name === 'approach' || name === 'retreat' || name === 'leap' || name === 'dive') {
@@ -101,7 +104,7 @@ export function describe(spec: ActionSpec): string {
   const base = ACTIONS[spec.name].label;
   const label = spec.charge ? `${base} (charging)` : spec.released ? `${base} (charged)` : spec.crunch ? `${base} ×2 (crunched)` : base;
   if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''})`;
-  if (spec.sweep) return `${label} (${spec.sweep})`;
+  if (spec.sweep) return `${label} (${spec.sweep}${spec.back ? ', stooping back' : ''})`;
   if (spec.depth) return `${label} (${spec.depth})`;
   if (spec.hard) return `${label} (hard landing)`;
   return label;

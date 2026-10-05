@@ -122,14 +122,17 @@ export const DEFAULT_RULES = {
   CORRODE_HARDNESS: 3, // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
   EARTH_OBSTACLE_MULTIPLIER: 2, // Earth's slurry eats obstacles
   // ---- Aspects ---- [Doc] §2; numbers [Assumed]
-  STOOP_RANGE: FAR_EDGE, // Wyvern Talons: a Claw from the air stoops on a grounded target anywhere within Far
+  STOOP_RANGE: FAR_EDGE, // Wyvern Talons: a Claw from the air against a grounded target within Far is a stoop
+  STOOP_CARRY: BAND, // [Doc] the stoop descends to the ground, carrying at most one band forward or back
+  STOOP_TICKS_PER_PACE: 2, // [Doc] the descent takes time: the stoop's wind-up grows this many ticks per pace it falls
+  TALONS_LEAP_BANDS: 2, // [Doc] Talons: a Wyvern's Leap climbs up to two bands
   STOOP_LANDING: Math.floor(1.5 * PACE), // [Assumed] it lands on the ground this far short of where the target stood
   // The Wyrm's Serpentine [Proposed]: its Strafe tests Evasion with Dodge's bonus, against Breath too (1; 0: Bite and Claw only).
   SERPENTINE_BREATH: 1,
   // Stomp catches movers [Proposed]: a Stomp that lands on a dragon whose slot is a move Staggers it this many slots (1: the usual one).
   STOMP_MOVER_STAGGER: 2,
   STAGGER_EVASION_TEST: 1, // [Proposed] 1: a Staggered dragon also tests half its Evasion (it already moves on half); 0: movement only
-  STOOP_PER_PACE: 1, // [Proposed] a stoop deals +1 per pace it falls (+3 a band), like a charge paying for its setup; 0: off
+  STOOP_PACES_PER_POINT: 2, // [Proposed] a stoop deals +1 per 2 paces it falls (+3 from two bands), like a charge paying for its setup; 0: off
   // ---- Technique numbers ---- (dragonshards-technique.md gives most; these fill its gaps) [Assumed]
   TECHNIQUE_POINTS: 3, // Thornscale's spikes, Goading Roar's sting, Riposte's free claw, Smoldering Maw's linger
   SCYTHE_REACH: { wyrmling: PACE / 2, full: PACE }, // Scything widens the arc: one side, then both

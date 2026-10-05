@@ -10,15 +10,15 @@
   "name": "altitude.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "16/24",
-  "hash": "c97e8c3cc7bf6557"
+  "wounds": "15/24",
+  "hash": "7e998f8fa1733974"
  },
  {
   "name": "brains.json",
   "winner": "B",
   "exchanges": 5,
-  "wounds": "0/11",
-  "hash": "972ccfc450da3dc3"
+  "wounds": "0/-2",
+  "hash": "0d110b72dee79615"
  },
  {
   "name": "breath-effects.json",
@@ -121,9 +121,9 @@
  {
   "name": "talons.json",
   "winner": "-",
-  "exchanges": 1,
-  "wounds": "18/45",
-  "hash": "f2d77b30bfb1257e"
+  "exchanges": 2,
+  "wounds": "9/30",
+  "hash": "268613292fcf9ea0"
  },
  {
   "name": "techniques.json",

@@ -90,9 +90,10 @@ export function moveStep(rules: Rules, me: Fighter, opp: Fighter, p: Plan, oppPl
 
 /**
  * Wyvern Talons [Doc] §2, claws from hind talons on dives: a Claw scripted while aloft, against a grounded
- * opponent within Far, is a stoop. It bends the one-band move rule: during the wind-up the Wyvern flies
- * straight to the ground, landing at Melee short of where the target stood when the wind-up began, then
- * swipes both ways. Against an airborne opponent it simply claws. The price is getting airborne first.
+ * opponent within Far, is a stoop. The Wyvern descends to the ground during the wind-up, carrying at most one
+ * band forward (never closer than Melee, short of where the target stood) or one band back, then swipes both
+ * ways. The descent takes time: the wind-up grows with the height it falls, and the active window trims to fit
+ * the slot. Against an airborne opponent it simply claws. The price is getting airborne, and close, first.
  */
 export function beginStoop(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: number, ev: Event[]) {
   if (p.spec.name !== 'claw' || att.sheet.aspect !== 'talons' || att.pos.z === 0 || def.pos.z !== 0) return;
@@ -103,11 +104,19 @@ export function beginStoop(rules: Rules, att: Fighter, def: Fighter, p: Plan, t:
     return;
   }
   const target = { ...def.pos };
-  const back = flat(sub(att.pos, target));
-  const offset = flatLen(back) === 0 ? vec(rules.STOOP_LANDING, 0) : scaleTo(back, rules.STOOP_LANDING);
-  const to = add(target, offset);
+  const ahead = flat(sub(target, att.pos));
+  const across = flatLen(ahead);
+  const carry = p.spec.back ? -rules.STOOP_CARRY : Math.min(rules.STOOP_CARRY, Math.max(0, across - rules.STOOP_LANDING));
+  let to = across === 0 ? flat(att.pos) : add(flat(att.pos), scaleTo(ahead, carry));
+  if (flatLen(to) > rules.ARENA_RADIUS) to = scaleTo(to, rules.ARENA_RADIUS);
+  // The descent takes time [Doc]: the wind-up grows with the fall; the active window, then recovery, give it room.
+  const fall = Math.floor((att.pos.z * rules.STOOP_TICKS_PER_PACE) / R.PACE);
+  p.windup = Math.min(R.TICKS_PER_SLOT - rules.MIN_ACTIVE, p.windup + fall);
+  p.active = Math.min(p.active, R.TICKS_PER_SLOT - p.windup);
+  p.recovery = R.TICKS_PER_SLOT - p.windup - p.active;
   p.stoop = { from: { ...att.pos }, to, target };
-  ev.push({ kind: 'note', tick: t, side: att.side, tag: 'stoop', text: `Stoops from ${(dist(att.pos, to) / R.PACE).toFixed(1)} paces to land at Melee, talons first.` });
+  const moved = flatLen(sub(to, flat(att.pos)));
+  ev.push({ kind: 'note', tick: t, side: att.side, tag: 'stoop', text: `Stoops from ${(att.pos.z / R.PACE).toFixed(1)} paces up, carrying ${(moved / R.PACE).toFixed(1)} paces ${p.spec.back ? 'back' : 'forward'}; strikes at tick ${p.windup}.` });
 }
 
 /**

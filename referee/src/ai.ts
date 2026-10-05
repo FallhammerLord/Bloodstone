@@ -29,8 +29,8 @@ interface Situation {
 /** Shared airborne habits: come down to fight, or answer a dragon overhead. Returns null when grounded and level. */
 function altitudeHabit({ sep, usable, rng, myZ, oppZ, flies, talons, rules }: Situation, style: 'close' | 'far' | 'wait'): ActionSpec | null {
   if (talons && oppZ === 0) {
-    // Wyvern Talons: from the air, stoop on anything within Far; from the ground at range, get airborne first.
-    if (myZ > 0) return sep <= rules.STOOP_RANGE ? { name: 'claw', sweep: side(rng) } : { name: 'approach' };
+    // Wyvern Talons: from the air, stoop on anything within a band plus Claw's reach; from further, close in aloft.
+    if (myZ > 0) return sep <= rules.STOOP_CARRY + rules.CLAW_REACH ? { name: 'claw', sweep: side(rng) } : { name: 'approach' };
     if (sep > R.MELEE_EDGE && rng() < (style === 'wait' ? 0.3 : 0.6)) return { name: 'leap' };
   }
   if (myZ > 0 && oppZ === 0) {
@@ -144,8 +144,8 @@ export function aiController(style: Style, seed: number): Controller {
         if (cd > 0) readyAt[pick.name] = slot + cd + 1;
         out.push(pick);
         if (pick.name === 'claw' && talons && myZ > 0 && view.opp.pos.z === 0 && sep <= view.rules.STOOP_RANGE) {
-          // A stoop lands at Melee, on the ground.
-          sep = view.rules.STOOP_LANDING;
+          // A stoop lands on the ground, carrying at most a band toward the target.
+          sep = Math.max(view.rules.STOOP_LANDING, sep - view.rules.STOOP_CARRY);
           myZ = 0;
         } else {
           ({ sep, z: myZ } = predict(sep, myZ, pick, view, i === 0 && view.me.pending.staggered));

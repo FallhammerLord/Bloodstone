@@ -29,6 +29,8 @@ export function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   if (ready('dodge')) out.push({ name: 'dodge' });
   if (s.f.sheet.flies && s.z < s.rules.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
   if (s.z > 0) out.push({ name: 'dive', depth: depth() });
+  // Talons: a stoop can carry back a band instead of forward, to land clear of a target that chased under it.
+  if (s.z > 0 && s.f.sheet.aspect === 'talons') out.push({ name: 'claw', sweep: side(), back: true });
   // A hard landing: all the way down from two bands up, with a free Stomp [Doc].
   if (s.z >= 2 * R.BAND && ready('stomp')) out.push({ name: 'dive', hard: true });
   // A charge takes this slot and the next; it must release by slot 3.
@@ -90,8 +92,9 @@ export function advance(s: Situation, a: ActionSpec): Situation {
   const readyAt = { ...s.readyAt };
   const cd = ACTIONS[a.name].cooldown;
   if (cd > 0) readyAt[a.name] = s.globalSlot + cd + 1;
-  const step = s.rules.BAND_MOVE; // a Leap or Dive carries a band
+  const step = s.rules.BAND_MOVE; // a Leap or Dive carries a band; a Wyvern's Leap climbs two
+  const climb = s.f.sheet.aspect === 'talons' ? s.rules.TALONS_LEAP_BANDS * step : step;
   if (a.name === 'dive' && a.hard) readyAt.stomp = s.globalSlot + ACTIONS.stomp.cooldown + 1;
-  const z = a.name === 'leap' && s.f.sheet.flies ? Math.min(s.rules.MAX_ALTITUDE, s.z + step) : a.name === 'dive' ? (a.hard ? 0 : Math.max(0, s.z - step)) : a.name === 'claw' && s.f.sheet.aspect === 'talons' ? 0 : s.z;
+  const z = a.name === 'leap' && s.f.sheet.flies ? Math.min(s.rules.MAX_ALTITUDE, s.z + climb) : a.name === 'dive' ? (a.hard ? 0 : Math.max(0, s.z - step)) : a.name === 'claw' && s.f.sheet.aspect === 'talons' ? 0 : s.z;
   return { ...s, globalSlot: s.globalSlot + 1, z, readyAt };
 }
