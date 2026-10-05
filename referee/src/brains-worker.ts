@@ -7,6 +7,7 @@ import { runBout, type Controller } from './bout.ts';
 import { newBout, type FighterSetup, type NoteTag, type Side } from './referee.ts';
 import { standardBoulders } from './arena.ts';
 import * as R from './rules.ts';
+import { rulesWith } from './rules.ts';
 
 export interface Player {
   kind: 'brain' | 'crude';
@@ -54,8 +55,10 @@ const controller = (p: Player): Controller =>
   p.kind === 'brain' ? brainController(p.style as BrainStyle, p.skill, p.seed) : aiController(p.style as Style, p.seed);
 
 const results: Result[] = [];
-for (const job of workerData.jobs as Job[]) {
-  const bout = newBout(job.A, job.B, R.DEFAULT_RULES.START_SEPARATION / R.PACE, job.challenged, { boulders: standardBoulders(job.arenaSeed), seed: job.arenaSeed });
+const rules = rulesWith(workerData.overrides ?? {});
+const mine = (workerData.jobs as Job[]).filter((_, i) => i % workerData.parts === workerData.part);
+for (const job of mine) {
+  const bout = newBout(job.A, job.B, rules.START_SEPARATION / R.PACE, job.challenged, { boulders: standardBoulders(job.arenaSeed, rules), seed: job.arenaSeed }, rules);
   const startPos = { A: { ...bout.fighters.A.pos }, B: { ...bout.fighters.B.pos } };
   const ev = runBout(bout, { A: controller(job.playerA), B: controller(job.playerB) });
   const end = ev.find((e) => e.kind === 'boutEnd');

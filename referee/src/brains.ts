@@ -1,19 +1,22 @@
 // The brain tournament: does thinking beat habit, do the styles form a triangle, and how do the
 // pairings fare when both sides think?
-//   npm run brains [-- --skill novice|adept|master]
+//   npm run brains [-- --skill novice|adept|master] [--rule KEY=VALUE ...] [--json file]
+//   --rule changes one dial for the whole run (BREATH.blast.radius=1p); --json also writes the numbers to a file.
 
-import { Worker } from 'node:worker_threads';
-import { availableParallelism } from 'node:os';
+import { writeFileSync } from 'node:fs';
 import { STYLES } from './ai.ts';
 import { BRAIN_STYLES, SKILLS, type BrainStyle, type Skill } from './brain.ts';
 import type { CoreStone, Morph } from './hatch.ts';
 import { seededRandom } from './random.ts';
 import type { FighterSetup, Side } from './referee.ts';
 import type { Job, Player, Result } from './brains-worker.ts';
+import { flag, inWorkers, rateWithMargin, rulesFromArgs, WORKERS } from './harness.ts';
 
 const argv = process.argv.slice(2);
-const skillArg = argv.indexOf('--skill');
-const skill = (skillArg >= 0 ? argv[skillArg + 1] : 'adept') as Skill;
+const skill = flag(argv, '--skill', 'adept') as Skill;
+const { overrides, label: rulesLabel } = rulesFromArgs(argv);
+const jsonFile = flag(argv, '--json', '');
+const json: Record<string, unknown> = { skill, rules: rulesLabel };
 if (!SKILLS.includes(skill)) throw new Error(`Skill is one of ${SKILLS.join(', ')}.`);
 
 const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
@@ -71,19 +74,13 @@ for (const p of pairings) {
   }
 }
 
-const workers = Math.max(1, Math.min(availableParallelism(), 8));
 const t0 = Date.now();
-const chunks: Job[][] = Array.from({ length: workers }, () => []);
-jobs.forEach((j, i) => chunks[i % workers].push(j));
-const results: Result[] = (await Promise.all(chunks.map((chunk) => new Promise<Result[]>((resolve, reject) => {
-  const w = new Worker(new URL('./brains-worker.ts', import.meta.url), { workerData: { jobs: chunk }, execArgv: process.execArgv });
-  w.once('message', resolve);
-  w.once('error', reject);
-})))).flat();
+const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs, overrides })).flat();
 const byId = new Map(results.map((r) => [r.id, r]));
 
 const pct = (w: number, n: number) => `${((100 * w) / Math.max(1, n)).toFixed(0).padStart(3)}%`;
-console.log(`Brain tournament at ${skill} skill: ${jobs.length} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${workers} workers.`);
+console.log(`Brain tournament at ${skill} skill, ${rulesLabel}: ${jobs.length} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
+console.log('Win rates carry a 95% margin (±): two rates whose margins overlap may not differ.');
 const ends = { ko: 0, pulse: 0, timeout: 0 };
 let ex = 0;
 for (const r of results) {
@@ -174,9 +171,9 @@ const overallStyle = BRAIN_STYLES.map((a) => {
     w += t.w;
     n += t.n;
   }
-  return { a, p: (100 * w) / n };
+  return { a, p: (100 * w) / n, w, n };
 }).sort((x, y) => y.p - x.p);
-for (const { a, p } of overallStyle) console.log(`    ${p.toFixed(0).padStart(3)}%  ${a}`);
+for (const { a, w, n } of overallStyle) console.log(`    ${rateWithMargin(w, n)}  ${a}`);
 console.log('\n  Focus brains (one attack only; meter-focus plays the Acumen meter, charge-focus two-slot charges, kite-focus position), against the general styles and each other:');
 for (const f of BRAIN_STYLES.filter((x) => x.endsWith('-focus'))) {
   const vs = (group: readonly BrainStyle[]) => {
@@ -212,7 +209,7 @@ for (const j of jobs.filter((x) => x.group.startsWith('pair|'))) {
 }
 console.log('\n── Pairings when both sides think ──');
 for (const [k, t] of [...pairWins.entries()].sort((x, y) => y[1].w / y[1].n - x[1].w / x[1].n)) {
-  console.log(`  ${pct(t.w, t.n)}  ${k.padEnd(20)} ${'█'.repeat(Math.round((25 * t.w) / t.n))}`);
+  console.log(`  ${rateWithMargin(t.w, t.n)}  ${k.padEnd(20)} ${'█'.repeat(Math.round((25 * t.w) / t.n))}`);
 }
 const group = (f: (label: string) => string) => {
   const m = new Map<string, { w: number; n: number }>();
@@ -225,9 +222,9 @@ const group = (f: (label: string) => string) => {
   return [...m.entries()].sort((x, y) => y[1].w / y[1].n - x[1].w / x[1].n);
 };
 console.log('\n  By morph:');
-for (const [k, t] of group((l) => l.split(' + ')[0])) console.log(`    ${pct(t.w, t.n)}  ${k}`);
+for (const [k, t] of group((l) => l.split(' + ')[0])) console.log(`    ${rateWithMargin(t.w, t.n)}  ${k}`);
 console.log('  By stone:');
-for (const [k, t] of group((l) => l.split(' + ')[1])) console.log(`    ${pct(t.w, t.n)}  ${k}`);
+for (const [k, t] of group((l) => l.split(' + ')[1])) console.log(`    ${rateWithMargin(t.w, t.n)}  ${k}`);
 // Per stone, in the pairing bouts: how often each attack lands, what a landed hit is worth, and what the stone takes.
 const stones: Record<string, Record<string, [number, number, number]>> = {};
 for (const j of jobs.filter((x) => x.group.startsWith('pair|'))) {
@@ -264,5 +261,24 @@ for (const j of crunchJobs) {
   slots += r.stats[5] / 2;
 }
 console.log('\n── Crunchlings (Raking Talons, Juvenile) against identical plain dragons ──');
-console.log(`  The crunchling wins ${pct(cw, crunchJobs.length)} of ${crunchJobs.length} bouts and crunches in ${pct(crunchSlots, slots)} of its slots.`);
+console.log(`  The crunchling wins ${rateWithMargin(cw, crunchJobs.length).trim()} of ${crunchJobs.length} bouts and crunches in ${pct(crunchSlots, slots)} of its slots.`);
 console.log(`  Damage dealt per bout: crunchling ${(cDealt / crunchJobs.length).toFixed(1)}, plain ${(pDealt / crunchJobs.length).toFixed(1)}.`);
+
+if (jsonFile) {
+  Object.assign(json, {
+    bouts: results.length,
+    endings: ends,
+    damageByAttack: byAttack,
+    actions: actionSlots,
+    outcomesPerBout: Object.fromEntries(Object.entries(outcomeCounts).map(([k, v]) => [k, v / results.length])),
+    styles: Object.fromEntries(overallStyle.map(({ a, w, n }) => [a, { w, n }])),
+    styleMatrix: Object.fromEntries([...styleWins.entries()]),
+    pairings: Object.fromEntries([...pairWins.entries()]),
+    morphs: Object.fromEntries(group((l) => l.split(' + ')[0])),
+    stones: Object.fromEntries(group((l) => l.split(' + ')[1])),
+    byStone: stones,
+    crunchling: { w: cw, n: crunchJobs.length },
+  });
+  writeFileSync(jsonFile, JSON.stringify(json, null, 1) + '\n');
+  console.log(`\nWrote ${jsonFile}.`);
+}

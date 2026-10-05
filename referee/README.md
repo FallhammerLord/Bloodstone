@@ -10,10 +10,26 @@ Needs [Node.js](https://nodejs.org) 22 or newer. From this folder:
 npm install                                  # once, for the type checker
 npm run duel -- scenarios/footsies-melee.json  # run a fight and print it
 npm test                                     # check the Referee against the design doc
-npm run tourney                              # every pairing fights every other; prints win rates
+npm run brains -- --skill master             # the brain tournament (see "The brain tournament")
+npm run check                                # type-check everything
 ```
 
 Add `--trace` to a duel to print both dragons' positions every tick, or `--json` for the raw event log.
+
+### Tools for balance work
+
+```sh
+npm run golden                                         # did a refactor change any fight? (--write records new goldens)
+npm run brains -- --skill master --rule BREATH.blast.radius=1p --json out.json
+npm run diag:pairing -- --morph true-dragon --stone fire --bouts 40   # one pairing against the field, and why
+npm run diag:movement -- --bouts 4                     # how each morph moves, and what it costs
+npm run ladder -- HEAD~2 HEAD~1 HEAD -- brains --skill novice         # one script at several commits
+```
+
+- `--rule KEY=VALUE` changes one dial for a whole run, without editing `DEFAULT_RULES`. KEY is a path into the rules (`BURN_DAMAGE`, `BREATH.blast.radius`); VALUE is in the rule's own units, or paces with a `p` suffix. Repeat it for several dials. The brains tournament and both diagnostics take it.
+- Win rates print with a 95% margin (`54% ±4`). Two rates whose margins overlap may not differ.
+- **Goldens** are 144 fixed-seed brain bouts and every scenario, hashed. A refactor must keep them identical; a rule change re-records them in the same commit. `npm test` checks the scenario half.
+- **Ladder** runs each commit in its own temporary git worktree and saves each run to `ladder/<ref>.txt`.
 
 ## Writing a scenario
 
@@ -220,4 +236,7 @@ Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps
 | `src/report.ts` | Turns the event log into text |
 | `src/cli.ts` | Runs a scenario file |
 | `src/golden.ts` | Golden masters: `npm run golden` checks a refactor changed nothing |
+| `src/harness.ts` | Shared tooling: `--rule` overrides, worker threads, win-rate margins |
+| `src/diagnostics/` | `pairing` (a pairing against the field) and `movement` (the movement census) |
+| `src/ladder.ts` | One npm script across several commits |
 | `test/*.test.ts` | Design-doc claims as tests |

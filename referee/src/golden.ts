@@ -5,7 +5,8 @@
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
+import { isMainThread, parentPort, workerData } from 'node:worker_threads';
+import { inWorkers } from './harness.ts';
 import { standardBoulders } from './arena.ts';
 import { brainController, BRAIN_STYLES } from './brain.ts';
 import { runBout } from './bout.ts';
@@ -74,19 +75,16 @@ export function diff(name: string, want: Golden[], got: Golden[]): string[] {
   return lines;
 }
 
-/** The bouts spread over worker threads, in order. */
-async function goldenBoutsParallel(parts = 4): Promise<Golden[]> {
-  const chunks = await Promise.all(Array.from({ length: parts }, (_, part) => new Promise<Golden[]>((resolve, reject) => {
-    const w = new Worker(new URL(import.meta.url), { workerData: { part, parts }, execArgv: process.execArgv });
-    w.once('message', resolve);
-    w.once('error', reject);
-  })));
+/** The bouts spread over worker threads, back in order. */
+async function goldenBoutsParallel(): Promise<Golden[]> {
+  const chunks = await inWorkers<Golden[]>(new URL(import.meta.url), { golden: true });
+  const parts = chunks.length;
   const out: Golden[] = [];
-  for (let i = 0; chunks.some((c) => i < c.length * parts); i++) if (chunks[i % parts][Math.floor(i / parts)]) out.push(chunks[i % parts][Math.floor(i / parts)]);
+  for (let i = 0; chunks[i % parts]?.[Math.floor(i / parts)]; i++) out.push(chunks[i % parts][Math.floor(i / parts)]);
   return out;
 }
 
-if (!isMainThread && workerData?.parts) {
+if (!isMainThread && workerData?.golden) {
   parentPort!.postMessage(goldenBouts(144, workerData.part, workerData.parts));
 } else if (import.meta.url === `file://${process.argv[1]}`) {
   const got = { bouts: await goldenBoutsParallel(), scenarios: goldenScenarios() };
