@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction } from '../src/actions.ts';
 import { makeArena, standardBoulders } from '../src/arena.ts';
-import { newBout, runExchange, type Bout, type Event, type FighterSetup } from '../src/referee.ts';
+import { newBout, runExchange, simulateSlot, type Bout, type Event, type FighterSetup } from '../src/referee.ts';
 import * as R from '../src/rules.ts';
 
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
@@ -261,11 +261,51 @@ test('zones contest Affinity too: a burning zone can\'t take hold of high Affini
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.endsWith("the flames can't take hold.")));
 });
 
-test('a Scales slot held to the end fills the Acumen meter a step', () => {
-  const bout = newBout(TD_WATER, TD_WATER, 6);
+// ---- The Acumen meter, fueled by Affinity [Proposed] ----
+
+test('the meter starts at age bracket × 10 + 3 × Affinity', () => {
+  const bout = newBout(TD_WATER, { name: 'H', morph: 'wyrm', stone: 'water' }, 6);
+  assert.equal(bout.fighters.A.meter, 10 + 3 * 6, 'True Dragon + Water, Affinity 6');
+  assert.equal(bout.fighters.B.meter, 10 + 3 * 9, 'Wyrm + Water, Affinity 9');
+});
+
+test('Scales, Dodge and a Breath charge held to the end each fill Affinity + 3', () => {
+  for (const action of ['scales', 'dodge', 'charge:breath']) {
+    const bout = newBout(TD_WATER, TD_WATER, 6);
+    const m0 = bout.fighters.A.meter;
+    simulateSlot(bout, { A: parseAction(action), B: parseAction('hold') });
+    assert.equal(bout.fighters.A.meter, m0 + 6 + R.METER_BASE_FILL, action);
+  }
+  const bite = newBout(TD_WATER, TD_WATER, 6);
+  const m0 = bite.fighters.A.meter;
+  simulateSlot(bite, { A: parseAction('charge:bite'), B: parseAction('hold') });
+  assert.equal(bite.fighters.A.meter, m0, 'a Bite charge fills nothing');
+});
+
+test('a landed Breath fills the breather; Affinity 0 still fills 3', () => {
+  const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, TD_WATER, 5);
   const m0 = bout.fighters.A.meter;
-  run(bout, ['scales'], ['hold']);
-  assert.equal(bout.fighters.A.meter, m0 + R.SCALES_ACUMEN);
+  const ev = run(bout, ['breath'], ['hold']);
+  assert.equal(hits(ev).length, 1);
+  assert.equal(bout.fighters.A.meter, m0 + R.METER_BASE_FILL);
+});
+
+test('a full meter makes the next landed hit true damage, then empties; a miss spends nothing', () => {
+  const bout = newBout(TD_WATER, { name: 'H', morph: 'wyrm', stone: 'earth' }, 2);
+  bout.fighters.A.meter = R.METER_MAX;
+  const whiff = run(bout, ['stomp'], ['hold']);
+  assert.ok(hits(whiff).length === 1 && bout.fighters.A.meter === R.METER_MAX, 'a Stomp never spends it');
+  const ev = run(bout, ['claw:left'], ['hold']);
+  assert.equal(hits(ev)[0].damage, 3, 'Claw 3 straight through Hardness 6');
+  assert.ok(hits(ev)[0].parts.includes('true damage (full Acumen meter)'));
+  assert.equal(bout.fighters.A.meter, 0);
+});
+
+test('a true-damage Breath ignores Affinity, and its verb can\'t be held', () => {
+  const bout = newBout({ name: 'G', morph: 'wyrm', stone: 'air' }, { name: 'H', morph: 'wyrm', stone: 'water' }, 8);
+  bout.fighters.A.meter = R.METER_MAX;
+  const ev = run(bout, ['breath'], ['hold']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The vortex pulls it in')));
 });
 
 test('standard arenas throw 1d4+2 boulders', () => {

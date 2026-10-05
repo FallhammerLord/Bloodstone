@@ -175,7 +175,7 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
     const { sheet, loadout } = buildSheet(setup);
     return {
       side, name: setup.name, sheet, loadout, pos: vec(x, 0),
-      wounds: sheet.wounds, meter: sheet.acumen, readyAt: {},
+      wounds: sheet.wounds, meter: Math.min(R.METER_MAX, R.AGE_BRACKET[sheet.age] * R.METER_START_PER_AGE + 3 * sheet.affinity), readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
       chain: noChain(), marks: noMarks(), pulsed: false,
     };
@@ -662,11 +662,9 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
       f.marks.noLeap = sp < A;
       ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: 'Stooping Pinions: +3 to the next attack.' });
     }
-    // A Scales slot held to the end steadies the mind: the Acumen meter fills by one near-miss step [Proposed].
-    if (p.spec.name === 'scales' && p.interruptedAt === null) {
-      f.meter = Math.min(R.METER_MAX, f.meter + R.SCALES_ACUMEN);
-      ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: `Scales steadies it: Acumen meter ${f.meter}.` });
-    }
+    // Guarding to the end, or drawing a Breath, fills the Acumen meter [Proposed]. A broken charge fills nothing.
+    if ((p.spec.name === 'scales' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(f, p.spec.name === 'scales' ? 'Scales' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);
+    if (p.charging && p.spec.name === 'breath' && f.marks.charge?.action === 'breath') fillMeter(f, 'drawing Breath', R.TICKS_PER_SLOT - 1, ev);
     bout.history[s].push(p.spec.name);
     f.marks.advanced = p.spec.name === 'approach' && p.converted === null && p.moved > 0;
     f.marks.strafed = p.spec.name === 'strafe' && p.converted === null && p.moved > 0;
@@ -824,7 +822,15 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   // Breath verbs wait until every hit this tick is applied, so a push and a pull can meet.
   const verbs: { s: Side; aim: Vec }[] = [];
   for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, t, false, trade, ev, verbs);
-  breathVerbs(bout, plans, verbs, t, ev);
+  for (const r of results) {
+    // A full meter is spent by the hit it empowered; a landed Breath then fills the breather's meter.
+    if (r.bypass) {
+      F[r.s].meter = 0;
+      ev.push({ kind: 'note', tick: t, side: r.s, text: 'The Acumen meter empties into the blow: true damage.' });
+    }
+    if (plans[r.s].spec.name === 'breath') fillMeter(F[r.s], 'landed Breath', t, ev);
+  }
+  breathVerbs(bout, plans, verbs, t, ev, new Set(results.filter((r) => r.bypass).map((r) => r.s)));
 
   // 5. End-of-window checks.
   for (const s of SIDES) {
@@ -847,15 +853,9 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
         ev.push({ kind: 'whiff', tick: t, attacker: s, action: p.spec.name });
         continue;
       }
-      const att = F[s];
-      att.meter += R.NEAR_MISS_STEP;
-      if (att.meter >= R.METER_MAX) {
-        att.meter = att.sheet.acumen;
-        const g = damage(att, F[other(s)], p, plans[other(s)], t, true);
-        applyHit(bout, plans, s, g.total, g.parts, t, true, false, ev);
-      } else {
-        ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: att.meter });
-      }
+      // A near miss fills the Acumen meter; it no longer grazes [Proposed].
+      fillMeter(F[s], 'near miss', t, ev);
+      ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: F[s].meter });
     }
     if (p.spec.name === 'intimidate') intimidateLands(bout, s, t, ev);
   }
@@ -951,8 +951,10 @@ function moveStep(me: Fighter, opp: Fighter, p: Plan, oppPlan: Plan, t: number, 
   return np;
 }
 
-function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[] } {
+function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[]; bypass: boolean } {
   const parts: string[] = [];
+  // A full Acumen meter makes the next landed Bite, Claw or Breath true damage: no Hardness, no Affinity [Proposed].
+  const bypass = !graze && att.meter >= R.METER_MAX && (p.spec.name === 'bite' || p.spec.name === 'claw' || p.spec.name === 'breath') && p.landedHalves === 0;
   const defPhase = phase(defPlan, t);
   const scales = guarding(defPlan, t);
   const corroded = def.status.corroded;
@@ -961,7 +963,7 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
 
   // Ash Gland: the breath carries information, not harm (3 points from Adult).
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
-  if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`] };
+  if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`], bypass: false };
 
   // Guard techniques change Hardness while guarding with Scales.
   let guardShift = 0;
@@ -984,7 +986,8 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     guardShift -= 3;
     guardNotes.push('Gnashing Teeth');
   }
-  const hardness = Math.max(0, hard.value + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0) + guardShift);
+  const hardness = bypass ? 0 : Math.max(0, hard.value + (scales ? R.SCALES_HARDNESS : 0) - (corroded ? R.CORRODE_HARDNESS : 0) + guardShift);
+  if (bypass) parts.push('true damage (full Acumen meter)');
   const hardLabel = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${guardNotes.length ? ` (−3 ${guardNotes.join(', ')})` : ''}${hard.note}`;
   let v = 0;
   switch (p.spec.name) {
@@ -1020,7 +1023,9 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     case 'breath': {
       const m = matchup(att.sheet.stone, def.sheet.stone) * R.MATCHUP;
       const breath = eff(att, 'breath', { sep });
-      const { aff, scalesAff, mantleAff, pierce, affinity } = affinityAgainst(att, def, scales, sep);
+      const against = affinityAgainst(att, def, scales, sep);
+      const { aff, scalesAff, mantleAff, pierce } = against;
+      const affinity = bypass ? 0 : against.affinity;
       v = breath.value - affinity + m;
       parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${scalesAff ? ' (Scales)' : ''}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
       const elem = R.ELEMENT_BREATH_MOD[att.sheet.stone];
@@ -1103,7 +1108,7 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     v = R.DAMAGE_FLOOR;
     parts.push(`floor ${R.DAMAGE_FLOOR}`);
   }
-  return { total: v, parts };
+  return { total: v, parts, bypass };
 }
 
 function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], t: number, graze: boolean, trade: boolean, ev: Event[], verbs: { s: Side; aim: Vec }[] | null = null) {
@@ -1264,6 +1269,14 @@ function elementHolds(att: Fighter, def: Fighter, scales: boolean): string | nul
   return holds ? `Affinity ${affinity} holds against Potency ${potency}` : null;
 }
 
+/** One Acumen trigger: Affinity + 3 into the meter, capped full [Proposed]. */
+function fillMeter(f: Fighter, why: string, t: number, ev: Event[]) {
+  if (f.meter >= R.METER_MAX) return;
+  const amount = R.METER_BASE_FILL + Math.max(0, eff(f, 'affinity', {}).value);
+  f.meter = Math.min(R.METER_MAX, f.meter + amount);
+  ev.push({ kind: 'note', tick: t, side: f.side, text: `Acumen meter +${amount} (${why}): ${f.meter}${f.meter >= R.METER_MAX ? ', full' : ''}.` });
+}
+
 /** Any forced movement that meets the wall or an obstacle slams [Proposed]. */
 function slammed(f: Fighter, slam: string | null, t: number, ev: Event[]) {
   if (!slam) return;
@@ -1272,10 +1285,11 @@ function slammed(f: Fighter, slam: string | null, t: number, ev: Event[]) {
 }
 
 /** A push and a pull in the same moment cancel: Water's jet against Air's vortex [Proposed]. */
-function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Side; aim: Vec }[], t: number, ev: Event[]) {
-  // First each target's Affinity contests the element; only verbs that take hold can meet.
+function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Side; aim: Vec }[], t: number, ev: Event[], bypass: Set<Side> = new Set()) {
+  // First each target's Affinity contests the element (a true-damage Breath ignores it); only verbs that take hold can meet.
   const verbs = all.filter((v) => {
     if (bout.fighters[v.s].sheet.stone !== 'water' && bout.fighters[v.s].sheet.stone !== 'air') return true;
+    if (bypass.has(v.s)) return true;
     const held = elementHolds(bout.fighters[v.s], bout.fighters[other(v.s)], guarding(plans[other(v.s)], t));
     if (held) ev.push({ kind: 'note', tick: t, side: other(v.s), text: `${held}: the ${bout.fighters[v.s].sheet.stone === 'water' ? 'push' : 'pull'} fails.` });
     return !held;
