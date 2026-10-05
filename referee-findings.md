@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [18](#round-18-fire-sets-the-world-on-fire) | Fire sets the world on fire |
 | [17](#round-17-fires-blast-at-¾-pace-on-the-cleaned-up-referee) | Fire's blast at ¾ pace, on the cleaned-up Referee |
 | [16](#round-16-trimmed-stalwart-½-pace-snap-brains-that-value-position) | trimmed Stalwart, ½-pace snap, brains that value position |
 | [15](#round-15-band-movement-and-the-breath-first-true-dragon) | band movement and the breath-first True Dragon |
@@ -21,6 +22,44 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 18: Fire sets the world on fire
+
+Changes since Round 17 [Proposed] (master, 2,544 bouts):
+- **Fire's burning ground is a lane** along its line through Close and Far (from the Melee edge to the Far edge), as wide as the blast, so closing in means crossing it.
+- **A burn deals Potency ÷ 4** (True Dragon + Fire 4, the others 3).
+- **Floor zones linger Potency ÷ 6 slots** after the one they land in, plus an exchange per charging slot; Earth's pools too. Each dragon keeps at most two; overlapping fires burn once a slot.
+- **Brains** count ending a slot in enemy ground as about one more burn.
+- **Blind on burn** was built as a toggle (`BURN_BLINDS`) and tested; it added nothing, so it's off.
+
+Fire tracks first (`diag:pairing`, each Fire pairing against every other, 20 bouts each, 220 per pairing):
+
+| | Old zone rules | New | New + Blind |
+|---|---|---|---|
+| True Dragon + Fire | 52% ±7 | **68% ±6** | 68% ±6 |
+| Wyrm + Fire | 42% ±6 | **50% ±7** | 48% ±7 |
+| Wyvern + Fire | 45% ±7 | 40% ±6 | 38% ±6 |
+
+The lane works as meant: True Dragon + Fire takes 14 Bite damage a bout instead of 21.
+
+Then the full tournament:
+
+| | Round 17 | Round 18 |
+|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 56 / 44 / 50 | 58 / 46 / 46 |
+| Stones (Air / Earth / Water / Fire) | 54 / 49 / 51 / 46 | 54 / **46** / 48 / **53** |
+| Fire pairings (TD / Wyrm / Wyvern) | 61 / 36 / 41 | 61 / **50** / 47 |
+| Pairing spread | 36–65% | 39–70% |
+| Fights at Melee / Close / Far / Very Far | 33 / 35 / 25 / 7% | 32 / 34 / 26 / 9% |
+| Style range (identical dragons) | 39–61% | 37–62% |
+| Timeouts | 13% | 13% |
+
+**What it shows:**
+- **Fire went from last stone to second (46 → 53% ±7).** The biggest gain is the weakest pairing: Wyrm + Fire 36 → 50%. Every Fire pairing is now within its margin of 50% or above it.
+- **True Dragon + Fire holds at 61% ±11** in the pairing bouts (68% in the larger Fire track): strong, with True Dragon + Air (70% ±11) still on top.
+- **Earth is now the last stone (46% ±7)**, and Wyrm + Earth the last pairing (39% ±11). Its pools now linger too, but a pool costs Hardness, not Wounds, so it gains less than Fire's lane.
+- **Fights drifted outward** a little (Very Far 7 → 9%), and timeouts held at 13%: the lingering fire hasn't made turtling pay.
+- **The boxing triangle shuffled** (swarmer over out-boxer now 42%); at ±12 per cell, that's within noise.
 
 ## Round 17: Fire's blast at ¾ pace, on the cleaned-up Referee
 
