@@ -141,9 +141,10 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
     }
     case 'stomp': {
       // Stomp grows with Hardness [Proposed]: 3 + Hardness ÷ 3, true damage.
-      const heft = Math.floor(Math.max(0, eff(att, 'hardness', {}).value) / rules.STOMP_HARDNESS_DIVISOR);
+      const divisor = rules.STOMP_HARDNESS_DIVISOR[att.sheet.age];
+      const heft = Math.floor(Math.max(0, eff(att, 'hardness', {}).value) / divisor);
       v = rules.STOMP_DAMAGE + heft;
-      parts.push(`Stomp ${rules.STOMP_DAMAGE} + ${heft} (Hardness ÷ ${rules.STOMP_HARDNESS_DIVISOR}) true damage`);
+      parts.push(`Stomp ${rules.STOMP_DAMAGE} + ${heft} (Hardness ÷ ${divisor}) true damage`);
       break;
     }
   }
@@ -255,7 +256,11 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
     def.pending.rattled = true;
     ev.push({ kind: 'note', tick: t, side: def.side, tag: 'technique', text: 'Gnashing Teeth: both bites land; Rattled.' });
   }
-  const interrupt = phase(defPlan, t) === 'windup';
+  // A hit in the wind-up interrupts, except a charged Breath's release: the charge is committed [Doc].
+  // At Melee, a Breath is lost to any hit before it resolves, active window included.
+  const chargedBreath = defPlan.spec.name === 'breath' && defPlan.spec.released;
+  const meleeBreath = defPlan.spec.name === 'breath' && !chargedBreath && !defPlan.resolved && phase(defPlan, t) === 'active' && dist(bout.fighters[s].pos, def.pos) <= R.MELEE_EDGE;
+  const interrupt = (phase(defPlan, t) === 'windup' && !chargedBreath) || meleeBreath;
   if (interrupt) defPlan.interruptedAt = t;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, tags, interrupt, trade, woundsLeft: def.wounds });
   if (p.spec.name === 'breath' && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) {

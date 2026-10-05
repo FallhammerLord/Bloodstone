@@ -73,9 +73,8 @@ test('Ratchet Claws Elder: the escalating chain holds through a hitless exchange
 });
 
 test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pierces Affinity from Juvenile', () => {
-  // Fire's blast reaches 8 paces (center 7½, radius ½); the lance reaches 9.
+  // Both reach Far's edge; the lance is a line, and from Juvenile it pierces Affinity.
   const fire: FighterSetup = { name: 'E', morph: 'true-dragon', stone: 'fire' };
-  assert.equal(hits(run(newBout(fire, TD_WATER, 8.5), ['breath'], ['hold'])).length, 0);
   const ev = run(newBout(withTech(fire, 'Lance Throat', 'juvenile'), TD_WATER, 8.5), ['breath'], ['hold']);
   assert.equal(hits(ev).length, 1);
   assert.equal(hits(ev)[0].damage, 15 - (6 - 3) - 2, 'Potency 15, Affinity 6 pierced to 3, Fire and Water neutral, −2 Fire breath');

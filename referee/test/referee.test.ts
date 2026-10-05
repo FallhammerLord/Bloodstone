@@ -91,9 +91,10 @@ test('chained bites deal 30 to a True Dragon: 9 + 9 + 12 (Bite pierces 3 Hardnes
 });
 
 test('a chain needs each link to land', () => {
-  // The first bite starts out of reach and misses while B steps in a band; the next two count as links 1 and 2, so no +3.
-  const { hits } = fight(TD_WATER, TD_WATER, 7, ['bite', 'bite', 'bite'], ['approach', 'hold', 'hold']);
-  assert.deepEqual(hits.map((h) => h.damage), [9, 9]);
+  // The first bite is out of reach (Far); B then steps in a band, and the next two count as links 1 and 2, so no +3.
+  // (B's slow approach is still in recovery at tick 12, so link 1 also punishes.)
+  const { hits } = fight(TD_WATER, TD_WATER, 7, ['bite', 'bite', 'bite'], ['hold', 'approach', 'hold']);
+  assert.deepEqual(hits.map((h) => h.damage), [9 + R.DEFAULT_RULES.PUNISH_BONUS, 9]);
 });
 
 test('breath skips Evasion and applies the matchup', () => {
@@ -133,7 +134,7 @@ test('a strafe during the wind-up slips a bite', () => {
 test('stomp deals 3 + Hardness ÷ 3 true damage and Staggers: the next move runs on half its Evasion', () => {
   // Wyrm + Air has Evasion 6: a strafe normally carries 2 paces; Staggered, Evasion 3 carries 1.
   const { hits, bout } = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['stomp', 'hold'], ['hold', 'strafe:cw']);
-  assert.equal(hits[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(3 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR)); // True Dragon Hardness 3
+  assert.equal(hits[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(3 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR.wyrmling)); // True Dragon Hardness 3
   const free = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['hold', 'hold'], ['hold', 'strafe:cw']).bout;
   assert.ok(Math.abs(bout.fighters.B.pos.y) < Math.abs(free.fighters.B.pos.y), 'the staggered strafe carries less');
 });

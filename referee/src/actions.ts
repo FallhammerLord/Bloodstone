@@ -57,6 +57,8 @@ export interface ActionSpec {
   crunch?: boolean;
   /** a band move landing short of or past the band's 3 paces, as far as Evasion allows [Proposed] */
   depth?: 'short' | 'long';
+  /** Dive: a hard landing, all the way down from two bands up or more, with a free Stomp where it lands [Doc] */
+  hard?: boolean;
 }
 
 export const HOLD: ActionSpec = { name: 'hold' };
@@ -85,6 +87,7 @@ export function parseAction(text: string): ActionSpec {
     if (sweep !== 'left' && sweep !== 'right') throw new Error(`Claw sweep is "left" or "right".`);
     return { name, sweep };
   }
+  if (name === 'dive' && detail === 'hard') return { name, hard: true };
   if (name === 'approach' || name === 'retreat' || name === 'leap' || name === 'dive') {
     if (detail === undefined) return { name };
     if (detail !== 'short' && detail !== 'long') throw new Error(`A band move lands "short" or "long": "${name}:long".`);
@@ -100,5 +103,6 @@ export function describe(spec: ActionSpec): string {
   if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''})`;
   if (spec.sweep) return `${label} (${spec.sweep})`;
   if (spec.depth) return `${label} (${spec.depth})`;
+  if (spec.hard) return `${label} (hard landing)`;
   return label;
 }

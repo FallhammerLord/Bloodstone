@@ -81,7 +81,7 @@ export const DEFAULT_RULES = {
   METER_START_PER_AGE: 10,
   GRAVITY_DROP: BAND, // [Proposed] a flier that doesn't Leap during an exchange drops a band at its end
   DEMORALIZE: 3, // [Proposed] an Intimidate that reaches also takes 3 off the target's next Bite or Claw
-  STOMP_HARDNESS_DIVISOR: 3, // [Proposed] Stomp deals 3 + Hardness ÷ 3, and shatters boulders inside its radius
+  STOMP_HARDNESS_DIVISOR: { wyrmling: 3, adult: 3, venerable: 2 }, // Stomp deals 3 + Hardness ÷ 3 (a Venerable's ÷ 2), and shatters boulders inside its radius
   METER_STEROID_DIVISOR: 3, // a full meter's hit also adds Affinity ÷ 3 [Proposed]
   AGE_BRACKET: { wyrmling: 1, adult: 3, venerable: 5 } as const, // of five: wyrmling, juvenile, adult, elder, venerable
   BOULDERS_PER_ARENA: { dice: 4, plus: 2 }, // [Proposed] standard arenas throw 1d4+2 boulders: never an open floor
@@ -130,7 +130,6 @@ export const DEFAULT_RULES = {
   STOMP_MOVER_STAGGER: 2,
   STAGGER_EVASION_TEST: 1, // [Proposed] 1: a Staggered dragon also tests half its Evasion (it already moves on half); 0: movement only
   STOOP_PER_PACE: 1, // [Proposed] a stoop deals +1 per pace it falls (+3 a band), like a charge paying for its setup; 0: off
-  WYVERN_GROUND_CLAW_REACH: 2 * PACE, // [Assumed] forelimbs are wings, so its Claw from the ground is short
   // ---- Technique numbers ---- (dragonshards-technique.md gives most; these fill its gaps) [Assumed]
   TECHNIQUE_POINTS: 3, // Thornscale's spikes, Goading Roar's sting, Riposte's free claw, Smoldering Maw's linger
   SCYTHE_REACH: { wyrmling: PACE / 2, full: PACE }, // Scything widens the arc: one side, then both
@@ -139,16 +138,17 @@ export const DEFAULT_RULES = {
   STOOPING_HEIGHT: { wyrmling: 6 * PACE, rest: 3 * PACE }, // Stooping Pinions: how high a dive must start
   // ---- Attack shapes ----
   // Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").
-  BITE_REACH: 5 * PACE, // [Assumed] Melee into Close; starts just outside at Far
+  // Reach is in whole range bands [Doc]; widths and radii are paces, tuned by attributes.
+  BITE_REACH: CLOSE_EDGE, // Bite reaches through Close [Doc]: Melee into Close
   BITE_HALF_WIDTH: PACE / 2, // [Assumed] narrow: how far off the aim line it still catches
-  CLAW_REACH: Math.floor((10 * PACE) / 3), // [Assumed] arc edge reaches just into Close
+  CLAW_REACH: MELEE_EDGE + NOTCH, // Claw's arc reaches Melee's edge and sweeps just into Close [Doc], from the ground or the air
   CLAW_BACK: PACE / 2, // [Assumed] arc wraps slightly behind the shoulders
-  STOMP_RADIUS: { wyrmling: 2 * PACE, adult: 3 * PACE, venerable: 4 * PACE }, // [Assumed] contact + 1/2/3 paces
+  STOMP_RADIUS: { wyrmling: CLOSE_EDGE, adult: FAR_EDGE, venerable: FAR_EDGE }, // Stomp quakes whole bands [Doc]: Close, then Far
   BREATH: {
     line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
-    narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
+    narrowCone: { reach: FAR_EDGE }, // Earth: through Far; half-width grows ¼ pace per pace, plus ¼ pace
     vortex: { maxCenter: Math.floor(8.5 * PACE), radius: Math.floor(0.5 * PACE) }, // [Proposed] Air: a ranged vortex centered on the target, 1 pace across (cut from 2); its edge reaches Far
-    blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.75 * PACE) }, // Fire: lands on the target; radius 1.5 → 0.5 (Round 2) → 0.75 (once aim settled late)
+    blast: { maxCenter: FAR_EDGE - Math.floor(0.75 * PACE), radius: Math.floor(0.75 * PACE) }, // Fire: lands on the target; radius 1.5 → 0.5 (Round 2) → 0.75 (once aim settled late)
   }, // all [Assumed]; every breath stays within Far [Doc]
   // ---- Attack roles ---- [Proposed]
   // Claw catches strafes; Bite catches retreats and armor; Breath catches dodges; Stomp catches burrows and the grounded.

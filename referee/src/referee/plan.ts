@@ -56,6 +56,9 @@ export interface Plan {
   /** a crunch: two attacks of 15 ticks each */
   halves: [number, number, number][] | null;
   landedHalves: number;
+  /** a hard landing: the whole descent, then a free Stomp where it lands [Doc] */
+  hardLanding: boolean;
+  quaked: boolean;
 }
 
 export const category = (p: Plan) => (p.charging ? 'guard' : ACTIONS[p.spec.name].category);
@@ -229,6 +232,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   }
   let [windup, active, recovery] = timing(rules, def.profile, wShift, rShift);
 
+  let hardLanding = false;
   let moveTotal = 0;
   let travel = active;
   let shiftTotal = 0;
@@ -252,6 +256,16 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     if (spec.shift) shiftTotal = (sw >= A ? 2 : 1) * R.PACE;
     if (f.status.slowed) travel = Math.min(R.TICKS_PER_SLOT - windup, travel + 3);
     if (spec.name === 'dive' && tech(f, 'stooping-pinions') >= E) travel = Math.max(1, travel - 3);
+    // A hard landing [Doc]: from two bands up or more, with Stomp ready, the Dive comes all the way down and Stomps
+    // where it lands. Otherwise it dives a band.
+    if (spec.name === 'dive' && spec.hard) {
+      const stompReady = (f.readyAt.stomp ?? 0) <= g;
+      if (f.pos.z >= 2 * R.BAND && stompReady) {
+        hardLanding = true;
+        moveTotal = f.pos.z;
+        f.readyAt.stomp = g + ACTIONS.stomp.cooldown + 1;
+      } else note('held-instead', `A hard landing needs two bands of altitude${stompReady ? '' : ' and Stomp ready'}: dives a band instead.`);
+    }
   }
 
   let link = 0;
@@ -289,7 +303,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, aimLock: 0, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
     pounces: pounces && spec.name === 'claw' && !spec.crunch,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
-    charging, halves, landedHalves: 0,
+    charging, halves, landedHalves: 0, hardLanding, quaked: false,
   };
 }
 

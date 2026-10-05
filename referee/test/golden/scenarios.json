@@ -15,10 +15,10 @@
  },
  {
   "name": "brains.json",
-  "winner": "A",
-  "exchanges": 3,
-  "wounds": "18/-1",
-  "hash": "a1a27ecff717bafd"
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "0/11",
+  "hash": "972ccfc450da3dc3"
  },
  {
   "name": "breath-effects.json",
@@ -45,8 +45,8 @@
   "name": "charge-and-crunch.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "43/22",
-  "hash": "dd40cfdbb754991d"
+  "wounds": "41/22",
+  "hash": "fef0a4070e4ff298"
  },
  {
   "name": "footsies-close.json",
@@ -123,7 +123,7 @@
   "winner": "-",
   "exchanges": 1,
   "wounds": "18/45",
-  "hash": "b2a734e8c371d7f3"
+  "hash": "f2d77b30bfb1257e"
  },
  {
   "name": "techniques.json",

@@ -22,6 +22,8 @@ import { intimidateLands, riposte, smolder } from './techniques.ts';
 export function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   // 1. Movement, both dragons from the same starting positions.
   move(bout, plans, t, ev);
+  // A hard landing Stomps where it touches down.
+  for (const s of SIDES) if (plans[s].hardLanding && !plans[s].quaked && bout.fighters[s].pos.z === 0 && plans[s].moved > 0) hardLanding(bout, plans, s, t, ev);
   // 2. Attacks aim as their wind-up starts, then track until the aim settles.
   for (const s of SIDES) aim(bout, plans, s, t, ev);
   // 3. Hit detection. Obstacles in the way are judged as they stood at the start of the tick.
@@ -104,13 +106,7 @@ function aim(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: Even
   if (p.lunges && t === p.windup && phase(p, t) === 'active') p.origin = { ...F[s].pos };
   // A pouncing Claw sweeps its arc from wherever the pounce has carried it, tick by tick.
   if (p.pounces && !p.stoop && phase(p, t) === 'active') p.origin = { ...F[s].pos };
-  // A Stomp's quake shatters the boulders inside its radius as it lands [Proposed]; pillars stand.
-  if (p.spec.name === 'stomp' && t === p.windup && phase(p, t) === 'active') {
-    const reach = bout.rules.STOMP_RADIUS[F[s].sheet.age];
-    const shattered = bout.arena.obstacles.filter((o) => o.kind === 'boulder' && flatLen(sub(o.pos, F[s].pos)) <= reach + o.radius);
-    for (const o of shattered) ev.push({ kind: 'note', tick: t, side: s, tag: 'boulder-shattered', text: `The quake shatters ${describeObstacle(o)}.` });
-    if (shattered.length) bout.arena.obstacles = bout.arena.obstacles.filter((o) => !shattered.includes(o));
-  }
+  if (p.spec.name === 'stomp' && t === p.windup && phase(p, t) === 'active') shatter(bout, s, t, ev);
   // A stooping Wyvern strikes from wherever it actually landed, toward where the target stood.
   if (p.stoop && t === p.windup && phase(p, t) === 'active') {
     p.origin = { ...F[s].pos };
@@ -183,17 +179,45 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
 /** Damage from the same moment, applied together; then the meters, and the breath verbs once every hit is in. */
 function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev: Event[]) {
   const F = bout.fighters;
+  // At Melee, a Breath trading with a Bite, Claw or Stomp is lost: Melee belongs to the body [Doc]. A charged release holds.
+  if (hits.length === 2 && dist(F.A.pos, F.B.pos) <= R.MELEE_EDGE) {
+    const lost = hits.filter((s) => plans[s].spec.name === 'breath' && !plans[s].spec.released && plans[other(s)].spec.name !== 'breath');
+    for (const s of lost) {
+      plans[s].interruptedAt = t;
+      plans[s].resolved = true;
+      ev.push({ kind: 'note', tick: t, side: s, tag: 'breath-broken', text: 'Struck at Melee mid-Breath: the Breath is lost.' });
+    }
+    hits = hits.filter((s) => !lost.includes(s));
+  }
   const results = hits.map((s) => ({ s, ...damage(bout.rules, F[s], F[other(s)], plans[s], plans[other(s)], t) }));
   const trade = results.length === 2;
   // Breath verbs wait until every hit this tick is applied, so a push and a pull can meet.
   const verbs: { s: Side; aim: Vec }[] = [];
-  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, r.tags, t, trade, ev, verbs);
+  const reflected = new Set<Side>();
+  for (const r of results) {
+    // A guard with a full Acumen meter turns the blow back on the attacker and empties the meter [Doc].
+    const d = other(r.s);
+    const dp = plans[d];
+    if ((dp.spec.name === 'scales' || dp.spec.name === 'dodge') && phase(dp, t) === 'active' && F[d].meter >= R.METER_MAX) {
+      reflected.add(r.s);
+      plans[r.s].resolved = true;
+      F[d].meter = 0;
+      // The blow lands on its owner, against its owner's own hide.
+      const back = damage(bout.rules, F[r.s], F[r.s], plans[r.s], plans[r.s], t);
+      F[r.s].wounds -= back.total;
+      ev.push({ kind: 'note', tick: t, side: d, tag: 'reflected', text: `The full Acumen meter turns the ${plans[r.s].spec.name} back on its owner.` });
+      ev.push({ kind: 'hit', tick: t, attacker: d, action: plans[r.s].spec.name, damage: back.total, parts: ['reflected by a full Acumen meter:', ...back.parts], tags: ['reflected'], interrupt: false, trade: false, woundsLeft: F[r.s].wounds });
+      continue;
+    }
+    applyHit(bout, plans, r.s, r.total, r.parts, r.tags, t, trade, ev, verbs);
+  }
   for (const r of results) {
     // A full meter is spent by the hit it empowered; a landed Breath then fills the breather's meter.
     if (r.bypass) {
       F[r.s].meter = 0;
       ev.push({ kind: 'note', tick: t, side: r.s, tag: 'meter-spent', text: 'The Acumen meter empties into the blow: true damage.' });
     }
+    if (reflected.has(r.s)) continue;
     if (plans[r.s].spec.name === 'breath') fillMeter(bout.rules, F[r.s], 'landed Breath', t, ev);
     // A hit on a corroded dragon is an Acumen trigger [Proposed].
     if (bout.rules.CORRODE_METER && F[other(r.s)].marks.corrosion) fillMeter(bout.rules, F[r.s], 'hit on a corroded target', t, ev);
@@ -227,4 +251,30 @@ function endOfWindow(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, 
     ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: F[s].meter });
   }
   if (p.spec.name === 'intimidate') intimidateLands(bout, s, t, ev);
+}
+
+/** A Stomp's quake shatters the boulders inside its radius as it lands [Proposed]; pillars stand. */
+function shatter(bout: Bout, s: Side, t: number, ev: Event[]) {
+  const F = bout.fighters;
+  const reach = bout.rules.STOMP_RADIUS[F[s].sheet.age];
+  const shattered = bout.arena.obstacles.filter((o) => o.kind === 'boulder' && flatLen(sub(o.pos, F[s].pos)) <= reach + o.radius);
+  for (const o of shattered) ev.push({ kind: 'note', tick: t, side: s, tag: 'boulder-shattered', text: `The quake shatters ${describeObstacle(o)}.` });
+  if (shattered.length) bout.arena.obstacles = bout.arena.obstacles.filter((o) => !shattered.includes(o));
+}
+
+/**
+ * A hard landing [Doc]: the Dive touches down and Stomps for free, a quake around where it lands. It hits a grounded
+ * target inside Stomp's reach, Staggers it as a Stomp does, and shatters boulders. No Evasion test, like any Stomp.
+ */
+function hardLanding(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: Event[]) {
+  const F = bout.fighters;
+  const p = plans[s];
+  p.quaked = true;
+  ev.push({ kind: 'note', tick: t, side: s, tag: 'hard-landing', text: 'A hard landing: the ground quakes.' });
+  shatter(bout, s, t, ev);
+  const def = F[other(s)];
+  if (def.pos.z !== 0 || dist(F[s].pos, def.pos) > bout.rules.STOMP_RADIUS[F[s].sheet.age]) return;
+  const quake: Plan = { ...p, spec: { name: 'stomp' }, halves: null, landedHalves: 0 };
+  const r = damage(bout.rules, F[s], def, quake, plans[other(s)], t);
+  applyHit(bout, { ...plans, [s]: quake } as Record<Side, Plan>, s, r.total, r.parts, r.tags, t, false, ev, null);
 }

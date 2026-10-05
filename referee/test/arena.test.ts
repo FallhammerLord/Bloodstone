@@ -13,12 +13,18 @@ const hits = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'hit' }
 
 // ---- Aspects (§2) ----
 
-test('Talons: a grounded Wyvern claw is short', () => {
-  // At 2.5 paces a True Dragon's claw lands; a Wyvern's doesn't.
-  const td = run(newBout(TD_WATER, TD_WATER, 2.5), ['claw:left'], ['hold']);
-  const wy = run(newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, 2.5), ['claw:left'], ['hold']);
-  assert.equal(hits(td).length, 1);
-  assert.equal(hits(wy).length, 0);
+test('Claw reaches Melee\'s edge and sweeps into Close, a grounded Wyvern\'s included', () => {
+  for (const sep of [2.5, 3.25]) {
+    const wy = run(newBout({ name: 'G', morph: 'wyvern', stone: 'water' }, TD_WATER, sep), ['claw:left'], ['hold']);
+    assert.equal(hits(wy).length, 1, `${sep} paces`);
+  }
+  assert.equal(hits(run(newBout(TD_WATER, TD_WATER, 3.75), ['claw:left'], ['hold'])).length, 0, 'not deep into Close');
+});
+
+test('reaches are whole bands: Bite through Close, Stomp through Close at wyrmling', () => {
+  assert.equal(hits(run(newBout(TD_WATER, TD_WATER, 6), ['bite'], ['hold'])).length, 1, 'Bite at Close\'s edge');
+  assert.equal(hits(run(newBout(TD_WATER, TD_WATER, 6.5), ['bite'], ['hold'])).length, 0, 'not into Far');
+  assert.equal(hits(run(newBout(TD_WATER, TD_WATER, 6), ['stomp'], ['hold'])).length, 1, 'Stomp at Close\'s edge');
 });
 
 test('Talons: from the air, a Wyvern stoops on a grounded target anywhere within Far, lands at Melee, and claws', () => {
@@ -409,7 +415,7 @@ test('a Wyvern can\'t Leap and stoop in the same exchange', () => {
 test('Stomp deals 3 + Hardness ÷ 3, and its quake shatters boulders inside its radius', () => {
   const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 1.5, 'B', { obstacles: [{ size: 'small', x: -1.5, y: -1.5 }] });
   const ev = run(bout, ['stomp'], ['hold']);
-  assert.equal(hits(ev)[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(6 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR), 'a Wyrm\'s Hardness 6 adds 2');
+  assert.equal(hits(ev)[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(6 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR.wyrmling), 'a Wyrm\'s Hardness 6 adds 2');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The quake shatters')));
   assert.equal(bout.arena.obstacles.filter((o) => o.kind === 'boulder').length, 0);
 });
@@ -458,4 +464,46 @@ test('a Stomp that lands mid-move Staggers for two slots, and a Staggered Wyrm c
   // Slot 2: Staggered, it tests 6 ÷ 2 + 3 = 6 against Accuracy 6, a tie on equal Acumen: the Breath lands.
   assert.deepEqual(hits(ev).filter((h) => h.attacker === 'A').map((h) => h.action), ['stomp', 'breath']);
   assert.equal(bout.fighters.B.marks.staggerExtra, 0, 'both slots spent');
+});
+
+// ---- Breath at Melee, charged releases, guard reflection, hard landings [Doc] ----
+
+test('at Melee a Breath trading with a Bite is lost; a charged release holds through a hit', () => {
+  const trade = run(newBout(TD_WATER, TD_WATER, 2), ['breath'], ['bite']);
+  assert.deepEqual(hits(trade).map((h) => h.attacker), ['B'], 'only the Bite lands');
+  assert.ok(trade.some((e) => e.kind === 'note' && e.tag === 'breath-broken'));
+  assert.equal(hits(run(newBout(TD_WATER, TD_WATER, 4), ['breath'], ['bite'])).length, 2, 'at Close they trade');
+  // A Claw in the wind-up would interrupt a plain Breath; a charged release comes out anyway.
+  const plain = run(newBout(TD_WATER, TD_WATER, 2), ['hold', 'breath'], ['hold', 'claw:left']);
+  assert.ok(!hits(plain).some((h) => h.attacker === 'A'));
+  const charged = run(newBout(TD_WATER, TD_WATER, 2), ['charge:breath', 'breath'], ['hold', 'claw:left']);
+  assert.ok(hits(charged).some((h) => h.attacker === 'A' && h.action === 'breath'), 'the charged Breath lands');
+});
+
+test('a guard with a full Acumen meter turns the blow back on its owner\'s own hide, Breath included, and spends the meter', () => {
+  for (const [attack, guard] of [['bite', 'scales'], ['breath', 'scales'], ['bite', 'dodge']] as const) {
+    const bout = newBout(TD_WATER, { name: 'W', morph: 'wyrm', stone: 'earth' }, 4);
+    bout.fighters.B.meter = R.METER_MAX;
+    const ev = run(bout, [attack], [guard]);
+    const h = hits(ev);
+    if (h.length === 0) continue; // a dodge that evades never needs the meter
+    assert.equal(h[0].attacker, 'B', `${attack} into ${guard}`);
+    assert.ok(h[0].tags.includes('reflected'));
+    assert.equal(bout.fighters.A.wounds, bout.fighters.A.sheet.wounds - h[0].damage);
+    assert.ok(bout.fighters.B.meter < R.METER_MAX, 'spent (a Scales slot held to the end then refills a little)');
+  }
+});
+
+test('a hard landing from two bands up comes all the way down and Stomps for free', () => {
+  const bout = newBout(TD_WATER, { name: 'W', morph: 'wyrm', stone: 'earth' }, 4);
+  bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 2 * R.BAND };
+  const ev = run(bout, ['dive:hard'], ['hold']);
+  assert.equal(bout.fighters.A.pos.z, 0);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.tag === 'hard-landing'));
+  assert.deepEqual(hits(ev).map((h) => h.action), ['stomp']);
+  assert.ok(bout.fighters.A.readyAt.stomp! > 0, 'it spends Stomp\'s cooldown');
+  // From one band up it's an ordinary Dive.
+  const low = newBout(TD_WATER, TD_WATER, 4);
+  low.fighters.A.pos = { ...low.fighters.A.pos, z: R.BAND };
+  assert.equal(hits(run(low, ['dive:hard'], ['hold'])).length, 0);
 });

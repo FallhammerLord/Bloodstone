@@ -23,7 +23,7 @@ export type NoteTag =
   // aspects and attack roles
   | 'stoop' | 'stoop-too-soon' | 'lunge' | 'pounce'
   // charges and crunches
-  | 'charge-held' | 'charge-released' | 'charge-broken' | 'crunch-capped' | 'crunch-refused'
+  | 'charge-held' | 'charge-released' | 'charge-broken' | 'breath-broken' | 'reflected' | 'hard-landing' | 'crunch-capped' | 'crunch-refused'
   // a scripted action that can't happen this slot
   | 'held-instead'
   // the elements
@@ -39,7 +39,7 @@ export type NoteTag =
   | 'technique';
 
 /** What shaped a hit's damage, beyond its base. */
-export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'corroded' | 'stoop';
+export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'corroded' | 'stoop' | 'reflected';
 
 export type Event =
   | { kind: 'exchangeStart'; exchange: number }

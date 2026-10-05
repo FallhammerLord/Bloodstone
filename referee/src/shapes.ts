@@ -32,10 +32,6 @@ export function inShape(rules: Rules, shape: Shape, sheet: StatSheet, origin: Ve
     case 'bite':
       return f > 0 && f <= rules.BITE_REACH + grow && l <= rules.BITE_HALF_WIDTH + grow;
     case 'claw':
-      // A Wyvern's forelimbs are wings: from the ground its Claw is short. In the air its talons reach fully.
-      if (sheet.aspect === 'talons' && origin.z === 0) {
-        return dist(origin, target) <= rules.WYVERN_GROUND_CLAW_REACH + extra + grow && f >= -rules.CLAW_BACK - grow;
-      }
       return dist(origin, target) <= rules.CLAW_REACH + extra + grow && f >= -rules.CLAW_BACK - grow;
     case 'stoop':
       // Landing from a stoop, the talons swipe both left and right: the full claw arc to either side.
