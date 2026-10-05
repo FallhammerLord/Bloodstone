@@ -1,0 +1,1010 @@
+[
+ {
+  "name": "0 true-dragon-water/swarmer v true-dragon-water/counterpuncher",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "1/-3",
+  "hash": "52415ef4c80049c3"
+ },
+ {
+  "name": "1 true-dragon-earth/out-boxer v true-dragon-water/meter-focus",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-3/21",
+  "hash": "015b6fdab526b796"
+ },
+ {
+  "name": "2 true-dragon-fire/slugger v true-dragon-water/boxer-puncher",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "6/-3",
+  "hash": "92638c1d630fbeed"
+ },
+ {
+  "name": "3 true-dragon-air/counterpuncher v true-dragon-water/charge-focus",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-3/15",
+  "hash": "5c8ad8372122e34c"
+ },
+ {
+  "name": "4 wyvern-water/boxer-puncher v true-dragon-water/aerialist",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "-10/3",
+  "hash": "33f48c1d27c052db"
+ },
+ {
+  "name": "5 wyvern-earth/aerialist v true-dragon-water/kite-focus",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "-2/3",
+  "hash": "94c68bb87f874395"
+ },
+ {
+  "name": "6 wyvern-fire/reader v true-dragon-water/reader",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-1/9",
+  "hash": "8eb2e11820021197"
+ },
+ {
+  "name": "7 wyvern-air/claw-focus v true-dragon-water/swarmer",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "13/0",
+  "hash": "e4968f85a56f2d2e"
+ },
+ {
+  "name": "8 wyrm-water/bite-focus v true-dragon-water/claw-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "16/33",
+  "hash": "5db71c0b41fa1b78"
+ },
+ {
+  "name": "9 wyrm-earth/breath-focus v true-dragon-water/out-boxer",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "-7/41",
+  "hash": "941dd686b65fdd6b"
+ },
+ {
+  "name": "10 wyrm-fire/meter-focus v true-dragon-water/bite-focus",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-6/4",
+  "hash": "a4f8f8558b201281"
+ },
+ {
+  "name": "11 wyrm-air/charge-focus v true-dragon-water/slugger",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "-7/21",
+  "hash": "ae8086b308b10572"
+ },
+ {
+  "name": "12 true-dragon-water/kite-focus v true-dragon-earth/breath-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "45/-12",
+  "hash": "801bfc7323834dac"
+ },
+ {
+  "name": "13 true-dragon-earth/swarmer v true-dragon-earth/counterpuncher",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "8/-2",
+  "hash": "614253b5aaefa957"
+ },
+ {
+  "name": "14 true-dragon-fire/out-boxer v true-dragon-earth/meter-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "11/-2",
+  "hash": "c4a9df457f77ec7a"
+ },
+ {
+  "name": "15 true-dragon-air/slugger v true-dragon-earth/boxer-puncher",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "12/0",
+  "hash": "e7f540aa81c406b0"
+ },
+ {
+  "name": "16 wyvern-water/counterpuncher v true-dragon-earth/charge-focus",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-3/-5",
+  "hash": "eb5130929fc51ac1"
+ },
+ {
+  "name": "17 wyvern-earth/boxer-puncher v true-dragon-earth/aerialist",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "-5/4",
+  "hash": "15ee124faa7ea21d"
+ },
+ {
+  "name": "18 wyvern-fire/aerialist v true-dragon-earth/kite-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "30/42",
+  "hash": "ba7fd517276520cc"
+ },
+ {
+  "name": "19 wyvern-air/reader v true-dragon-earth/reader",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-5/15",
+  "hash": "8e32b41f4aa80b9f"
+ },
+ {
+  "name": "20 wyrm-water/claw-focus v true-dragon-earth/swarmer",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "0/24",
+  "hash": "ca2648e1ce54611a"
+ },
+ {
+  "name": "21 wyrm-earth/bite-focus v true-dragon-earth/claw-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "1/-6",
+  "hash": "3d3b21f4386aace1"
+ },
+ {
+  "name": "22 wyrm-fire/breath-focus v true-dragon-earth/out-boxer",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "3/33",
+  "hash": "d8e916473b2eed50"
+ },
+ {
+  "name": "23 wyrm-air/meter-focus v true-dragon-earth/bite-focus",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "3/-2",
+  "hash": "4f4a90ada887f3e0"
+ },
+ {
+  "name": "24 true-dragon-water/charge-focus v true-dragon-fire/slugger",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-16/-7",
+  "hash": "25b6d0c98abf81eb"
+ },
+ {
+  "name": "25 true-dragon-earth/kite-focus v true-dragon-fire/breath-focus",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "0/2",
+  "hash": "be8330adf28b7796"
+ },
+ {
+  "name": "26 true-dragon-fire/swarmer v true-dragon-fire/counterpuncher",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "7/-2",
+  "hash": "c1138af7804787d2"
+ },
+ {
+  "name": "27 true-dragon-air/out-boxer v true-dragon-fire/meter-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "24/-3",
+  "hash": "a0ab00a31c490db8"
+ },
+ {
+  "name": "28 wyvern-water/slugger v true-dragon-fire/boxer-puncher",
+  "winner": "B",
+  "exchanges": 2,
+  "wounds": "-1/9",
+  "hash": "e62db668624f2a75"
+ },
+ {
+  "name": "29 wyvern-earth/counterpuncher v true-dragon-fire/charge-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "-1/-4",
+  "hash": "0a31f6b554e90080"
+ },
+ {
+  "name": "30 wyvern-fire/boxer-puncher v true-dragon-fire/aerialist",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "24/19",
+  "hash": "5dec55bdac71fde3"
+ },
+ {
+  "name": "31 wyvern-air/aerialist v true-dragon-fire/kite-focus",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "12/-6",
+  "hash": "cea447228d272ee6"
+ },
+ {
+  "name": "32 wyrm-water/reader v true-dragon-fire/reader",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-8/27",
+  "hash": "6ed2953123e490ec"
+ },
+ {
+  "name": "33 wyrm-earth/claw-focus v true-dragon-fire/swarmer",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "2/2",
+  "hash": "8b3a2fe19d6d0acb"
+ },
+ {
+  "name": "34 wyrm-fire/bite-focus v true-dragon-fire/claw-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "22/21",
+  "hash": "f7dc663cf55f87e0"
+ },
+ {
+  "name": "35 wyrm-air/breath-focus v true-dragon-fire/out-boxer",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-4/37",
+  "hash": "68f6de04c304f118"
+ },
+ {
+  "name": "36 true-dragon-water/meter-focus v true-dragon-air/bite-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "6/-7",
+  "hash": "814da0f38ccf5043"
+ },
+ {
+  "name": "37 true-dragon-earth/charge-focus v true-dragon-air/slugger",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-3/25",
+  "hash": "afc2af623066a7ff"
+ },
+ {
+  "name": "38 true-dragon-fire/kite-focus v true-dragon-air/breath-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "27/20",
+  "hash": "b0e60c58f6da7649"
+ },
+ {
+  "name": "39 true-dragon-air/swarmer v true-dragon-air/counterpuncher",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "9/-6",
+  "hash": "e30db9bc14bff33a"
+ },
+ {
+  "name": "40 wyvern-water/out-boxer v true-dragon-air/meter-focus",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-3/1",
+  "hash": "020519f339956670"
+ },
+ {
+  "name": "41 wyvern-earth/slugger v true-dragon-air/boxer-puncher",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "-3/-6",
+  "hash": "07d687c2bd322508"
+ },
+ {
+  "name": "42 wyvern-fire/counterpuncher v true-dragon-air/charge-focus",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "6/-3",
+  "hash": "b8bbb45e8415e3d4"
+ },
+ {
+  "name": "43 wyvern-air/boxer-puncher v true-dragon-air/aerialist",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "-3/-3",
+  "hash": "083050fa9088089a"
+ },
+ {
+  "name": "44 wyrm-water/aerialist v true-dragon-air/kite-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "10/7",
+  "hash": "657c20b965faa1cd"
+ },
+ {
+  "name": "45 wyrm-earth/reader v true-dragon-air/reader",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-3/7",
+  "hash": "8ef28d98181cd72a"
+ },
+ {
+  "name": "46 wyrm-fire/claw-focus v true-dragon-air/swarmer",
+  "winner": "A",
+  "exchanges": 7,
+  "wounds": "8/-3",
+  "hash": "25fc33f7a20fe68a"
+ },
+ {
+  "name": "47 wyrm-air/bite-focus v true-dragon-air/claw-focus",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-11/12",
+  "hash": "d4c3ef0152815b3e"
+ },
+ {
+  "name": "48 true-dragon-water/breath-focus v wyvern-water/out-boxer",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "-3/-1",
+  "hash": "4e2514ff5dbd5ccb"
+ },
+ {
+  "name": "49 true-dragon-earth/meter-focus v wyvern-water/bite-focus",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "-3/2",
+  "hash": "1a5e567917b1ef5f"
+ },
+ {
+  "name": "50 true-dragon-fire/charge-focus v wyvern-water/slugger",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "6/-17",
+  "hash": "4423c06261aa279e"
+ },
+ {
+  "name": "51 true-dragon-air/kite-focus v wyvern-water/breath-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "15/18",
+  "hash": "c63a004d384800ba"
+ },
+ {
+  "name": "52 wyvern-water/swarmer v wyvern-water/counterpuncher",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-4/-7",
+  "hash": "d0ddfd172f89fd85"
+ },
+ {
+  "name": "53 wyvern-earth/out-boxer v wyvern-water/meter-focus",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "1/0",
+  "hash": "d1cafc9894e39080"
+ },
+ {
+  "name": "54 wyvern-fire/slugger v wyvern-water/boxer-puncher",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "7/-1",
+  "hash": "1c3bb736e3e72d22"
+ },
+ {
+  "name": "55 wyvern-air/counterpuncher v wyvern-water/charge-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "9/-6",
+  "hash": "25b6c57e012db60c"
+ },
+ {
+  "name": "56 wyrm-water/boxer-puncher v wyvern-water/aerialist",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "-6/9",
+  "hash": "487148951e5f12d0"
+ },
+ {
+  "name": "57 wyrm-earth/aerialist v wyvern-water/kite-focus",
+  "winner": "A",
+  "exchanges": 7,
+  "wounds": "-7/-1",
+  "hash": "60035204449cf9a4"
+ },
+ {
+  "name": "58 wyrm-fire/reader v wyvern-water/reader",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "8/0",
+  "hash": "18fa5ee61ad10902"
+ },
+ {
+  "name": "59 wyrm-air/claw-focus v wyvern-water/swarmer",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "18/3",
+  "hash": "06a5e6de58047817"
+ },
+ {
+  "name": "60 true-dragon-water/bite-focus v wyvern-earth/claw-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "21/-6",
+  "hash": "b09f16f326709cdb"
+ },
+ {
+  "name": "61 true-dragon-earth/breath-focus v wyvern-earth/out-boxer",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "-1/24",
+  "hash": "06b9e0b7c04ee90f"
+ },
+ {
+  "name": "62 true-dragon-fire/meter-focus v wyvern-earth/bite-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "3/-1",
+  "hash": "860f0f2d26cf7142"
+ },
+ {
+  "name": "63 true-dragon-air/charge-focus v wyvern-earth/slugger",
+  "winner": "A",
+  "exchanges": 2,
+  "wounds": "-3/0",
+  "hash": "91a8ba46b5ffc42c"
+ },
+ {
+  "name": "64 wyvern-water/kite-focus v wyvern-earth/breath-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "15/18",
+  "hash": "9d533b3cb2da63ac"
+ },
+ {
+  "name": "65 wyvern-earth/swarmer v wyvern-earth/counterpuncher",
+  "winner": "A",
+  "exchanges": 2,
+  "wounds": "-8/-8",
+  "hash": "c959654d711d12d4"
+ },
+ {
+  "name": "66 wyvern-fire/out-boxer v wyvern-earth/meter-focus",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-12/12",
+  "hash": "ad48c30141103aa2"
+ },
+ {
+  "name": "67 wyvern-air/slugger v wyvern-earth/boxer-puncher",
+  "winner": "A",
+  "exchanges": 2,
+  "wounds": "2/-3",
+  "hash": "ff261dc556281e69"
+ },
+ {
+  "name": "68 wyrm-water/counterpuncher v wyvern-earth/charge-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "5/-10",
+  "hash": "2d3b6a26318b3ffd"
+ },
+ {
+  "name": "69 wyrm-earth/boxer-puncher v wyvern-earth/aerialist",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "-5/-7",
+  "hash": "6eae4050d0fd230f"
+ },
+ {
+  "name": "70 wyrm-fire/aerialist v wyvern-earth/kite-focus",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "-3/1",
+  "hash": "2920d1eb160680e4"
+ },
+ {
+  "name": "71 wyrm-air/reader v wyvern-earth/reader",
+  "winner": "B",
+  "exchanges": 2,
+  "wounds": "-7/9",
+  "hash": "56ef9864ffc00f27"
+ },
+ {
+  "name": "72 true-dragon-water/claw-focus v wyvern-fire/swarmer",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-1/11",
+  "hash": "e405fdacd7cb43ef"
+ },
+ {
+  "name": "73 true-dragon-earth/bite-focus v wyvern-fire/claw-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "7/30",
+  "hash": "3b3a28d11742a199"
+ },
+ {
+  "name": "74 true-dragon-fire/breath-focus v wyvern-fire/out-boxer",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "9/5",
+  "hash": "eb840883ef42b356"
+ },
+ {
+  "name": "75 true-dragon-air/meter-focus v wyvern-fire/bite-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "24/-5",
+  "hash": "a8b15aaf1264eb99"
+ },
+ {
+  "name": "76 wyvern-water/charge-focus v wyvern-fire/slugger",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "0/19",
+  "hash": "a3061ad824a66fac"
+ },
+ {
+  "name": "77 wyvern-earth/kite-focus v wyvern-fire/breath-focus",
+  "winner": "A",
+  "exchanges": 7,
+  "wounds": "9/-5",
+  "hash": "8d15a01b265828e5"
+ },
+ {
+  "name": "78 wyvern-fire/swarmer v wyvern-fire/counterpuncher",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "14/-3",
+  "hash": "bfa35a3c40149c6e"
+ },
+ {
+  "name": "79 wyvern-air/out-boxer v wyvern-fire/meter-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "-1/-3",
+  "hash": "503b63a26140a2e9"
+ },
+ {
+  "name": "80 wyrm-water/slugger v wyvern-fire/boxer-puncher",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-1/-2",
+  "hash": "8b2d4fe61ae135db"
+ },
+ {
+  "name": "81 wyrm-earth/counterpuncher v wyvern-fire/charge-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "10/-5",
+  "hash": "a6f206a1500857a3"
+ },
+ {
+  "name": "82 wyrm-fire/boxer-puncher v wyvern-fire/aerialist",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "10/0",
+  "hash": "838b0ed82c13b00d"
+ },
+ {
+  "name": "83 wyrm-air/aerialist v wyvern-fire/kite-focus",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "0/21",
+  "hash": "5e6be5e6e3a8339e"
+ },
+ {
+  "name": "84 true-dragon-water/reader v wyvern-air/reader",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "-6/10",
+  "hash": "82797f9357f52c72"
+ },
+ {
+  "name": "85 true-dragon-earth/claw-focus v wyvern-air/swarmer",
+  "winner": "A",
+  "exchanges": 2,
+  "wounds": "0/0",
+  "hash": "a6c3e3641153546d"
+ },
+ {
+  "name": "86 true-dragon-fire/bite-focus v wyvern-air/claw-focus",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "-5/9",
+  "hash": "7a6ee243c71e58ee"
+ },
+ {
+  "name": "87 true-dragon-air/breath-focus v wyvern-air/out-boxer",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "2/6",
+  "hash": "450acf29b123af13"
+ },
+ {
+  "name": "88 wyvern-water/meter-focus v wyvern-air/bite-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "6/-5",
+  "hash": "afc869aad9e01dba"
+ },
+ {
+  "name": "89 wyvern-earth/charge-focus v wyvern-air/slugger",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "-3/11",
+  "hash": "f4935670d4c795c3"
+ },
+ {
+  "name": "90 wyvern-fire/kite-focus v wyvern-air/breath-focus",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-2/-5",
+  "hash": "e8bd043ba9c01962"
+ },
+ {
+  "name": "91 wyvern-air/swarmer v wyvern-air/counterpuncher",
+  "winner": "A",
+  "exchanges": 2,
+  "wounds": "-3/-3",
+  "hash": "f9e1ba66feb1dc93"
+ },
+ {
+  "name": "92 wyrm-water/out-boxer v wyvern-air/meter-focus",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "0/10",
+  "hash": "59306fb9af464c4a"
+ },
+ {
+  "name": "93 wyrm-earth/slugger v wyvern-air/boxer-puncher",
+  "winner": "A",
+  "exchanges": 2,
+  "wounds": "15/0",
+  "hash": "36dbe8d76c33f6d6"
+ },
+ {
+  "name": "94 wyrm-fire/counterpuncher v wyvern-air/charge-focus",
+  "winner": "B",
+  "exchanges": 2,
+  "wounds": "0/2",
+  "hash": "ea33ea56e3de5957"
+ },
+ {
+  "name": "95 wyrm-air/boxer-puncher v wyvern-air/aerialist",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "6/0",
+  "hash": "91ea88930777d2d2"
+ },
+ {
+  "name": "96 true-dragon-water/aerialist v wyrm-water/kite-focus",
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "-20/-1",
+  "hash": "fc2fa9f8176fab5e"
+ },
+ {
+  "name": "97 true-dragon-earth/reader v wyrm-water/reader",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "13/0",
+  "hash": "f96129bbedaea2c1"
+ },
+ {
+  "name": "98 true-dragon-fire/claw-focus v wyrm-water/swarmer",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "-4/0",
+  "hash": "6acfa407685cadd1"
+ },
+ {
+  "name": "99 true-dragon-air/bite-focus v wyrm-water/claw-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "32/18",
+  "hash": "495ddf6144b3b2e6"
+ },
+ {
+  "name": "100 wyvern-water/breath-focus v wyrm-water/out-boxer",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "16/20",
+  "hash": "0f68c43ad5a55bd6"
+ },
+ {
+  "name": "101 wyvern-earth/meter-focus v wyrm-water/bite-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "-6/0",
+  "hash": "82f52c0167162c53"
+ },
+ {
+  "name": "102 wyvern-fire/charge-focus v wyrm-water/slugger",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "0/8",
+  "hash": "d016af7b1f7f8b0e"
+ },
+ {
+  "name": "103 wyvern-air/kite-focus v wyrm-water/breath-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "18/1",
+  "hash": "29684099492bc9d4"
+ },
+ {
+  "name": "104 wyrm-water/swarmer v wyrm-water/counterpuncher",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-1/-9",
+  "hash": "4a90451515bc3d4d"
+ },
+ {
+  "name": "105 wyrm-earth/out-boxer v wyrm-water/meter-focus",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-3/6",
+  "hash": "7a33571f59c6d93c"
+ },
+ {
+  "name": "106 wyrm-fire/slugger v wyrm-water/boxer-puncher",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-10/-2",
+  "hash": "d480b46616f8680f"
+ },
+ {
+  "name": "107 wyrm-air/counterpuncher v wyrm-water/charge-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "15/0",
+  "hash": "fddbcc65cc44b036"
+ },
+ {
+  "name": "108 true-dragon-water/boxer-puncher v wyrm-earth/aerialist",
+  "winner": "B",
+  "exchanges": 2,
+  "wounds": "0/-4",
+  "hash": "098ea4661b6d2068"
+ },
+ {
+  "name": "109 true-dragon-earth/aerialist v wyrm-earth/kite-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "25/0",
+  "hash": "2960c9cb9e9384f5"
+ },
+ {
+  "name": "110 true-dragon-fire/reader v wyrm-earth/reader",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "-1/1",
+  "hash": "d4656441f641784e"
+ },
+ {
+  "name": "111 true-dragon-air/claw-focus v wyrm-earth/swarmer",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "24/3",
+  "hash": "08b313a14eedbc57"
+ },
+ {
+  "name": "112 wyvern-water/bite-focus v wyrm-earth/claw-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "18/12",
+  "hash": "a896321480abffd4"
+ },
+ {
+  "name": "113 wyvern-earth/breath-focus v wyrm-earth/out-boxer",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "14/0",
+  "hash": "4c2427cc63aaa629"
+ },
+ {
+  "name": "114 wyvern-fire/meter-focus v wyrm-earth/bite-focus",
+  "winner": "A",
+  "exchanges": 6,
+  "wounds": "9/-1",
+  "hash": "8a1d897aa327605a"
+ },
+ {
+  "name": "115 wyvern-air/charge-focus v wyrm-earth/slugger",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "6/-3",
+  "hash": "231460dfad9169b7"
+ },
+ {
+  "name": "116 wyrm-water/kite-focus v wyrm-earth/breath-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "23/-5",
+  "hash": "13efa72052625a99"
+ },
+ {
+  "name": "117 wyrm-earth/swarmer v wyrm-earth/counterpuncher",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "-2/-6",
+  "hash": "52155b92a392a01c"
+ },
+ {
+  "name": "118 wyrm-fire/out-boxer v wyrm-earth/meter-focus",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "10/0",
+  "hash": "15faf824af8dc058"
+ },
+ {
+  "name": "119 wyrm-air/slugger v wyrm-earth/boxer-puncher",
+  "winner": "A",
+  "exchanges": 7,
+  "wounds": "0/-4",
+  "hash": "f8f15481a8a4b325"
+ },
+ {
+  "name": "120 true-dragon-water/counterpuncher v wyrm-fire/charge-focus",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-3/7",
+  "hash": "2ce50c29e8d06eb1"
+ },
+ {
+  "name": "121 true-dragon-earth/boxer-puncher v wyrm-fire/aerialist",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "15/0",
+  "hash": "814189d80bd5b8e5"
+ },
+ {
+  "name": "122 true-dragon-fire/aerialist v wyrm-fire/kite-focus",
+  "winner": "B",
+  "exchanges": 6,
+  "wounds": "-2/-2",
+  "hash": "3a27d46f148f04a6"
+ },
+ {
+  "name": "123 true-dragon-air/reader v wyrm-fire/reader",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-4/6",
+  "hash": "c40fe2168770abcf"
+ },
+ {
+  "name": "124 wyvern-water/claw-focus v wyrm-fire/swarmer",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "2/21",
+  "hash": "1f1383783f2b41a8"
+ },
+ {
+  "name": "125 wyvern-earth/bite-focus v wyrm-fire/claw-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "18/17",
+  "hash": "f740214fe9c1461a"
+ },
+ {
+  "name": "126 wyvern-fire/breath-focus v wyrm-fire/out-boxer",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "30/20",
+  "hash": "7b50ede88c84e750"
+ },
+ {
+  "name": "127 wyvern-air/meter-focus v wyrm-fire/bite-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "12/1",
+  "hash": "918b2029274d0e0b"
+ },
+ {
+  "name": "128 wyrm-water/charge-focus v wyrm-fire/slugger",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "7/-2",
+  "hash": "90479a2024f5136f"
+ },
+ {
+  "name": "129 wyrm-earth/kite-focus v wyrm-fire/breath-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "2/-6",
+  "hash": "6a919db317e6cbbe"
+ },
+ {
+  "name": "130 wyrm-fire/swarmer v wyrm-fire/counterpuncher",
+  "winner": "A",
+  "exchanges": 4,
+  "wounds": "2/-3",
+  "hash": "9d2c7fcd2b43ab54"
+ },
+ {
+  "name": "131 wyrm-air/out-boxer v wyrm-fire/meter-focus",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "31/12",
+  "hash": "5ca48f014df5a4d6"
+ },
+ {
+  "name": "132 true-dragon-water/slugger v wyrm-air/boxer-puncher",
+  "winner": "A",
+  "exchanges": 3,
+  "wounds": "6/-2",
+  "hash": "8ca3f6acb9bc16d5"
+ },
+ {
+  "name": "133 true-dragon-earth/counterpuncher v wyrm-air/charge-focus",
+  "winner": "B",
+  "exchanges": 5,
+  "wounds": "-9/20",
+  "hash": "00ab8102aa429e1a"
+ },
+ {
+  "name": "134 true-dragon-fire/boxer-puncher v wyrm-air/aerialist",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "14/-8",
+  "hash": "0b6cb4eff78f5153"
+ },
+ {
+  "name": "135 true-dragon-air/aerialist v wyrm-air/kite-focus",
+  "winner": "A",
+  "exchanges": 7,
+  "wounds": "-3/0",
+  "hash": "83ec0f35008cdb42"
+ },
+ {
+  "name": "136 wyvern-water/reader v wyrm-air/reader",
+  "winner": "B",
+  "exchanges": 3,
+  "wounds": "0/14",
+  "hash": "a5e24355297003eb"
+ },
+ {
+  "name": "137 wyvern-earth/claw-focus v wyrm-air/swarmer",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "1/13",
+  "hash": "d4f35bf31613def7"
+ },
+ {
+  "name": "138 wyvern-fire/bite-focus v wyrm-air/claw-focus",
+  "winner": "B",
+  "exchanges": 8,
+  "wounds": "24/33",
+  "hash": "dffb9717c93ff24f"
+ },
+ {
+  "name": "139 wyvern-air/breath-focus v wyrm-air/out-boxer",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "12/21",
+  "hash": "839fbd9c4aaafb99"
+ },
+ {
+  "name": "140 wyrm-water/meter-focus v wyrm-air/bite-focus",
+  "winner": "B",
+  "exchanges": 4,
+  "wounds": "-3/-4",
+  "hash": "5f4abd47f3b6e152"
+ },
+ {
+  "name": "141 wyrm-earth/charge-focus v wyrm-air/slugger",
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "4/-1",
+  "hash": "a1dec5e79b887f1d"
+ },
+ {
+  "name": "142 wyrm-fire/kite-focus v wyrm-air/breath-focus",
+  "winner": "A",
+  "exchanges": 7,
+  "wounds": "13/-1",
+  "hash": "68e3860f3a2915fb"
+ },
+ {
+  "name": "143 wyrm-air/swarmer v wyrm-air/counterpuncher",
+  "winner": "A",
+  "exchanges": 8,
+  "wounds": "7/4",
+  "hash": "e73d691c58231529"
+ }
+]
