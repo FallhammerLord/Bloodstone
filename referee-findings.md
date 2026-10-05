@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [19](#round-19-earth-corrodes-and-the-wheel-holds-everywhere) | Earth corrodes, and the wheel holds everywhere |
 | [18](#round-18-fire-sets-the-world-on-fire) | Fire sets the world on fire |
 | [17](#round-17-fires-blast-at-¾-pace-on-the-cleaned-up-referee) | Fire's blast at ¾ pace, on the cleaned-up Referee |
 | [16](#round-16-trimmed-stalwart-½-pace-snap-brains-that-value-position) | trimmed Stalwart, ½-pace snap, brains that value position |
@@ -22,6 +23,44 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 19: Earth corrodes, and the wheel holds everywhere
+
+Changes since Round 18 [Proposed] (master, 2,544 bouts):
+- **The element wheel holds in every element contest** (push, pull, corrosion, burns): a target whose stone beats the breather's adds 3 to its Affinity, and the reverse.
+- **A burn adds the matchup (±3)** like the Breath that laid it, never below 1. The contest alone lifted Earth's Affinity only from 3 to 6 against Fire's Potency of 12–18, so the burn still landed; the damage term is what makes Earth smother Fire. True Dragon + Fire's lane now burns Earth for 1, Air for 7, Water or Fire for 4.
+- **Earth corrodes on the hit, no pool:** a corroded dragon takes +Potency ÷ 4 (3) from every hit for Potency ÷ 6 slots (2), plus an exchange per charging slot, and each hit on it is an Acumen trigger.
+- **Brains** value a corroded opponent and count the wheel in a fire's threat; they also stop re-offering last exchange's script when a cooldown makes it illegal.
+
+Tracks first (`diag:pairing`, 220 bouts per pairing, each column adding one change):
+
+| | Round 18 | + wheel | + corrosion | + meter fill |
+|---|---|---|---|---|
+| TD + Earth | 51% | 55% | 56% | 60% |
+| Wyrm + Earth | 44% | 50% | 50% | 49% |
+| Wyvern + Earth | 40% | 45% | 50% | 47% |
+| TD + Fire | 68% | 65% | 64% | 63% |
+| Wyrm + Fire | 50% | 49% | 48% | 49% |
+| Wyvern + Fire | 40% | 45% | 45% | 45% |
+
+The wheel did most of the work (burns on Earth 3.3 → 1.6 a bout). Corrosion lifted Wyvern + Earth; the meter fill is within noise.
+
+Then the full tournament:
+
+| | Round 18 | Round 19 |
+|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 58 / 46 / 46 | 58 / 46 / 45 |
+| Stones (Air / Earth / Water / Fire) | 54 / 46 / 48 / 53 | 54 / **51** / 46 / 49 |
+| Pairing spread | 39–70% | 39–67% |
+| Fights at Melee / Close / Far / Very Far | 32 / 34 / 26 / 9% | 31 / 33 / 27 / 8% |
+| Style range (identical dragons) | 37–62% | 34–64% |
+| Timeouts | 13% | 14% |
+
+**What it shows:**
+- **The stones are balanced.** All four sit within 8 points (Air 54 to Water 46), and every stone's margin (±7) covers 50%. Earth rose 5; Fire gave back 4 of its Round 18 gain, as the wheel meant it to.
+- **The morph gap is now the largest imbalance.** True Dragon 58% ±6 against Wyrm 46% and Wyvern 45%: the four True Dragon pairings are the top four, from True Dragon + Air (67% ±11) down. Wyvern + Water (39%) and Wyrm + Fire (41%) trail.
+- **Style balance is unchanged:** boxer-puncher leads at 64%; the one-attack focus brains (bite-focus 36%, breath-focus 34%) trail, as diagnostics should. The boxing triangle reads even, even, ✓.
+- **Timeouts held** at 14%.
 
 ## Round 18: Fire sets the world on fire
 
