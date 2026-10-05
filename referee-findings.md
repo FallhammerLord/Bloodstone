@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [20](#round-20-brains-look-ahead-stoops-fall-harder-serpentine-slips-breath-stomp-catches-movers) | Brains look ahead, stoops fall harder, Serpentine slips Breath, Stomp catches movers |
 | [19](#round-19-earth-corrodes-and-the-wheel-holds-everywhere) | Earth corrodes, and the wheel holds everywhere |
 | [18](#round-18-fire-sets-the-world-on-fire) | Fire sets the world on fire |
 | [17](#round-17-fires-blast-at-¾-pace-on-the-cleaned-up-referee) | Fire's blast at ¾ pace, on the cleaned-up Referee |
@@ -23,6 +24,46 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 20: brains look ahead, stoops fall harder, Serpentine slips Breath, Stomp catches movers
+
+Changes since Round 19 [Proposed] (master; **three independent tournaments pooled, 7,632 bouts**, so margins are about ±3 for morphs and styles, ±4 for stones, ±7 for pairings):
+- **Brains look ahead by skill:** novice 1 exchange, adept 2, master 3. The best few scripts, plus a few long shots, are played forward on habit and judged on the whole line; the chosen line's next script is kept as a plan. Head to head, a look-ahead master beats a one-exchange master 50–54% (±8): no clear gain in strength yet.
+- **A stoop deals +1 per pace it falls** (+3 a band). Wyvern stoops per 132 bouts: 57 → 75; a landed stoop 5.3 → 7.9 damage.
+- **Serpentine slips Breath:** a strafing Wyrm tests Evasion (6 + 3) against Breath too. Against Fire's blast and Water's line a strafe usually slips out by geometry anyway; it matters most against Earth's cone.
+- **Stomp catches movers:** a Stomp landing mid-move Staggers for two slots, and a Staggered dragon tests half its Evasion, so Stomp then Breath answers a strafing Wyrm.
+- **Brains** value a pending Stagger and a pending stoop. **Speed:** a fast bout copy and idle-tick skips make a master bout 2–3× faster before look-ahead's cost.
+
+Wyrm tracks first (`diag:pairing`, 220 bouts per pairing):
+
+| | Round 19 rules | + Serpentine vs Breath | + Stomp catches movers |
+|---|---|---|---|
+| Wyrm + Water | 45% | 49% | 49% |
+| Wyrm + Air | 36% | 45% | 46% |
+| Wyrm + Fire | 44% | 40% | 42% |
+| Wyrm + Earth | 32% | 38% | 41% |
+| Wyrm strafe share | 11–14% | 11–17% | 11–17% |
+
+Serpentine lifted the Wyrm about 4 points; Stomp's counter trimmed nothing measurable. Strafing rose 1–3 points and timeouts held: no strafe-spam.
+
+Then the pooled tournaments:
+
+| | Round 19 | Round 20 (3 runs) |
+|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 58 / 46 / 45 | 54 / **43** / **53** |
+| Stones (Air / Earth / Water / Fire) | 54 / 51 / 46 / 49 | 56 / 48 / 46 / 50 |
+| Pairing spread | 39–67% | 34–62% |
+| Fights at Melee / Close / Far / Very Far | 31 / 33 / 27 / 8% | 28 / 33 / 29 / 10% |
+| Breath's share of damage | 46% | 49% |
+| Style range (identical dragons) | 34–64% | 34–58% |
+| Timeouts | 14% | 13% |
+
+**What it shows:**
+- **The Wyvern caught up (45 → 53% ±3).** The stoop now pays, and every style counts a pending stoop. Wyvern + Air (62%) joins True Dragon + Fire (62%) at the top.
+- **The True Dragon came down to 54% ±3** without being touched: the gap it held was partly the Wyvern's weakness.
+- **The Wyrm is now alone at the bottom (43% ±3),** and Wyrm + Fire is the weakest pairing (34% ±7). Serpentine helped in the tracks, but the Wyrm still trails. Next suspect: its Accuracy 3, the lowest of any morph. Its aim settles 9 ticks before the strike, so its own Breath and Bite miss movers, and Breath is now half of all damage.
+- **Water is the weakest stone (46% ±4),** Air the strongest (56% ±4).
+- **Style balance tightened** to 34–58%. Fights spread outward (Very Far 10% of slots).
 
 ## Round 19: Earth corrodes, and the wheel holds everywhere
 
