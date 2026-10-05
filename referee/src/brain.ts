@@ -258,7 +258,9 @@ export function value(style: BrainStyle, o: Outcome): number {
   // Every style reads leverage [Proposed]: a target with a wall or obstacle within a band behind it can be
   // slammed and can't retreat; being pinned yourself is the reverse. Breaking a charge denies a setup.
   const leverage = (pinned(o.after, op1, me1) ? 0.03 : 0) - (pinned(o.after, me1, op1) ? 0.03 : 0)
-    + 0.04 * o.events.filter((e) => e.kind === 'note' && e.side === them && e.text === 'The hit breaks the charge.').length;
+    + 0.04 * o.events.filter((e) => e.kind === 'note' && e.side === them && e.text === 'The hit breaks the charge.').length
+    // A fuller Acumen meter brings the next graze closer (Scales fills it a step).
+    + 0.0015 * (me1.meter - me0.meter);
   return leverage + styleValue(style, o, { dealt, taken, band, sep, me1, op1, big, punishes, theirMisses, rim });
 }
 

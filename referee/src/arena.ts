@@ -58,6 +58,11 @@ const boulder = (id: number, size: BoulderSize, pos: Vec): Obstacle => ({
   id, kind: 'boulder', size, pos, wounds: R.BOULDERS[size].wounds, radius: R.BOULDERS[size].radius, height: R.BOULDERS[size].height,
 });
 
+/** A standard arena's boulder count, 1d4+2 [Proposed]: a seeded throw, never an open floor. */
+export function standardBoulders(seed: number): number {
+  return R.BOULDERS_PER_ARENA.plus + 1 + Math.floor(seededRandom(seed * 7 + 3)() * R.BOULDERS_PER_ARENA.dice);
+}
+
 /** Four unbreakable pillars at the quadrants [Doc], plus boulders. Boulders never land on a dragon's starting spot. */
 export function makeArena(setup: ArenaSetup = {}, keepClear: Vec[] = []): Arena {
   const obstacles: Obstacle[] = [];

@@ -56,7 +56,7 @@
 - **Hardness:** damage reduction; improved when guarding.
 - **Claw Sharpness, Bite Force, Breath Potency:** attack damage.
 - **Accuracy:** tracking and reach without leaving position; sets the phantom band around hitboxes.
-- **Affinity:** elemental resistance; improved when guarding with Scales.
+- **Affinity:** elemental resistance; improved when guarding with Scales. **[Proposed]** It is the element's Evasion: a Breath's verb (push, pull, burn, corrosion) takes hold only if the breather's Potency beats the target's Affinity, ties to the higher Acumen. Affinity still subtracts from Breath damage.
 - **Acumen:** battle sense, shown as an integer and mapped through a hidden curve. It converts near misses, tips close contests, and scales punishes. Its meter is visible to both players. No shards raise it; it grows only through play.
 
 **Units.** 3 points make one combat unit, everywhere. Everything runs on integers and displays as units and thirds. Damage is dealt in points: attack attributes add, Hardness and Affinity subtract. Acumen is the exception, mapping through a hidden curve.
@@ -222,7 +222,7 @@ Each morph prefers one element and dislikes the element that beats it.
 |---|---|---|
 | Attack | Bite, Claw, Breath, Stomp | Shapes below |
 | Move | Approach, Retreat, Strafe, Leap, Dive | Three degrees of freedom |
-| Guard | Dodge, Scales | Dodge avoids harm (Evasion); Scales presents the hide: +Hardness against Bite and Claw, +Affinity against Breath |
+| Guard | Dodge, Scales | Dodge avoids harm (Evasion); Scales presents the hide: +Hardness against Bite and Claw, +Affinity against Breath and its verbs. **[Proposed]** A Scales slot held to the end also fills the Acumen meter one near-miss step, the guard's answer to Intimidate. **[Open]** Scales may be renamed. |
 | Intimidate | Intimidate | +3 to the next attack; open for that action |
 
 **Attack shapes**

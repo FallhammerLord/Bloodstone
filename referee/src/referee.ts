@@ -662,6 +662,11 @@ function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec>, ev: 
       f.marks.noLeap = sp < A;
       ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: 'Stooping Pinions: +3 to the next attack.' });
     }
+    // A Scales slot held to the end steadies the mind: the Acumen meter fills by one near-miss step [Proposed].
+    if (p.spec.name === 'scales' && p.interruptedAt === null) {
+      f.meter = Math.min(R.METER_MAX, f.meter + R.SCALES_ACUMEN);
+      ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: `Scales steadies it: Acumen meter ${f.meter}.` });
+    }
     bout.history[s].push(p.spec.name);
     f.marks.advanced = p.spec.name === 'approach' && p.converted === null && p.moved > 0;
     f.marks.strafed = p.spec.name === 'strafe' && p.converted === null && p.moved > 0;
@@ -819,7 +824,7 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   // Breath verbs wait until every hit this tick is applied, so a push and a pull can meet.
   const verbs: { s: Side; aim: Vec }[] = [];
   for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, t, false, trade, ev, verbs);
-  breathVerbs(bout, verbs, t, ev);
+  breathVerbs(bout, plans, verbs, t, ev);
 
   // 5. End-of-window checks.
   for (const s of SIDES) {
@@ -1015,15 +1020,7 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
     case 'breath': {
       const m = matchup(att.sheet.stone, def.sheet.stone) * R.MATCHUP;
       const breath = eff(att, 'breath', { sep });
-      const aff = eff(def, 'affinity', { opp: att });
-      // Scales presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
-      const scalesAff = scales ? R.SCALES_AFFINITY : 0;
-      const mantle = scales ? tech(def, 'mantle-wings') : -1;
-      const mantleAff = mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
-      // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable.
-      const lance = tech(att, 'lance-throat');
-      const pierce = lance >= V && sep > R.CLOSE_EDGE ? 6 : lance >= J ? 3 : 0;
-      const affinity = Math.max(0, aff.value + scalesAff + mantleAff - pierce);
+      const { aff, scalesAff, mantleAff, pierce, affinity } = affinityAgainst(att, def, scales, sep);
       v = breath.value - affinity + m;
       parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${scalesAff ? ' (Scales)' : ''}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
       const elem = R.ELEMENT_BREATH_MOD[att.sheet.stone];
@@ -1242,6 +1239,31 @@ function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]) {
   }
 }
 
+/** The Affinity a Breath meets: the stone's, plus Scales and Mantle Wings when guarding, less Lance Throat's pierce. */
+function affinityAgainst(att: Fighter, def: Fighter, scales: boolean, sep: number) {
+  const aff = eff(def, 'affinity', { opp: att });
+  // Scales presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
+  const scalesAff = scales ? R.SCALES_AFFINITY : 0;
+  const mantle = scales ? tech(def, 'mantle-wings') : -1;
+  const mantleAff = mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
+  // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable.
+  const lance = tech(att, 'lance-throat');
+  const pierce = lance >= V && sep > R.CLOSE_EDGE ? 6 : lance >= J ? 3 : 0;
+  return { aff, scalesAff, mantleAff, pierce, affinity: Math.max(0, aff.value + scalesAff + mantleAff - pierce) };
+}
+
+/**
+ * Affinity is the element's Evasion [Proposed]: a breath's verb (push, pull, burn, corrosion, a smolder's
+ * tug) lands only if the breather's Potency beats the target's Affinity; a tie goes to the higher Acumen.
+ * Returns a note when the target holds, or null when the element takes hold.
+ */
+function elementHolds(att: Fighter, def: Fighter, scales: boolean): string | null {
+  const potency = eff(att, 'breath', { sep: dist(att.pos, def.pos) }).value;
+  const { affinity } = affinityAgainst(att, def, scales, dist(att.pos, def.pos));
+  const holds = affinity > potency || (affinity === potency && def.sheet.acumen > att.sheet.acumen);
+  return holds ? `Affinity ${affinity} holds against Potency ${potency}` : null;
+}
+
 /** Any forced movement that meets the wall or an obstacle slams [Proposed]. */
 function slammed(f: Fighter, slam: string | null, t: number, ev: Event[]) {
   if (!slam) return;
@@ -1250,7 +1272,14 @@ function slammed(f: Fighter, slam: string | null, t: number, ev: Event[]) {
 }
 
 /** A push and a pull in the same moment cancel: Water's jet against Air's vortex [Proposed]. */
-function breathVerbs(bout: Bout, verbs: { s: Side; aim: Vec }[], t: number, ev: Event[]) {
+function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Side; aim: Vec }[], t: number, ev: Event[]) {
+  // First each target's Affinity contests the element; only verbs that take hold can meet.
+  const verbs = all.filter((v) => {
+    if (bout.fighters[v.s].sheet.stone !== 'water' && bout.fighters[v.s].sheet.stone !== 'air') return true;
+    const held = elementHolds(bout.fighters[v.s], bout.fighters[other(v.s)], guarding(plans[other(v.s)], t));
+    if (held) ev.push({ kind: 'note', tick: t, side: other(v.s), text: `${held}: the ${bout.fighters[v.s].sheet.stone === 'water' ? 'push' : 'pull'} fails.` });
+    return !held;
+  });
   const stones = verbs.map((v) => bout.fighters[v.s].sheet.stone);
   if (verbs.length === 2 && stones.includes('water') && stones.includes('air')) {
     for (const v of verbs) ev.push({ kind: 'note', tick: t, side: other(v.s), text: 'Jet and vortex meet: the push and the pull cancel.' });
@@ -1282,6 +1311,12 @@ function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Ev
       const f = bout.fighters[s];
       if (!inZone(z, f.pos)) continue;
       if (plans[s].spec.name === 'scales' && tech(f, 'mantle-wings') >= E) continue;
+      // The zone's element contests the dragon's Affinity, as the breath did [Proposed].
+      const held = elementHolds(bout.fighters[z.owner], f, plans[s].spec.name === 'scales');
+      if (held && z.kind !== 'smolder') {
+        ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: `${held}: the ${z.kind === 'burning' ? 'flames' : 'pool'} can't take hold.` });
+        continue;
+      }
       if (z.kind === 'burning') {
         f.wounds -= R.BURN_DAMAGE;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.BURN_DAMAGE, woundsLeft: f.wounds });
@@ -1294,6 +1329,7 @@ function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Ev
         f.wounds -= R.TECHNIQUE_POINTS;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.TECHNIQUE_POINTS, woundsLeft: f.wounds });
         const away = sub(f.pos, z.center);
+        if (held) continue;
         if (z.element === 'water') shove(bout, s, away, R.SMOLDER_PUSH);
         if (z.element === 'air') shove(bout, s, sub(bout.fighters[z.owner].pos, f.pos), R.SMOLDER_PULL);
         if (z.element === 'earth') f.pending.corroded = true;

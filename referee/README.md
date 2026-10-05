@@ -79,7 +79,7 @@ Each morph bends one rule (design doc §2). The True Dragon's Aspect is having n
 ## Breath effects
 
 At wyrmling strength (design doc §3):
-- **Water** pushes the target back a whole band (3 paces). **Air**'s vortex pulls the target a band toward the breather, lowering a flier without grounding it; a second vortex in the breather's own space throws anything at Melee back out to Close, so the pull ends at Close. A push and a pull in the same moment cancel. Any forced movement that meets the wall or an obstacle slams for 3 [Proposed]. Water's jet shoves a boulder a band instead of breaking it. Any landed hit breaks a charge.
+- **Water** pushes the target back a whole band (3 paces). **Air**'s vortex pulls the target a band toward the breather, lowering a flier without grounding it; a second vortex in the breather's own space throws anything at Melee back out to Close, so the pull ends at Close. A push and a pull in the same moment cancel. Any forced movement that meets the wall or an obstacle slams for 3 [Proposed]. Water's jet shoves a boulder a band instead of breaking it. Any landed hit breaks a charge. **Affinity is the element's Evasion** [Proposed]: a verb (push, pull, burn, corrosion, a smolder's tug) takes hold only if the breather's Potency beats the target's Affinity, ties to the higher Acumen. A Scales slot held to the end fills the Acumen meter one near-miss step.
 - **Breath damage by element:** Water +2, Air 0, Earth +1, Fire −2. Harmless extras earn points; harmful ones cost them.
 - **Fire** leaves a burning zone where it lands; **Earth** leaves a corrosive pool. Zones last through the next slot. A grounded dragon inside one at a slot's end takes 1 damage (burning) or loses 3 Hardness for the next slot (corrosive), whoever breathed it.
 
@@ -136,7 +136,7 @@ It sees only what a player sees: the board, the record, and its own script.
 
 Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how tightly it sticks to its best idea, and how long it remembers your habits.
 
-`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate.
+`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate, every action's share of slots, and what came of them (revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, grazes, setups). Arenas throw 1d4+2 boulders.
 
 ## Attack-role variants
 
@@ -161,7 +161,7 @@ Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came fr
 
 `npm run tourney` (add `-- --shards` for random, seeded 3-pip loadouts and a shard ranking) fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
 
-Each bout's arena gets 0 to 3 seeded boulders. The AIs are crude, so the numbers mean "strong in crude hands."
+Each bout's arena throws 1d4+2 seeded boulders, so it's never an open floor. The AIs are crude, so the numbers mean "strong in crude hands."
 
 ## Not built yet
 

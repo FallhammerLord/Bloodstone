@@ -61,6 +61,8 @@ export const DODGE_BONUS = 3; // [Assumed] Evasion bonus while dodging
 // ---- Acumen ---- [Proposed] §4 Acumen meter
 export const ACUMEN_START = 10; // [Assumed] starting Acumen for every hatchling
 export const NEAR_MISS_STEP = 10;
+export const SCALES_ACUMEN = NEAR_MISS_STEP; // [Proposed] a completed Scales slot fills the Acumen meter by one near-miss step (Scales' name is TBD)
+export const BOULDERS_PER_ARENA = { dice: 4, plus: 2 }; // [Proposed] standard arenas throw 1d4+2 boulders: never an open floor
 export const METER_MAX = 100;
 
 // ---- Statuses ---- [Doc] §4 Statuses

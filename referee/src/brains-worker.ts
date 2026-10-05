@@ -5,6 +5,7 @@ import { aiController, type Style } from './ai.ts';
 import { brainController, type BrainStyle, type Skill } from './brain.ts';
 import { runBout, type Controller } from './bout.ts';
 import { newBout, type FighterSetup, type Side } from './referee.ts';
+import { standardBoulders } from './arena.ts';
 import * as R from './rules.ts';
 
 export interface Player {
@@ -38,6 +39,10 @@ export interface Result {
   byAttack: Record<string, [number, number, number]>;
   /** per attacker stone, then attack: [aimed, landed, damage]; pairing bouts only (identical dragons tell nothing) */
   byStone: Record<string, Record<string, [number, number, number]>>;
+  /** slots spent on each action (both sides) */
+  actions: Record<string, number>;
+  /** what came of them: revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, and more */
+  outcomes: Record<string, number>;
   /** [Bites right after an Approach, all Bites, Claws right after a Strafe, all Claws] */
   setup: [number, number, number, number];
 }
@@ -47,7 +52,7 @@ const controller = (p: Player): Controller =>
 
 const results: Result[] = [];
 for (const job of workerData.jobs as Job[]) {
-  const bout = newBout(job.A, job.B, R.START_SEPARATION / R.PACE, job.challenged, { boulders: job.arenaSeed % 4, seed: job.arenaSeed });
+  const bout = newBout(job.A, job.B, R.START_SEPARATION / R.PACE, job.challenged, { boulders: standardBoulders(job.arenaSeed), seed: job.arenaSeed });
   const ev = runBout(bout, { A: controller(job.playerA), B: controller(job.playerB) });
   const end = ev.find((e) => e.kind === 'boutEnd');
   const ending = end?.kind === 'boutEnd' && end.reason.startsWith('timeout') ? 'timeout' : ev.some((e) => e.kind === 'pulse' && e.woundsLeft <= 0) ? 'pulse' : 'ko';
@@ -56,8 +61,32 @@ for (const job of workerData.jobs as Job[]) {
   const byAttack: Result['byAttack'] = {};
   const tally = (a: string) => (byAttack[a] ??= [0, 0, 0]);
   const byStone: Result['byStone'] = {};
+  const actions: Record<string, number> = {};
+  const outcomes: Record<string, number> = {};
+  const bump = (k: string) => (outcomes[k] = (outcomes[k] ?? 0) + 1);
+  const NOTES: [string, (t: string) => boolean][] = [
+    ['intimidate lands', (t) => t.startsWith('Intimidate lands')],
+    ['intimidate falls short', (t) => t.startsWith('Intimidate falls short')],
+    ['push lands', (t) => t.startsWith('The jet pushes it back')],
+    ['pull lands', (t) => t.startsWith('The vortex pulls it in') || t.startsWith('The vortex at its heart')],
+    ['verb held by Affinity', (t) => t.includes('holds against Potency')],
+    ['push and pull cancel', (t) => t.includes('cancel')],
+    ['slam', (t) => t.startsWith('Slammed into')],
+    ['charge broken', (t) => t === 'The hit breaks the charge.'],
+    ['Scales steadies', (t) => t.startsWith('Scales steadies')],
+    ['lunge', (t) => t.startsWith('Lunges')],
+    ['pounce', (t) => t.startsWith('Pounces') || t.startsWith('Strafed into the stoop')],
+    ['stoop', (t) => t.startsWith('Stoops')],
+    ['blocked move → dodge', (t) => t.includes('converts to a dodge')],
+  ];
   const stoneTally = (s: Side, a: string) => ((byStone[bout.fighters[s].sheet.stone] ??= {})[a] ??= [0, 0, 0]);
   for (const e of ev) {
+    if (e.kind === 'revision') bump('revision');
+    if (e.kind === 'evade') bump(e.text.startsWith('dodging') ? 'evade by Dodge' : 'evade while moving');
+    if (e.kind === 'zoneEffect') bump(`zone: ${e.zone}`);
+    if (e.kind === 'hit' && e.graze) bump('graze');
+    if (e.kind === 'hit' && e.parts.some((p) => p.includes('Intimidate'))) bump('intimidate cashed');
+    if (e.kind === 'note') for (const [k, test] of NOTES) if (test(e.text)) bump(k);
     if (e.kind === 'aim') {
       tally(e.action)[0]++;
       stoneTally(e.side, e.action)[0]++;
@@ -104,10 +133,11 @@ for (const job of workerData.jobs as Job[]) {
       }
     }
   });
+  for (const r of bout.record) for (const s of ['A', 'B'] as const) actions[r.actions[s]] = (actions[r.actions[s]] ?? 0) + 1;
   for (const r of bout.record) for (const s of ['A', 'B'] as const) {
     stats[5]++;
     if (r.actions[s] === 'scales') stats[4]++;
   }
-  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone });
+  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, outcomes });
 }
 parentPort!.postMessage(results);

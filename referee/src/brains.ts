@@ -102,6 +102,15 @@ console.log(`Damage by attack: ${['breath', 'bite', 'claw', 'stomp'].map((k) => 
   const [aimed, landed, dmg] = byAttack[k] ?? [0, 0, 0];
   return `${k} ${pct(dmg, st[3])} (lands ${pct(landed, aimed)})`;
 }).join(', ')}.`);
+const actionSlots: Record<string, number> = {};
+const outcomeCounts: Record<string, number> = {};
+for (const r of results) {
+  for (const [k, v] of Object.entries(r.actions)) actionSlots[k] = (actionSlots[k] ?? 0) + v;
+  for (const [k, v] of Object.entries(r.outcomes)) outcomeCounts[k] = (outcomeCounts[k] ?? 0) + v;
+}
+const totalSlots = Object.values(actionSlots).reduce((a, b) => a + b, 0);
+console.log(`Every action, share of all slots: ${Object.entries(actionSlots).sort((x, y) => y[1] - x[1]).map(([k, v]) => `${k} ${pct(v, totalSlots).trim()}`).join(', ')}.`);
+console.log(`What came of them, per bout: ${Object.entries(outcomeCounts).sort((x, y) => y[1] - x[1]).map(([k, v]) => `${k} ${(v / results.length).toFixed(2)}`).join(', ')}.`);
 const setup = results.reduce((a, r) => a.map((v, i) => v + r.setup[i]), [0, 0, 0, 0]);
 console.log(`Bites right after an Approach: ${pct(setup[0], setup[1])} of ${setup[1]} Bites. Claws right after a Strafe: ${pct(setup[2], setup[3])} of ${setup[3]} Claws.`);
 

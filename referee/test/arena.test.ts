@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction } from '../src/actions.ts';
-import { makeArena } from '../src/arena.ts';
+import { makeArena, standardBoulders } from '../src/arena.ts';
 import { newBout, runExchange, type Bout, type Event, type FighterSetup } from '../src/referee.ts';
 import * as R from '../src/rules.ts';
 
@@ -230,4 +230,45 @@ test('Water\'s jet shoves a boulder it strikes', () => {
 test('a landed jet breaks a charge', () => {
   const ev = run(newBout(TD_WATER, TD_AIR, 5), ['breath', 'hold'], ['charge:breath', 'breath']);
   assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
+});
+
+// ---- Affinity contests the element [Proposed] ----
+
+test('a verb lands only if Potency beats Affinity: a Wyrm + Water shrugs off a weak pull', () => {
+  // Wyrm + Air breathes Potency 6; Wyrm + Water's Affinity 9 holds.
+  const bout = newBout({ name: 'G', morph: 'wyrm', stone: 'air' }, { name: 'H', morph: 'wyrm', stone: 'water' }, 8);
+  const x0 = bout.fighters.B.pos.x;
+  const ev = run(bout, ['breath'], ['hold']);
+  assert.equal(hits(ev).length, 1, 'the breath still hits');
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'Affinity 9 holds against Potency 6: the pull fails.'));
+  assert.equal(bout.fighters.B.pos.x, x0);
+});
+
+test('Scales adds its Affinity to the contest', () => {
+  // True Dragon + Water's jet (Potency 9) against a True Dragon + Fire (Affinity 6): lands bare; under Scales it's 9 against 9, and a tie goes to the higher Acumen.
+  const bare = newBout(TD_WATER, { name: 'F', morph: 'true-dragon', stone: 'fire' }, 5);
+  assert.ok(run(bare, ['breath'], ['hold']).some((e) => e.kind === 'note' && e.text.startsWith('The jet pushes it back')));
+  const guarded = newBout(TD_WATER, { name: 'F', morph: 'true-dragon', stone: 'fire' }, 5);
+  guarded.fighters.B.sheet.acumen = 11;
+  assert.ok(run(guarded, ['breath'], ['scales']).some((e) => e.kind === 'note' && e.text.includes('holds against Potency 9')));
+});
+
+test('zones contest Affinity too: a burning zone can\'t take hold of high Affinity', () => {
+  const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5);
+  bout.fighters.B.sheet.affinity = 20;
+  const ev = run(bout, ['breath', 'hold'], ['hold', 'hold']);
+  assert.equal(ev.filter((e) => e.kind === 'zoneEffect' && e.zone === 'burning').length, 0);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.endsWith("the flames can't take hold.")));
+});
+
+test('a Scales slot held to the end fills the Acumen meter a step', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 6);
+  const m0 = bout.fighters.A.meter;
+  run(bout, ['scales'], ['hold']);
+  assert.equal(bout.fighters.A.meter, m0 + R.SCALES_ACUMEN);
+});
+
+test('standard arenas throw 1d4+2 boulders', () => {
+  const counts = new Set(Array.from({ length: 200 }, (_, i) => standardBoulders(i)));
+  assert.deepEqual([...counts].sort(), [3, 4, 5, 6]);
 });

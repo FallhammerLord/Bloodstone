@@ -6,6 +6,7 @@ import { aiController, STYLES } from './ai.ts';
 import { DEFAULT_RULES, runBout } from './bout.ts';
 import type { CoreStone, Morph } from './hatch.ts';
 import { newBout, type FighterSetup, type Side } from './referee.ts';
+import { standardBoulders } from './arena.ts';
 import { seededRandom } from './random.ts';
 import { allAttrShards, builtTechniques, findShard, GRADES, type Shard } from './shards.ts';
 import * as R from './rules.ts';
@@ -68,7 +69,7 @@ for (const a of entrants) {
             const rng = seededRandom(seed);
             const la = withShards ? randomLoadout(rng) : undefined;
             const lb = withShards ? randomLoadout(rng) : undefined;
-            const bout = newBout({ ...a.setup, shards: la }, { ...b.setup, shards: lb }, R.START_SEPARATION / R.PACE, challenged, { boulders: total % 4, seed });
+            const bout = newBout({ ...a.setup, shards: la }, { ...b.setup, shards: lb }, R.START_SEPARATION / R.PACE, challenged, { boulders: standardBoulders(seed), seed });
             const events = runBout(bout, { A: aiController(styleA, seed), B: aiController(styleB, seed + 1) }, DEFAULT_RULES);
             const end = events.find((e) => e.kind === 'boutEnd');
             if (end?.reason.startsWith('timeout')) endings.timeout++;
@@ -108,7 +109,7 @@ const fmt = (n: number) => `${n.toFixed(0).padStart(3)}%`;
 
 console.log(`Tournament: ${total} bouts. Every pairing against every other, ${STYLES.length * STYLES.length} AI style matchups, both as challenger and challenged.`);
 console.log(`Endings: ${endings.ko} KO, ${endings.pulse} rim-pulse KO, ${endings.timeout} timeout. Average ${(exchanges / total).toFixed(1)} exchanges per bout.`);
-console.log('Arenas: the four rim pillars plus 0 to 3 seeded boulders per bout.');
+console.log('Arenas: the four rim pillars plus 1d4+2 seeded boulders per bout.');
 if (withShards) console.log('Loadouts: every dragon gets a random, seeded 3-pip wyrmling loadout from every built shard at every grade.');
 console.log('A fair pairing wins about 50%. These AIs are crude, so read this as "strong in crude hands."\n');
 
