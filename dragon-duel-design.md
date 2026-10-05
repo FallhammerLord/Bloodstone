@@ -190,7 +190,7 @@ Each morph prefers one element and dislikes the element that beats it.
 |---|---|---|
 | Water | Line | High-pressure jet; pushes the target back a band, slamming it into walls and obstacles (3); shoves boulders **[Proposed]** |
 | Earth | Narrow cone | Acidic slurry; eats obstacles and leaves a corrosive pool |
-| Fire | Ranged blast | Flame; leaves a burning zone |
+| Fire | Ranged blast, ¾ pace radius **[Proposed]** | Flame; leaves a burning zone |
 | Air | Ranged vortex **[Proposed]** | Vortex at the target, 1 pace across; pulls the target a band toward the breather (lowering, never grounding, a flier), while a vortex in the breather's own space throws Melee out to Close; disperses clouds |
 | Salt | Line blooming into a cloud **[Proposed]** | Caustic gas; Blinds dragons inside |
 | Magma | Narrow cone that pools **[Proposed]** | Molten spray; burns, then cools into a low ridge |
