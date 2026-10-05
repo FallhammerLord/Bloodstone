@@ -129,7 +129,8 @@ export const BREATH = {
   line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
   narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
   vortex: { maxCenter: Math.floor(8.5 * PACE), radius: Math.floor(0.5 * PACE) }, // [Proposed] Air: a ranged vortex centered on the target, 1 pace across (cut from 2); its edge reaches Far
-  blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.5 * PACE) }, // Fire: lands on the target; radius cut from 1.5 to 0.5
+  // Fire: lands on the target; radius cut from 1.5 to 0.5. REFEREE_FIRE_RADIUS (in paces) overrides it for diagnostics.
+  blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor((Number(typeof process !== 'undefined' ? process.env.REFEREE_FIRE_RADIUS ?? 0.5 : 0.5) || 0.5) * PACE) },
 }; // all [Assumed]; every breath stays within Far [Doc]
 
 // ---- Attack-role variants ---- [Proposed] Switched on for testing, one per run: REFEREE_VARIANT=charge,mandatory,lunge,pounce
