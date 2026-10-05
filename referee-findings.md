@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [17](#round-17-fires-blast-at-¾-pace-on-the-cleaned-up-referee) | Fire's blast at ¾ pace, on the cleaned-up Referee |
 | [16](#round-16-trimmed-stalwart-½-pace-snap-brains-that-value-position) | trimmed Stalwart, ½-pace snap, brains that value position |
 | [15](#round-15-band-movement-and-the-breath-first-true-dragon) | band movement and the breath-first True Dragon |
 | [14](#round-14-stalwart-steadies-charges) | Stalwart steadies charges |
@@ -20,6 +21,34 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 17: Fire's blast at ¾ pace, on the cleaned-up Referee
+
+Changes since Round 16 (master, 2,544 bouts):
+- **Fire's blast radius ½ → ¾ pace**, now that aim settles late (12 − Accuracy ticks before the strike).
+- **The cleanup** (`referee/ROADMAP.md`, Phases 0–8) changed no fights: a fixed set of 144 brain bouts replays identically. Charge, lunge and pounce are now the rules everywhere rather than switches.
+- **Win rates now carry a 95% margin.** Pairings are ±11–12 points, morphs and stones ±6–7, styles ±6. Two rates whose margins overlap may not differ.
+
+| | Round 16 | Round 17 |
+|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 56 / 47 / 47 | 56 / 44 / 50 |
+| Stones (Air / Earth / Water / Fire) | 56 / 51 / 49 / 44 | 54 / 49 / 51 / **46** |
+| Pairing spread | 36–65% | 36–65% |
+| Fights at Melee / Close / Far / Very Far | 36 / 35 / 24 / 6% | 33 / 35 / 25 / 7% |
+| Travel per bout (TD / Wyrm / Wyvern) | 11.2 / 14.8 / 16.6 | 10.9 / 14.4 / 16.2 paces |
+| claw-focus vs general | 48% | 43% |
+| charge / kite / meter-focus vs general | 51 / 48 / 46% | 53 / 52 / 42% |
+| Style range (identical dragons) | 38–61% | 39–61% |
+| Crunchling vs plain | 57% | 55% ±8 |
+| Timeouts | 16% | 13% |
+
+**What it shows:**
+- **Stones are within 8 points (Air 54 to Fire 46)**, and every stone's margin overlaps its neighbors'. Fire rose 2; True Dragon + Fire is second at 61% ±11. Wyrm + Fire is last at 36% ±11, the one pairing whose margin clears 50%.
+- **True Dragon is the strongest morph (56% ±6)**; the Wyrm (44% ±6) is the only morph whose margin falls below 50%. The Wyvern rose 3 points.
+- **Most round-to-round moves are noise.** At these sample sizes a 3-point shift in a stone, or 10 in a pairing, is within the margin. Larger runs (`--rule` tracks, or `diag:pairing` with more bouts) are the way to test a specific change.
+- **Breath is the main damage source** (44% of damage, 25% of slots); Bite 37%, Claw 17% (but the most accurate, landing 65%).
+- **Two brain habits to look at:** the counterpuncher at Melee opens with a Bite 14 times in 20 and never with Scales, and kite-focus at Melee breathes or bites 11 times in 20 rather than backing off. Both still do well (56% and 52% against the general styles), so these may be sound reads rather than bugs.
+- **The boxing triangle's third leg stays reversed:** the slugger beats the swarmer only 25% of the time.
 
 ## Round 16: trimmed Stalwart, ½-pace snap, brains that value position
 
