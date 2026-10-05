@@ -32,9 +32,9 @@ export function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event
     if (c === 'hit') hits.push(s);
     else if (c) blocked.push({ s, o: c });
   }
-  for (const s of strikeObstacles(bout, plans, blocked, t, ev)) hits.push(s);
+  if (blocked.length) for (const s of strikeObstacles(bout, plans, blocked, t, ev)) hits.push(s);
   // 4. Damage and statuses, worked out from the same moment, then applied together.
-  land(bout, plans, hits, t, ev);
+  if (hits.length) land(bout, plans, hits, t, ev);
   // 5. End-of-window checks.
   for (const s of SIDES) endOfWindow(bout, plans, s, t, ev);
   // 6. KO checks.
@@ -47,6 +47,7 @@ function move(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   const next = { A: moveStep(bout.rules, F.A, F.B, plans.A, plans.B, t, ev), B: moveStep(bout.rules, F.B, F.A, plans.B, plans.A, t, ev) };
   for (const s of SIDES) next[s] = stoopStep(F[s], plans[s], t, next[s]);
   for (const s of SIDES) next[s] = carryStep(plans[s], t, next[s]);
+  if (next.A === F.A.pos && next.B === F.B.pos) return; // nobody moved this tick
   const block = (s: Side, by: string) => {
     next[s] = F[s].pos;
     const p = plans[s];
