@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [21](#round-21-whole-band-reaches-breath-loses-melee-the-guard-reversal-hard-landings) | Whole-band reaches, Breath loses Melee, the guard reversal, hard landings |
 | [20](#round-20-brains-look-ahead-stoops-fall-harder-serpentine-slips-breath-stomp-catches-movers) | Brains look ahead, stoops fall harder, Serpentine slips Breath, Stomp catches movers |
 | [19](#round-19-earth-corrodes-and-the-wheel-holds-everywhere) | Earth corrodes, and the wheel holds everywhere |
 | [18](#round-18-fire-sets-the-world-on-fire) | Fire sets the world on fire |
@@ -24,6 +25,33 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 21: whole-band reaches, Breath loses Melee, the guard reversal, hard landings
+
+Changes since Round 20, as core rules rather than dials (master; three plain tournaments pooled, 7,632 bouts, plus two with random 3-pip shard loadouts, 5,088 bouts):
+- **Reach is in whole range bands;** widths and radii stay paces. Bite reaches through Close (was 5 paces). Claw's arc reaches Melee's edge and just into Close for every dragon (the Wyvern's short ground Claw is gone). Earth's cone and Fire's blast reach Far's edge.
+- **Stomp quakes whole bands:** Close at wyrmling, Far at adult and venerable; a Venerable adds Hardness ÷ 2.
+- **At Melee a Breath is lost to any hit before it resolves,** a trade included. A charged Breath's release can't be interrupted.
+- **The guard reversal:** Scales or Dodge with a full Acumen meter turns a landing attack, Breath included, back on its owner's own hide, and empties the meter. Unlike Dragonseeds' reflector it costs a full meter and a read.
+- **Hard landing:** a Dive from two bands up, with Stomp ready, comes all the way down and Stomps where it lands, on Stomp's cooldown.
+- **Brains** know the hard landing; a census of 528 master bouts shows them adapting: Breath at Melee 19% → 11% of Breath use, Scales reflects in 19% of its slots, Stomp 2% → 5% of slots.
+
+| | Round 20 | Round 21 (plain) | Round 21 (shards) |
+|---|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 54 / 43 / 53 | 54 / **47** / 48 | 52 / 51 / 48 |
+| Stones (Air / Earth / Water / Fire) | 56 / 48 / 46 / 50 | 55 / 49 / 47 / 48 | 51 / 53 / 46 / 50 |
+| Pairing spread | 34–62% | **42–60%** | 36–60% |
+| Breath's share of damage | 49% | 44% | |
+| Stomp's share of damage | 2% | 5% | |
+| Style range (identical dragons) | 34–58% | 36–61% | 30–59% |
+| Timeouts | 13% | **8%** | 8% |
+
+**What it shows:**
+- **The tightest pairings yet: 42–60% (±7).** Breath fell from 49% to 44% of damage as Melee went back to the body, and timeouts dropped to 8%: fights end.
+- **The Wyrm recovered to 47% ±3,** within a few points of the Wyvern. The True Dragon stays on top at 54% ±3; Air is still the strongest stone (55%).
+- **With shards, the morphs close up** (48–52%, ±4) and Earth leads the stones (53%). Wyrm + Earth tops the shard pairings (60%); Wyvern + Water is last in both sets (42% plain, 36% with shards).
+- **Gnashing Teeth dominates the shard ranking at every grade** (Venerable 82% ±11, Juvenile 75% ±9): a crunched Bite with Bite's new reach. Hamstring Hooks, Thornscale and Lockjaw (Elder) trail.
+- **An open problem:** brains still throw about half their Stomps from beyond its reach, because a near miss fills the Acumen meter and Stomp's radius makes near misses easy: a meter pump.
 
 ## Round 20: brains look ahead, stoops fall harder, Serpentine slips Breath, Stomp catches movers
 
