@@ -39,7 +39,7 @@ export type NoteTag =
   | 'technique';
 
 /** What shaped a hit's damage, beyond its base. */
-export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'corroded';
+export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'corroded' | 'stoop';
 
 export type Event =
   | { kind: 'exchangeStart'; exchange: number }

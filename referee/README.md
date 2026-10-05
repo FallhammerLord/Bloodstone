@@ -162,7 +162,7 @@ It sees only what a player sees: the board, the record, and its own script.
 | bite-focus | attacks only with Bite (charged or crunched if it can); holds Close | being at Close | at Melee it backs off; beyond Bite reach it closes in |
 | breath-focus | attacks only with Breath (charged if it can); holds Far | being at Far | at Close or nearer, it opens by backing off |
 
-Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how tightly it sticks to its best idea, and how long it remembers your habits.
+Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how far ahead it looks (1, 2 or 3 exchanges), how tightly it sticks to its best idea, and how long it remembers your habits. Looking ahead, an adept or master plays its best few scripts (plus a few others, so a plan that pays off later gets a hearing) forward through the next exchanges, both sides on habit, and judges the whole line, later exchanges counting less. It keeps the next exchange of its chosen line as a plan, offered again next exchange if it still fits.
 
 `npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate, every action's share of slots, and what came of them (revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, setups). Arenas throw 1d4+2 boulders.
 

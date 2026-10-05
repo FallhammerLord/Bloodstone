@@ -172,6 +172,15 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
     parts.push(`+${rules.INTIMIDATE_BONUS} Intimidate`);
     tags.push('intimidate');
   }
+  // A stoop hits harder the farther it falls [Proposed]: +1 a pace, +3 a band.
+  if (p.stoop && rules.STOOP_PER_PACE) {
+    const drop = Math.floor((p.stoop.from.z / R.PACE) * rules.STOOP_PER_PACE);
+    if (drop > 0) {
+      v += drop;
+      parts.push(`+${drop} stoop (${(p.stoop.from.z / R.PACE).toFixed(1)} paces)`);
+      tags.push('stoop');
+    }
+  }
   // Earth's corrosion [Proposed]: a corroded dragon takes more from every hit.
   if (def.marks.corrosion) {
     v += def.marks.corrosion.bonus;

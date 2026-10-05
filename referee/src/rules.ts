@@ -124,6 +124,7 @@ export const DEFAULT_RULES = {
   // ---- Aspects ---- [Doc] §2; numbers [Assumed]
   STOOP_RANGE: FAR_EDGE, // Wyvern Talons: a Claw from the air stoops on a grounded target anywhere within Far
   STOOP_LANDING: Math.floor(1.5 * PACE), // [Assumed] it lands on the ground this far short of where the target stood
+  STOOP_PER_PACE: 1, // [Proposed] a stoop deals +1 per pace it falls (+3 a band), like a charge paying for its setup; 0: off
   WYVERN_GROUND_CLAW_REACH: 2 * PACE, // [Assumed] forelimbs are wings, so its Claw from the ground is short
   // ---- Technique numbers ---- (dragonshards-technique.md gives most; these fill its gaps) [Assumed]
   TECHNIQUE_POINTS: 3, // Thornscale's spikes, Goading Roar's sting, Riposte's free claw, Smoldering Maw's linger

@@ -37,6 +37,32 @@ export function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter,
   return out.slice(0, R.SLOTS_PER_EXCHANGE);
 }
 
+/** How many imagined exchanges brains played and how many they reused, for tuning. */
+export const stats = { played: 0, reused: 0, lookahead: 0 };
+
+/** How much each exchange of a line of play counts: this one in full, later ones less, being less certain. */
+const LOOKAHEAD_WEIGHTS = [1, 0.7, 0.5, 0.35];
+/** Habitual scripts tried at each look-ahead step; it keeps the best. */
+const PLAYOUT_TRIES = 3;
+
+const sepOf = (b: Bout) => Math.hypot(b.fighters.A.pos.x - b.fighters.B.pos.x, b.fighters.A.pos.y - b.fighters.B.pos.y, b.fighters.A.pos.z - b.fighters.B.pos.z);
+
+function situationOf(b: Bout, side: Side): Situation {
+  const f = b.fighters[side];
+  return { f, globalSlot: b.globalSlot, z: f.pos.z, readyAt: f.readyAt, rules: b.rules };
+}
+
+/** The opponent's likeliest script from here, by its habits: what a look-ahead expects of it. */
+function habitScript(read: Read, s: Situation, sep: number, f: Fighter): ActionSpec[] {
+  const g: ActionSpec[] = [];
+  const ctx = `${f.pos.z > 0}|${f.meter >= R.METER_MAX}`;
+  while (g.length < R.SLOTS_PER_EXCHANGE) {
+    const ready = (s.readyAt.breath ?? 0) <= s.globalSlot;
+    s = place(g, s, read.likeliest(bandOf(sep), g.length, ready, legalActions(s, () => 0.5), ctx));
+  }
+  return g.slice(0, R.SLOTS_PER_EXCHANGE);
+}
+
 export function brainController(style: BrainStyle, skill: Skill = 'adept', seed = 1, tellOverride?: number): Controller {
   const rng = seededRandom(seed);
   const level = SKILL[skill];
@@ -45,6 +71,8 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
   let lastWounds: number | null = null;
   let lastOppWounds: number | null = null;
   let lastScript: ActionSpec[] = [];
+  // The script it means to play next exchange, from its best line of play; offered again if it still fits.
+  let planned: ActionSpec[] = [];
 
   const softmax = (values: number[]) => {
     const top = Math.max(...values);
@@ -67,6 +95,7 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const candidates: ActionSpec[][] = [];
       for (let i = 0; i < level.candidates; i++) candidates.push(scriptFor(style, mine, view.opp, sep, rng, i < (level.candidates * 2) / 3));
       if (lastScript.length && playable(lastScript, mine)) candidates.push(lastScript);
+      if (planned.length && playable(planned, mine)) candidates.push(planned);
 
       // Guesses at the opponent: from what it could do and what it has shown, slot by slot.
       const guessScript = (choose: (legal: ActionSpec[], slot: number, ready: boolean) => ActionSpec) => {
@@ -85,16 +114,72 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       // Counter-scripts: the best answer, slot by slot, to its likeliest guesses.
       for (let i = 0; i < Math.min(level.counters, guesses.length); i++) candidates.push(counterScript(style, base, me, them, guesses[i], mine, rng));
 
-      const values = candidates.map((c) => {
-        let total = 0;
-        for (const g of guesses) {
+      // The Referee is deterministic, so a script played against the same guess twice scores the same: play it once.
+      const seen = new Map<string, { v: number; after: Bout }>();
+      const first = candidates.map((c) => guesses.map((g) => {
+        const key = JSON.stringify([c, g]);
+        let r = seen.get(key);
+        if (r === undefined) {
           const b = cloneBout(base);
           const events = runExchange(b, { [me]: c, [them]: g } as Record<Side, ActionSpec[]>);
-          total += value(style, { before: base, after: b, events, me });
+          r = { v: value(style, { before: base, after: b, events, me }), after: b };
+          seen.set(key, r);
+          stats.played++;
+        } else stats.reused++;
+        return r;
+      }));
+      let values = first.map((rs) => rs.reduce((a, r) => a + r.v, 0) / rs.length);
+
+      // Looking ahead: its best few scripts are played forward through the next exchanges, both sides on habit,
+      // and judged on the whole line, later exchanges counting less. Only those few stay in the running.
+      let pool = candidates.map((_, i) => i);
+      const nextScripts = new Map<number, ActionSpec[]>();
+      if (level.horizon > 1 && level.lookahead > 0) {
+        const roll = seededRandom(view.globalSlot * 7919 + 17);
+        // The best few by this exchange alone, plus a few others: a plan that pays off later (a Leap before a stoop,
+        // a charge) looks poor over one exchange, and would never get played forward otherwise.
+        const ranked = pool.sort((a, b) => values[b] - values[a]);
+        const rest = ranked.slice(level.lookahead);
+        const explore: number[] = [];
+        while (explore.length < Math.ceil(level.lookahead / 2) && rest.length) explore.push(rest.splice(Math.floor(roll() * rest.length), 1)[0]);
+        pool = [...ranked.slice(0, level.lookahead), ...explore];
+        for (const i of pool) {
+          let total = 0;
+          first[i].forEach((r, gi) => {
+            let v = r.v;
+            let weight = 1;
+            let b = r.after;
+            for (let k = 1; k < level.horizon && !b.over; k++) {
+              const w = LOOKAHEAD_WEIGHTS[k];
+              const mineNow = situationOf(b, me);
+              const theirScript = habitScript(read, situationOf(b, them), sepOf(b), b.fighters[them]);
+              // Its own play-out: the best of a few habitual scripts against what the opponent likely does.
+              let best: { script: ActionSpec[]; next: Bout; v: number } | null = null;
+              for (let n = 0; n < PLAYOUT_TRIES; n++) {
+                const script = scriptFor(style, mineNow, b.fighters[them], sepOf(b), roll, true);
+                const trial = cloneBout(b);
+                const events = runExchange(trial, { [me]: script, [them]: theirScript } as Record<Side, ActionSpec[]>);
+                stats.lookahead++;
+                const tv = value(style, { before: b, after: trial, events, me });
+                if (!best || tv > best.v) best = { script, next: trial, v: tv };
+              }
+              const myScript = best!.script;
+              const next = best!.next;
+              v += w * best!.v;
+              weight += w;
+              if (k === 1 && gi === 0) nextScripts.set(i, myScript);
+              b = next;
+            }
+            total += v / weight;
+          });
+          values[i] = total / first[i].length;
         }
-        return total / guesses.length;
-      });
-      let chosen = pick(candidates, softmax(values), rng);
+      }
+      const poolCandidates = pool.map((i) => candidates[i]);
+      const poolValues = pool.map((i) => values[i]);
+      const choice = pick(pool.map((_, k) => k), softmax(poolValues), rng);
+      let chosen = poolCandidates[choice];
+      planned = nextScripts.get(pool[choice]) ?? [];
 
       chosen = tell(style, chosen, view, rng() < tellChance, { lastWounds, lastOppWounds, lastScript }, mine);
       lastWounds = view.me.wounds;

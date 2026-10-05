@@ -76,12 +76,16 @@ export interface SkillLevel {
   tell: number;
   /** counter-scripts it builds against its likeliest guesses, slot by slot in the Referee */
   counters: number;
+  /** exchanges it looks ahead: this one, then quick play-outs of the next */
+  horizon: number;
+  /** how many of its best scripts it plays forward past this exchange */
+  lookahead: number;
 }
 
 export const SKILL: Record<Skill, SkillLevel> = {
-  novice: { candidates: 8, guesses: 4, temperature: 0.08, memory: 0.5, tell: 0.9, counters: 0 },
-  adept: { candidates: 14, guesses: 6, temperature: 0.04, memory: 0.8, tell: 0.5, counters: 1 },
-  master: { candidates: 28, guesses: 12, temperature: 0.015, memory: 0.95, tell: 0.15, counters: 2 },
+  novice: { candidates: 8, guesses: 4, temperature: 0.08, memory: 0.5, tell: 0.9, counters: 0, horizon: 1, lookahead: 0 },
+  adept: { candidates: 14, guesses: 6, temperature: 0.04, memory: 0.8, tell: 0.5, counters: 1, horizon: 2, lookahead: 4 },
+  master: { candidates: 28, guesses: 12, temperature: 0.015, memory: 0.95, tell: 0.15, counters: 2, horizon: 3, lookahead: 6 },
 };
 
 /** Which actions each style reaches for first when imagining scripts, by range band. Others still get a look. */

@@ -15,10 +15,10 @@
  },
  {
   "name": "brains.json",
-  "winner": "A",
-  "exchanges": 5,
-  "wounds": "1/-13",
-  "hash": "32e69038f53dde41"
+  "winner": "B",
+  "exchanges": 7,
+  "wounds": "0/18",
+  "hash": "4e20f2d8625f21d2"
  },
  {
   "name": "breath-effects.json",
