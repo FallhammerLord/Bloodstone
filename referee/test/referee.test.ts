@@ -26,14 +26,15 @@ test('swing table: every pairing in the design doc, with derived knock-ons', () 
   assert.deepEqual([td.breath, td.wounds, td.affinity], [15, 30 + 9, 6]);
   const tdE = hatch('true-dragon', 'earth');
   assert.deepEqual([tdE.bite, tdE.wounds], [9, 42 + 9]);
+  // The body side of every swing is Wounds: signature defenses stay at base, and Accuracy doesn't move.
   const wa = hatch('wyvern', 'air');
-  assert.deepEqual([wa.claw, wa.evasion, wa.accuracy], [15, 6, 3]);
+  assert.deepEqual([wa.claw, wa.wounds, wa.evasion, wa.accuracy], [15, 18, 9, 6]);
   const wf = hatch('wyvern', 'fire');
-  assert.deepEqual([wf.breath, wf.evasion, wf.affinity, wf.accuracy], [9, 12, 0, 9]);
+  assert.deepEqual([wf.breath, wf.wounds, wf.evasion, wf.affinity, wf.accuracy], [9, 30, 9, 0, 6]);
   const ww = hatch('wyrm', 'water');
-  assert.deepEqual([ww.affinity, ww.hardness], [9, 3]);
+  assert.deepEqual([ww.affinity, ww.wounds, ww.hardness], [9, 24, 6]);
   const wr = hatch('wyrm', 'air');
-  assert.deepEqual([wr.claw, wr.hardness], [9, 9]);
+  assert.deepEqual([wr.claw, wr.wounds, wr.hardness], [9, 36, 6]);
 });
 
 test('neutral pairings keep the base tables', () => {
@@ -148,9 +149,10 @@ test('the same scripts always produce the same fight', () => {
 });
 
 test('Evasion beyond the one-band cap buys timing: the move finishes sooner', () => {
-  // Wyvern + Fire (Evasion 12) and Wyvern + Water (Evasion 9) both retreat one band; 12 gets there first.
+  // A Wyvern at Evasion 12 (as a shard might give) and one at its base 9 both retreat one band; 12 gets there first.
   const at = (stone: 'fire' | 'water', tick: number) => {
     const bout = newBout(TD_WATER, { name: 'G', morph: 'wyvern', stone }, 4);
+    if (stone === 'fire') bout.fighters.B.sheet.evasion = 12;
     const ev = runExchange(bout, { A: ['hold'].map(parseAction), B: ['retreat'].map(parseAction) }, { trace: true });
     const tr = ev.find((e) => e.kind === 'trace' && e.tick === tick);
     return tr && tr.kind === 'trace' ? tr.positions.B.x : NaN;

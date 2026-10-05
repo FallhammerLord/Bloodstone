@@ -103,8 +103,9 @@ Each morph prefers one element and dislikes the element that beats it.
 | Wyrm | Water | Air |
 
 **The swing** is zero-sum, so no pairing is simply better:
-- **Preferred stone:** +3 to the stone's peak attribute, −3 to the egg's peak. The dragon leans into its stone: more element, less body.
-- **Disliked stone:** −3 to the stone's peak, +3 to the egg's peak. The dragon fights its stone and toughens for it: more body, less element.
+- **Preferred stone:** +3 to the stone's peak attribute, −6 Wounds. The dragon leans into its stone: more element, less body.
+- **Disliked stone:** −3 to the stone's peak, +6 Wounds. The dragon fights its stone and toughens for it: more body, less element.
+- **[Proposed]** The body side of the swing is always Wounds. Each morph's signature defense (True Dragon Wounds, Wyvern Evasion, Wyrm Hardness) stays at its base, and no swing feeds a derived stat, so every swing is zero-sum.
 - **Neutral stone:** no swing.
 - Wounds moves in 6s on its doubled scale.
 - **Order:** the swing applies before tertiaries derive, so it carries into Accuracy and Affinity. A swing on Affinity (Water's peak) moves the stone modifier.
@@ -113,12 +114,12 @@ Each morph prefers one element and dislikes the element that beats it.
 |---|---|---|
 | True Dragon + Fire | Breath 12 → 15, Wounds 36 → 30: a breath cannon | Affinity 3 → 6 |
 | True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill | |
-| Wyvern + Air | Claw 12 → 15, Evasion 9 → 6 | Accuracy 6 → 3 |
-| Wyvern + Fire | Breath 12 → 9, Evasion 9 → 12: almost impossible to pin down | Affinity 3 → 0, Accuracy 6 → 9 |
-| Wyrm + Water | Affinity 6 → 9, Hardness 6 → 3: a supple sea serpent | |
-| Wyrm + Air | Claw 12 → 9, Hardness 6 → 9 | |
+| Wyvern + Air | Claw 12 → 15, Wounds 24 → 18 | |
+| Wyvern + Fire | Breath 12 → 9, Wounds 24 → 30: the toughest Wyvern | Affinity 3 → 0 |
+| Wyrm + Water | Affinity 6 → 9, Wounds 30 → 24: a sea serpent the elements slide off | |
+| Wyrm + Air | Claw 12 → 9, Wounds 30 → 36 | |
 
-**[Open]** Derivation amplifies swings that touch Evasion or Breath Potency, so those pairings are no longer strictly zero-sum. True Dragon + Fire gains Affinity on top of its Breath.
+**[Open]** Derivation still amplifies swings that touch Breath Potency: True Dragon + Fire gains Affinity on top of its Breath. Swings no longer touch Evasion.
 
 - **Growth leans the same way:** preferred pairings weight age-up points toward the stone's attributes; disliked pairings toward the egg's.
 - **Intermediates derive:** one preferred parent counts as preference, one disliked parent as distaste, one of each cancels to neutral. For a True Dragon, Lightning is preferred, Salt disliked, Magma neutral.

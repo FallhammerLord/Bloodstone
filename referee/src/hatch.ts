@@ -61,10 +61,11 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
   const s = { ...STONES[stone] };
   const pref = preference(morph, stone);
 
-  // The swing: preferred leans into the stone, disliked into the body. Wounds moves in 6s.
+  // The swing: preferred leans into the stone, disliked into the body. The body side is always Wounds,
+  // in 6s [Proposed]: each morph's signature defense stays at its base, and no swing feeds a derived stat.
   const sign = pref === 'preferred' ? 1 : pref === 'disliked' ? -1 : 0;
   s[s.peak] += 3 * sign;
-  m[m.peak] -= (m.peak === 'wounds' ? 6 : 3) * sign;
+  m.wounds -= 6 * sign;
 
   return {
     morph, stone, age, preference: pref, flies: morph !== 'wyrm', aspect: ASPECTS[morph],
