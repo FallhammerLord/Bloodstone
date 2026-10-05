@@ -74,6 +74,15 @@ export function place(out: ActionSpec[], s: Situation, a: ActionSpec): Situation
   return next;
 }
 
+/** Whether a whole script is still playable from here: no action scripted before its cooldown ends. */
+export function playable(script: ActionSpec[], s: Situation): boolean {
+  for (const a of script) {
+    if ((s.readyAt[a.name] ?? 0) > s.globalSlot + (a.charge ? 1 : 0)) return false;
+    s = advance(s, a.charge ? { name: 'hold' } : a);
+  }
+  return true;
+}
+
 /** Advances the imagined situation past one action: cooldowns and altitude. */
 export function advance(s: Situation, a: ActionSpec): Situation {
   const readyAt = { ...s.readyAt };

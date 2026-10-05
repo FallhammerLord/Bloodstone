@@ -3,6 +3,7 @@
 import type { ActionName } from '../actions.ts';
 import { add, dist, flat, flatLen, len, scaleTo, sub, vec, type Vec } from '../geometry.ts';
 import { describeObstacle, inZone, obstacleAt, type Obstacle, type Zone } from '../arena.ts';
+import { matchup } from '../hatch.ts';
 import * as R from '../rules.ts';
 import type { Rules } from '../rules.ts';
 import type { Event } from './events.ts';
@@ -85,7 +86,7 @@ export function shoveObstacle(bout: Bout, o: Obstacle, dir: Vec, t: number, s: S
 }
 
 /** The breath's verb on a hit [Doc] §3: Water pushes back, Air shoves sideways. Fire and Earth act through zones. */
-export function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]) {
+export function breathVerb(bout: Bout, s: Side, p: Plan, aim: Vec, t: number, ev: Event[]) {
   const att = bout.fighters[s];
   const def = bout.fighters[other(s)];
   if (att.sheet.stone === 'water') {
@@ -108,6 +109,16 @@ export function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]
       ev.push({ kind: 'note', tick: t, side: def.side, tag: moved > 0 ? 'pull' : 'pull-stopped', text: moved > 0 ? `The vortex pulls it in ${(moved / R.PACE).toFixed(1)} paces.` : 'The vortex pulls, but something holds it in place.' });
       slammed(bout.rules, def, slam, t, ev);
     }
+  } else if (att.sheet.stone === 'earth' && bout.rules.EARTH_CORRODES) {
+    // Earth corrodes the target directly [Proposed]: for Potency ÷ 6 slots, plus an exchange per charging slot, it
+    // takes +Potency ÷ 4 from every hit. A fresh corrosion refreshes the time; the bonus doesn't stack.
+    const R2 = bout.rules;
+    const potency = eff(att, 'breath', {}).value;
+    const charged = p.spec.released ? (p.spec.full ? 2 : 1) : 0;
+    const until = bout.globalSlot - 1 + Math.floor(potency / R2.ZONE_DURATION_DIVISOR || 1) + charged * R2.ZONE_CHARGE_SLOTS;
+    const bonus = Math.floor(potency / R2.CORRODE_DIVISOR);
+    def.marks.corrosion = { bonus, until: Math.max(until, def.marks.corrosion?.until ?? 0) };
+    ev.push({ kind: 'note', tick: t, side: def.side, tag: 'corroded', text: `Corroded for the rest of this slot and the next ${def.marks.corrosion.until - bout.globalSlot + 1} slots: +${bonus} from every hit.` });
   }
 }
 
@@ -131,7 +142,9 @@ export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, scales
  */
 export function elementHolds(rules: Rules, att: Fighter, def: Fighter, scales: boolean): string | null {
   const potency = eff(att, 'breath', { sep: dist(att.pos, def.pos) }).value;
-  const { affinity } = affinityAgainst(rules, att, def, scales, dist(att.pos, def.pos));
+  // The element wheel holds in the contest too [Proposed]: a stone that beats the breather's resists it, and the reverse.
+  const wheel = rules.ELEMENT_MATCHUP_CONTEST ? -matchup(att.sheet.stone, def.sheet.stone) * rules.MATCHUP : 0;
+  const affinity = affinityAgainst(rules, att, def, scales, dist(att.pos, def.pos)).affinity + wheel;
   const holds = affinity > potency || (affinity === potency && def.sheet.acumen > att.sheet.acumen);
   return holds ? `Affinity ${affinity} holds against Potency ${potency}` : null;
 }
@@ -147,10 +160,11 @@ export function slammed(rules: Rules, f: Fighter, slam: string | null, t: number
 export function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Side; aim: Vec }[], t: number, ev: Event[], bypass: Set<Side> = new Set()) {
   // First each target's Affinity contests the element (a true-damage Breath ignores it); only verbs that take hold can meet.
   const verbs = all.filter((v) => {
-    if (bout.fighters[v.s].sheet.stone !== 'water' && bout.fighters[v.s].sheet.stone !== 'air') return true;
+    const stone = bout.fighters[v.s].sheet.stone;
+    if (stone !== 'water' && stone !== 'air' && !(stone === 'earth' && bout.rules.EARTH_CORRODES)) return true;
     if (bypass.has(v.s)) return true;
     const held = elementHolds(bout.rules, bout.fighters[v.s], bout.fighters[other(v.s)], guarding(plans[other(v.s)], t));
-    if (held) ev.push({ kind: 'note', tick: t, side: other(v.s), tag: 'verb-held', text: `${held}: the ${bout.fighters[v.s].sheet.stone === 'water' ? 'push' : 'pull'} fails.` });
+    if (held) ev.push({ kind: 'note', tick: t, side: other(v.s), tag: 'verb-held', text: `${held}: the ${stone === 'water' ? 'push' : stone === 'air' ? 'pull' : 'corrosion'} fails.` });
     return !held;
   });
   const stones = verbs.map((v) => bout.fighters[v.s].sheet.stone);
@@ -158,7 +172,7 @@ export function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Sid
     for (const v of verbs) ev.push({ kind: 'note', tick: t, side: other(v.s), tag: 'push-pull-cancel', text: 'Jet and vortex meet: the push and the pull cancel.' });
     return;
   }
-  for (const v of verbs) breathVerb(bout, v.s, v.aim, t, ev);
+  for (const v of verbs) breathVerb(bout, v.s, plans[v.s], v.aim, t, ev);
 }
 
 /**
@@ -171,6 +185,7 @@ export function leaveZone(bout: Bout, s: Side, p: Plan, origin: Vec, aim: Vec, t
   const f = bout.fighters[s];
   const stone = f.sheet.stone;
   if (stone !== 'fire' && stone !== 'earth') return;
+  if (stone === 'earth' && R2.EARTH_CORRODES) return; // Earth corrodes on the hit instead
   const kind = stone === 'fire' ? 'burning' : 'corrosive';
   const potency = eff(f, 'breath', {}).value;
   const charged = p.spec.released ? (p.spec.full ? 2 : 1) : 0;
@@ -213,7 +228,10 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
       if (z.kind === 'burning') {
         if (burned.has(s)) continue;
         burned.add(s);
-        const burn = z.damage ?? bout.rules.BURN_DAMAGE;
+        const base = z.damage ?? bout.rules.BURN_DAMAGE;
+        // The wheel shapes the burn as it shapes the Breath [Proposed]: Earth smothers Fire; Fire consumes Air.
+        const wheel = bout.rules.ZONE_MATCHUP ? matchup(bout.fighters[z.owner].sheet.stone, f.sheet.stone) * bout.rules.MATCHUP : 0;
+        const burn = Math.max(bout.rules.DAMAGE_FLOOR, base + wheel);
         f.wounds -= burn;
         if (bout.rules.BURN_BLINDS) f.pending.blinded = true;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: burn, woundsLeft: f.wounds });

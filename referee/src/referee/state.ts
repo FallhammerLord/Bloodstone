@@ -55,8 +55,10 @@ export interface Marks {
   demoralized: boolean;
   /** the exchange this dragon last crunched in: one crunch per exchange [Proposed] */
   crunchedIn: number;
+  /** Earth's corrosion [Proposed]: each hit taken through slot `until` deals `bonus` more */
+  corrosion: { bonus: number; until: number } | null;
 }
-export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1 });
+export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null });
 
 export interface Chain {
   action: ActionName | null;
@@ -188,6 +190,9 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
     startWounds: { A: 0, B: 0 }, history: { A: [], B: [] }, record: [],
   };
 }
+
+/** Whether this dragon is corroded in global slot g. */
+export const corroded = (f: Fighter, g: number) => f.marks.corrosion !== null && f.marks.corrosion.until >= g;
 
 /** A deep copy for imagining futures: everything but the rules, which are shared and never change mid-bout. */
 export function cloneBout(b: Bout): Bout {

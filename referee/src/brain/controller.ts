@@ -5,7 +5,7 @@ import type { Controller, View } from '../bout.ts';
 import { seededRandom } from '../random.ts';
 import { cloneBout, simulateSlot, runExchange, type Bout, type Fighter, type Moment, type Side } from '../referee.ts';
 import * as R from '../rules.ts';
-import { type Situation, advance, legalActions, place } from './options.ts';
+import { type Situation, advance, legalActions, place, playable } from './options.ts';
 import { Read, pick } from './read.ts';
 import { type BrainStyle, CHARGE_LEAN, CHARGE_LEAN_DEFAULT, CRUNCH_LEAN, LEAN, SKILL, type Skill, allowed, bandOf } from './styles.ts';
 import { value } from './value.ts';
@@ -66,7 +66,7 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       // Candidates: mostly in the style's lean, some anything-goes, plus last exchange's script.
       const candidates: ActionSpec[][] = [];
       for (let i = 0; i < level.candidates; i++) candidates.push(scriptFor(style, mine, view.opp, sep, rng, i < (level.candidates * 2) / 3));
-      if (lastScript.length) candidates.push(lastScript);
+      if (lastScript.length && playable(lastScript, mine)) candidates.push(lastScript);
 
       // Guesses at the opponent: from what it could do and what it has shown, slot by slot.
       const guessScript = (choose: (legal: ActionSpec[], slot: number, ready: boolean) => ActionSpec) => {

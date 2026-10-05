@@ -172,6 +172,12 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
     parts.push(`+${rules.INTIMIDATE_BONUS} Intimidate`);
     tags.push('intimidate');
   }
+  // Earth's corrosion [Proposed]: a corroded dragon takes more from every hit.
+  if (def.marks.corrosion) {
+    v += def.marks.corrosion.bonus;
+    parts.push(`+${def.marks.corrosion.bonus} corroded`);
+    tags.push('corroded');
+  }
   if (p.demoralized) {
     v -= rules.DEMORALIZE;
     parts.push(`−${rules.DEMORALIZE} demoralized`);
@@ -245,7 +251,7 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, tags, interrupt, trade, woundsLeft: def.wounds });
   if (p.spec.name === 'breath' && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) {
     if (verbs) verbs.push({ s, aim: p.aim });
-    else breathVerb(bout, s, p.aim, t, ev);
+    else breathVerb(bout, s, p, p.aim, t, ev);
   }
   techniqueOnHit(bout, s, p, defPlan, t, ev);
   if (p.spec.name === 'stomp') {

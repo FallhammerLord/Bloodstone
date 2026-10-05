@@ -217,6 +217,8 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     // Guarding to the end, or drawing a Breath, fills the Acumen meter [Proposed]. A broken charge fills nothing.
     if ((p.spec.name === 'scales' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(bout.rules, f, p.spec.name === 'scales' ? 'Scales' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);
     if (p.charging && p.spec.name === 'breath' && f.marks.charge?.action === 'breath') fillMeter(bout.rules, f, 'drawing Breath', R.TICKS_PER_SLOT - 1, ev);
+    // Corrosion wears off after its last slot.
+    if (f.marks.corrosion && f.marks.corrosion.until <= g) f.marks.corrosion = null;
     bout.history[s].push(p.spec.name);
     f.marks.advanced = p.spec.name === 'approach' && p.converted === null && p.moved > 0;
     f.marks.strafed = p.spec.name === 'strafe' && p.converted === null && p.moved > 0;

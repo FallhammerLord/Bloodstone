@@ -28,7 +28,7 @@ export type NoteTag =
   | 'held-instead'
   // the elements
   | 'push' | 'push-stopped' | 'pull' | 'pull-stopped' | 'verb-held' | 'zone-held' | 'push-pull-cancel' | 'slam'
-  | 'boulder-shoved' | 'boulder-shattered'
+  | 'boulder-shoved' | 'boulder-shattered' | 'corroded'
   // the Acumen meter
   | 'meter-fill' | 'meter-full' | 'meter-spent'
   // Intimidate
@@ -39,7 +39,7 @@ export type NoteTag =
   | 'technique';
 
 /** What shaped a hit's damage, beyond its base. */
-export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish';
+export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'corroded';
 
 export type Event =
   | { kind: 'exchangeStart'; exchange: number }

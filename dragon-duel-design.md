@@ -189,7 +189,7 @@ Each morph prefers one element and dislikes the element that beats it.
 | Element | Shape | Substance and verb |
 |---|---|---|
 | Water | Line | High-pressure jet; pushes the target back a band, slamming it into walls and obstacles (3); shoves boulders **[Proposed]** |
-| Earth | Narrow cone | Acidic slurry; eats obstacles and leaves a corrosive pool |
+| Earth | Narrow cone | Acidic slurry; eats obstacles and corrodes the target. **[Proposed]** A corroded dragon takes +Potency ÷ 4 from every hit for Potency ÷ 6 slots (plus an exchange per charging slot), and each hit on it is an Acumen trigger |
 | Fire | Ranged blast, ¾ pace radius **[Proposed]** | Flame; sets the world on fire. **[Proposed]** The ground burns in a lane along its line through Close and Far, as wide as the blast, so closing in means crossing it. A burn deals Potency ÷ 4 to grounded dragons at slot's end |
 | Air | Ranged vortex **[Proposed]** | Vortex at the target, 1 pace across; pulls the target a band toward the breather (lowering, never grounding, a flier), while a vortex in the breather's own space throws Melee out to Close; disperses clouds |
 | Salt | Line blooming into a cloud **[Proposed]** | Caustic gas; Blinds dragons inside |
@@ -197,7 +197,7 @@ Each morph prefers one element and dislikes the element that beats it.
 | Lightning | Forking blast **[Proposed]** | Instant arc; jumps through cover |
 | Storm | Wide cone along a line **[Proposed]** | Wind and rain; shoves back and sideways at once |
 
-**[Proposed]** Floor zones (Fire's lanes, Earth's pools) linger Potency ÷ 6 slots after the one they land in, plus an exchange per charging slot. Each dragon keeps at most two; the oldest goes out. Overlapping fires burn a dragon once a slot.
+**[Proposed]** Fire's burning lanes linger Potency ÷ 6 slots after the one they land in, plus an exchange per charging slot. Each dragon keeps at most two; the oldest goes out. Overlapping fires burn a dragon once a slot. **[Proposed]** The element wheel holds in every element contest and every burn: a target whose stone beats the breather's adds 3 to its Affinity against the verb, and a burn adds the matchup (±3) as the Breath does, so Earth smothers Fire and Fire consumes Air.
 
 **[Proposed]** Optional depth: interacting surfaces in the style of Divinity: Original Sin 2.
 

@@ -2,9 +2,9 @@
  {
   "name": "ai-bout.json",
   "winner": "A",
-  "exchanges": 3,
-  "wounds": "23/-2",
-  "hash": "42bb2bb9b8b79449"
+  "exchanges": 1,
+  "wounds": "38/-2",
+  "hash": "1afa82e837e1a94e"
  },
  {
   "name": "altitude.json",
@@ -15,24 +15,24 @@
  },
  {
   "name": "brains.json",
-  "winner": "B",
-  "exchanges": 7,
-  "wounds": "-5/2",
-  "hash": "f0706ee7a3fab791"
+  "winner": "A",
+  "exchanges": 5,
+  "wounds": "1/-13",
+  "hash": "32e69038f53dde41"
  },
  {
   "name": "breath-effects.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "20/4",
-  "hash": "cbf89723720b68a1"
+  "wounds": "17/16",
+  "hash": "74b2a58205cd2da4"
  },
  {
   "name": "breath-matchup.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "23/37",
-  "hash": "3cff158d0b0d76a1"
+  "hash": "3a486faf1e59e340"
  },
  {
   "name": "chained-bites.json",
@@ -81,7 +81,7 @@
   "winner": "-",
   "exchanges": 2,
   "wounds": "38/51",
-  "hash": "576f1b5b99cbd2d1"
+  "hash": "8a12029aae371c48"
  },
  {
   "name": "push-and-shove.json",

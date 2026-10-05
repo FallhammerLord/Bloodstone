@@ -190,6 +190,8 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
       ev.push({ kind: 'note', tick: t, side: r.s, tag: 'meter-spent', text: 'The Acumen meter empties into the blow: true damage.' });
     }
     if (plans[r.s].spec.name === 'breath') fillMeter(bout.rules, F[r.s], 'landed Breath', t, ev);
+    // A hit on a corroded dragon is an Acumen trigger [Proposed].
+    if (bout.rules.CORRODE_METER && F[other(r.s)].marks.corrosion) fillMeter(bout.rules, F[r.s], 'hit on a corroded target', t, ev);
   }
   breathVerbs(bout, plans, verbs, t, ev, new Set(results.filter((r) => r.bypass).map((r) => r.s)));
 }

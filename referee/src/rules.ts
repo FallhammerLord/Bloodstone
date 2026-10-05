@@ -109,6 +109,15 @@ export const DEFAULT_RULES = {
   ZONE_CHARGE_SLOTS: 3, // [Proposed] and this many more per charging slot of the Breath that laid it
   ZONE_MAX: 2, // [Proposed] floor zones each dragon keeps at once; 0 for no cap
   BURN_DIVISOR: 4, // [Proposed] a burn deals the breather's Potency ÷ this (18 → 4, 15 → 3, 12 → 3)
+  // The element wheel in every element contest [Proposed]: a target whose stone beats the breather's adds MATCHUP to its
+  // Affinity against the verb or zone, and one whose stone it beats loses it. Earth smothers Fire's burn.
+  ELEMENT_MATCHUP_CONTEST: 1, // [Proposed] 0: contests ignore the wheel
+  ZONE_MATCHUP: 1, // [Proposed] a burn adds the matchup (±3) like the Breath that laid it, never below the damage floor; 0: off
+  // Earth corrodes [Proposed]: a landed Earth Breath corrodes the target directly (no pool) for Potency ÷ 6 slots plus an
+  // exchange per charging slot; a corroded dragon takes +Potency ÷ 4 from every hit, and each hit on it is an Acumen trigger.
+  EARTH_CORRODES: 1, // [Proposed] 1: the debuff on the hit; 0: the old pool that lowers Hardness
+  CORRODE_DIVISOR: 4, // [Proposed] a corroded dragon takes +Potency ÷ this from each hit (12 → 3)
+  CORRODE_METER: 1, // [Proposed] 1: landing a hit on a corroded dragon fills the attacker's Acumen meter
   BURN_BLINDS: 0, // [Proposed] 1: a burn also Blinds for the next slot (−3 Accuracy). Off: a toggle for A:B runs
   CORRODE_HARDNESS: 3, // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
   EARTH_OBSTACLE_MULTIPLIER: 2, // Earth's slurry eats obstacles

@@ -171,14 +171,23 @@ test('each charging slot adds an exchange to the fire; each dragon keeps at most
   for (let i = 0; i < 3; i++) runExchange(bout, { A: ['breath', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
   assert.equal(bout.arena.zones.filter((z) => z.owner === 'A').length, rules.ZONE_MAX);
 });
-test('Earth leaves a corrosive pool: Hardness −3 the next slot', () => {
-  // Wyrm + Earth breathes on Brine, then Brine's corroded Hardness is 0: a bite deals the full 12.
+test('Earth corrodes on the hit: +Potency ÷ 4 from every hit while it lasts, and each such hit fills the attacker\'s meter', () => {
+  // Wyrm + Earth (Potency 12) breathes on Brine, then bites: Bite 12, Hardness 3 pierced to 0, +3 corroded.
   const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 4);
   const ev = run(bout, ['breath', 'bite'], ['hold', 'hold']);
   assert.deepEqual(hits(ev).map((h) => h.action), ['breath', 'bite']);
-  assert.equal(hits(ev)[1].damage, 12);
+  assert.equal(hits(ev)[1].damage, 12 + Math.floor(12 / R.DEFAULT_RULES.CORRODE_DIVISOR));
+  assert.ok(hits(ev)[1].tags.includes('corroded'));
+  assert.ok(ev.some((e) => e.kind === 'note' && e.side === 'A' && e.text.includes('hit on a corroded target')));
+  assert.equal(bout.arena.zones.length, 0, 'no pool');
 });
 
+test('corrosion wears off after Potency ÷ 6 slots', () => {
+  const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 4);
+  run(bout, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  const ev = run(bout, ['bite', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.ok(!hits(ev)[0].tags.includes('corroded'), 'landed in slot 1, lasting 2 more: gone by the next exchange');
+});
 // ---- Obstacles (§5) ----
 
 test('four unbreakable pillars stand at the quadrants', () => {
@@ -281,17 +290,34 @@ test('a landed jet breaks a charge', () => {
 
 // ---- Affinity contests the element [Proposed] ----
 
-test('a verb lands only if Potency beats Affinity: a Wyrm + Water shrugs off a weak pull', () => {
-  // Wyrm + Air breathes Potency 9; Wyrm + Water's Affinity 12 holds.
-  const bout = newBout({ name: 'G', morph: 'wyrm', stone: 'air' }, { name: 'H', morph: 'wyrm', stone: 'water' }, 8);
-  const x0 = bout.fighters.B.pos.x;
-  const ev = run(bout, ['breath'], ['hold']);
-  assert.equal(hits(ev).length, 1, 'the breath still hits');
-  assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'Affinity 12 holds against Potency 9: the pull fails.'));
-  assert.equal(bout.fighters.B.pos.x, x0);
+test('a verb lands only if Potency beats Affinity, and the element wheel counts: Air scatters Water', () => {
+  // Wyrm + Air breathes Potency 9 at Wyrm + Water, Affinity 12. Air beats Water, so the wheel takes 3 off: 9 against 9,
+  // a tie on equal Acumen, and the pull lands. Without the wheel, Affinity 12 holds.
+  const pull = (rules = R.DEFAULT_RULES) => {
+    const bout = newBout({ name: 'G', morph: 'wyrm', stone: 'air' }, { name: 'H', morph: 'wyrm', stone: 'water' }, 8, 'B', {}, rules);
+    const x0 = bout.fighters.B.pos.x;
+    const ev = run(bout, ['breath'], ['hold']);
+    assert.equal(hits(ev).length, 1, 'the breath still hits');
+    return { moved: bout.fighters.B.pos.x !== x0, ev };
+  };
+  assert.ok(pull().moved);
+  const off = pull(R.rulesWith({ ELEMENT_MATCHUP_CONTEST: 0 }));
+  assert.ok(!off.moved);
+  assert.ok(off.ev.some((e) => e.kind === 'note' && e.text === 'Affinity 12 holds against Potency 9: the pull fails.'));
 });
 
-test('Scales adds its Affinity to the contest', () => {
+test('the wheel shapes a burn as it shapes the Breath: Earth smothers Fire, Fire consumes Air', () => {
+  // True Dragon + Fire burns for 18 ÷ 4 = 4: against Earth 4 − 3 = 1; against Air 4 + 3 = 7; against Water, neutral, 4.
+  const burn = (stone: 'earth' | 'air' | 'water') => {
+    const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, { name: 'T', morph: 'wyrm', stone }, 5);
+    const ev = run(bout, ['breath', 'hold'], ['hold', 'hold']);
+    const b = ev.find((e): e is Extract<Event, { kind: 'zoneEffect' }> => e.kind === 'zoneEffect');
+    return b?.damage;
+  };
+  assert.equal(burn('earth'), 1);
+  assert.equal(burn('air'), 7);
+  assert.equal(burn('water'), 4);
+});test('Scales adds its Affinity to the contest', () => {
   // True Dragon + Water's jet (Potency 12) against a True Dragon + Fire (Affinity 9): lands bare; under Scales it's 12 against 12, and a tie goes to the higher Acumen.
   const bare = newBout(TD_WATER, { name: 'F', morph: 'true-dragon', stone: 'fire' }, 5);
   assert.ok(run(bare, ['breath'], ['hold']).some((e) => e.kind === 'note' && e.text.startsWith('The jet pushes it back')));
