@@ -9,7 +9,8 @@
 
 import { ACTIONS, type ActionName, type ActionSpec } from './actions.ts';
 import type { Controller, View } from './bout.ts';
-import { flatLen } from './geometry.ts';
+import { obstacleAt } from './arena.ts';
+import { add, flat, flatLen, scaleTo, sub } from './geometry.ts';
 import { seededRandom } from './random.ts';
 import { simulateSlot, runExchange, type Bout, type Event, type Fighter, type Moment, type Side } from './referee.ts';
 import * as R from './rules.ts';
@@ -254,6 +255,38 @@ export function value(style: BrainStyle, o: Outcome): number {
   const late = o.after.exchange >= R.EXCHANGE_LIMIT - 3 && flatLen(me1.pos) >= R.ARENA_RADIUS - R.RIM_DEPTH;
   const rim = late ? -0.15 : 0;
 
+  // Every style reads leverage [Proposed]: a target with a wall or obstacle within a band behind it can be
+  // slammed and can't retreat; being pinned yourself is the reverse. Breaking a charge denies a setup.
+  const leverage = (pinned(o.after, op1, me1) ? 0.03 : 0) - (pinned(o.after, me1, op1) ? 0.03 : 0)
+    + 0.04 * o.events.filter((e) => e.kind === 'note' && e.side === them && e.text === 'The hit breaks the charge.').length;
+  return leverage + styleValue(style, o, { dealt, taken, band, sep, me1, op1, big, punishes, theirMisses, rim });
+}
+
+/** A wall or obstacle within a band behind this dragon, measured away from the other one. */
+function pinned(b: Bout, f: Fighter, from: Fighter): boolean {
+  const back = flat(sub(f.pos, from.pos));
+  if (flatLen(back) === 0) return false;
+  for (let k = 1; k <= R.BAND / R.PACE; k++) {
+    const p = add(f.pos, scaleTo(back, k * R.PACE));
+    if (flatLen(p) > R.ARENA_RADIUS || obstacleAt(b.arena, p)) return true;
+  }
+  return false;
+}
+
+interface Scored {
+  dealt: number;
+  taken: number;
+  band: Band;
+  sep: number;
+  me1: Fighter;
+  op1: Fighter;
+  big: number;
+  punishes: number;
+  theirMisses: number;
+  rim: number;
+}
+
+function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me1, op1, big, punishes, theirMisses, rim }: Scored): number {
   switch (style) {
     case 'swarmer':
       return dealt - 0.8 * taken + (band === 'melee' ? 0.08 : band === 'close' ? 0.04 : -0.04) + 0.04 * me1.chain.links + rim;

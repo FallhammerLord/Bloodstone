@@ -69,17 +69,47 @@ test('the True Dragon\'s Aspect, Stalwart: a flat +9 Wounds', () => {
 
 // ---- Breath effects (§3) ----
 
-test('Water pushes the target back one pace', () => {
+test('Water pushes the target back a band', () => {
   const bout = newBout({ name: 'T', morph: 'wyrm', stone: 'water' }, TD_WATER, 4);
   const before = bout.fighters.B.pos.x;
   run(bout, ['breath'], ['hold']);
   assert.equal(bout.fighters.B.pos.x - before, R.WATER_PUSH);
 });
 
-test('Air shoves the target sideways one pace', () => {
-  const bout = newBout({ name: 'G', morph: 'wyrm', stone: 'air' }, TD_WATER, 4);
+const AIR_WYRM: FighterSetup = { name: 'G', morph: 'wyrm', stone: 'air' };
+const sepOf = (bout: Bout) => Math.hypot(bout.fighters.A.pos.x - bout.fighters.B.pos.x, bout.fighters.A.pos.y - bout.fighters.B.pos.y, bout.fighters.A.pos.z - bout.fighters.B.pos.z);
+
+test('Air\'s vortex pulls the target a band toward the breather', () => {
+  const bout = newBout(AIR_WYRM, TD_WATER, 8);
   run(bout, ['breath'], ['hold']);
-  assert.equal(Math.abs(bout.fighters.B.pos.y), R.AIR_SHOVE);
+  assert.equal(Math.round(sepOf(bout)), 8 * R.PACE - R.AIR_PULL);
+});
+
+test('the pull stops at Close: the vortex at the breather\'s heart throws Melee back out', () => {
+  const close = newBout(AIR_WYRM, TD_WATER, 4.5);
+  run(close, ['breath'], ['hold']);
+  assert.equal(Math.round(sepOf(close)), R.MELEE_EDGE + R.NOTCH, 'pulled only to the edge of Close');
+  const melee = newBout(AIR_WYRM, TD_WATER, 2);
+  const ev = run(melee, ['breath'], ['hold']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The vortex at its heart throws it out')));
+  assert.equal(Math.round(sepOf(melee)), R.MELEE_EDGE + R.NOTCH);
+});
+
+test('the vortex lowers a flier a band but never grounds it', () => {
+  const bout = newBout(AIR_WYRM, { name: 'W', morph: 'wyvern', stone: 'water' }, 8);
+  bout.fighters.B.pos = { ...bout.fighters.B.pos, z: 2 * R.PACE };
+  run(bout, ['breath'], ['hold']);
+  assert.ok(bout.fighters.B.pos.z > 0 && bout.fighters.B.pos.z < 2 * R.PACE);
+});
+
+test('a push and a pull in the same moment cancel', () => {
+  const bout = newBout(TD_WATER, AIR_WYRM, 7);
+  const a0 = { ...bout.fighters.A.pos };
+  const b0 = { ...bout.fighters.B.pos };
+  const ev = run(bout, ['breath'], ['breath']);
+  assert.equal(hits(ev).length, 2);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.includes('cancel')));
+  assert.deepEqual([bout.fighters.A.pos, bout.fighters.B.pos], [a0, b0]);
 });
 
 test('Fire leaves a burning zone that hurts grounded dragons inside at slot end, not those aloft', () => {
@@ -177,14 +207,14 @@ test('a push into the arena wall slams for 3', () => {
   bout.fighters.B.pos = { x: R.ARENA_RADIUS - R.PACE, y: 0, z: 0 };
   const w0 = bout.fighters.B.wounds;
   const ev = run(bout, ['breath'], ['hold']);
-  assert.ok(ev.some((e) => e.kind === 'note' && e.text === `Slammed into the arena wall: takes ${R.WATER_SLAM}.`));
-  assert.equal(w0 - bout.fighters.B.wounds, hits(ev)[0].damage + R.WATER_SLAM);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text === `Slammed into the arena wall: takes ${R.SLAM_DAMAGE}.`));
+  assert.equal(w0 - bout.fighters.B.wounds, hits(ev)[0].damage + R.SLAM_DAMAGE);
 });
 
 test('a push into an obstacle slams for 3', () => {
   const bout = newBout(TD_WATER, TD_AIR, 5, 'B', { obstacles: [{ size: 'large', x: 5, y: 0 }] });
   const ev = run(bout, ['breath'], ['hold']);
-  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Slammed into') && e.text.endsWith(`takes ${R.WATER_SLAM}.`)));
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Slammed into') && e.text.endsWith(`takes ${R.SLAM_DAMAGE}.`)));
 });
 
 test('Water\'s jet shoves a boulder it strikes', () => {

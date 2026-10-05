@@ -6,10 +6,10 @@ import type { CoreStone, StatSheet } from './hatch.ts';
 import { add, dist, frame, len, scaleTo, type Vec } from './geometry.ts';
 import * as R from './rules.ts';
 
-export type Shape = 'bite' | 'claw' | 'stoop' | 'lance' | 'stomp' | 'line' | 'narrowCone' | 'wideCone' | 'blast';
+export type Shape = 'bite' | 'claw' | 'stoop' | 'lance' | 'stomp' | 'line' | 'narrowCone' | 'vortex' | 'blast';
 
 // [Doc] §3 Breath shapes for the core quartet
-const BREATH_SHAPE: Record<CoreStone, Shape> = { water: 'line', earth: 'narrowCone', fire: 'blast', air: 'wideCone' };
+const BREATH_SHAPE: Record<CoreStone, Shape> = { water: 'line', earth: 'narrowCone', fire: 'blast', air: 'vortex' };
 
 export function shapeOf(action: ActionName, sheet: StatSheet): Shape {
   if (action === 'breath') return BREATH_SHAPE[sheet.stone];
@@ -51,8 +51,10 @@ export function inShape(shape: Shape, sheet: StatSheet, origin: Vec, aim: Vec, t
       return f > 0 && f <= R.BREATH.line.reach + grow && l <= R.BREATH.line.halfWidth + grow;
     case 'narrowCone':
       return f > 0 && f <= R.BREATH.narrowCone.reach + grow && 4 * l <= f + R.PACE + 4 * grow;
-    case 'wideCone':
-      return f > 0 && f <= R.BREATH.wideCone.reach + grow && l <= f + grow;
+    case 'vortex': {
+      const center = add(origin, scaleTo(aim, Math.min(len(aim), R.BREATH.vortex.maxCenter)));
+      return dist(center, target) <= R.BREATH.vortex.radius + grow;
+    }
     case 'blast': {
       const center = add(origin, scaleTo(aim, Math.min(len(aim), R.BREATH.blast.maxCenter)));
       return dist(center, target) <= R.BREATH.blast.radius + grow;

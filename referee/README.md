@@ -79,8 +79,8 @@ Each morph bends one rule (design doc §2). The True Dragon's Aspect is having n
 ## Breath effects
 
 At wyrmling strength (design doc §3):
-- **Water** pushes the target back a whole band (3 paces) [Proposed]; a push that meets the wall or an obstacle slams for 3. Its jet shoves a boulder a band instead of breaking it. **Air** shoves the target 1 pace sideways. Walls, obstacles and the leash stop a push early. Any landed hit breaks a charge.
-- **Breath damage by element:** Water +2, Air +2, Earth +1, Fire −2. Harmless extras earn points; harmful ones cost them.
+- **Water** pushes the target back a whole band (3 paces). **Air**'s vortex pulls the target a band toward the breather, lowering a flier without grounding it; a second vortex in the breather's own space throws anything at Melee back out to Close, so the pull ends at Close. A push and a pull in the same moment cancel. Any forced movement that meets the wall or an obstacle slams for 3 [Proposed]. Water's jet shoves a boulder a band instead of breaking it. Any landed hit breaks a charge.
+- **Breath damage by element:** Water +2, Air 0, Earth +1, Fire −2. Harmless extras earn points; harmful ones cost them.
 - **Fire** leaves a burning zone where it lands; **Earth** leaves a corrosive pool. Zones last through the next slot. A grounded dragon inside one at a slot's end takes 1 damage (burning) or loses 3 Hardness for the next slot (corrosive), whoever breathed it.
 
 ## Obstacles
@@ -148,7 +148,7 @@ Four [Proposed] changes sit behind a switch, so a run can add them one at a time
 - **lunge:** a Bite right after an Approach that moved carries the dragon up to 1 pace along its line during the wind-up. Pure geometry: Evasion still applies, and a retreat that outruns it escapes. Only the first Bite after the Approach lunges.
 - **pounce:** a Claw right after a Strafe that moved advances up to one band along its line during the active window, sweeping its arc as it goes, and pierces 3 Hardness. It stops 1½ paces short of where the target stood. An airborne Wyvern that strafes into its stoop gets the pierce on the stoop.
 
-Brains plan the setups as two-slot ideas (Approach then Bite, Strafe then Claw, a two-slot charge), weighed by their style's taste for both halves. The brain tournament prints how often a Bite follows an Approach and a Claw follows a Strafe. Tests flip the switches at runtime in `test/variants.test.ts`.
+Brains are updated with every rule change, so none plays by old patch notes. They plan the setups as two-slot ideas (Approach then Bite, Strafe then Claw, a two-slot charge), weighed by their style's taste for both halves, and every style reads leverage: a target pinned within a band of the wall or an obstacle, its own exposure, and charges broken. The brain tournament prints how often a Bite follows an Approach and a Claw follows a Strafe. Tests flip the switches at runtime in `test/variants.test.ts`.
 
 ## Where the numbers live
 

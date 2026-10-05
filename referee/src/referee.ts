@@ -816,7 +816,10 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
   // 4. Damage and statuses, worked out from the same moment, then applied together.
   const results = hits.map((s) => ({ s, ...damage(F[s], F[other(s)], plans[s], plans[other(s)], t, false) }));
   const trade = results.length === 2;
-  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, t, false, trade, ev);
+  // Breath verbs wait until every hit this tick is applied, so a push and a pull can meet.
+  const verbs: { s: Side; aim: Vec }[] = [];
+  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, t, false, trade, ev, verbs);
+  breathVerbs(bout, verbs, t, ev);
 
   // 5. End-of-window checks.
   for (const s of SIDES) {
@@ -1106,7 +1109,7 @@ function damage(att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, g
   return { total: v, parts };
 }
 
-function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], t: number, graze: boolean, trade: boolean, ev: Event[]) {
+function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], t: number, graze: boolean, trade: boolean, ev: Event[], verbs: { s: Side; aim: Vec }[] | null = null) {
   const p = plans[s];
   const defPlan = plans[other(s)];
   const def = bout.fighters[other(s)];
@@ -1125,7 +1128,10 @@ function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number,
   const interrupt = phase(defPlan, t) === 'windup';
   if (interrupt) defPlan.interruptedAt = t;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, interrupt, graze, trade, woundsLeft: def.wounds });
-  if (p.spec.name === 'breath' && !graze && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) breathVerb(bout, s, p.aim, t, ev);
+  if (p.spec.name === 'breath' && !graze && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) {
+    if (verbs) verbs.push({ s, aim: p.aim });
+    else breathVerb(bout, s, p.aim, t, ev);
+  }
   techniqueOnHit(bout, s, p, defPlan, t, graze, ev);
   if (p.spec.name === 'stomp') {
     def.pending.staggered = true;
@@ -1173,14 +1179,17 @@ function strikeObstacles(bout: Bout, plans: Record<Side, Plan>, blocked: { s: Si
 
 /** Moves a dragon across the floor in ⅓-pace steps until the full distance or something stops it. */
 /** Moves a dragon up to `amount` along `dir`; reports how far, and the wall or obstacle that stopped it, if one did. */
-function shove(bout: Bout, side: Side, dir: Vec, amount: number): { moved: number; slam: string | null } {
+function shove(bout: Bout, side: Side, dir: Vec, amount: number, zFloor: number | null = null): { moved: number; slam: string | null } {
   const f = bout.fighters[side];
   const opp = bout.fighters[other(side)];
-  if (flatLen(dir) === 0) return { moved: 0, slam: null };
+  // Flat unless a floor is given: then the move may lower a flier, but never below the floor.
+  const d = zFloor === null ? flat(dir) : dir;
+  if (len(d) === 0) return { moved: 0, slam: null };
   let moved = 0;
   while (moved < amount) {
     const step = Math.min(R.NOTCH, amount - moved);
-    const np = add(f.pos, scaleTo(flat(dir), step));
+    let np = add(f.pos, scaleTo(d, step));
+    if (zFloor !== null) np = { ...np, z: Math.max(np.z, zFloor) };
     if (flatLen(np) > R.ARENA_RADIUS) return { moved, slam: 'the arena wall' };
     const o = obstacleAt(bout.arena, np);
     if (o) return { moved, slam: describeObstacle(o) };
@@ -1213,18 +1222,41 @@ function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]) {
   if (att.sheet.stone === 'water') {
     const { moved, slam } = shove(bout, def.side, aim, R.WATER_PUSH);
     ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The jet pushes it back ${(moved / R.PACE).toFixed(1)} paces.` : 'The jet pushes, but something holds it in place.' });
-    if (slam) {
-      def.wounds -= R.WATER_SLAM;
-      ev.push({ kind: 'note', tick: t, side: def.side, text: `Slammed into ${slam}: takes ${R.WATER_SLAM}.` });
-    }
+    slammed(def, slam, t, ev);
   } else if (att.sheet.stone === 'air') {
-    // Shove away from the gust's center line; dead center goes counterclockwise.
-    const d = sub(def.pos, att.pos);
-    const side = aim.x * d.y - aim.y * d.x;
-    const perp = side >= 0 ? vec(-aim.y, aim.x) : vec(aim.y, -aim.x);
-    const { moved } = shove(bout, def.side, perp, R.AIR_SHOVE);
-    ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The gust shoves it sideways ${(moved / R.PACE).toFixed(1)} paces.` : 'The gust shoves, but something holds it in place.' });
+    // The vortex pulls a band toward the breather; a second vortex in the breather's own space throws anything
+    // inside Melee back out to Close. So the pull ends at Close, and a target already at Melee is thrown out.
+    const sep = dist(def.pos, att.pos);
+    const edge = R.MELEE_EDGE + R.NOTCH;
+    const floor = def.pos.z > 0 ? Math.min(def.pos.z, R.AIR_FLOOR) : 0;
+    if (sep <= R.MELEE_EDGE) {
+      const out = len(sub(def.pos, att.pos)) === 0 ? vec(R.PACE, 0) : sub(def.pos, att.pos);
+      const { moved, slam } = shove(bout, def.side, out, edge - sep, floor);
+      ev.push({ kind: 'note', tick: t, side: def.side, text: `The vortex at its heart throws it out ${(moved / R.PACE).toFixed(1)} paces, to Close.` });
+      slammed(def, slam, t, ev);
+    } else {
+      const { moved, slam } = shove(bout, def.side, sub(att.pos, def.pos), Math.min(R.AIR_PULL, sep - edge), floor);
+      ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The vortex pulls it in ${(moved / R.PACE).toFixed(1)} paces.` : 'The vortex pulls, but something holds it in place.' });
+      slammed(def, slam, t, ev);
+    }
   }
+}
+
+/** Any forced movement that meets the wall or an obstacle slams [Proposed]. */
+function slammed(f: Fighter, slam: string | null, t: number, ev: Event[]) {
+  if (!slam) return;
+  f.wounds -= R.SLAM_DAMAGE;
+  ev.push({ kind: 'note', tick: t, side: f.side, text: `Slammed into ${slam}: takes ${R.SLAM_DAMAGE}.` });
+}
+
+/** A push and a pull in the same moment cancel: Water's jet against Air's vortex [Proposed]. */
+function breathVerbs(bout: Bout, verbs: { s: Side; aim: Vec }[], t: number, ev: Event[]) {
+  const stones = verbs.map((v) => bout.fighters[v.s].sheet.stone);
+  if (verbs.length === 2 && stones.includes('water') && stones.includes('air')) {
+    for (const v of verbs) ev.push({ kind: 'note', tick: t, side: other(v.s), text: 'Jet and vortex meet: the push and the pull cancel.' });
+    return;
+  }
+  for (const v of verbs) breathVerb(bout, v.s, v.aim, t, ev);
 }
 
 /** Fire leaves a burning zone and Earth a corrosive pool where the breath lands, on the floor below [Doc] §3. */
@@ -1263,7 +1295,7 @@ function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number, ev: Ev
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.TECHNIQUE_POINTS, woundsLeft: f.wounds });
         const away = sub(f.pos, z.center);
         if (z.element === 'water') shove(bout, s, away, R.SMOLDER_PUSH);
-        if (z.element === 'air') shove(bout, s, vec(-away.y, away.x), R.AIR_SHOVE);
+        if (z.element === 'air') shove(bout, s, sub(bout.fighters[z.owner].pos, f.pos), R.SMOLDER_PULL);
         if (z.element === 'earth') f.pending.corroded = true;
       }
     }
@@ -1491,7 +1523,7 @@ function smolder(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, ev: Even
   const f = bout.fighters[s];
   const sm = tech(f, 'smoldering-maw');
   if (sm < W) return;
-  const reach = tech(f, 'lance-throat') >= W ? R.FAR_EDGE : f.sheet.stone === 'water' ? R.BREATH.line.reach : f.sheet.stone === 'earth' ? R.BREATH.narrowCone.reach : f.sheet.stone === 'air' ? R.BREATH.wideCone.reach : R.BREATH.blast.maxCenter;
+  const reach = tech(f, 'lance-throat') >= W ? R.FAR_EDGE : f.sheet.stone === 'water' ? R.BREATH.line.reach : f.sheet.stone === 'earth' ? R.BREATH.narrowCone.reach : f.sheet.stone === 'air' ? R.BREATH.vortex.maxCenter : R.BREATH.blast.maxCenter;
   // The area is centered where the breath reaches its target, or its full reach.
   const center = add(origin, scaleTo(aim, Math.min(len(aim), reach)));
   bout.arena.zones.push({

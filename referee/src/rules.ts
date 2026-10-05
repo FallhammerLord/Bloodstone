@@ -68,14 +68,16 @@ export const RATTLED_WINDUP = 3;
 export const BLINDED_ACCURACY = 3;
 
 // ---- Breath damage by element ---- [Assumed]: harmless extras earn points, harmful extras cost them
-export const ELEMENT_BREATH_MOD = { water: 2, air: 2, earth: 1, fire: -2 }; // push, shove, corrode, burn
+export const ELEMENT_BREATH_MOD = { water: 2, air: 0, earth: 1, fire: -2 }; // push, pull (Air's +2 nixed: the pull isn't harmless), corrode, burn
 
 // ---- Breath effects, wyrmling strength ---- [Doc] §3 element table; numbers [Assumed]
 export const WATER_PUSH = BAND; // [Proposed; was 1 pace] Water: the jet pushes the target back a whole band
-export const WATER_SLAM = 3; // [Proposed] true damage when the push drives the target into the wall or an obstacle
+export const SLAM_DAMAGE = 3; // [Proposed] true damage when any forced movement drives a dragon into the wall or an obstacle
 export const WATER_OBSTACLE_PUSH = BAND; // [Proposed] the jet shoves a boulder it strikes instead of breaking it; pillars don't move
 export const SMOLDER_PUSH = PACE; // Smoldering Maw's lingering water still nudges 1 pace
-export const AIR_SHOVE = PACE; // Air: the gust shoves the target sideways
+export const AIR_PULL = BAND; // [Proposed] Air: the vortex pulls the target a band toward the breather, fliers included (it lowers them, never grounds them)
+export const AIR_FLOOR = PACE; // a pulled flier stays at least this high (or where it was, if lower)
+export const SMOLDER_PULL = PACE; // Smoldering Maw's lingering air still tugs 1 pace
 export const ZONE_RADIUS = PACE; // Fire's burning zone and Earth's corrosive pool
 export const ZONE_SLOTS = 1; // a zone lingers through this many slots after the one it lands in
 export const BURN_DAMAGE = 3; // [Proposed; was 1] true damage to a grounded dragon in a burning zone at slot's end
@@ -104,7 +106,7 @@ export const STOMP_RADIUS = { wyrmling: 2 * PACE, adult: 3 * PACE, venerable: 4 
 export const BREATH = {
   line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
   narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
-  wideCone: { reach: 9 * PACE }, // Air: half-width equals distance; reaches Far like the others
+  vortex: { maxCenter: 8 * PACE, radius: PACE }, // [Proposed] Air: a ranged vortex centered on the target, 2 paces across; its edge reaches Far
   blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.5 * PACE) }, // Fire: lands on the target; radius cut from 1.5 to 0.5
 }; // all [Assumed]; every breath stays within Far [Doc]
 
