@@ -254,6 +254,8 @@ interface Plan {
   demoralized: boolean;
   /** a Wyvern stoop: flies from the air to land at Melee during the wind-up */
   stoop: { from: Vec; to: Vec; target: Vec } | null;
+  /** the tick the aim settles: until then it follows the target [Proposed] */
+  aimLock: number;
   /** a lunging Bite (during the wind-up) or a pouncing Claw (during the active window) [Proposed] */
   carry: { kind: 'lunge' | 'pounce'; from: Vec; to: Vec } | null;
   /** this Bite follows an Approach and may lunge [Proposed] */
@@ -511,7 +513,7 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   return {
     spec, windup: w0, active: a0, recovery: r0, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, aimLock: 0, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
     pounces: pounces && spec.name === 'claw' && !spec.crunch,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
     charging, halves, landedHalves: 0,
@@ -806,8 +808,19 @@ function tick(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
       ev.push({ kind: 'aim', tick: t, side: s, action: p.spec.name, distance: len(p.aim) });
       if (!p.halves) beginStoop(F[s], F[other(s)], p, t, ev);
       if (p.lunges && t === 0) beginLunge(F[s], p, ev);
+      if (t === 0) {
+        // Accuracy sets how late the aim settles: (12 − Accuracy) ticks before the strike [Proposed].
+        const acc = eff(F[s], 'accuracy', { opp: F[other(s)] }).value - (F[s].status.blinded ? R.BLINDED_ACCURACY : 0);
+        const lead = Math.min(p.windup, Math.max(1, R.AIM_SETTLE_BASE - acc));
+        p.aimLock = Math.max(0, p.windup - lead);
+      }
       if (p.pounces && t === 0 && !p.stoop) beginPounce(F[s], p, ev);
       if (p.pounces && t === 0 && p.stoop) ev.push({ kind: 'note', tick: t, side: s, text: 'Strafed into the stoop: it pounces, and pierces.' });
+    }
+    // Until it settles, the aim follows the target (a stoop and a crunch's halves keep their own aim).
+    if (category(p) === 'attack' && !p.stoop && !p.halves && t > 0 && t <= p.aimLock && phase(p, t) === 'windup' && p.aim) {
+      p.origin = { ...F[s].pos };
+      p.aim = sub(F[other(s)].pos, F[s].pos);
     }
     // A lunging Bite strikes from where the wind-up carried it, along the line it locked.
     if (p.lunges && t === p.windup && phase(p, t) === 'active') p.origin = { ...F[s].pos };

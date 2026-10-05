@@ -366,3 +366,21 @@ test('between slots, separation snaps to the nearest ½ pace', () => {
   assert.equal(Math.round(sepOf(bout)) % R.SNAP, 0);
   assert.equal(Math.round(sepOf(bout)), 6 * R.PACE);
 });
+
+// ---- Aim settles by Accuracy [Proposed] ----
+
+test('aim follows through the wind-up and settles 12 − Accuracy ticks out: radius then decides slow movers', () => {
+  const r0 = R.BREATH.blast.radius;
+  const fire = (radius: number, target: FighterSetup, move: string) => {
+    (R.BREATH.blast as { radius: number }).radius = Math.floor(radius * R.PACE);
+    const ev = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, target, 5), ['breath'], [move]);
+    return hits(ev).filter((h) => h.attacker === 'A').length;
+  };
+  try {
+    assert.equal(fire(0.5, TD_WATER, 'retreat'), 0, "a ½-pace blast misses a slow True Dragon's retreat");
+    assert.equal(fire(0.75, TD_WATER, 'retreat'), 1, 'a ¾-pace blast catches it');
+    assert.equal(fire(1, { name: 'W', morph: 'wyvern', stone: 'water' }, 'retreat'), 0, "a Wyvern's quick move slips even 1 pace");
+  } finally {
+    (R.BREATH.blast as { radius: number }).radius = r0;
+  }
+});

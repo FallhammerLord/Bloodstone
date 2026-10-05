@@ -70,6 +70,10 @@ B  Bite         ------xxxxxxxxxxxxxxxxxxxxxxxx
 
 Bands are the range game; paces are hit geometry [Proposed]. Approach, Retreat, Leap and Dive carry one band (3 paces) for every dragon; a script may land `short` or `long` (`retreat:long`), by up to Evasion ÷ 6 paces. Strafe carries Evasion × ⅓ pace. A move's wind-up is followed by an evasive active window of 2 × Evasion ticks, then recovery; travel takes 72 ÷ Evasion ticks and can run on into recovery for slow dragons, where a hit counts as a punish. Staggered halves Evasion for the next move. Between slots, separation snaps to the nearest ½ pace, so where a dragon lands in a band matters only for that action. The brain tournament reports how far each morph travels and at what range fights happen.
 
+## Aim
+
+An attack's aim follows its target through the wind-up and settles 12 − Accuracy ticks before the strike [Proposed], never less than 1 tick and never longer than the wind-up. Movement after the aim settles is what the shape must cover, so a blast's radius and a line's width decide close calls, and a fast mover slips what a slow one can't. A stoop and a crunch's halves keep their own aim.
+
 ## Altitude
 
 Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Approach, Retreat and Strafe move across the floor. Distances, reach, range bands and the leash all count height. The Wyrm is grounded: its Leap is a hop that lands by the end of the slot, and it can't Dive. Stomp misses anything aloft, and a dragon in the air can't Stomp. Evasion beyond the one-band move cap makes moves finish sooner.

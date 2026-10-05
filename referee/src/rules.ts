@@ -64,6 +64,9 @@ export const STALWART_WIDEN = Math.floor(PACE / 2);
 // Between slots, separation snaps to the nearest ½ pace [Proposed]: where a dragon lands in a band matters only for
 // that action, and the edge cases of drift (2.96 paces against 3.04) clean up before the next.
 export const SNAP = Math.floor(PACE / 2);
+// Aim [Proposed]: an attack's aim tracks its target through the wind-up and settles (12 − Accuracy) ticks before the
+// strike, never less than 1 tick and never longer than the wind-up. Movement after that is what a shape must cover.
+export const AIM_SETTLE_BASE = 12;
 
 // ---- Guards ----
 export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales

@@ -55,7 +55,7 @@
 - **Evasion:** how fast and finely a dragon moves; tested on dodge and strafe. **[Proposed]** Approach, Retreat, Leap and Dive carry a full band for every dragon; Evasion buys where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves (72 ÷ Evasion ticks), how long it counts as evading (2 × Evasion ticks of active window), and how far a Strafe carries (⅓ pace per point).
 - **Hardness:** damage reduction; improved when guarding.
 - **Claw Sharpness, Bite Force, Breath Potency:** attack damage.
-- **Accuracy:** tracking and reach without leaving position; sets the phantom band around hitboxes.
+- **Accuracy:** **[Proposed]** how late an attack's aim settles: it tracks through the wind-up and settles 12 − Accuracy ticks before the strike (never less than 1, never longer than the wind-up), so movement after that is what the shape must cover. Also tracking and reach without leaving position; sets the phantom band around hitboxes.
 - **Affinity:** elemental resistance; improved when guarding with Scales. **[Proposed]** It is the element's Evasion: a Breath's verb (push, pull, burn, corrosion) takes hold only if the breather's Potency beats the target's Affinity, ties to the higher Acumen. Affinity still subtracts from Breath damage, and it fuels the Acumen meter (below).
 - **Acumen:** battle sense, shown as an integer and mapped through a hidden curve. It converts near misses, tips close contests, and scales punishes. Its meter is visible to both players. No shards raise it; it grows only through play.
 
