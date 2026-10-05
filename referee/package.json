@@ -14,6 +14,7 @@
     "diag:movement": "node --experimental-strip-types --no-warnings src/diagnostics/movement.ts",
     "ladder": "node --experimental-strip-types --no-warnings src/ladder.ts",
     "dials": "node --experimental-strip-types --no-warnings src/dials.ts",
+    "pool": "node --experimental-strip-types --no-warnings src/pool.ts",
     "check": "tsc --noEmit"
   },
   "devDependencies": {
