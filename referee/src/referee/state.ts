@@ -194,8 +194,26 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
 /** Whether this dragon is corroded in global slot g. */
 export const corroded = (f: Fighter, g: number) => f.marks.corrosion !== null && f.marks.corrosion.until >= g;
 
-/** A deep copy for imagining futures: everything but the rules, which are shared and never change mid-bout. */
+/**
+ * A copy for imagining futures, fast: it copies what the Referee changes and shares what it only replaces or
+ * appends to (stat sheets, loadouts, positions, the slot record's entries, zones, the rules). The golden masters
+ * check it against a full deep copy's results.
+ */
 export function cloneBout(b: Bout): Bout {
-  const { rules, ...rest } = b;
-  return { ...structuredClone(rest), rules };
+  const fighter = (f: Fighter): Fighter => ({
+    ...f,
+    readyAt: { ...f.readyAt },
+    status: { ...f.status },
+    pending: { ...f.pending },
+    chain: { ...f.chain },
+    marks: { ...f.marks, charge: f.marks.charge && { ...f.marks.charge } },
+  });
+  return {
+    ...b,
+    fighters: { A: fighter(b.fighters.A), B: fighter(b.fighters.B) },
+    startWounds: { ...b.startWounds },
+    history: { A: [...b.history.A], B: [...b.history.B] },
+    record: [...b.record],
+    arena: { obstacles: b.arena.obstacles.map((o) => ({ ...o })), zones: [...b.arena.zones] },
+  };
 }
