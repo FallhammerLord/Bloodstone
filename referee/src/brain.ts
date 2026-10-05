@@ -296,7 +296,7 @@ export function value(style: BrainStyle, o: Outcome): number {
   const band = bandOf(sep);
   const myHits = o.events.filter((e): e is Extract<Event, { kind: 'hit' }> => e.kind === 'hit' && e.attacker === o.me);
   const big = myHits.filter((h) => h.damage >= 9).length;
-  const punishes = myHits.filter((h) => h.parts.some((p) => p.includes('punish'))).length;
+  const punishes = myHits.filter((h) => h.tags.includes('punish')).length;
   const theirMisses = o.events.filter((e) => (e.kind === 'whiff' || e.kind === 'nearMiss' || e.kind === 'evade') && e.attacker === them).length;
   const late = o.after.exchange >= o.after.rules.EXCHANGE_LIMIT - 3 && flatLen(me1.pos) >= o.after.rules.ARENA_RADIUS - o.after.rules.RIM_DEPTH;
   const rim = late ? -0.15 : 0;
@@ -304,7 +304,7 @@ export function value(style: BrainStyle, o: Outcome): number {
   // Every style reads leverage [Proposed]: a target with a wall or obstacle within a band behind it can be
   // slammed and can't retreat; being pinned yourself is the reverse. Breaking a charge denies a setup.
   const leverage = (pinned(o.after, op1, me1) ? 0.03 : 0) - (pinned(o.after, me1, op1) ? 0.03 : 0)
-    + 0.04 * o.events.filter((e) => e.kind === 'note' && e.side === them && e.text === 'The hit breaks the charge.').length
+    + 0.04 * o.events.filter((e) => e.kind === 'note' && e.side === them && e.tag === 'charge-broken').length
     // Filling the Acumen meter brings a true-damage hit closer; the opponent's fills are worth denying. Spending a
     // full meter costs nothing here, so no style hoards it or waits on it before attacking.
     + 0.0015 * Math.max(0, me1.meter - me0.meter) - 0.0008 * Math.max(0, op1.meter - op0.meter)
@@ -375,7 +375,7 @@ function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me
     }
     case 'meter-focus': {
       const me0 = o.before.fighters[o.me];
-      const spent = o.events.filter((e) => e.kind === 'note' && e.side === o.me && e.text.startsWith('The Acumen meter empties')).length;
+      const spent = o.events.filter((e) => e.kind === 'note' && e.side === o.me && e.tag === 'meter-spent').length;
       return dealt - taken + 0.004 * Math.max(0, me1.meter - me0.meter) + 0.06 * spent + rim;
     }
     case 'claw-focus':

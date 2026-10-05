@@ -51,12 +51,12 @@ function move(bout: Bout, plans: Record<Side, Plan>, t: number, ev: Event[]) {
     next[s] = F[s].pos;
     const p = plans[s];
     if (p.stoop || p.carry) {
-      ev.push({ kind: 'note', tick: t, side: s, text: `The ${p.stoop ? 'stoop' : p.carry!.kind} is cut short by ${by}.` });
+      ev.push({ kind: 'note', tick: t, side: s, tag: 'carry-cut', text: `The ${p.stoop ? 'stoop' : p.carry!.kind} is cut short by ${by}.` });
       p.stoop = null;
       p.carry = null;
     } else {
       p.converted = 'dodge';
-      ev.push({ kind: 'note', tick: t, side: s, text: `Blocked by ${by}; converts to a dodge.` });
+      ev.push({ kind: 'note', tick: t, side: s, tag: 'blocked-move', text: `Blocked by ${by}; converts to a dodge.` });
     }
   };
   for (const s of SIDES) {
@@ -92,7 +92,7 @@ function aim(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: Even
       p.aimLock = Math.max(0, p.windup - lead);
     }
     if (p.pounces && t === 0 && !p.stoop) beginPounce(bout.rules, F[s], p, ev);
-    if (p.pounces && t === 0 && p.stoop) ev.push({ kind: 'note', tick: t, side: s, text: 'Strafed into the stoop: it pounces, and pierces.' });
+    if (p.pounces && t === 0 && p.stoop) ev.push({ kind: 'note', tick: t, side: s, tag: 'pounce', text: 'Strafed into the stoop: it pounces, and pierces.' });
   }
   // Until it settles, the aim follows the target (a stoop and a crunch's halves keep their own aim).
   if (category(p) === 'attack' && !p.stoop && !p.halves && t > 0 && t <= p.aimLock && phase(p, t) === 'windup' && p.aim) {
@@ -107,7 +107,7 @@ function aim(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: Even
   if (p.spec.name === 'stomp' && t === p.windup && phase(p, t) === 'active') {
     const reach = bout.rules.STOMP_RADIUS[F[s].sheet.age];
     const shattered = bout.arena.obstacles.filter((o) => o.kind === 'boulder' && flatLen(sub(o.pos, F[s].pos)) <= reach + o.radius);
-    for (const o of shattered) ev.push({ kind: 'note', tick: t, side: s, text: `The quake shatters ${describeObstacle(o)}.` });
+    for (const o of shattered) ev.push({ kind: 'note', tick: t, side: s, tag: 'boulder-shattered', text: `The quake shatters ${describeObstacle(o)}.` });
     if (shattered.length) bout.arena.obstacles = bout.arena.obstacles.filter((o) => !shattered.includes(o));
   }
   // A stooping Wyvern strikes from wherever it actually landed, toward where the target stood.
@@ -163,7 +163,7 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
       if (escaped) {
         p.resolved = true;
         defPlan.evaded = true;
-        ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, text: `${serpentine ? 'strafing (Serpentine)' : evading} with Evasion ${evasion} beats Accuracy ${accuracy}` });
+        ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${serpentine ? 'strafing (Serpentine)' : evading} with Evasion ${evasion} beats Accuracy ${accuracy}` });
         riposte(bout, other(s), p, defPlan, t, ev);
         return null;
       }
@@ -182,12 +182,12 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
   const trade = results.length === 2;
   // Breath verbs wait until every hit this tick is applied, so a push and a pull can meet.
   const verbs: { s: Side; aim: Vec }[] = [];
-  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, t, false, trade, ev, verbs);
+  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, r.tags, t, false, trade, ev, verbs);
   for (const r of results) {
     // A full meter is spent by the hit it empowered; a landed Breath then fills the breather's meter.
     if (r.bypass) {
       F[r.s].meter = 0;
-      ev.push({ kind: 'note', tick: t, side: r.s, text: 'The Acumen meter empties into the blow: true damage.' });
+      ev.push({ kind: 'note', tick: t, side: r.s, tag: 'meter-spent', text: 'The Acumen meter empties into the blow: true damage.' });
     }
     if (plans[r.s].spec.name === 'breath') fillMeter(bout.rules, F[r.s], 'landed Breath', t, ev);
   }

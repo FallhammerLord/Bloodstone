@@ -11,5 +11,5 @@ export function fillMeter(rules: Rules, f: Fighter, why: string, t: number, ev: 
   if (f.meter >= R.METER_MAX) return;
   const amount = rules.METER_BASE_FILL + Math.max(0, eff(f, 'affinity', {}).value);
   f.meter = Math.min(R.METER_MAX, f.meter + amount);
-  ev.push({ kind: 'note', tick: t, side: f.side, text: `Acumen meter +${amount} (${why}): ${f.meter}${f.meter >= R.METER_MAX ? ', full' : ''}.` });
+  ev.push({ kind: 'note', tick: t, side: f.side, tag: f.meter >= R.METER_MAX ? 'meter-full' : 'meter-fill', text: `Acumen meter +${amount} (${why}): ${f.meter}${f.meter >= R.METER_MAX ? ', full' : ''}.` });
 }

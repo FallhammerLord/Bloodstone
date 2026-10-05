@@ -81,7 +81,7 @@ export function shoveObstacle(bout: Bout, o: Obstacle, dir: Vec, t: number, s: S
     moved += Math.min(R.NOTCH, bout.rules.WATER_OBSTACLE_PUSH - moved);
     o.pos = { ...np, z: 0 };
   }
-  if (moved > 0) ev.push({ kind: 'note', tick: t, side: s, text: `The jet shoves ${describeObstacle(o)} ${(moved / R.PACE).toFixed(1)} paces.` });
+  if (moved > 0) ev.push({ kind: 'note', tick: t, side: s, tag: 'boulder-shoved', text: `The jet shoves ${describeObstacle(o)} ${(moved / R.PACE).toFixed(1)} paces.` });
 }
 
 /** The breath's verb on a hit [Doc] §3: Water pushes back, Air shoves sideways. Fire and Earth act through zones. */
@@ -90,7 +90,7 @@ export function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]
   const def = bout.fighters[other(s)];
   if (att.sheet.stone === 'water') {
     const { moved, slam } = shove(bout, def.side, aim, bout.rules.WATER_PUSH);
-    ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The jet pushes it back ${(moved / R.PACE).toFixed(1)} paces.` : 'The jet pushes, but something holds it in place.' });
+    ev.push({ kind: 'note', tick: t, side: def.side, tag: moved > 0 ? 'push' : 'push-stopped', text: moved > 0 ? `The jet pushes it back ${(moved / R.PACE).toFixed(1)} paces.` : 'The jet pushes, but something holds it in place.' });
     slammed(bout.rules, def, slam, t, ev);
   } else if (att.sheet.stone === 'air') {
     // The vortex pulls a band toward the breather; a second vortex in the breather's own space throws anything
@@ -101,11 +101,11 @@ export function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]
     if (sep <= R.MELEE_EDGE) {
       const out = len(sub(def.pos, att.pos)) === 0 ? vec(R.PACE, 0) : sub(def.pos, att.pos);
       const { moved, slam } = shove(bout, def.side, out, edge - sep, floor);
-      ev.push({ kind: 'note', tick: t, side: def.side, text: `The vortex at its heart throws it out ${(moved / R.PACE).toFixed(1)} paces, to Close.` });
+      ev.push({ kind: 'note', tick: t, side: def.side, tag: 'pull', text: `The vortex at its heart throws it out ${(moved / R.PACE).toFixed(1)} paces, to Close.` });
       slammed(bout.rules, def, slam, t, ev);
     } else {
       const { moved, slam } = shove(bout, def.side, sub(att.pos, def.pos), Math.min(bout.rules.AIR_PULL, sep - edge), floor);
-      ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The vortex pulls it in ${(moved / R.PACE).toFixed(1)} paces.` : 'The vortex pulls, but something holds it in place.' });
+      ev.push({ kind: 'note', tick: t, side: def.side, tag: moved > 0 ? 'pull' : 'pull-stopped', text: moved > 0 ? `The vortex pulls it in ${(moved / R.PACE).toFixed(1)} paces.` : 'The vortex pulls, but something holds it in place.' });
       slammed(bout.rules, def, slam, t, ev);
     }
   }
@@ -140,7 +140,7 @@ export function elementHolds(rules: Rules, att: Fighter, def: Fighter, scales: b
 export function slammed(rules: Rules, f: Fighter, slam: string | null, t: number, ev: Event[]) {
   if (!slam) return;
   f.wounds -= rules.SLAM_DAMAGE;
-  ev.push({ kind: 'note', tick: t, side: f.side, text: `Slammed into ${slam}: takes ${rules.SLAM_DAMAGE}.` });
+  ev.push({ kind: 'note', tick: t, side: f.side, tag: 'slam', text: `Slammed into ${slam}: takes ${rules.SLAM_DAMAGE}.` });
 }
 
 /** A push and a pull in the same moment cancel: Water's jet against Air's vortex [Proposed]. */
@@ -150,12 +150,12 @@ export function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Sid
     if (bout.fighters[v.s].sheet.stone !== 'water' && bout.fighters[v.s].sheet.stone !== 'air') return true;
     if (bypass.has(v.s)) return true;
     const held = elementHolds(bout.rules, bout.fighters[v.s], bout.fighters[other(v.s)], guarding(plans[other(v.s)], t));
-    if (held) ev.push({ kind: 'note', tick: t, side: other(v.s), text: `${held}: the ${bout.fighters[v.s].sheet.stone === 'water' ? 'push' : 'pull'} fails.` });
+    if (held) ev.push({ kind: 'note', tick: t, side: other(v.s), tag: 'verb-held', text: `${held}: the ${bout.fighters[v.s].sheet.stone === 'water' ? 'push' : 'pull'} fails.` });
     return !held;
   });
   const stones = verbs.map((v) => bout.fighters[v.s].sheet.stone);
   if (verbs.length === 2 && stones.includes('water') && stones.includes('air')) {
-    for (const v of verbs) ev.push({ kind: 'note', tick: t, side: other(v.s), text: 'Jet and vortex meet: the push and the pull cancel.' });
+    for (const v of verbs) ev.push({ kind: 'note', tick: t, side: other(v.s), tag: 'push-pull-cancel', text: 'Jet and vortex meet: the push and the pull cancel.' });
     return;
   }
   for (const v of verbs) breathVerb(bout, v.s, v.aim, t, ev);
@@ -189,7 +189,7 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
       // The zone's element contests the dragon's Affinity, as the breath did [Proposed].
       const held = elementHolds(bout.rules, bout.fighters[z.owner], f, plans[s].spec.name === 'scales');
       if (held && z.kind !== 'smolder') {
-        ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: `${held}: the ${z.kind === 'burning' ? 'flames' : 'pool'} can't take hold.` });
+        ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'zone-held', text: `${held}: the ${z.kind === 'burning' ? 'flames' : 'pool'} can't take hold.` });
         continue;
       }
       if (z.kind === 'burning') {

@@ -4,7 +4,7 @@ import { parentPort, workerData } from 'node:worker_threads';
 import { aiController, type Style } from './ai.ts';
 import { brainController, type BrainStyle, type Skill } from './brain.ts';
 import { runBout, type Controller } from './bout.ts';
-import { newBout, type FighterSetup, type Side } from './referee.ts';
+import { newBout, type FighterSetup, type NoteTag, type Side } from './referee.ts';
 import { standardBoulders } from './arena.ts';
 import * as R from './rules.ts';
 
@@ -68,37 +68,39 @@ for (const job of workerData.jobs as Job[]) {
   const actions: Record<string, number> = {};
   const outcomes: Record<string, number> = {};
   const bump = (k: string) => (outcomes[k] = (outcomes[k] ?? 0) + 1);
-  const NOTES: [string, (t: string) => boolean][] = [
-    ['intimidate lands', (t) => t.startsWith('Intimidate lands')],
-    ['intimidate falls short', (t) => t.startsWith('Intimidate falls short')],
-    ['push lands', (t) => t.startsWith('The jet pushes it back')],
-    ['pull lands', (t) => t.startsWith('The vortex pulls it in') || t.startsWith('The vortex at its heart')],
-    ['verb held by Affinity', (t) => t.includes('holds against Potency')],
-    ['push and pull cancel', (t) => t.includes('cancel')],
-    ['slam', (t) => t.startsWith('Slammed into')],
-    ['charge broken', (t) => t === 'The hit breaks the charge.'],
-    ['meter fill', (t) => t.startsWith('Acumen meter +')],
-    ['meter full', (t) => t.startsWith('Acumen meter +') && t.endsWith(', full.')],
-    ['true-damage hit', (t) => t.startsWith('The Acumen meter empties')],
-    ['lunge', (t) => t.startsWith('Lunges')],
-    ['pounce', (t) => t.startsWith('Pounces') || t.startsWith('Strafed into the stoop')],
-    ['stoop', (t) => t.startsWith('Stoops')],
-    ['blocked move → dodge', (t) => t.includes('converts to a dodge')],
-    ['gravity drop', (t) => t.startsWith('No Leap this exchange')],
-    ['stoop too soon', (t) => t.startsWith('Not aloft since the exchange began')],
-    ['demoralized', (t) => t.startsWith('Demoralized')],
-    ['crunch capped', (t) => t.startsWith('One crunch per exchange')],
-    ['quake shatters boulder', (t) => t.startsWith('The quake shatters')],
-  ];
+  // What each note tag counts toward in the outcomes table.
+  const NOTES: Partial<Record<NoteTag, string[]>> = {
+    'intimidate-lands': ['intimidate lands'],
+    'intimidate-short': ['intimidate falls short'],
+    push: ['push lands'],
+    pull: ['pull lands'],
+    'verb-held': ['verb held by Affinity'],
+    'zone-held': ['verb held by Affinity'],
+    'push-pull-cancel': ['push and pull cancel'],
+    slam: ['slam'],
+    'charge-broken': ['charge broken'],
+    'meter-fill': ['meter fill'],
+    'meter-full': ['meter fill', 'meter full'],
+    'meter-spent': ['true-damage hit'],
+    lunge: ['lunge'],
+    pounce: ['pounce'],
+    stoop: ['stoop'],
+    'blocked-move': ['blocked move → dodge'],
+    gravity: ['gravity drop'],
+    'stoop-too-soon': ['stoop too soon'],
+    demoralized: ['demoralized'],
+    'crunch-capped': ['crunch capped'],
+    'boulder-shattered': ['quake shatters boulder'],
+  };
   const stoneTally = (s: Side, a: string) => ((byStone[bout.fighters[s].sheet.stone] ??= {})[a] ??= [0, 0, 0]);
   for (const e of ev) {
     if (e.kind === 'revision') bump('revision');
-    if (e.kind === 'evade') bump(e.text.startsWith('dodging') ? 'evade by Dodge' : 'evade while moving');
+    if (e.kind === 'evade') bump(e.how === 'dodging' ? 'evade by Dodge' : 'evade while moving');
     if (e.kind === 'zoneEffect') bump(`zone: ${e.zone}`);
     if (e.kind === 'hit' && e.graze) bump('graze');
-    if (e.kind === 'hit' && e.parts.some((p) => p.includes('Intimidate'))) bump('intimidate cashed');
-    if (e.kind === 'hit' && e.parts.some((p) => p.includes('demoralized'))) bump('demoralize felt');
-    if (e.kind === 'note') for (const [k, test] of NOTES) if (test(e.text)) bump(k);
+    if (e.kind === 'hit' && e.tags.includes('intimidate')) bump('intimidate cashed');
+    if (e.kind === 'hit' && e.tags.includes('demoralized')) bump('demoralize felt');
+    if (e.kind === 'note') for (const k of NOTES[e.tag] ?? []) bump(k);
     if (e.kind === 'aim') {
       tally(e.action)[0]++;
       stoneTally(e.side, e.action)[0]++;

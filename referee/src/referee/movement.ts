@@ -31,7 +31,7 @@ export function moveStep(rules: Rules, me: Fighter, opp: Fighter, p: Plan, oppPl
       const both = oppPlan.spec.name === 'approach' && oppPlan.converted === null && traveling(oppPlan, t);
       if (both && len(v) <= R.MELEE_EDGE) {
         p.converted = 'dodge';
-        ev.push({ kind: 'note', tick: t, side: me.side, text: 'Both advanced: stops at Melee and converts to a dodge.' });
+        ev.push({ kind: 'note', tick: t, side: me.side, tag: 'blocked-move', text: 'Both advanced: stops at Melee and converts to a dodge.' });
         return me.pos;
       }
       if (flatSep === 0) return me.pos; // directly above or below: nothing left to close across the floor
@@ -45,7 +45,7 @@ export function moveStep(rules: Rules, me: Fighter, opp: Fighter, p: Plan, oppPl
       np = { ...add(flat(opp.pos), scaleTo(flatV, flatSep + delta)), z: me.pos.z };
       if (dist(np, opp.pos) > rules.LEASH) {
         p.converted = 'roar';
-        ev.push({ kind: 'note', tick: t, side: me.side, text: 'The leash holds: the retreat becomes an impotent roar.' });
+        ev.push({ kind: 'note', tick: t, side: me.side, tag: 'leash', text: 'The leash holds: the retreat becomes an impotent roar.' });
         return me.pos;
       }
       break;
@@ -80,7 +80,7 @@ export function moveStep(rules: Rules, me: Fighter, opp: Fighter, p: Plan, oppPl
   }
   if (flatLen(np) > rules.ARENA_RADIUS) {
     p.converted = 'dodge';
-    ev.push({ kind: 'note', tick: t, side: me.side, text: 'Blocked by the arena wall; converts to a dodge.' });
+    ev.push({ kind: 'note', tick: t, side: me.side, tag: 'blocked-move', text: 'Blocked by the arena wall; converts to a dodge.' });
     return me.pos;
   }
   p.moved = target;
@@ -99,7 +99,7 @@ export function beginStoop(rules: Rules, att: Fighter, def: Fighter, p: Plan, t:
   if (dist(att.pos, def.pos) > rules.STOOP_RANGE) return;
   // A stoop needs an exchange already spent aloft [Proposed]: no Leap and stoop in the same exchange.
   if (!att.marks.aloftAtStart) {
-    ev.push({ kind: 'note', tick: t, side: att.side, text: 'Not aloft since the exchange began: too soon to stoop.' });
+    ev.push({ kind: 'note', tick: t, side: att.side, tag: 'stoop-too-soon', text: 'Not aloft since the exchange began: too soon to stoop.' });
     return;
   }
   const target = { ...def.pos };
@@ -107,7 +107,7 @@ export function beginStoop(rules: Rules, att: Fighter, def: Fighter, p: Plan, t:
   const offset = flatLen(back) === 0 ? vec(rules.STOOP_LANDING, 0) : scaleTo(back, rules.STOOP_LANDING);
   const to = add(target, offset);
   p.stoop = { from: { ...att.pos }, to, target };
-  ev.push({ kind: 'note', tick: t, side: att.side, text: `Stoops from ${(dist(att.pos, to) / R.PACE).toFixed(1)} paces to land at Melee, talons first.` });
+  ev.push({ kind: 'note', tick: t, side: att.side, tag: 'stoop', text: `Stoops from ${(dist(att.pos, to) / R.PACE).toFixed(1)} paces to land at Melee, talons first.` });
 }
 
 /**
@@ -121,7 +121,7 @@ export function beginLunge(rules: Rules, att: Fighter, p: Plan, ev: Event[]) {
   const room = Math.min(rules.BITE_LUNGE, Math.max(0, flatLen(ahead) - rules.BODY_GAP));
   if (room <= 0 || flatLen(ahead) === 0) return;
   p.carry = { kind: 'lunge', from: { ...att.pos }, to: carryTo(rules, att, ahead, room) };
-  ev.push({ kind: 'note', tick: 0, side: att.side, text: `Lunges ${(dist(att.pos, p.carry.to) / R.PACE).toFixed(1)} paces into the Bite.` });
+  ev.push({ kind: 'note', tick: 0, side: att.side, tag: 'lunge', text: `Lunges ${(dist(att.pos, p.carry.to) / R.PACE).toFixed(1)} paces into the Bite.` });
 }
 
 /**
@@ -135,11 +135,11 @@ export function beginPounce(rules: Rules, att: Fighter, p: Plan, ev: Event[]) {
   const ahead = flat(p.aim);
   const room = Math.min(rules.POUNCE_REACH, Math.max(0, flatLen(ahead) - rules.STOOP_LANDING));
   if (room <= 0 || flatLen(ahead) === 0) {
-    ev.push({ kind: 'note', tick: 0, side: att.side, text: 'Pounces from the strafe, already in reach.' });
+    ev.push({ kind: 'note', tick: 0, side: att.side, tag: 'pounce', text: 'Pounces from the strafe, already in reach.' });
     return;
   }
   p.carry = { kind: 'pounce', from: { ...att.pos }, to: carryTo(rules, att, ahead, room) };
-  ev.push({ kind: 'note', tick: 0, side: att.side, text: `Pounces ${(dist(att.pos, p.carry.to) / R.PACE).toFixed(1)} paces out of the strafe.` });
+  ev.push({ kind: 'note', tick: 0, side: att.side, tag: 'pounce', text: `Pounces ${(dist(att.pos, p.carry.to) / R.PACE).toFixed(1)} paces out of the strafe.` });
 }
 
 export function carryTo(rules: Rules, att: Fighter, ahead: Vec, room: number): Vec {

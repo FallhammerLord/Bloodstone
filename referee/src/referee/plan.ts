@@ -4,7 +4,7 @@ import { ACTIONS, HOLD, describe, type ActionSpec } from '../actions.ts';
 import { dist, type Vec } from '../geometry.ts';
 import * as R from '../rules.ts';
 import type { Rules } from '../rules.ts';
-import type { Event } from './events.ts';
+import type { Event, NoteTag } from './events.ts';
 import { eff } from './riders.ts';
 import { A, E, type Fighter, J, V, W, tech } from './state.ts';
 
@@ -120,7 +120,7 @@ export function timing(rules: Rules, profile: readonly [number, number, number],
 
 export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: ActionSpec, g: number, slot: number, prevLanded: boolean, ev: Event[]): Plan {
   let spec = requested;
-  const note = (text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, text });
+  const note = (tag: NoteTag, text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, tag, text });
 
   // A charge begun last slot releases now, whatever this slot scripted. Scripting the same charge again holds it
   // a second slot (not into slot 3), and only that second slot earns the bonus [Proposed].
@@ -130,11 +130,11 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     if (requested.charge && requested.name === c.action && c.slots === 1 && slot < 2) {
       spec = { name: c.action, sweep: c.sweep, charge: true };
       holding = true;
-      note(`Holds the ${ACTIONS[spec.name].label} charge a second slot.`);
+      note('charge-held', `Holds the ${ACTIONS[spec.name].label} charge a second slot.`);
     } else {
       spec = { name: c.action, sweep: c.sweep, released: true, full: c.slots >= 2 };
       f.marks.charge = null;
-      note(`Releases the charged ${ACTIONS[spec.name].label}.`);
+      note('charge-released', `Releases the charged ${ACTIONS[spec.name].label}.`);
     }
   }
   // Lunge [Proposed]: a Bite right after an Approach that moved carries the dragon forward.
@@ -149,47 +149,47 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   f.marks.lockjawFollow = false;
   const ready = f.readyAt[spec.name] ?? 0;
   if (ready > g + (spec.charge ? 1 : 0)) {
-    note(`${describe(spec)} is still cooling down; holds instead.`);
+    note('held-instead', `${describe(spec)} is still cooling down; holds instead.`);
     spec = HOLD;
   }
   if (f.status.pinned && ACTIONS[spec.name].category === 'move') {
-    note(`Pinned: can't ${describe(spec)}; holds instead.`);
+    note('held-instead', `Pinned: can't ${describe(spec)}; holds instead.`);
     spec = HOLD;
   }
   if (spec.name === 'dive' && f.pos.z === 0) {
-    note('Already on the ground: nothing to dive from; holds instead.');
+    note('held-instead', 'Already on the ground: nothing to dive from; holds instead.');
     spec = HOLD;
   }
   if (spec.name === 'stomp' && f.pos.z > 0) {
-    note("Can't Stomp while aloft; holds instead.");
+    note('held-instead', "Can't Stomp while aloft; holds instead.");
     spec = HOLD;
   }
   if (spec.name === 'leap' && (f.status.grounded || f.marks.noLeap)) {
-    note(f.status.grounded ? 'Hamstrung: can\'t Leap; holds instead.' : 'Just dived: can\'t Leap this slot; holds instead.');
+    note('held-instead', f.status.grounded ? 'Hamstrung: can\'t Leap; holds instead.' : 'Just dived: can\'t Leap this slot; holds instead.');
     spec = HOLD;
   }
   f.marks.noLeap = false;
 
   // Charging: one action across two slots [Doc]. It must release by slot 3; only the Ouroboros wraps a charge.
   if (spec.charge && slot >= 2) {
-    note('A charge must release by slot 3: charging in slot 3 holds instead.');
+    note('held-instead', 'A charge must release by slot 3: charging in slot 3 holds instead.');
     spec = HOLD;
   }
   // Crunching comes only from shards [Doc]: Raking Talons for Claw, Gnashing Teeth for Bite.
   const crunchTech = spec.name === 'claw' ? tech(f, 'raking-talons') : spec.name === 'bite' ? tech(f, 'gnashing-teeth') : -1;
   if (spec.crunch && crunchTech >= 0 && f.marks.crunchedIn === Math.floor(g / R.SLOTS_PER_EXCHANGE)) {
-    note(`One crunch per exchange: the ${ACTIONS[spec.name].label} attacks once.`);
+    note('crunch-capped', `One crunch per exchange: the ${ACTIONS[spec.name].label} attacks once.`);
     spec = { ...spec, crunch: undefined };
   }
   if (spec.crunch && (crunchTech < 0 || (crunchTech === W && !prevLanded))) {
-    note(crunchTech < 0
+    note('crunch-refused', crunchTech < 0
       ? `Crunching a ${ACTIONS[spec.name].label} needs ${spec.name === 'claw' ? 'Raking Talons' : 'Gnashing Teeth'}: attacks once.`
       : `A Wyrmling crunch needs a landed ${ACTIONS[spec.name].label} in the slot before: attacks once.`);
     spec = { ...spec, crunch: undefined };
   }
   const sw = tech(f, 'sidewinder-spine');
   if (spec.shift && (sw < 0 || (sw === W && spec.shift === 'in'))) {
-    note(sw < 0 ? 'Strafes without shifting: that needs Sidewinder Spine.' : 'A Wyrmling Sidewinder Spine only shifts away.');
+    note('technique', sw < 0 ? 'Strafes without shifting: that needs Sidewinder Spine.' : 'A Wyrmling Sidewinder Spine only shifts away.');
     spec = { name: spec.name, dir: spec.dir };
   }
 
@@ -199,7 +199,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     f.marks.goaded = null;
     if (spec.name === 'retreat' || (gr >= E && spec.name === 'dodge')) {
       f.wounds -= rules.TECHNIQUE_POINTS;
-      note(`Goaded into a ${describe(spec)}: takes ${rules.TECHNIQUE_POINTS}.`);
+      note('technique', `Goaded into a ${describe(spec)}: takes ${rules.TECHNIQUE_POINTS}.`);
       if (gr >= V) f.status.rattled = true;
     }
   }

@@ -6,7 +6,7 @@ import type { TechniqueId } from '../shards.ts';
 import * as R from '../rules.ts';
 import type { Rules } from '../rules.ts';
 import { affinityAgainst, breathVerb } from './elements.ts';
-import type { Event } from './events.ts';
+import type { Event, HitTag } from './events.ts';
 import { type Plan, guarding, phase } from './plan.ts';
 import { eff } from './riders.ts';
 import { A, type Bout, E, type Fighter, J, type Side, V, W, other, tech } from './state.ts';
@@ -16,23 +16,27 @@ import { techniqueOnHit } from './techniques.ts';
  * What a landed hit deals: the attack's base against Hardness (or Affinity, for Breath), then every modifier.
  * A full Acumen meter makes a Bite, Claw or Breath true damage [Proposed]. Never less than the floor.
  */
-export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[]; bypass: boolean } {
+export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[]; tags: HitTag[]; bypass: boolean } {
   // Ash Gland: the breath carries information, not harm (3 points from Adult).
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
-  if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`], bypass: false };
+  if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`], tags: [], bypass: false };
 
   const parts: string[] = [];
+  const tags: HitTag[] = [];
   const bypass = !graze && att.meter >= R.METER_MAX && (p.spec.name === 'bite' || p.spec.name === 'claw' || p.spec.name === 'breath') && p.landedHalves === 0;
   const scales = guarding(defPlan, t);
   const { hardness, label } = hardnessFelt(rules, att, def, p, t, scales, bypass);
-  if (bypass) parts.push('true damage (full Acumen meter)');
-  let v = baseDamage(rules, att, def, p, hardness, label, scales, bypass, parts);
-  v += modifiers(rules, att, def, p, defPlan, t, graze, bypass, parts);
+  if (bypass) {
+    parts.push('true damage (full Acumen meter)');
+    tags.push('true-damage');
+  }
+  let v = baseDamage(rules, att, def, p, hardness, label, scales, bypass, parts, tags);
+  v += modifiers(rules, att, def, p, defPlan, t, graze, bypass, parts, tags);
   if (v < rules.DAMAGE_FLOOR) {
     v = rules.DAMAGE_FLOOR;
     parts.push(`floor ${rules.DAMAGE_FLOOR}`);
   }
-  return { total: v, parts, bypass };
+  return { total: v, parts, tags, bypass };
 }
 
 /** The Hardness a hit meets: Scales, corrosion and guard techniques; none at all for a true-damage hit. */
@@ -66,7 +70,7 @@ function hardnessFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: numb
 }
 
 /** Each attack's own damage against what it meets, with its own riders (pierce, chain escalation, charge, matchup). */
-function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness: number, hardLabel: string, scales: boolean, bypass: boolean, parts: string[]): number {
+function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness: number, hardLabel: string, scales: boolean, bypass: boolean, parts: string[], tags: HitTag[]): number {
   const crunched = p.halves !== null;
   const sep = dist(att.pos, def.pos);
   let v = 0;
@@ -80,6 +84,7 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
       if (p.spec.released && p.spec.full) {
         v += rules.CHARGE_BONUS;
         parts.push(`+${rules.CHARGE_BONUS} charged`);
+        tags.push('charged');
       }
       break;
     }
@@ -89,6 +94,7 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
       const felt = p.pounces ? Math.max(0, hardness - rules.POUNCE_PIERCE) : hardness;
       v = claw.value - felt;
       parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}${p.pounces && hardness ? ` pierced to ${felt} (pounce)` : ''}`);
+      if (p.pounces) tags.push('pounce');
       // Ratchet Claws: an escalating chain. Each landed link adds to the next (Wyrmling: only into the third).
       const rat = tech(att, 'ratchet-claws');
       const prior = p.link - 1;
@@ -120,7 +126,10 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
         // Under the charge variant a one-slot charge earns nothing; Bellows Chest restores the +3.
         const base = p.spec.full || bel >= W ? rules.CHARGE_BONUS : 0;
         v += base + extra;
-        if (base + extra) parts.push(`+${base + extra} charged${bel >= W ? ' (Bellows Chest)' : ''}`);
+        if (base + extra) {
+          parts.push(`+${base + extra} charged${bel >= W ? ' (Bellows Chest)' : ''}`);
+          tags.push('charged');
+        }
       }
       if (tech(att, 'smoldering-maw') >= W) {
         v -= 3;
@@ -142,7 +151,7 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
 }
 
 /** Modifiers on top of any attack: Acumen, Intimidate and demoralize, chains, technique bonuses, punishes. */
-function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean, bypass: boolean, parts: string[]): number {
+function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean, bypass: boolean, parts: string[], tags: HitTag[]): number {
   const crunched = p.halves !== null;
   const defPhase = phase(defPlan, t);
   let v = 0;
@@ -154,14 +163,19 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
       parts.push(`+${steroid} Acumen (Affinity ÷ ${rules.METER_STEROID_DIVISOR})`);
     }
   }
-  if (crunched) parts.push('crunched: no modifiers');
+  if (crunched) {
+    parts.push('crunched: no modifiers');
+    tags.push('crunched');
+  }
   if (p.intimidateBonus) {
     v += rules.INTIMIDATE_BONUS;
     parts.push(`+${rules.INTIMIDATE_BONUS} Intimidate`);
+    tags.push('intimidate');
   }
   if (p.demoralized) {
     v -= rules.DEMORALIZE;
     parts.push(`−${rules.DEMORALIZE} demoralized`);
+    tags.push('demoralized');
   }
   if (p.link === 3 && !p.spec.revised && !crunched) {
     const sapped = att.marks.sapped === 'any' || (att.marks.sapped === 'claw' && p.spec.name === 'claw');
@@ -174,9 +188,11 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
       const bonus = rules.CHAIN_THIRD_LINK_BONUS - (rat >= A ? 1 : 3);
       v += bonus;
       parts.push(`+${bonus} chain third link (Ratchet Claws)`);
+      tags.push('chain');
     } else {
       v += rules.CHAIN_THIRD_LINK_BONUS;
       parts.push(`+${rules.CHAIN_THIRD_LINK_BONUS} chain third link`);
+      tags.push('chain');
     }
   }
   if (p.lockjawBonus) {
@@ -194,9 +210,11 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
   if (defPhase === 'recovery') {
     v += rules.PUNISH_BONUS;
     parts.push(`+${rules.PUNISH_BONUS} punish (caught in recovery)`);
+    tags.push('punish');
   } else if (defPlan.spec.name === 'intimidate' && defPhase !== 'idle') {
     v += rules.PUNISH_BONUS;
     parts.push(`+${rules.PUNISH_BONUS} punish (caught intimidating)`);
+    tags.push('punish');
     // Intimidate techniques at Adult: punishes against you deal 3 less [Doc].
     if (['sapping-bellow', 'baleful-eye', 'goading-roar'].some((id) => tech(def, id as TechniqueId) >= A)) {
       v -= 3;
@@ -206,11 +224,12 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
   if (graze) {
     v -= rules.GRAZE_PENALTY;
     parts.push(`−${rules.GRAZE_PENALTY} graze`);
+    tags.push('graze');
   }
   return v;
 }
 
-export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], t: number, graze: boolean, trade: boolean, ev: Event[], verbs: { s: Side; aim: Vec }[] | null = null) {
+export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], tags: HitTag[], t: number, graze: boolean, trade: boolean, ev: Event[], verbs: { s: Side; aim: Vec }[] | null = null) {
   const p = plans[s];
   const defPlan = plans[other(s)];
   const def = bout.fighters[other(s)];
@@ -220,15 +239,15 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   def.wounds -= total;
   if (defPlan.charging && def.marks.charge) {
     def.marks.charge = null;
-    ev.push({ kind: 'note', tick: t, side: def.side, text: 'The hit breaks the charge.' });
+    ev.push({ kind: 'note', tick: t, side: def.side, tag: 'charge-broken', text: 'The hit breaks the charge.' });
   }
   if (p.halves && p.landedHalves === 2 && p.spec.name === 'bite' && tech(bout.fighters[s], 'gnashing-teeth') >= V) {
     def.pending.rattled = true;
-    ev.push({ kind: 'note', tick: t, side: def.side, text: 'Gnashing Teeth: both bites land; Rattled.' });
+    ev.push({ kind: 'note', tick: t, side: def.side, tag: 'technique', text: 'Gnashing Teeth: both bites land; Rattled.' });
   }
   const interrupt = phase(defPlan, t) === 'windup';
   if (interrupt) defPlan.interruptedAt = t;
-  ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, interrupt, graze, trade, woundsLeft: def.wounds });
+  ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, tags, interrupt, graze, trade, woundsLeft: def.wounds });
   if (p.spec.name === 'breath' && !graze && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) {
     if (verbs) verbs.push({ s, aim: p.aim });
     else breathVerb(bout, s, p.aim, t, ev);
@@ -236,6 +255,6 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   techniqueOnHit(bout, s, p, defPlan, t, graze, ev);
   if (p.spec.name === 'stomp') {
     def.pending.staggered = true;
-    ev.push({ kind: 'note', tick: t, side: def.side, text: 'Staggered next slot: movement distance halved.' });
+    ev.push({ kind: 'note', tick: t, side: def.side, tag: 'staggered', text: 'Staggered next slot: movement distance halved.' });
   }
 }

@@ -47,7 +47,7 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
     f.chain.scalesThisExchange = false;
     f.marks.eye = null;
     bout.startWounds[s] = f.wounds;
-    if (f.marks.revisionLockedFor === bout.exchange) ev.push({ kind: 'note', tick: 0, side: s, text: "Ash Gland: can't revise this exchange." });
+    if (f.marks.revisionLockedFor === bout.exchange) ev.push({ kind: 'note', tick: 0, side: s, tag: 'technique', text: "Ash Gland: can't revise this exchange." });
   }
   const slots: Record<Side, ActionSpec[]> = {
     A: [0, 1, 2].map((i) => scripts.A[i] ?? HOLD),
@@ -116,7 +116,7 @@ export function gravity(bout: Bout, s: Side, ev: Event[]) {
   const below = obstacleAt(bout.arena, { ...f.pos, z }, bout.rules);
   if (below) z = Math.max(z, below.height);
   f.pos = { ...f.pos, z };
-  ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: z === 0 ? 'No Leap this exchange: gravity brings it down to land.' : `No Leap this exchange: gravity drops it to ${(z / R.PACE).toFixed(1)} paces.` });
+  ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'gravity', text: z === 0 ? 'No Leap this exchange: gravity brings it down to land.' : `No Leap this exchange: gravity drops it to ${(z / R.PACE).toFixed(1)} paces.` });
 }
 
 /**
@@ -131,10 +131,10 @@ export function chainAtExchangeEnd(f: Fighter, ev: Event[]) {
   if (c.action === 'claw' && rat >= E && c.saves < 1) {
     c.saves++;
     c.resumed = true;
-    ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, text: `Ratchet Claws: the Claw chain (${c.links} link${c.links > 1 ? 's' : ''}) holds through a hitless exchange.` });
+    ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, tag: 'chain-held', text: `Ratchet Claws: the Claw chain (${c.links} link${c.links > 1 ? 's' : ''}) holds through a hitless exchange.` });
     return;
   }
-  ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, text: `A whole exchange without a hit: the ${ACTIONS[c.action ?? 'hold'].label} chain lapses.` });
+  ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, tag: 'chain-lapsed', text: `A whole exchange without a hit: the ${ACTIONS[c.action ?? 'hold'].label} chain lapses.` });
   f.chain = noChain();
 }
 
@@ -212,7 +212,7 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     if (p.spec.name === 'dive' && sp >= W && p.moved > 0 && p.startZ >= (sp === W ? bout.rules.STOOPING_HEIGHT.wyrmling : bout.rules.STOOPING_HEIGHT.rest)) {
       f.marks.diveBonus = true;
       f.marks.noLeap = sp < A;
-      ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: 'Stooping Pinions: +3 to the next attack.' });
+      ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'technique', text: 'Stooping Pinions: +3 to the next attack.' });
     }
     // Guarding to the end, or drawing a Breath, fills the Acumen meter [Proposed]. A broken charge fills nothing.
     if ((p.spec.name === 'scales' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(bout.rules, f, p.spec.name === 'scales' ? 'Scales' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);

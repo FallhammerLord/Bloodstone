@@ -13,7 +13,7 @@
 
 export { SIDES, other, buildSheet, newBout, cloneBout } from './referee/state.ts';
 export type { Side, Statuses, Marks, Chain, Fighter, Bout, ShardSetup, SlotRecord, FighterSetup } from './referee/state.ts';
-export type { Event, PlanInfo } from './referee/events.ts';
+export type { Event, HitTag, NoteTag, PlanInfo } from './referee/events.ts';
 export { timing } from './referee/plan.ts';
 export { runExchange, simulateSlot, checkKO } from './referee/exchange.ts';
 export type { Moment, Reviser, ExchangeOptions } from './referee/exchange.ts';

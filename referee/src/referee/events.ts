@@ -1,4 +1,5 @@
-// Everything the Referee reports. Notes are for people; the other kinds are for tools.
+// Everything the Referee reports. Text is for people; every event also says what happened in a form tools can count:
+// notes carry a tag, hits carry tags for their modifiers, evades say how. Tools never match on text.
 
 import type { ActionName } from '../actions.ts';
 import type { Vec } from '../geometry.ts';
@@ -15,13 +16,38 @@ export interface PlanInfo {
   halves?: [number, number, number][];
 }
 
+/** What a note records. Every note has one, so a renamed note can't silently drop out of a statistic. */
+export type NoteTag =
+  // movement
+  | 'blocked-move' | 'leash' | 'carry-cut' | 'gravity'
+  // aspects and attack roles
+  | 'stoop' | 'stoop-too-soon' | 'lunge' | 'pounce'
+  // charges and crunches
+  | 'charge-held' | 'charge-released' | 'charge-broken' | 'crunch-capped' | 'crunch-refused'
+  // a scripted action that can't happen this slot
+  | 'held-instead'
+  // the elements
+  | 'push' | 'push-stopped' | 'pull' | 'pull-stopped' | 'verb-held' | 'zone-held' | 'push-pull-cancel' | 'slam'
+  | 'boulder-shoved' | 'boulder-shattered'
+  // the Acumen meter
+  | 'meter-fill' | 'meter-full' | 'meter-spent'
+  // Intimidate
+  | 'intimidate-lands' | 'intimidate-short' | 'demoralized'
+  // chains and statuses
+  | 'chain-held' | 'chain-lapsed' | 'staggered'
+  // Techniques (dragonshards-technique.md)
+  | 'technique';
+
+/** What shaped a hit's damage, beyond its base. */
+export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'graze';
+
 export type Event =
   | { kind: 'exchangeStart'; exchange: number }
   | { kind: 'slotStart'; exchange: number; slot: number }
-  | { kind: 'note'; tick: number; side: Side; text: string }
+  | { kind: 'note'; tick: number; side: Side; tag: NoteTag; text: string }
   | { kind: 'aim'; tick: number; side: Side; action: ActionName; distance: number }
-  | { kind: 'hit'; tick: number; attacker: Side; action: ActionName; damage: number; parts: string[]; interrupt: boolean; graze: boolean; trade: boolean; woundsLeft: number }
-  | { kind: 'evade'; tick: number; attacker: Side; action: ActionName; text: string }
+  | { kind: 'hit'; tick: number; attacker: Side; action: ActionName; damage: number; parts: string[]; tags: HitTag[]; interrupt: boolean; graze: boolean; trade: boolean; woundsLeft: number }
+  | { kind: 'evade'; tick: number; attacker: Side; action: ActionName; how: 'moving' | 'dodging' | 'serpentine'; text: string }
   | { kind: 'nearMiss'; tick: number; attacker: Side; action: ActionName; meter: number }
   | { kind: 'whiff'; tick: number; attacker: Side; action: ActionName }
   | { kind: 'trace'; tick: number; positions: Record<Side, Vec> }

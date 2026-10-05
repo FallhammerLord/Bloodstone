@@ -2,7 +2,7 @@
 
 import { add, dist, len, scaleTo, type Vec } from '../geometry.ts';
 import * as R from '../rules.ts';
-import type { Event } from './events.ts';
+import type { Event, NoteTag } from './events.ts';
 import { type Plan, guarding } from './plan.ts';
 import { eff } from './riders.ts';
 import { A, type Bout, E, J, type Side, V, W, other, tech } from './state.ts';
@@ -11,7 +11,7 @@ import { A, type Bout, E, J, type Side, V, W, other, tech } from './state.ts';
 export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: number, graze: boolean, ev: Event[]) {
   const att = bout.fighters[s];
   const def = bout.fighters[other(s)];
-  const note = (side: Side, text: string) => ev.push({ kind: 'note', tick: t, side, text });
+  const note = (side: Side, text: string) => ev.push({ kind: 'note', tick: t, side, tag: 'technique', text });
 
   // Lockjaw: a landed Bite Pins; the biter's next slot locks to Bite (Adult: Bite or Guard).
   const lj = p.spec.name === 'bite' ? tech(att, 'lockjaw') : -1;
@@ -63,19 +63,19 @@ export function riposte(bout: Bout, s: Side, attackPlan: Plan, dodgePlan: Plan, 
     parts.push(`+${bout.rules.PUNISH_BONUS} punish`);
   }
   target.wounds -= v;
-  ev.push({ kind: 'hit', tick: t, attacker: s, action: 'claw', damage: v, parts, interrupt: false, graze: false, trade: false, woundsLeft: target.wounds });
+  ev.push({ kind: 'hit', tick: t, attacker: s, action: 'claw', damage: v, parts, tags: rip >= E ? ['punish'] : [], interrupt: false, graze: false, trade: false, woundsLeft: target.wounds });
 }
 
 /** An Intimidate that reaches its target (within Far): the +3, or what a Technique trades it for. */
 export function intimidateLands(bout: Bout, s: Side, t: number, ev: Event[]) {
   const f = bout.fighters[s];
   const opp = bout.fighters[other(s)];
-  const note = (text: string) => ev.push({ kind: 'note', tick: t, side: s, text });
+  const note = (text: string, tag: NoteTag = 'technique') => ev.push({ kind: 'note', tick: t, side: s, tag, text });
   const sep = dist(f.pos, opp.pos);
-  if (sep > R.FAR_EDGE) return note('Intimidate falls short: the opponent is beyond Far.');
+  if (sep > R.FAR_EDGE) return note('Intimidate falls short: the opponent is beyond Far.', 'intimidate-short');
   // Whatever form it takes, an Intimidate that reaches demoralizes: the target's next Bite or Claw loses 3 [Proposed].
   opp.marks.demoralized = true;
-  ev.push({ kind: 'note', tick: t, side: opp.side, text: `Demoralized: its next Bite or Claw loses ${bout.rules.DEMORALIZE}.` });
+  ev.push({ kind: 'note', tick: t, side: opp.side, tag: 'demoralized', text: `Demoralized: its next Bite or Claw loses ${bout.rules.DEMORALIZE}.` });
   const sap = tech(f, 'sapping-bellow');
   const eye = tech(f, 'baleful-eye');
   const goad = tech(f, 'goading-roar');
@@ -99,7 +99,7 @@ export function intimidateLands(bout: Bout, s: Side, t: number, ev: Event[]) {
     return note(`Goading Roar: a Retreat${goad >= E ? ' or Dodge' : ''} next slot will sting.`);
   }
   f.intimidateBonus = true;
-  note('Intimidate lands: +3 to the next attack.');
+  note('Intimidate lands: +3 to the next attack.', 'intimidate-lands');
 }
 
 /** Smoldering Maw: the breath's area lingers; dragons inside at slot's end take 3 and the element's verb. */
