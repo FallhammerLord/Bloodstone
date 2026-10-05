@@ -13,9 +13,9 @@ const run = (a: FighterSetup, b: FighterSetup, sep: number, A: string[], B: stri
 };
 const hits = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'hit' }> => e.kind === 'hit');
 
-test('a charged Bite releases next slot for +3, whatever that slot scripted', () => {
+test('a one-slot Bite charge releases next slot, whatever that slot scripted, with no bonus', () => {
   const { ev } = run(TD_WATER, TD_WATER, 4, ['charge:bite', 'retreat'], ['hold', 'hold']);
-  assert.deepEqual(hits(ev).map((h) => h.damage), [9 + 3]);
+  assert.deepEqual(hits(ev).map((h) => h.damage), [9]);
 });
 
 test('the charging slot guards like Scales, and a landed hit breaks the charge', () => {

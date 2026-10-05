@@ -147,17 +147,18 @@ Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses i
 
 `npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate, every action's share of slots, and what came of them (revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, grazes, setups). Arenas throw 1d4+2 boulders.
 
-## Attack-role variants
+## Attack roles
 
 Hits resolve in layers: geometry first (is the target in the shape?), then Accuracy against Evasion for a moving or dodging target, then Acumen on a tie. A swift dragon that reaches safe geometry before the active window is meant to escape.
 
-Four [Proposed] changes sit behind a switch, so a run can add them one at a time: `REFEREE_VARIANT=charge,lunge,pounce npm run brains -- --skill master`.
-- **charge:** a one-slot charge releases with no bonus. Scripting the same charge again holds it a second slot (Bite or Breath, slots 1–2), and that release earns +3. Bellows Chest restores the +3 on any Breath charge, then adds its own.
-- **mandatory:** Breath must charge. A plain Breath is read as a one-slot charge, and slot 3 can't start one. Off since Round 7.
-- **lunge:** a Bite right after an Approach that moved carries the dragon up to 1 pace along its line during the wind-up. Pure geometry: Evasion still applies, and a retreat that outruns it escapes. Only the first Bite after the Approach lunges.
-- **pounce:** a Claw right after a Strafe that moved advances up to one band along its line during the active window, sweeping its arc as it goes, and pierces 3 Hardness. It stops 1½ paces short of where the target stood. An airborne Wyvern that strafes into its stoop gets the pierce on the stoop.
+Three [Proposed] rules give each attack a role. They began as switches and are now part of the rules everywhere: tests, scenarios and tournaments play the same game.
+- **Charge:** a one-slot charge releases with no bonus. Scripting the same charge again holds it a second slot (Bite or Breath, slots 1–2), and that release earns +3. Bellows Chest restores the +3 on any Breath charge, then adds its own.
+- **Lunge:** a Bite right after an Approach that moved carries the dragon up to 1 pace along its line during the wind-up. Pure geometry: Evasion still applies, and a retreat that outruns it escapes. Only the first Bite after the Approach lunges.
+- **Pounce:** a Claw right after a Strafe that moved advances up to one band along its line during the active window, sweeping its arc as it goes, and pierces 3 Hardness. It stops 1½ paces short of where the target stood. An airborne Wyvern that strafes into its stoop gets the pierce on the stoop.
 
-Brains are updated with every rule change, so none plays by old patch notes. Their value counts what's pending when a slot or exchange ends (an Intimidate bonus, a demoralize, a setup), and their reads key on whether the opponent is aloft and whether its meter is full. Every style has an ideal band, from its taste for each attack and its own dragon's attacks (Claw at Melee, Bite at Close, Breath at Far), and values forcing misses by style. Diagnostic brains: meter-focus plays the Acumen meter, charge-focus two-slot charges, kite-focus position. They plan the setups as two-slot ideas (Approach then Bite, Strafe then Claw, a two-slot charge), weighed by their style's taste for both halves, and every style reads leverage: a target pinned within a band of the wall or an obstacle, its own exposure, and charges broken. The brain tournament prints how often a Bite follows an Approach and a Claw follows a Strafe. Tests flip the switches at runtime in `test/variants.test.ts`.
+A fourth, mandatory Breath charge, was tried and retired in Round 7.
+
+Brains are updated with every rule change, so none plays by old patch notes. Their value counts what's pending when a slot or exchange ends (an Intimidate bonus, a demoralize, a setup), and their reads key on whether the opponent is aloft and whether its meter is full. Every style has an ideal band, from its taste for each attack and its own dragon's attacks (Claw at Melee, Bite at Close, Breath at Far), and values forcing misses by style. Diagnostic brains: meter-focus plays the Acumen meter, charge-focus two-slot charges, kite-focus position. They plan the setups as two-slot ideas (Approach then Bite, Strafe then Claw, a two-slot charge), weighed by their style's taste for both halves, and every style reads leverage: a target pinned within a band of the wall or an obstacle, its own exposure, and charges broken. The brain tournament prints how often a Bite follows an Approach and a Claw follows a Strafe.
 
 ## Where the numbers live
 

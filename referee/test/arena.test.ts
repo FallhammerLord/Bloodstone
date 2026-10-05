@@ -80,10 +80,8 @@ test('Stalwart: each charging slot widens a True Dragon\'s released Breath by ½
   // At a ½-pace radius, a slow target retreating out of it slips a plain blast; a charged one is widened.
   const r0 = R.BREATH.blast.radius;
   (R.BREATH.blast as { radius: number }).radius = Math.floor(R.PACE / 2);
-  Object.assign(R.VARIANT, { breathCharge: true });
   const plain = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['hold', 'breath'], ['hold', 'retreat']);
   const charged = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['charge:breath', 'charge:breath', 'breath'], ['hold', 'hold', 'retreat']);
-  Object.assign(R.VARIANT, { breathCharge: false });
   (R.BREATH.blast as { radius: number }).radius = r0;
   assert.equal(hits(plain).filter((h) => h.attacker === 'A').length, 0, 'the plain blast misses the retreat');
   assert.equal(hits(charged).filter((h) => h.attacker === 'A').length, 1, 'two charging slots widen it a pace: it catches the retreat');

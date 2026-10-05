@@ -210,8 +210,7 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
     { name: 'bite' }, { name: 'claw', sweep: side() }, { name: 'approach', depth: depth() }, { name: 'retreat', depth: depth() },
     { name: 'strafe', dir: turn() }, { name: 'scales' }, { name: 'intimidate' },
   ];
-  // With mandatory charge, Breath is only ever planned as a charge.
-  if (ready('breath') && !R.VARIANT.breathMandatory) out.push({ name: 'breath' });
+  if (ready('breath')) out.push({ name: 'breath' });
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });
   if (ready('dodge')) out.push({ name: 'dodge' });
   if (s.f.sheet.flies && s.z < R.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
@@ -223,11 +222,11 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   }
   // Setups: an Approach makes the next Bite lunge; a Strafe makes the next Claw pounce. Both take two slots.
   if (s.globalSlot % R.SLOTS_PER_EXCHANGE < 2) {
-    if (R.VARIANT.biteLunge) out.push({ name: 'bite', setup: 'approach' });
-    if (R.VARIANT.clawPounce) out.push({ name: 'claw', sweep: side(), dir: turn(), setup: 'strafe' });
+    out.push({ name: 'bite', setup: 'approach' });
+    out.push({ name: 'claw', sweep: side(), dir: turn(), setup: 'strafe' });
   }
-  // With the charge variant, a charge held two slots earns the bonus; it must start in slot 1.
-  if (R.VARIANT.breathCharge && s.globalSlot % R.SLOTS_PER_EXCHANGE === 0) {
+  // A charge held two slots earns the bonus; it must start in slot 1.
+  if (s.globalSlot % R.SLOTS_PER_EXCHANGE === 0) {
     out.push({ name: 'bite', charge: true, long: true });
     if ((s.readyAt.breath ?? 0) <= s.globalSlot + 1) out.push({ name: 'breath', charge: true, long: true });
   }
@@ -411,7 +410,7 @@ function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter, sep: n
     const weights = legal.map((a) => {
       // A setup sequence is weighed by the style's taste for both halves, so each style keeps its flavor.
       const w = styled ? (a.setup ? ((lean[a.setup] ?? 0.4) + (lean[a.name] ?? 0.4)) / 2 : (lean[a.name] ?? 0.4)) : 1;
-      return a.charge ? w * (style === 'charge-focus' ? (a.long ? 3 : 1.5) : style === 'slugger' || style === 'out-boxer' || style === 'meter-focus' || (R.VARIANT.breathMandatory && a.name === 'breath') ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
+      return a.charge ? w * (style === 'charge-focus' ? (a.long ? 3 : 1.5) : style === 'slugger' || style === 'out-boxer' || style === 'meter-focus' ? 1 : 0.4) : a.crunch ? w * 1.5 : w;
     });
     s = place(out, s, pick(legal, weights, rng));
   }
@@ -538,11 +537,10 @@ function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, gues
     }
     let best: ActionSpec = { name: 'hold' };
     let bestValue = -Infinity;
-    // Under mandatory charge a Breath is weighed across both its slots, per slot.
-    // Two-slot ideas (a mandatory Breath charge, a setup and its strike) are weighed across both slots, per slot.
-    const twoSlot = (x: ActionSpec) => i + 1 < R.SLOTS_PER_EXCHANGE && ((x.charge === true && !x.long && x.name === 'breath' && R.VARIANT.breathMandatory) || x.setup !== undefined);
+    // Two-slot ideas (a setup and its strike) are weighed across both slots, per slot.
+    const twoSlot = (x: ActionSpec) => i + 1 < R.SLOTS_PER_EXCHANGE && x.setup !== undefined;
     const first = (x: ActionSpec): ActionSpec => (x.setup === 'strafe' ? { name: 'strafe', dir: x.dir } : x.setup === 'approach' ? { name: 'approach' } : x);
-    const second = (x: ActionSpec): ActionSpec => (x.setup ? { name: x.name, sweep: x.sweep } : { name: 'breath' });
+    const second = (x: ActionSpec): ActionSpec => ({ name: x.name, sweep: x.sweep });
     for (const a of legalActions(s, rng).filter((x) => (!(x.charge || x.setup) || twoSlot(x)) && allowed(style, x))) {
       const trial = structuredClone(b);
       const events = simulateSlot(trial, { [me]: first(a), [them]: guess[i] } as Record<Side, ActionSpec>);

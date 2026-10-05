@@ -344,32 +344,27 @@ function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, sl
   let spec = requested;
   const note = (text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, text });
 
-  // A charge begun last slot releases now, whatever this slot scripted. With the charge variant [Proposed],
-  // scripting the same charge again holds it a second slot (not into slot 3), and that second slot earns the bonus.
+  // A charge begun last slot releases now, whatever this slot scripted. Scripting the same charge again holds it
+  // a second slot (not into slot 3), and only that second slot earns the bonus [Proposed].
   let holding = false;
   if (f.marks.charge) {
     const c = f.marks.charge;
-    if (R.VARIANT.breathCharge && requested.charge && requested.name === c.action && c.slots === 1 && slot < 2) {
+    if (requested.charge && requested.name === c.action && c.slots === 1 && slot < 2) {
       spec = { name: c.action, sweep: c.sweep, charge: true };
       holding = true;
       note(`Holds the ${ACTIONS[spec.name].label} charge a second slot.`);
     } else {
-      spec = { name: c.action, sweep: c.sweep, released: true, full: !R.VARIANT.breathCharge || c.slots >= 2 };
+      spec = { name: c.action, sweep: c.sweep, released: true, full: c.slots >= 2 };
       f.marks.charge = null;
       note(`Releases the charged ${ACTIONS[spec.name].label}.`);
     }
   }
   // Lunge [Proposed]: a Bite right after an Approach that moved carries the dragon forward.
-  const lunges = R.VARIANT.biteLunge && f.marks.advanced;
+  const lunges = f.marks.advanced;
   f.marks.advanced = false;
   // Pounce [Proposed]: a Claw right after a Strafe that moved.
-  const pounces = R.VARIANT.clawPounce && f.marks.strafed;
+  const pounces = f.marks.strafed;
   f.marks.strafed = false;
-  // Mandatory charge [Proposed]: a Breath always takes two slots.
-  if (R.VARIANT.breathMandatory && spec.name === 'breath' && !spec.charge && !spec.released) {
-    spec = { ...spec, charge: true };
-    note('Breath must charge: this slot draws breath, the next releases it.');
-  }
 
   // Lockjaw Venerable: a Bite the slot after a landed Lockjaw Bite gains +3. Nothing is forced.
   const lockjawBonus = f.marks.lockjawFollow && spec.name === 'bite';

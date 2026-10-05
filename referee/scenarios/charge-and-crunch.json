@@ -1,11 +1,11 @@
 {
   "title": "Charges and crunches",
-  "note": "A charge takes two slots: the first charges (guarding like Scales), the second releases with +3. A hit during the charging slot breaks it. A crunch puts two attacks in one slot, 15 ticks each, with no modifiers; it needs Raking Talons (Claw) or Gnashing Teeth (Bite). Brine charges a Bite and lands it; Coil, a crunchling with Raking Talons, crunches its claws.",
+  "note": "A charge guards like Scales while it draws. A one-slot charge releases next slot with no bonus; scripting the same charge again holds it a second slot, and that release earns +3. A hit during a charging slot breaks it. A crunch puts two attacks in one slot, 15 ticks each, with no modifiers; it needs Raking Talons (Claw) or Gnashing Teeth (Bite). Brine holds a Bite charge two slots and lands it, then starts a Breath charge that Coil, a crunchling with Raking Talons, breaks with a crunch of its claws.",
   "separation": 2.5,
   "A": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
   "B": { "name": "Coil", "morph": "wyrm", "stone": "air", "shards": [{ "shard": "Raking Talons", "grade": "juvenile", "pips": [0] }] },
   "exchanges": [
-    { "A": ["charge:bite", "bite", "hold"], "B": ["hold", "hold", "crunch:claw"] },
+    { "A": ["charge:bite", "charge:bite", "bite"], "B": ["hold", "hold", "hold"] },
     { "A": ["charge:breath", "breath", "hold"], "B": ["crunch:claw", "hold", "hold"] }
   ]
 }

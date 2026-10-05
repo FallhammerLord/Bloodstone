@@ -132,19 +132,12 @@ export const BREATH = {
   line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
   narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
   vortex: { maxCenter: Math.floor(8.5 * PACE), radius: Math.floor(0.5 * PACE) }, // [Proposed] Air: a ranged vortex centered on the target, 1 pace across (cut from 2); its edge reaches Far
-  // Fire: lands on the target; radius 1.5 → 0.5 (Round 2) → 0.75 (once aim settled late). REFEREE_FIRE_RADIUS (in paces) overrides it for diagnostics.
-  blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor((Number(typeof process !== 'undefined' ? process.env.REFEREE_FIRE_RADIUS ?? 0.75 : 0.75) || 0.75) * PACE) },
+  blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.75 * PACE) }, // Fire: lands on the target; radius 1.5 → 0.5 (Round 2) → 0.75 (once aim settled late)
 }; // all [Assumed]; every breath stays within Far [Doc]
 
-// ---- Attack-role variants ---- [Proposed] Switched on for testing, one per run: REFEREE_VARIANT=charge,mandatory,lunge,pounce
+// ---- Attack roles ---- [Proposed]
 // Claw catches strafes; Bite catches retreats and armor; Breath catches dodges; Stomp catches burrows and the grounded.
-const variantEnv = (typeof process !== 'undefined' ? process.env.REFEREE_VARIANT ?? '' : '').split(',');
-export const VARIANT = {
-  breathCharge: variantEnv.includes('charge'), // a charge earns +3 only on its second slot (Bellows Chest restores it for Breath)
-  breathMandatory: variantEnv.includes('mandatory'), // Breath must charge: a plain Breath is read as a one-slot charge
-  biteLunge: variantEnv.includes('lunge'), // a Bite right after an Approach carries the dragon 1 pace forward during its wind-up
-  clawPounce: variantEnv.includes('pounce'), // a Claw right after a Strafe advances through its active window and pierces
-};
-export const BITE_LUNGE = PACE;
-export const POUNCE_REACH = BAND; // a pounce carries up to one band, stopping at the stoop's landing distance
+// A charge earns CHARGE_BONUS only when held a second slot (Bellows Chest restores it on a one-slot Breath charge).
+export const BITE_LUNGE = PACE; // a Bite right after an Approach that moved carries the dragon 1 pace forward during its wind-up
+export const POUNCE_REACH = BAND; // a Claw right after a Strafe that moved pounces: it carries up to one band, stopping at the stoop's landing distance
 export const POUNCE_PIERCE = 3; // like Bite's piercing

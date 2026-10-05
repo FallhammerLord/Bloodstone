@@ -29,11 +29,9 @@ const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 const SETUPS: FighterSetup[] = MORPHS.flatMap((m) => STONES.map((s) => ({ name: `${m}-${s}`, morph: m, stone: s })));
 
-/** Brain bouts on the tournament's rules: every pairing once, styles and seeds rotating. */
+/** Brain bouts: every pairing once, styles and seeds rotating. */
 export function goldenBouts(count = 144, part = 0, parts = 1): Golden[] {
   const out: Golden[] = [];
-  const saved = { ...R.VARIANT };
-  Object.assign(R.VARIANT, { breathCharge: true, biteLunge: true, clawPounce: true, breathMandatory: false });
   for (let i = part; i < count; i += parts) {
     const A = SETUPS[i % SETUPS.length];
     const B = SETUPS[Math.floor(i / SETUPS.length) % SETUPS.length];
@@ -44,7 +42,6 @@ export function goldenBouts(count = 144, part = 0, parts = 1): Golden[] {
     const ev = runBout(bout, { A: brainController(sa, 'master', seed), B: brainController(sb, 'master', seed + 1) });
     out.push(summary(`${i} ${A.name}/${sa} v ${B.name}/${sb}`, bout, ev));
   }
-  Object.assign(R.VARIANT, saved);
   return out;
 }
 
