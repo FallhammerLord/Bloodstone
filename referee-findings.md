@@ -1,6 +1,24 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 14: Stalwart steadies charges
+
+One change from Round 13 [Proposed]: the True Dragon's old Aspect (+9 Wounds) is folded into a base 45, and **Stalwart** now means a hit breaks a True Dragon's charge only if it deals 6 or more after the charging guard. Master, 1,992 bouts.
+
+| | Round 13 | Round 14 |
+|---|---|---|
+| Morphs (TD / Wyrm / Wyvern) | 48 / 50 / 52 | **44** / 51 / 55 |
+| True Dragon pairings (Air / Earth / Water / Fire) | 64 / 56 / 41 / 32 | 64 / 47 / 38 / **27** |
+| Stones (Air / Earth / Water / Fire) | 60 / 53 / 47 / 41 | 61 / 49 / 48 / 41 |
+| Charges (share of slots) / broken per bout | 5% / 0.35 | 6% / 0.32 |
+| Top / bottom pairing | Wyvern + Air 65 / TD + Fire 32 | Wyvern + Air 68 / TD + Fire 27 |
+
+**What it shows:**
+- **Stalwart barely engaged.** Charge breaks fell only from 0.35 to 0.32 per bout, and charges rose a point. Breaking charges was never common, so protecting them buys little.
+- **The True Dragon fell 4 points** (partly noise: its pairings sit within ±8), and True Dragon + Fire fell again to 27%. Whatever is sinking it isn't its charges.
+- **Likely suspects for True Dragon + Fire** (39 Wounds, Hardness 3, Breath 18): its Breath lands least of any stone (48%, the ½-pace blast), its Bite is its valley (6), and since Round 13 Intimidate's +3 is cashed three times as often, mostly by Bites into soft targets like it. It takes Bites at ×8.8.
+- **Next:** a focused diagnostic on True Dragon + Fire (its action mix, damage dealt and taken by attack, and who beats it), before another rule change.
+
 ## Round 13: gravity, demoralize, Stomp, crunch cap
 
 One fully patched run (master, 1,992 bouts: the style matrix now includes a meter-focus brain). Changes since Round 12, rung 5 [all Proposed]:
