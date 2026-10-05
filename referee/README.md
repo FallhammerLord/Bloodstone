@@ -31,6 +31,7 @@ npm run brains -- --skill master --seed 2027 --json b.json  # an independent run
 npm run pool -- a.json b.json                          # pool runs for tighter margins
 npm run brains -- --skill master --shards              # every dragon carries a random 3-pip wyrmling-grade loadout; ranks the shards
 npm run draft -- --skill master                       # the hatch tournament: each brain drafts egg, stone and shards by its style
+npm run gauntlet -- --cards cards.md                  # the living ladder: tamers raise wyrmlings rung by rung on spoils
 ```
 
 - `--rule KEY=VALUE` changes one dial for a whole run, without editing `DEFAULT_RULES`. KEY is a path into the rules (`BURN_DAMAGE`, `BREATH.blast.radius`); VALUE is in the rule's own units, or paces with a `p` suffix. Repeat it for several dials. The brains tournament and both diagnostics take it.
@@ -218,6 +219,8 @@ Every dial is in `src/rules.ts` (`DEFAULT_RULES`), `src/actions.ts` (timing prof
 ## The tournament
 
 `npm run draft` (add `-- --skill novice|adept|master`) is the hatch tournament: every brain drafts its own egg, bloodstone and wyrmling-grade shards by its playstyle (`src/brain/hatchery.ts`), then fights every other style. Ladders draft 0, 1 and 3 pips of shards. A draft is a weighted draw: skill sets how tightly a brain sticks to its style's best pick, and a novelty bonus pulls it toward builds its style has picked least. It reports each style's win rate and builds (with their spread), and each build, morph, stone and shard's pick and win rates.
+
+`npm run gauntlet` (add `-- --tamers N --rounds N --cards file`) is the living ladder. Each tamer (one brain style) raises one wyrmling at a time. Each round, dragons fight a random dragon on their own rung (pips of shards), or an unclaimed dragon when the rung is odd. A loss is death; three straight wins earn one pick from the victim's spoils (its morph's Body shard, its stone's Bloodstone shard, and its intact array) and a step up. A full three-pip array makes a wyrmling champion, who retires. Tamers learn: novice until they first reach rung 1, adept there, master from rung 2, and their drafts lean toward builds that won for them and away from builds that died. It reports builds by rung (win rate and field share), the drift in hatches, styles, skill, spoils, the hall of champions, and writes tamer cards with match histories.
 
 `npm run tourney` (add `-- --shards` for random, seeded 3-pip loadouts and a shard ranking) fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
 

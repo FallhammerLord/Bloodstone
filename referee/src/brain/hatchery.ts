@@ -103,7 +103,7 @@ export function sheetScores(style: BrainStyle): number[] {
 }
 
 /** How much a style wants a shard on a given sheet. */
-function shardScore(style: BrainStyle, shard: Shard, sheet: StatSheet): number {
+export function shardScore(style: BrainStyle, shard: Shard, sheet: StatSheet): number {
   const kind = shard.kind as { family: string; attr?: string; technique?: string };
   if (kind.family === 'technique') {
     const tags = TECHNIQUE_TAGS[kind.technique ?? ''] ?? [];
@@ -128,17 +128,20 @@ function draw<T>(items: T[], scores: number[], temperature: number, rng: () => n
 }
 
 /** A brain's draft: egg and bloodstone, then wyrmling-grade shards up to its ladder's pips. */
-export function draftDragon(style: BrainStyle, skill: Skill, rng: () => number, picks: Picks, name = style): FighterSetup {
+export function draftDragon(
+  style: BrainStyle, skill: Skill, rng: () => number, picks: Picks, name: string = style,
+  { pips = LADDER_PIPS[skill], bias }: { pips?: number; bias?: (build: string) => number } = {},
+): FighterSetup {
   const t = TEMPERATURE[skill];
   const keys = SHEETS.map((x) => `${x.morph} + ${x.stone}`);
   const novelty = picks.novelty(style, keys);
   const base = sheetScores(style);
-  const pickIndex = draw(SHEETS.map((_, i) => i), base.map((s, i) => s + novelty[i]), t, rng);
+  const pickIndex = draw(SHEETS.map((_, i) => i), base.map((s, i) => s + novelty[i] + (bias?.(keys[i]) ?? 0)), t, rng);
   const { morph, stone, sheet } = SHEETS[pickIndex];
   picks.add(style, keys[pickIndex]);
 
   const shards: ShardSetup[] = [];
-  let free = Array.from({ length: LADDER_PIPS[skill] }, (_, i) => i);
+  let free = Array.from({ length: pips }, (_, i) => i);
   const pool = shardPool('wyrmling');
   while (free.length) {
     const options = pool.filter((s) => s.pips <= free.length && !shards.some((x) => x.shard === s.name));
@@ -150,4 +153,16 @@ export function draftDragon(style: BrainStyle, skill: Skill, rng: () => number, 
     free = free.slice(s.pips);
   }
   return { name, morph, stone, ...(shards.length ? { shards } : {}) };
+}
+
+/** The two shards every slain dragon drops at its age grade [Doc] Spoils: its morph's Body shard and its stone's Bloodstone shard. */
+export const DROPS = {
+  morph: { 'true-dragon': 'Heartgrit', wyvern: 'Hollow Bones', wyrm: 'Pebblescale' } as Record<Morph, string>,
+  stone: { water: 'Weathered Hide', earth: 'Milk Fang', fire: 'Smolder Sac', air: 'Whetted Nail' } as Record<CoreStone, string>,
+};
+
+/** A victor's spoils pick: the shard its style wants most from the pool, drawn at its skill's temperature. */
+export function pickSpoil(style: BrainStyle, skill: Skill, sheet: StatSheet, pool: Shard[], rng: () => number): Shard | null {
+  if (!pool.length) return null;
+  return draw(pool, pool.map((s) => shardScore(style, s, sheet)), TEMPERATURE[skill], rng);
 }

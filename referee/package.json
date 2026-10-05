@@ -16,6 +16,7 @@
     "dials": "node --experimental-strip-types --no-warnings src/dials.ts",
     "pool": "node --experimental-strip-types --no-warnings src/pool.ts",
     "draft": "node --experimental-strip-types --no-warnings src/draft.ts",
+    "gauntlet": "node --experimental-strip-types --no-warnings src/gauntlet.ts",
     "check": "tsc --noEmit"
   },
   "devDependencies": {
