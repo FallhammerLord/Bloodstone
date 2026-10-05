@@ -97,7 +97,6 @@ for (const job of workerData.jobs as Job[]) {
     if (e.kind === 'revision') bump('revision');
     if (e.kind === 'evade') bump(e.how === 'dodging' ? 'evade by Dodge' : 'evade while moving');
     if (e.kind === 'zoneEffect') bump(`zone: ${e.zone}`);
-    if (e.kind === 'hit' && e.graze) bump('graze');
     if (e.kind === 'hit' && e.tags.includes('intimidate')) bump('intimidate cashed');
     if (e.kind === 'hit' && e.tags.includes('demoralized')) bump('demoralize felt');
     if (e.kind === 'note') for (const k of NOTES[e.tag] ?? []) bump(k);

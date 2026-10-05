@@ -16,14 +16,14 @@ import { techniqueOnHit } from './techniques.ts';
  * What a landed hit deals: the attack's base against Hardness (or Affinity, for Breath), then every modifier.
  * A full Acumen meter makes a Bite, Claw or Breath true damage [Proposed]. Never less than the floor.
  */
-export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean): { total: number; parts: string[]; tags: HitTag[]; bypass: boolean } {
+export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number): { total: number; parts: string[]; tags: HitTag[]; bypass: boolean } {
   // Ash Gland: the breath carries information, not harm (3 points from Adult).
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
   if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`], tags: [], bypass: false };
 
   const parts: string[] = [];
   const tags: HitTag[] = [];
-  const bypass = !graze && att.meter >= R.METER_MAX && (p.spec.name === 'bite' || p.spec.name === 'claw' || p.spec.name === 'breath') && p.landedHalves === 0;
+  const bypass = att.meter >= R.METER_MAX && (p.spec.name === 'bite' || p.spec.name === 'claw' || p.spec.name === 'breath') && p.landedHalves === 0;
   const scales = guarding(defPlan, t);
   const { hardness, label } = hardnessFelt(rules, att, def, p, t, scales, bypass);
   if (bypass) {
@@ -31,7 +31,7 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
     tags.push('true-damage');
   }
   let v = baseDamage(rules, att, def, p, hardness, label, scales, bypass, parts, tags);
-  v += modifiers(rules, att, def, p, defPlan, t, graze, bypass, parts, tags);
+  v += modifiers(rules, att, def, p, defPlan, t, bypass, parts, tags);
   if (v < rules.DAMAGE_FLOOR) {
     v = rules.DAMAGE_FLOOR;
     parts.push(`floor ${rules.DAMAGE_FLOOR}`);
@@ -151,7 +151,7 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
 }
 
 /** Modifiers on top of any attack: Acumen, Intimidate and demoralize, chains, technique bonuses, punishes. */
-function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, graze: boolean, bypass: boolean, parts: string[], tags: HitTag[]): number {
+function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number, bypass: boolean, parts: string[], tags: HitTag[]): number {
   const crunched = p.halves !== null;
   const defPhase = phase(defPlan, t);
   let v = 0;
@@ -221,15 +221,10 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
       parts.push('−3 (Intimidate technique)');
     }
   }
-  if (graze) {
-    v -= rules.GRAZE_PENALTY;
-    parts.push(`−${rules.GRAZE_PENALTY} graze`);
-    tags.push('graze');
-  }
   return v;
 }
 
-export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], tags: HitTag[], t: number, graze: boolean, trade: boolean, ev: Event[], verbs: { s: Side; aim: Vec }[] | null = null) {
+export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number, parts: string[], tags: HitTag[], t: number, trade: boolean, ev: Event[], verbs: { s: Side; aim: Vec }[] | null = null) {
   const p = plans[s];
   const defPlan = plans[other(s)];
   const def = bout.fighters[other(s)];
@@ -247,12 +242,12 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   }
   const interrupt = phase(defPlan, t) === 'windup';
   if (interrupt) defPlan.interruptedAt = t;
-  ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, tags, interrupt, graze, trade, woundsLeft: def.wounds });
-  if (p.spec.name === 'breath' && !graze && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) {
+  ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, tags, interrupt, trade, woundsLeft: def.wounds });
+  if (p.spec.name === 'breath' && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) {
     if (verbs) verbs.push({ s, aim: p.aim });
     else breathVerb(bout, s, p.aim, t, ev);
   }
-  techniqueOnHit(bout, s, p, defPlan, t, graze, ev);
+  techniqueOnHit(bout, s, p, defPlan, t, ev);
   if (p.spec.name === 'stomp') {
     def.pending.staggered = true;
     ev.push({ kind: 'note', tick: t, side: def.side, tag: 'staggered', text: 'Staggered next slot: movement distance halved.' });

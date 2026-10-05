@@ -4,98 +4,98 @@
   "winner": "A",
   "exchanges": 3,
   "wounds": "23/-1",
-  "hash": "9783a08820dd7516"
+  "hash": "f51649738dfb5875"
  },
  {
   "name": "altitude.json",
   "winner": "-",
   "exchanges": 2,
   "wounds": "16/24",
-  "hash": "7927eea7d36b782e"
+  "hash": "c97e8c3cc7bf6557"
  },
  {
   "name": "brains.json",
   "winner": "A",
   "exchanges": 5,
   "wounds": "1/-10",
-  "hash": "b9feb0856f6eeece"
+  "hash": "06186405582d38e1"
  },
  {
   "name": "breath-effects.json",
   "winner": "-",
   "exchanges": 2,
   "wounds": "20/14",
-  "hash": "1101e16a414da46c"
+  "hash": "d1f343402348135e"
  },
  {
   "name": "breath-matchup.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "23/37",
-  "hash": "e220715878054efc"
+  "hash": "3cff158d0b0d76a1"
  },
  {
   "name": "chained-bites.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "45/15",
-  "hash": "b2f1527e428fa4fd"
+  "hash": "ba79d2f2d66e39a1"
  },
  {
   "name": "charge-and-crunch.json",
   "winner": "-",
   "exchanges": 2,
   "wounds": "43/22",
-  "hash": "2dd6883256379a0c"
+  "hash": "dd40cfdbb754991d"
  },
  {
   "name": "footsies-close.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "36/45",
-  "hash": "7ac3475f3099645e"
+  "hash": "24877d0a0c303d4e"
  },
  {
   "name": "footsies-melee.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "45/39",
-  "hash": "54272570bec6b4e9"
+  "hash": "a43d095eee83b1c4"
  },
  {
   "name": "full-bout.json",
   "winner": "B",
   "exchanges": 2,
   "wounds": "0/18",
-  "hash": "18b03de7ff4d0950"
+  "hash": "54759a0ecb09311c"
  },
  {
   "name": "intimidate-punish.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "30/36",
-  "hash": "f4cb936acb0511b6"
+  "hash": "16d3e37fb0b1bd11"
  },
  {
   "name": "obstacles.json",
   "winner": "-",
   "exchanges": 2,
   "wounds": "38/51",
-  "hash": "babce488d443acf4"
+  "hash": "ea936de4157f7f7c"
  },
  {
   "name": "push-and-shove.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "23/31",
-  "hash": "ed10ffbc76b50a29"
+  "hash": "74bf87b31fcc9cc7"
  },
  {
   "name": "revision-read.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "42/23",
-  "hash": "bc8d4db7014526bb"
+  "hash": "223eb4b0bb1733bd"
  },
  {
   "name": "rim-pulse.json",
@@ -109,14 +109,14 @@
   "winner": "-",
   "exchanges": 1,
   "wounds": "45/23",
-  "hash": "4df2ae74a845a1ec"
+  "hash": "7d558f84f32b98e9"
  },
  {
   "name": "shards.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "54/21",
-  "hash": "5aa8efecb93c1637"
+  "hash": "d715b24ca906884c"
  },
  {
   "name": "talons.json",
@@ -130,7 +130,7 @@
   "winner": "-",
   "exchanges": 1,
   "wounds": "45/18",
-  "hash": "dc8484e9c1c4d818"
+  "hash": "7a6d977340685a3d"
  },
  {
   "name": "wyvern-strafe.json",

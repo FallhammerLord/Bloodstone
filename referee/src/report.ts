@@ -82,9 +82,8 @@ export function report(bout: Bout, events: Event[]): string[] {
         buffer.push(`${at(e.tick)}${label(e.side)}'s ${ACTIONS[e.action].label} winds up, aimed at ${paces(e.distance)} paces (${bandOf(e.distance)}).`);
         break;
       case 'hit': {
-        const verb = e.graze ? 'GRAZES' : 'HITS';
         const tags = [e.interrupt ? 'interrupts' : '', e.trade ? 'trade' : ''].filter(Boolean).join(', ');
-        buffer.push(`${at(e.tick)}${label(e.attacker)}'s ${ACTIONS[e.action].label} ${verb} ${label(other(e.attacker))} for ${e.damage}${tags ? ` (${tags})` : ''}.`);
+        buffer.push(`${at(e.tick)}${label(e.attacker)}'s ${ACTIONS[e.action].label} HITS ${label(other(e.attacker))} for ${e.damage}${tags ? ` (${tags})` : ''}.`);
         buffer.push(`        ${e.parts.join(' ')}  →  ${label(other(e.attacker))} at ${Math.max(0, e.woundsLeft)}`);
         break;
       }

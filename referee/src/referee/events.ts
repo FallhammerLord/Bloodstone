@@ -39,14 +39,14 @@ export type NoteTag =
   | 'technique';
 
 /** What shaped a hit's damage, beyond its base. */
-export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'graze';
+export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish';
 
 export type Event =
   | { kind: 'exchangeStart'; exchange: number }
   | { kind: 'slotStart'; exchange: number; slot: number }
   | { kind: 'note'; tick: number; side: Side; tag: NoteTag; text: string }
   | { kind: 'aim'; tick: number; side: Side; action: ActionName; distance: number }
-  | { kind: 'hit'; tick: number; attacker: Side; action: ActionName; damage: number; parts: string[]; tags: HitTag[]; interrupt: boolean; graze: boolean; trade: boolean; woundsLeft: number }
+  | { kind: 'hit'; tick: number; attacker: Side; action: ActionName; damage: number; parts: string[]; tags: HitTag[]; interrupt: boolean; trade: boolean; woundsLeft: number }
   | { kind: 'evade'; tick: number; attacker: Side; action: ActionName; how: 'moving' | 'dodging' | 'serpentine'; text: string }
   | { kind: 'nearMiss'; tick: number; attacker: Side; action: ActionName; meter: number }
   | { kind: 'whiff'; tick: number; attacker: Side; action: ActionName }

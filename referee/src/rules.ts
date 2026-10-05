@@ -56,7 +56,6 @@ export const DEFAULT_RULES = {
   INTIMIDATE_BONUS: 3,
   CHAIN_THIRD_LINK_BONUS: 3,
   PUNISH_BONUS: 3, // Acumen scaling of punishes not modeled yet
-  GRAZE_PENALTY: 3,
   MATCHUP: 3,
   DAMAGE_FLOOR: 1,
   STOMP_DAMAGE: 3,

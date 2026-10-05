@@ -8,7 +8,7 @@ import { eff } from './riders.ts';
 import { A, type Bout, E, J, type Side, V, W, other, tech } from './state.ts';
 
 /** What a landed hit sets off, by the attacker's and defender's Techniques. */
-export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: number, graze: boolean, ev: Event[]) {
+export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: number, ev: Event[]) {
   const att = bout.fighters[s];
   const def = bout.fighters[other(s)];
   const note = (side: Side, text: string) => ev.push({ kind: 'note', tick: t, side, tag: 'technique', text });
@@ -36,9 +36,9 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
     if (th >= V) att.pending.rattled = true;
     note(s, `Thornscale: takes ${bout.rules.TECHNIQUE_POINTS} from the spines${th >= V ? ' and is Rattled' : ''}.`);
   }
-  // Ash Gland: locks the target's revision next exchange (Wyrmling: clean hits only).
+  // Ash Gland: locks the target's revision next exchange. (A Wyrmling's 'clean hits only' is every hit, now grazes are gone.)
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
-  if (ash >= W && (ash >= J || !graze)) {
+  if (ash >= W) {
     def.marks.revisionLockedFor = bout.exchange + 1;
     if (ash >= E) def.pending.blinded = true;
     if (ash >= V) def.pending.rattled = true;
@@ -63,7 +63,7 @@ export function riposte(bout: Bout, s: Side, attackPlan: Plan, dodgePlan: Plan, 
     parts.push(`+${bout.rules.PUNISH_BONUS} punish`);
   }
   target.wounds -= v;
-  ev.push({ kind: 'hit', tick: t, attacker: s, action: 'claw', damage: v, parts, tags: rip >= E ? ['punish'] : [], interrupt: false, graze: false, trade: false, woundsLeft: target.wounds });
+  ev.push({ kind: 'hit', tick: t, attacker: s, action: 'claw', damage: v, parts, tags: rip >= E ? ['punish'] : [], interrupt: false, trade: false, woundsLeft: target.wounds });
 }
 
 /** An Intimidate that reaches its target (within Far): the +3, or what a Technique trades it for. */

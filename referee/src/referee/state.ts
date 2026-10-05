@@ -62,7 +62,7 @@ export interface Chain {
   action: ActionName | null;
   /** links landed so far */
   links: number;
-  /** a hit landed this exchange (any attack, grazes included) */
+  /** a hit landed this exchange (any attack) */
   hitThisExchange: boolean;
   /** guarded with Scales this exchange (a Wyrmling Ratchet Claws needs it) */
   scalesThisExchange: boolean;

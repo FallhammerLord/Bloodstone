@@ -178,11 +178,11 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
 /** Damage from the same moment, applied together; then the meters, and the breath verbs once every hit is in. */
 function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev: Event[]) {
   const F = bout.fighters;
-  const results = hits.map((s) => ({ s, ...damage(bout.rules, F[s], F[other(s)], plans[s], plans[other(s)], t, false) }));
+  const results = hits.map((s) => ({ s, ...damage(bout.rules, F[s], F[other(s)], plans[s], plans[other(s)], t) }));
   const trade = results.length === 2;
   // Breath verbs wait until every hit this tick is applied, so a push and a pull can meet.
   const verbs: { s: Side; aim: Vec }[] = [];
-  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, r.tags, t, false, trade, ev, verbs);
+  for (const r of results) applyHit(bout, plans, r.s, r.total, r.parts, r.tags, t, trade, ev, verbs);
   for (const r of results) {
     // A full meter is spent by the hit it empowered; a landed Breath then fills the breather's meter.
     if (r.bypass) {
