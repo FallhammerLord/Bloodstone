@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { runBout } from './bout.ts';
 import { newBout } from './referee.ts';
 import { LEGEND, report, rosterLines } from './report.ts';
-import { rulesFor, scenarioController, separationOf, type Scenario } from './scenario.ts';
+import { formatFor, scenarioController, separationOf, type Scenario } from './scenario.ts';
 
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--'));
@@ -19,7 +19,7 @@ try {
   const bout = newBout(sc.A, sc.B, separationOf(sc), sc.challenged ?? 'B', sc.arena ?? {});
   const controllers = { A: scenarioController(sc, 'A'), B: scenarioController(sc, 'B') };
   const header = rosterLines(bout, controllers);
-  const events = runBout(bout, controllers, rulesFor(sc), { trace: args.includes('--trace') });
+  const events = runBout(bout, controllers, formatFor(sc), { trace: args.includes('--trace') });
 
   if (args.includes('--json')) {
     console.log(JSON.stringify(events, null, 2));

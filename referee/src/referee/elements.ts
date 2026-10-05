@@ -4,6 +4,7 @@ import type { ActionName } from '../actions.ts';
 import { add, dist, flat, flatLen, len, scaleTo, sub, vec, type Vec } from '../geometry.ts';
 import { describeObstacle, inZone, obstacleAt, type Obstacle } from '../arena.ts';
 import * as R from '../rules.ts';
+import type { Rules } from '../rules.ts';
 import type { Event } from './events.ts';
 import { checkKO } from './exchange.ts';
 import { type Plan, guarding } from './plan.ts';
@@ -11,12 +12,12 @@ import { eff } from './riders.ts';
 import { type Bout, E, type Fighter, J, SIDES, type Side, V, W, other, tech } from './state.ts';
 
 /** Raw force of an attack against an obstacle: no Hardness, no modifiers. */
-export function obstacleDamage(att: Fighter, action: ActionName): number {
+export function obstacleDamage(rules: Rules, att: Fighter, action: ActionName): number {
   switch (action) {
     case 'bite': return att.sheet.bite;
     case 'claw': return att.sheet.claw;
-    case 'breath': return att.sheet.breath * (att.sheet.stone === 'earth' ? R.EARTH_OBSTACLE_MULTIPLIER : 1);
-    default: return R.STOMP_DAMAGE;
+    case 'breath': return att.sheet.breath * (att.sheet.stone === 'earth' ? rules.EARTH_OBSTACLE_MULTIPLIER : 1);
+    default: return rules.STOMP_DAMAGE;
   }
 }
 
@@ -28,7 +29,7 @@ export function obstacleDamage(att: Fighter, action: ActionName): number {
 export function strikeObstacles(bout: Bout, plans: Record<Side, Plan>, blocked: { s: Side; o: Obstacle }[], t: number, ev: Event[]): Side[] {
   // Water's jet shoves a boulder rather than breaking it [Proposed]; Earth's slurry eats through.
   const jet = (s: Side) => plans[s].spec.name === 'breath' && bout.fighters[s].sheet.stone === 'water';
-  const dealt = blocked.map(({ s, o }) => (o.wounds === null || jet(s) ? 0 : obstacleDamage(bout.fighters[s], plans[s].spec.name)));
+  const dealt = blocked.map(({ s, o }) => (o.wounds === null || jet(s) ? 0 : obstacleDamage(bout.rules, bout.fighters[s], plans[s].spec.name)));
   blocked.forEach(({ o }, i) => {
     if (o.wounds !== null) o.wounds -= dealt[i];
   });
@@ -58,10 +59,10 @@ export function shove(bout: Bout, side: Side, dir: Vec, amount: number, zFloor: 
     const step = Math.min(R.NOTCH, amount - moved);
     let np = add(f.pos, scaleTo(d, step));
     if (zFloor !== null) np = { ...np, z: Math.max(np.z, zFloor) };
-    if (flatLen(np) > R.ARENA_RADIUS) return { moved, slam: 'the arena wall' };
-    const o = obstacleAt(bout.arena, np);
+    if (flatLen(np) > bout.rules.ARENA_RADIUS) return { moved, slam: 'the arena wall' };
+    const o = obstacleAt(bout.arena, np, bout.rules);
     if (o) return { moved, slam: describeObstacle(o) };
-    if (dist(np, opp.pos) < R.BODY_GAP || dist(np, opp.pos) > R.LEASH) break;
+    if (dist(np, opp.pos) < bout.rules.BODY_GAP || dist(np, opp.pos) > bout.rules.LEASH) break;
     f.pos = np;
     moved += step;
   }
@@ -72,12 +73,12 @@ export function shove(bout: Bout, side: Side, dir: Vec, amount: number, zFloor: 
 export function shoveObstacle(bout: Bout, o: Obstacle, dir: Vec, t: number, s: Side, ev: Event[]) {
   if (o.kind !== 'boulder' || flatLen(dir) === 0) return;
   let moved = 0;
-  while (moved < R.WATER_OBSTACLE_PUSH) {
-    const np = add(o.pos, scaleTo(flat(dir), Math.min(R.NOTCH, R.WATER_OBSTACLE_PUSH - moved)));
-    if (flatLen(np) + o.radius > R.ARENA_RADIUS) break;
+  while (moved < bout.rules.WATER_OBSTACLE_PUSH) {
+    const np = add(o.pos, scaleTo(flat(dir), Math.min(R.NOTCH, bout.rules.WATER_OBSTACLE_PUSH - moved)));
+    if (flatLen(np) + o.radius > bout.rules.ARENA_RADIUS) break;
     if (bout.arena.obstacles.some((q) => q !== o && flatLen(sub(np, q.pos)) < q.radius + o.radius)) break;
-    if (SIDES.some((d) => flatLen(sub(np, bout.fighters[d].pos)) < o.radius + R.BODY_RADIUS)) break;
-    moved += Math.min(R.NOTCH, R.WATER_OBSTACLE_PUSH - moved);
+    if (SIDES.some((d) => flatLen(sub(np, bout.fighters[d].pos)) < o.radius + bout.rules.BODY_RADIUS)) break;
+    moved += Math.min(R.NOTCH, bout.rules.WATER_OBSTACLE_PUSH - moved);
     o.pos = { ...np, z: 0 };
   }
   if (moved > 0) ev.push({ kind: 'note', tick: t, side: s, text: `The jet shoves ${describeObstacle(o)} ${(moved / R.PACE).toFixed(1)} paces.` });
@@ -88,33 +89,33 @@ export function breathVerb(bout: Bout, s: Side, aim: Vec, t: number, ev: Event[]
   const att = bout.fighters[s];
   const def = bout.fighters[other(s)];
   if (att.sheet.stone === 'water') {
-    const { moved, slam } = shove(bout, def.side, aim, R.WATER_PUSH);
+    const { moved, slam } = shove(bout, def.side, aim, bout.rules.WATER_PUSH);
     ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The jet pushes it back ${(moved / R.PACE).toFixed(1)} paces.` : 'The jet pushes, but something holds it in place.' });
-    slammed(def, slam, t, ev);
+    slammed(bout.rules, def, slam, t, ev);
   } else if (att.sheet.stone === 'air') {
     // The vortex pulls a band toward the breather; a second vortex in the breather's own space throws anything
     // inside Melee back out to Close. So the pull ends at Close, and a target already at Melee is thrown out.
     const sep = dist(def.pos, att.pos);
     const edge = R.MELEE_EDGE + R.NOTCH;
-    const floor = def.pos.z > 0 ? Math.min(def.pos.z, R.AIR_FLOOR) : 0;
+    const floor = def.pos.z > 0 ? Math.min(def.pos.z, bout.rules.AIR_FLOOR) : 0;
     if (sep <= R.MELEE_EDGE) {
       const out = len(sub(def.pos, att.pos)) === 0 ? vec(R.PACE, 0) : sub(def.pos, att.pos);
       const { moved, slam } = shove(bout, def.side, out, edge - sep, floor);
       ev.push({ kind: 'note', tick: t, side: def.side, text: `The vortex at its heart throws it out ${(moved / R.PACE).toFixed(1)} paces, to Close.` });
-      slammed(def, slam, t, ev);
+      slammed(bout.rules, def, slam, t, ev);
     } else {
-      const { moved, slam } = shove(bout, def.side, sub(att.pos, def.pos), Math.min(R.AIR_PULL, sep - edge), floor);
+      const { moved, slam } = shove(bout, def.side, sub(att.pos, def.pos), Math.min(bout.rules.AIR_PULL, sep - edge), floor);
       ev.push({ kind: 'note', tick: t, side: def.side, text: moved > 0 ? `The vortex pulls it in ${(moved / R.PACE).toFixed(1)} paces.` : 'The vortex pulls, but something holds it in place.' });
-      slammed(def, slam, t, ev);
+      slammed(bout.rules, def, slam, t, ev);
     }
   }
 }
 
 /** The Affinity a Breath meets: the stone's, plus Scales and Mantle Wings when guarding, less Lance Throat's pierce. */
-export function affinityAgainst(att: Fighter, def: Fighter, scales: boolean, sep: number) {
+export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, scales: boolean, sep: number) {
   const aff = eff(def, 'affinity', { opp: att });
   // Scales presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
-  const scalesAff = scales ? R.SCALES_AFFINITY : 0;
+  const scalesAff = scales ? rules.SCALES_AFFINITY : 0;
   const mantle = scales ? tech(def, 'mantle-wings') : -1;
   const mantleAff = mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
   // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable.
@@ -128,18 +129,18 @@ export function affinityAgainst(att: Fighter, def: Fighter, scales: boolean, sep
  * tug) lands only if the breather's Potency beats the target's Affinity; a tie goes to the higher Acumen.
  * Returns a note when the target holds, or null when the element takes hold.
  */
-export function elementHolds(att: Fighter, def: Fighter, scales: boolean): string | null {
+export function elementHolds(rules: Rules, att: Fighter, def: Fighter, scales: boolean): string | null {
   const potency = eff(att, 'breath', { sep: dist(att.pos, def.pos) }).value;
-  const { affinity } = affinityAgainst(att, def, scales, dist(att.pos, def.pos));
+  const { affinity } = affinityAgainst(rules, att, def, scales, dist(att.pos, def.pos));
   const holds = affinity > potency || (affinity === potency && def.sheet.acumen > att.sheet.acumen);
   return holds ? `Affinity ${affinity} holds against Potency ${potency}` : null;
 }
 
 /** Any forced movement that meets the wall or an obstacle slams [Proposed]. */
-export function slammed(f: Fighter, slam: string | null, t: number, ev: Event[]) {
+export function slammed(rules: Rules, f: Fighter, slam: string | null, t: number, ev: Event[]) {
   if (!slam) return;
-  f.wounds -= R.SLAM_DAMAGE;
-  ev.push({ kind: 'note', tick: t, side: f.side, text: `Slammed into ${slam}: takes ${R.SLAM_DAMAGE}.` });
+  f.wounds -= rules.SLAM_DAMAGE;
+  ev.push({ kind: 'note', tick: t, side: f.side, text: `Slammed into ${slam}: takes ${rules.SLAM_DAMAGE}.` });
 }
 
 /** A push and a pull in the same moment cancel: Water's jet against Air's vortex [Proposed]. */
@@ -148,7 +149,7 @@ export function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Sid
   const verbs = all.filter((v) => {
     if (bout.fighters[v.s].sheet.stone !== 'water' && bout.fighters[v.s].sheet.stone !== 'air') return true;
     if (bypass.has(v.s)) return true;
-    const held = elementHolds(bout.fighters[v.s], bout.fighters[other(v.s)], guarding(plans[other(v.s)], t));
+    const held = elementHolds(bout.rules, bout.fighters[v.s], bout.fighters[other(v.s)], guarding(plans[other(v.s)], t));
     if (held) ev.push({ kind: 'note', tick: t, side: other(v.s), text: `${held}: the ${bout.fighters[v.s].sheet.stone === 'water' ? 'push' : 'pull'} fails.` });
     return !held;
   });
@@ -164,10 +165,10 @@ export function breathVerbs(bout: Bout, plans: Record<Side, Plan>, all: { s: Sid
 export function leaveZone(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, ev: Event[]) {
   const stone = bout.fighters[s].sheet.stone;
   if (stone !== 'fire' && stone !== 'earth') return;
-  const reach = stone === 'fire' ? R.BREATH.blast.maxCenter : R.BREATH.narrowCone.reach;
+  const reach = stone === 'fire' ? bout.rules.BREATH.blast.maxCenter : bout.rules.BREATH.narrowCone.reach;
   const center = flat(add(origin, scaleTo(aim, Math.min(len(aim), reach))));
   const zone = stone === 'fire' ? 'burning' : 'corrosive';
-  bout.arena.zones.push({ kind: zone, center, radius: R.ZONE_RADIUS, lastSlot: bout.globalSlot - 1 + R.ZONE_SLOTS, owner: s });
+  bout.arena.zones.push({ kind: zone, center, radius: bout.rules.ZONE_RADIUS, lastSlot: bout.globalSlot - 1 + bout.rules.ZONE_SLOTS, owner: s });
   ev.push({ kind: 'zone', tick: t, owner: s, zone, center });
 }
 
@@ -186,33 +187,33 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
       // Stalwart: a True Dragon's own zones never harm it [Proposed].
       if (z.owner === s && f.sheet.aspect === 'stalwart') continue;
       // The zone's element contests the dragon's Affinity, as the breath did [Proposed].
-      const held = elementHolds(bout.fighters[z.owner], f, plans[s].spec.name === 'scales');
+      const held = elementHolds(bout.rules, bout.fighters[z.owner], f, plans[s].spec.name === 'scales');
       if (held && z.kind !== 'smolder') {
         ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: `${held}: the ${z.kind === 'burning' ? 'flames' : 'pool'} can't take hold.` });
         continue;
       }
       if (z.kind === 'burning') {
-        f.wounds -= R.BURN_DAMAGE;
-        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.BURN_DAMAGE, woundsLeft: f.wounds });
+        f.wounds -= bout.rules.BURN_DAMAGE;
+        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: bout.rules.BURN_DAMAGE, woundsLeft: f.wounds });
       } else if (z.kind === 'corrosive') {
         f.pending.corroded = true;
         ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: 0, woundsLeft: f.wounds });
       } else {
         if (smoldered.has(s) && !z.stacks) continue;
         smoldered.add(s);
-        f.wounds -= R.TECHNIQUE_POINTS;
-        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: R.TECHNIQUE_POINTS, woundsLeft: f.wounds });
+        f.wounds -= bout.rules.TECHNIQUE_POINTS;
+        ev.push({ kind: 'zoneEffect', side: s, zone: z.kind, damage: bout.rules.TECHNIQUE_POINTS, woundsLeft: f.wounds });
         const away = sub(f.pos, z.center);
         if (held) continue;
-        if (z.element === 'water') shove(bout, s, away, R.SMOLDER_PUSH);
-        if (z.element === 'air') shove(bout, s, sub(bout.fighters[z.owner].pos, f.pos), R.SMOLDER_PULL);
+        if (z.element === 'water') shove(bout, s, away, bout.rules.SMOLDER_PUSH);
+        if (z.element === 'air') shove(bout, s, sub(bout.fighters[z.owner].pos, f.pos), bout.rules.SMOLDER_PULL);
         if (z.element === 'earth') f.pending.corroded = true;
       }
     }
     // Smoldering Maw Elder: the lingering area eats at obstacles inside it.
     if (z.kind === 'smolder' && tech(bout.fighters[z.owner], 'smoldering-maw') >= E) {
       for (const o of bout.arena.obstacles) {
-        if (o.wounds !== null && flatLen(sub(o.pos, z.center)) <= z.radius + o.radius) o.wounds -= R.TECHNIQUE_POINTS;
+        if (o.wounds !== null && flatLen(sub(o.pos, z.center)) <= z.radius + o.radius) o.wounds -= bout.rules.TECHNIQUE_POINTS;
       }
       bout.arena.obstacles = bout.arena.obstacles.filter((o) => o.wounds === null || o.wounds > 0);
     }

@@ -162,7 +162,7 @@ Brains are updated with every rule change, so none plays by old patch notes. The
 
 ## Where the numbers live
 
-Every dial is in `src/rules.ts` and `src/actions.ts`, tagged by where it came from:
+Every dial is in `src/rules.ts` (`DEFAULT_RULES`), `src/actions.ts` (timing profiles) and `src/hatch.ts` (stat sheets). Units (ticks, paces, bands) are fixed constants; everything else is a dial. Each bout carries its rules as `bout.rules`, and controllers see them in their `View`. To try a change without editing the defaults, pass `rulesWith({ ... })` to `newBout`. Each dial is tagged by where it came from:
 - **[Doc]:** settled in the design doc.
 - **[Proposed]:** marked [Proposed] in the design doc.
 - **[Assumed]:** a placeholder this build needed. The numbers pass should replace these.

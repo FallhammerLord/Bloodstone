@@ -6,6 +6,7 @@ import { vec, type Vec } from '../geometry.ts';
 import { makeArena, type Arena, type ArenaSetup } from '../arena.ts';
 import { compile, emptyArray, findShard, gradeRank, seat, type Grade, type Loadout, type TechniqueId } from '../shards.ts';
 import * as R from '../rules.ts';
+import { DEFAULT_RULES, type Rules } from '../rules.ts';
 
 export type Side = 'A' | 'B';
 export const SIDES: readonly Side[] = ['A', 'B'];
@@ -118,6 +119,8 @@ export interface Bout {
   /** one entry per slot: where each dragon stood when it began and what each did; public, for reading habits */
   record: SlotRecord[];
   arena: Arena;
+  /** the dials this bout plays by; shared, never cloned or changed mid-bout */
+  rules: Rules;
   over: boolean;
   winner: Side | null;
 }
@@ -165,13 +168,13 @@ export function buildSheet(setup: FighterSetup): { sheet: StatSheet; loadout: Lo
 }
 
 /** Separation is in paces (decimals allowed). A stands west of B, facing east. */
-export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: number, challenged: Side = 'B', arena: ArenaSetup = {}): Bout {
+export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: number, challenged: Side = 'B', arena: ArenaSetup = {}, rules: Rules = DEFAULT_RULES): Bout {
   const half = Math.round((separationPaces * R.PACE) / 2);
   const make = (side: Side, setup: FighterSetup, x: number): Fighter => {
     const { sheet, loadout } = buildSheet(setup);
     return {
       side, name: setup.name, sheet, loadout, pos: vec(x, 0),
-      wounds: sheet.wounds, meter: Math.min(R.METER_MAX, R.AGE_BRACKET[sheet.age] * R.METER_START_PER_AGE + 3 * sheet.affinity), readyAt: {},
+      wounds: sheet.wounds, meter: Math.min(R.METER_MAX, rules.AGE_BRACKET[sheet.age] * rules.METER_START_PER_AGE + 3 * sheet.affinity), readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
       chain: noChain(), marks: noMarks(), pulsed: false,
     };
@@ -179,8 +182,15 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
   const fighters = { A: make('A', a, -half), B: make('B', b, half) };
   return {
     fighters,
-    arena: makeArena(arena, [fighters.A.pos, fighters.B.pos]),
+    arena: makeArena(arena, [fighters.A.pos, fighters.B.pos], rules),
+    rules,
     challenged, exchange: 0, globalSlot: 0, over: false, winner: null,
     startWounds: { A: 0, B: 0 }, history: { A: [], B: [] }, record: [],
   };
+}
+
+/** A deep copy for imagining futures: everything but the rules, which are shared and never change mid-bout. */
+export function cloneBout(b: Bout): Bout {
+  const { rules, ...rest } = b;
+  return { ...structuredClone(rest), rules };
 }

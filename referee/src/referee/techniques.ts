@@ -32,9 +32,9 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
   const th = tech(def, 'thornscale');
   const intoScales = guarding(defPlan, t);
   if (th >= W && intoScales && (p.spec.name === 'claw' || (th >= J && p.spec.name === 'bite'))) {
-    att.wounds -= R.TECHNIQUE_POINTS;
+    att.wounds -= bout.rules.TECHNIQUE_POINTS;
     if (th >= V) att.pending.rattled = true;
-    note(s, `Thornscale: takes ${R.TECHNIQUE_POINTS} from the spines${th >= V ? ' and is Rattled' : ''}.`);
+    note(s, `Thornscale: takes ${bout.rules.TECHNIQUE_POINTS} from the spines${th >= V ? ' and is Rattled' : ''}.`);
   }
   // Ash Gland: locks the target's revision next exchange (Wyrmling: clean hits only).
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
@@ -53,14 +53,14 @@ export function riposte(bout: Bout, s: Side, attackPlan: Plan, dodgePlan: Plan, 
   const rip = tech(f, 'riposte-talons');
   if (rip < W || dodgePlan.spec.name !== 'dodge' || (rip === W && attackPlan.spec.name !== 'bite')) return;
   const parts: string[] = [];
-  let v = R.TECHNIQUE_POINTS;
+  let v = bout.rules.TECHNIQUE_POINTS;
   if (rip >= V) {
-    v = Math.max(R.DAMAGE_FLOOR, eff(f, 'claw', {}).value - eff(target, 'hardness', {}).value);
+    v = Math.max(bout.rules.DAMAGE_FLOOR, eff(f, 'claw', {}).value - eff(target, 'hardness', {}).value);
     parts.push(`Riposte Talons: Claw Sharpness against Hardness, ${v}`);
   } else parts.push(`Riposte Talons: ${v}`);
   if (rip >= E) {
-    v += R.PUNISH_BONUS;
-    parts.push(`+${R.PUNISH_BONUS} punish`);
+    v += bout.rules.PUNISH_BONUS;
+    parts.push(`+${bout.rules.PUNISH_BONUS} punish`);
   }
   target.wounds -= v;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: 'claw', damage: v, parts, interrupt: false, graze: false, trade: false, woundsLeft: target.wounds });
@@ -75,7 +75,7 @@ export function intimidateLands(bout: Bout, s: Side, t: number, ev: Event[]) {
   if (sep > R.FAR_EDGE) return note('Intimidate falls short: the opponent is beyond Far.');
   // Whatever form it takes, an Intimidate that reaches demoralizes: the target's next Bite or Claw loses 3 [Proposed].
   opp.marks.demoralized = true;
-  ev.push({ kind: 'note', tick: t, side: opp.side, text: `Demoralized: its next Bite or Claw loses ${R.DEMORALIZE}.` });
+  ev.push({ kind: 'note', tick: t, side: opp.side, text: `Demoralized: its next Bite or Claw loses ${bout.rules.DEMORALIZE}.` });
   const sap = tech(f, 'sapping-bellow');
   const eye = tech(f, 'baleful-eye');
   const goad = tech(f, 'goading-roar');
@@ -107,12 +107,12 @@ export function smolder(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, e
   const f = bout.fighters[s];
   const sm = tech(f, 'smoldering-maw');
   if (sm < W) return;
-  const reach = tech(f, 'lance-throat') >= W ? R.FAR_EDGE : f.sheet.stone === 'water' ? R.BREATH.line.reach : f.sheet.stone === 'earth' ? R.BREATH.narrowCone.reach : f.sheet.stone === 'air' ? R.BREATH.vortex.maxCenter : R.BREATH.blast.maxCenter;
+  const reach = tech(f, 'lance-throat') >= W ? R.FAR_EDGE : f.sheet.stone === 'water' ? bout.rules.BREATH.line.reach : f.sheet.stone === 'earth' ? bout.rules.BREATH.narrowCone.reach : f.sheet.stone === 'air' ? bout.rules.BREATH.vortex.maxCenter : bout.rules.BREATH.blast.maxCenter;
   // The area is centered where the breath reaches its target, or its full reach.
   const center = add(origin, scaleTo(aim, Math.min(len(aim), reach)));
   bout.arena.zones.push({
     kind: 'smolder', element: f.sheet.stone, stacks: sm >= V, center,
-    radius: sm === W ? R.SMOLDER_RADIUS.center : R.SMOLDER_RADIUS.full,
+    radius: sm === W ? bout.rules.SMOLDER_RADIUS.center : bout.rules.SMOLDER_RADIUS.full,
     lastSlot: bout.globalSlot - 1 + (sm >= A ? 2 : 1), owner: s,
   });
   ev.push({ kind: 'zone', tick: t, owner: s, zone: 'smolder', center });

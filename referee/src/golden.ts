@@ -12,7 +12,7 @@ import { runBout } from './bout.ts';
 import type { CoreStone, Morph } from './hatch.ts';
 import { newBout, type Event, type FighterSetup } from './referee.ts';
 import * as R from './rules.ts';
-import { rulesFor, scenarioController, separationOf, type Scenario } from './scenario.ts';
+import { formatFor, scenarioController, separationOf, type Scenario } from './scenario.ts';
 
 export interface Golden {
   name: string;
@@ -38,7 +38,7 @@ export function goldenBouts(count = 144, part = 0, parts = 1): Golden[] {
     const sa = BRAIN_STYLES[i % BRAIN_STYLES.length];
     const sb = BRAIN_STYLES[(i * 7 + 3) % BRAIN_STYLES.length];
     const seed = i * 31 + 7;
-    const bout = newBout(A, B, R.START_SEPARATION / R.PACE, i % 2 ? 'A' : 'B', { boulders: standardBoulders(seed), seed });
+    const bout = newBout(A, B, R.DEFAULT_RULES.START_SEPARATION / R.PACE, i % 2 ? 'A' : 'B', { boulders: standardBoulders(seed), seed });
     const ev = runBout(bout, { A: brainController(sa, 'master', seed), B: brainController(sb, 'master', seed + 1) });
     out.push(summary(`${i} ${A.name}/${sa} v ${B.name}/${sb}`, bout, ev));
   }
@@ -50,7 +50,7 @@ export function goldenScenarios(): Golden[] {
   return readdirSync(dir).filter((f) => f.endsWith('.json')).sort().map((f) => {
     const sc = JSON.parse(readFileSync(dir + f, 'utf8')) as Scenario;
     const bout = newBout(sc.A, sc.B, separationOf(sc), sc.challenged ?? 'B', sc.arena ?? {});
-    const ev = runBout(bout, { A: scenarioController(sc, 'A'), B: scenarioController(sc, 'B') }, rulesFor(sc));
+    const ev = runBout(bout, { A: scenarioController(sc, 'A'), B: scenarioController(sc, 'B') }, formatFor(sc));
     return summary(f, bout, ev);
   });
 }

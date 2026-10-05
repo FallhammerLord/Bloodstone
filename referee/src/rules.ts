@@ -2,16 +2,14 @@
 // [Doc]      settled in dragon-duel-design.md
 // [Proposed] marked [Proposed] in the design doc
 // [Assumed]  placeholder chosen for this build; the numbers pass should replace it
+//
+// Units are fixed: the integer grid everything is measured on. Every other dial lives in DEFAULT_RULES, which each
+// bout carries as bout.rules. Tests and diagnostics pass overrides (rulesWith) instead of editing the defaults.
 
-// ---- Time ----
+// ---- Units ----
 export const TICKS_PER_SLOT = 30; // [Doc] §4 Timeline: 30 ticks of 100 ms
 export const SLOTS_PER_EXCHANGE = 3; // [Doc] §4 Exchange
-export const EXCHANGE_LIMIT = 8; // [Assumed] the doc estimates six to eight; the last three get rim pulses
-export const MIN_ACTIVE = 3; // [Proposed] the active window never drops below 3 ticks
 export const HALF = 15; // [Doc] a crunch half runs 15 ticks
-export const CHARGE_BONUS = 3; // [Assumed] a charged Bite or Breath hits for +3
-
-// ---- Space ----
 // Positions are whole numbers in a fine grain so all math stays in integers.
 export const PACE = 300; // internal units per pace
 export const NOTCH = PACE / 3; // ⅓ pace: one point of Accuracy's phantom band [Doc] §4 Hits
@@ -19,125 +17,133 @@ export const BAND = 3 * PACE; // [Doc] each range band is 3 paces deep
 export const MELEE_EDGE = BAND;
 export const CLOSE_EDGE = 2 * BAND;
 export const FAR_EDGE = 3 * BAND;
-export const LEASH = 4 * BAND; // [Doc] separation can't exceed Very Far's outer edge (12 paces)
-export const ARENA_RADIUS = 12 * PACE; // [Doc] §5 radius equals the leash
-export const BODY_GAP = 1 * PACE; // [Assumed] closest two dragon centers can get
-export const RIM_DEPTH = 3 * PACE; // [Assumed] how far in from the wall the pillars' pulse reaches
-export const MAX_ALTITUDE = 3 * BAND; // [Assumed] arena ceiling: 9 paces
-export const BODY_RADIUS = BODY_GAP / 2; // [Assumed] for collisions with obstacles
-
-// ---- Obstacles ---- [Doc] §5: four unbreakable pillars at the quadrants; obstacles have 3, 6 or 9 Wounds by size
-export const PILLAR_RING = ARENA_RADIUS - Math.floor(1.5 * PACE); // [Assumed] pillars stand just inside the rim
-export const PILLAR_RADIUS = PACE; // [Assumed]
 export const PILLAR_HEIGHT = 1_000_000; // unbreakable and too tall to fly over
-export const BOULDERS = {
-  small: { radius: PACE / 2, height: PACE, wounds: 3 }, // radius and height [Assumed]
-  medium: { radius: PACE, height: 2 * PACE, wounds: 6 },
-  large: { radius: Math.floor(1.5 * PACE), height: 3 * PACE, wounds: 9 },
-};
-export const BOULDER_CLEARANCE = 2 * PACE; // [Assumed] random boulders keep this far from starting spots
-export const START_SEPARATION = Math.floor(6.5 * PACE); // [Doc] Far, just outside Bite range
-
-// ---- Movement ----
-export const MOVE_CAP = BAND; // [Proposed] a move carries at most one band
-export const EVASION_STEP = NOTCH; // [Assumed] a Strafe carries ⅓ pace per point of Evasion (Evasion 9 = one band)
-// Band moves [Proposed]: Approach, Retreat, Leap and Dive each carry one band (3 paces), for every dragon. Evasion buys
-// where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves
-// (72 ÷ Evasion ticks), and how long it counts as evading (2 × Evasion ticks of active window).
-export const BAND_MOVE = BAND;
-export const MOVE_DEPTH_DIVISOR = 6;
-export const MOVE_SPEED = 72;
-export const EVADE_TICKS_PER_POINT = 2;
-
-// ---- Damage ---- [Doc] §4 Damage, Modifiers
-export const INTIMIDATE_BONUS = 3;
-export const CHAIN_THIRD_LINK_BONUS = 3;
-export const PUNISH_BONUS = 3; // Acumen scaling of punishes not modeled yet
-export const GRAZE_PENALTY = 3;
-export const MATCHUP = 3;
-export const DAMAGE_FLOOR = 1;
-export const STOMP_DAMAGE = 3;
-export const BITE_PIERCE = 3; // [Doc] Bite is piercing; [Assumed] it ignores 3 Hardness
-// The True Dragon's Aspect, Stalwart [Proposed]: its own zones never harm it, and each charging slot widens its
-// released Breath by ½ pace. (A 3-tick faster Breath was tried and overshot.)
-export const STALWART_WIDEN = Math.floor(PACE / 2);
-// Between slots, separation snaps to the nearest ½ pace [Proposed]: where a dragon lands in a band matters only for
-// that action, and the edge cases of drift (2.96 paces against 3.04) clean up before the next.
-export const SNAP = Math.floor(PACE / 2);
-// Aim [Proposed]: an attack's aim tracks its target through the wind-up and settles (12 − Accuracy) ticks before the
-// strike, never less than 1 tick and never longer than the wind-up. Movement after that is what a shape must cover.
-export const AIM_SETTLE_BASE = 12;
-
-// ---- Guards ----
-export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales
-export const SCALES_AFFINITY = 3; // [Assumed] Affinity bonus while guarding with Scales: presenting the hide to the elements
-export const DODGE_BONUS = 3; // [Assumed] Evasion bonus while dodging
-
-// ---- Acumen ---- [Proposed] §4 Acumen meter
-export const ACUMEN_START = 10; // [Assumed] starting Acumen for every hatchling
-// The Acumen meter [Proposed]: Affinity fuels it. It starts at age bracket × 10 + 3 × Affinity, and each trigger
-// (a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 9.
-// Full, the next landed Bite, Claw or Breath deals true damage (no Hardness or Affinity) and drains it. A miss spends nothing.
-export const METER_BASE_FILL = 9; // [Proposed] raised from 3 so low-Affinity stones still fill
-export const METER_START_PER_AGE = 10;
-export const GRAVITY_DROP = BAND; // [Proposed] a flier that doesn't Leap during an exchange drops a band at its end
-export const DEMORALIZE = 3; // [Proposed] an Intimidate that reaches also takes 3 off the target's next Bite or Claw
-export const STOMP_HARDNESS_DIVISOR = 3; // [Proposed] Stomp deals 3 + Hardness ÷ 3, and shatters boulders inside its radius
-export const METER_STEROID_DIVISOR = 3; // a full meter's hit also adds Affinity ÷ 3 [Proposed]
-export const AGE_BRACKET = { wyrmling: 1, adult: 3, venerable: 5 } as const; // of five: wyrmling, juvenile, adult, elder, venerable
-export const BOULDERS_PER_ARENA = { dice: 4, plus: 2 }; // [Proposed] standard arenas throw 1d4+2 boulders: never an open floor
 export const METER_MAX = 100;
 
-// ---- Statuses ---- [Doc] §4 Statuses
-export const RATTLED_WINDUP = 3;
-export const BLINDED_ACCURACY = 3;
+export const DEFAULT_RULES = {
+  // ---- Time ----
+  EXCHANGE_LIMIT: 8, // [Assumed] the doc estimates six to eight; the last three get rim pulses
+  MIN_ACTIVE: 3, // [Proposed] the active window never drops below 3 ticks
+  CHARGE_BONUS: 3, // [Assumed] a charged Bite or Breath hits for +3
+  // ---- Space ----
+  LEASH: 4 * BAND, // [Doc] separation can't exceed Very Far's outer edge (12 paces)
+  ARENA_RADIUS: 12 * PACE, // [Doc] §5 radius equals the leash
+  BODY_GAP: 1 * PACE, // [Assumed] closest two dragon centers can get
+  RIM_DEPTH: 3 * PACE, // [Assumed] how far in from the wall the pillars' pulse reaches
+  MAX_ALTITUDE: 3 * BAND, // [Assumed] arena ceiling: 9 paces
+  BODY_RADIUS: PACE / 2, // [Assumed] for collisions with obstacles
+  // ---- Obstacles ---- [Doc] §5: four unbreakable pillars at the quadrants; obstacles have 3, 6 or 9 Wounds by size
+  PILLAR_INSET: Math.floor(1.5 * PACE), // [Assumed] pillars stand just inside the rim
+  PILLAR_RADIUS: PACE, // [Assumed]
+  BOULDERS: {
+    small: { radius: PACE / 2, height: PACE, wounds: 3 }, // radius and height [Assumed]
+    medium: { radius: PACE, height: 2 * PACE, wounds: 6 },
+    large: { radius: Math.floor(1.5 * PACE), height: 3 * PACE, wounds: 9 },
+  },
+  BOULDER_CLEARANCE: 2 * PACE, // [Assumed] random boulders keep this far from starting spots
+  START_SEPARATION: Math.floor(6.5 * PACE), // [Doc] Far, just outside Bite range
+  // ---- Movement ----
+  MOVE_CAP: BAND, // [Proposed] a move carries at most one band
+  EVASION_STEP: NOTCH, // [Assumed] a Strafe carries ⅓ pace per point of Evasion (Evasion 9 = one band)
+  // Band moves [Proposed]: Approach, Retreat, Leap and Dive each carry one band (3 paces), for every dragon. Evasion buys
+  // where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves
+  // (72 ÷ Evasion ticks), and how long it counts as evading (2 × Evasion ticks of active window).
+  BAND_MOVE: BAND,
+  MOVE_DEPTH_DIVISOR: 6,
+  MOVE_SPEED: 72,
+  EVADE_TICKS_PER_POINT: 2,
+  // ---- Damage ---- [Doc] §4 Damage, Modifiers
+  INTIMIDATE_BONUS: 3,
+  CHAIN_THIRD_LINK_BONUS: 3,
+  PUNISH_BONUS: 3, // Acumen scaling of punishes not modeled yet
+  GRAZE_PENALTY: 3,
+  MATCHUP: 3,
+  DAMAGE_FLOOR: 1,
+  STOMP_DAMAGE: 3,
+  BITE_PIERCE: 3, // [Doc] Bite is piercing; [Assumed] it ignores 3 Hardness
+  // The True Dragon's Aspect, Stalwart [Proposed]: its own zones never harm it, and each charging slot widens its
+  // released Breath by ½ pace. (A 3-tick faster Breath was tried and overshot.)
+  STALWART_WIDEN: Math.floor(PACE / 2),
+  // Between slots, separation snaps to the nearest ½ pace [Proposed]: where a dragon lands in a band matters only for
+  // that action, and the edge cases of drift (2.96 paces against 3.04) clean up before the next.
+  SNAP: Math.floor(PACE / 2),
+  // Aim [Proposed]: an attack's aim tracks its target through the wind-up and settles (12 − Accuracy) ticks before the
+  // strike, never less than 1 tick and never longer than the wind-up. Movement after that is what a shape must cover.
+  AIM_SETTLE_BASE: 12,
+  // ---- Guards ----
+  SCALES_HARDNESS: 3, // [Assumed] Hardness bonus while guarding with Scales
+  SCALES_AFFINITY: 3, // [Assumed] Affinity bonus while guarding with Scales: presenting the hide to the elements
+  DODGE_BONUS: 3, // [Assumed] Evasion bonus while dodging
+  // ---- Acumen ---- [Proposed] §4 Acumen meter
+  // The Acumen meter [Proposed]: Affinity fuels it. It starts at age bracket × 10 + 3 × Affinity, and each trigger
+  // (a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 9.
+  // Full, the next landed Bite, Claw or Breath deals true damage (no Hardness or Affinity) and drains it. A miss spends nothing.
+  METER_BASE_FILL: 9, // [Proposed] raised from 3 so low-Affinity stones still fill
+  METER_START_PER_AGE: 10,
+  GRAVITY_DROP: BAND, // [Proposed] a flier that doesn't Leap during an exchange drops a band at its end
+  DEMORALIZE: 3, // [Proposed] an Intimidate that reaches also takes 3 off the target's next Bite or Claw
+  STOMP_HARDNESS_DIVISOR: 3, // [Proposed] Stomp deals 3 + Hardness ÷ 3, and shatters boulders inside its radius
+  METER_STEROID_DIVISOR: 3, // a full meter's hit also adds Affinity ÷ 3 [Proposed]
+  AGE_BRACKET: { wyrmling: 1, adult: 3, venerable: 5 } as const, // of five: wyrmling, juvenile, adult, elder, venerable
+  BOULDERS_PER_ARENA: { dice: 4, plus: 2 }, // [Proposed] standard arenas throw 1d4+2 boulders: never an open floor
+  // ---- Statuses ---- [Doc] §4 Statuses
+  RATTLED_WINDUP: 3,
+  BLINDED_ACCURACY: 3,
+  // ---- Breath damage by element ---- [Assumed]: harmless extras earn points, harmful extras cost them
+  ELEMENT_BREATH_MOD: { water: 2, air: 0, earth: 1, fire: -2 }, // push, pull (Air's +2 nixed: the pull isn't harmless), corrode, burn
+  // ---- Breath effects, wyrmling strength ---- [Doc] §3 element table; numbers [Assumed]
+  WATER_PUSH: BAND, // [Proposed; was 1 pace] Water: the jet pushes the target back a whole band
+  SLAM_DAMAGE: 3, // [Proposed] true damage when any forced movement drives a dragon into the wall or an obstacle
+  WATER_OBSTACLE_PUSH: BAND, // [Proposed] the jet shoves a boulder it strikes instead of breaking it; pillars don't move
+  SMOLDER_PUSH: PACE, // Smoldering Maw's lingering water still nudges 1 pace
+  AIR_PULL: BAND, // [Proposed] Air: the vortex pulls the target a band toward the breather, fliers included (it lowers them, never grounds them)
+  AIR_FLOOR: PACE, // a pulled flier stays at least this high (or where it was, if lower)
+  SMOLDER_PULL: PACE, // Smoldering Maw's lingering air still tugs 1 pace
+  ZONE_RADIUS: PACE, // Fire's burning zone and Earth's corrosive pool
+  ZONE_SLOTS: 1, // a zone lingers through this many slots after the one it lands in
+  BURN_DAMAGE: 3, // [Proposed; was 1] true damage to a grounded dragon in a burning zone at slot's end
+  CORRODE_HARDNESS: 3, // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
+  EARTH_OBSTACLE_MULTIPLIER: 2, // Earth's slurry eats obstacles
+  // ---- Aspects ---- [Doc] §2; numbers [Assumed]
+  STOOP_RANGE: FAR_EDGE, // Wyvern Talons: a Claw from the air stoops on a grounded target anywhere within Far
+  STOOP_LANDING: Math.floor(1.5 * PACE), // [Assumed] it lands on the ground this far short of where the target stood
+  WYVERN_GROUND_CLAW_REACH: 2 * PACE, // [Assumed] forelimbs are wings, so its Claw from the ground is short
+  // ---- Technique numbers ---- (dragonshards-technique.md gives most; these fill its gaps) [Assumed]
+  TECHNIQUE_POINTS: 3, // Thornscale's spikes, Goading Roar's sting, Riposte's free claw, Smoldering Maw's linger
+  SCYTHE_REACH: { wyrmling: PACE / 2, full: PACE }, // Scything widens the arc: one side, then both
+  SMOLDER_RADIUS: { center: PACE, full: 2 * PACE }, // Smoldering Maw: the area's center, then all of it
+  LANCE_WIDEN: PACE / 2, // Lance Throat Elder: the line's half-width grows this much by its end
+  STOOPING_HEIGHT: { wyrmling: 6 * PACE, rest: 3 * PACE }, // Stooping Pinions: how high a dive must start
+  // ---- Attack shapes ----
+  // Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").
+  BITE_REACH: 5 * PACE, // [Assumed] Melee into Close; starts just outside at Far
+  BITE_HALF_WIDTH: PACE / 2, // [Assumed] narrow: how far off the aim line it still catches
+  CLAW_REACH: Math.floor((10 * PACE) / 3), // [Assumed] arc edge reaches just into Close
+  CLAW_BACK: PACE / 2, // [Assumed] arc wraps slightly behind the shoulders
+  STOMP_RADIUS: { wyrmling: 2 * PACE, adult: 3 * PACE, venerable: 4 * PACE }, // [Assumed] contact + 1/2/3 paces
+  BREATH: {
+    line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
+    narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
+    vortex: { maxCenter: Math.floor(8.5 * PACE), radius: Math.floor(0.5 * PACE) }, // [Proposed] Air: a ranged vortex centered on the target, 1 pace across (cut from 2); its edge reaches Far
+    blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.75 * PACE) }, // Fire: lands on the target; radius 1.5 → 0.5 (Round 2) → 0.75 (once aim settled late)
+  }, // all [Assumed]; every breath stays within Far [Doc]
+  // ---- Attack roles ---- [Proposed]
+  // Claw catches strafes; Bite catches retreats and armor; Breath catches dodges; Stomp catches burrows and the grounded.
+  // A charge earns CHARGE_BONUS only when held a second slot (Bellows Chest restores it on a one-slot Breath charge).
+  BITE_LUNGE: PACE, // a Bite right after an Approach that moved carries the dragon 1 pace forward during its wind-up
+  POUNCE_REACH: BAND, // a Claw right after a Strafe that moved pounces: it carries up to one band, stopping at the stoop's landing distance
+  POUNCE_PIERCE: 3, // like Bite's piercing
+};
 
-// ---- Breath damage by element ---- [Assumed]: harmless extras earn points, harmful extras cost them
-export const ELEMENT_BREATH_MOD = { water: 2, air: 0, earth: 1, fire: -2 }; // push, pull (Air's +2 nixed: the pull isn't harmless), corrode, burn
+export type Rules = typeof DEFAULT_RULES;
 
-// ---- Breath effects, wyrmling strength ---- [Doc] §3 element table; numbers [Assumed]
-export const WATER_PUSH = BAND; // [Proposed; was 1 pace] Water: the jet pushes the target back a whole band
-export const SLAM_DAMAGE = 3; // [Proposed] true damage when any forced movement drives a dragon into the wall or an obstacle
-export const WATER_OBSTACLE_PUSH = BAND; // [Proposed] the jet shoves a boulder it strikes instead of breaking it; pillars don't move
-export const SMOLDER_PUSH = PACE; // Smoldering Maw's lingering water still nudges 1 pace
-export const AIR_PULL = BAND; // [Proposed] Air: the vortex pulls the target a band toward the breather, fliers included (it lowers them, never grounds them)
-export const AIR_FLOOR = PACE; // a pulled flier stays at least this high (or where it was, if lower)
-export const SMOLDER_PULL = PACE; // Smoldering Maw's lingering air still tugs 1 pace
-export const ZONE_RADIUS = PACE; // Fire's burning zone and Earth's corrosive pool
-export const ZONE_SLOTS = 1; // a zone lingers through this many slots after the one it lands in
-export const BURN_DAMAGE = 3; // [Proposed; was 1] true damage to a grounded dragon in a burning zone at slot's end
-export const CORRODE_HARDNESS = 3; // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
-export const EARTH_OBSTACLE_MULTIPLIER = 2; // Earth's slurry eats obstacles
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
-// ---- Aspects ---- [Doc] §2; numbers [Assumed]
-export const STOOP_RANGE = FAR_EDGE; // Wyvern Talons: a Claw from the air stoops on a grounded target anywhere within Far
-export const STOOP_LANDING = Math.floor(1.5 * PACE); // [Assumed] it lands on the ground this far short of where the target stood
-export const WYVERN_GROUND_CLAW_REACH = 2 * PACE; // [Assumed] forelimbs are wings, so its Claw from the ground is short
-
-// ---- Technique numbers ---- (dragonshards-technique.md gives most; these fill its gaps) [Assumed]
-export const TECHNIQUE_POINTS = 3; // Thornscale's spikes, Goading Roar's sting, Riposte's free claw, Smoldering Maw's linger
-export const SCYTHE_REACH = { wyrmling: PACE / 2, full: PACE }; // Scything widens the arc: one side, then both
-export const SMOLDER_RADIUS = { center: PACE, full: 2 * PACE }; // Smoldering Maw: the area's center, then all of it
-export const LANCE_WIDEN = PACE / 2; // Lance Throat Elder: the line's half-width grows this much by its end
-export const STOOPING_HEIGHT = { wyrmling: 6 * PACE, rest: 3 * PACE }; // Stooping Pinions: how high a dive must start
-
-// ---- Attack shapes ----
-// Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").
-export const BITE_REACH = 5 * PACE; // [Assumed] Melee into Close; starts just outside at Far
-export const BITE_HALF_WIDTH = PACE / 2; // [Assumed] narrow: how far off the aim line it still catches
-export const CLAW_REACH = Math.floor((10 * PACE) / 3); // [Assumed] arc edge reaches just into Close
-export const CLAW_BACK = PACE / 2; // [Assumed] arc wraps slightly behind the shoulders
-export const STOMP_RADIUS = { wyrmling: 2 * PACE, adult: 3 * PACE, venerable: 4 * PACE }; // [Assumed] contact + 1/2/3 paces
-export const BREATH = {
-  line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
-  narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
-  vortex: { maxCenter: Math.floor(8.5 * PACE), radius: Math.floor(0.5 * PACE) }, // [Proposed] Air: a ranged vortex centered on the target, 1 pace across (cut from 2); its edge reaches Far
-  blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.75 * PACE) }, // Fire: lands on the target; radius 1.5 → 0.5 (Round 2) → 0.75 (once aim settled late)
-}; // all [Assumed]; every breath stays within Far [Doc]
-
-// ---- Attack roles ---- [Proposed]
-// Claw catches strafes; Bite catches retreats and armor; Breath catches dodges; Stomp catches burrows and the grounded.
-// A charge earns CHARGE_BONUS only when held a second slot (Bellows Chest restores it on a one-slot Breath charge).
-export const BITE_LUNGE = PACE; // a Bite right after an Approach that moved carries the dragon 1 pace forward during its wind-up
-export const POUNCE_REACH = BAND; // a Claw right after a Strafe that moved pounces: it carries up to one band, stopping at the stoop's landing distance
-export const POUNCE_PIERCE = 3; // like Bite's piercing
+/** The default rules with some dials changed; nested objects merge. */
+export function rulesWith(overrides: DeepPartial<Rules>, base: Rules = DEFAULT_RULES): Rules {
+  const merge = (a: unknown, b: unknown): unknown =>
+    b && typeof b === 'object' && a && typeof a === 'object'
+      ? Object.fromEntries(Object.keys({ ...a, ...b }).map((k) => [k, merge((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k])]))
+      : b === undefined ? a : b;
+  return merge(base, overrides) as Rules;
+}

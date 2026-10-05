@@ -131,7 +131,7 @@ export function report(bout: Bout, events: Event[]): string[] {
         say(e.zone === 'burning'
           ? `  🔥 ${label(e.side)} ends the slot in a burning zone: ${e.damage} damage → ${Math.max(0, e.woundsLeft)}.`
           : e.zone === 'corrosive'
-            ? `  ☣ ${label(e.side)} ends the slot in a corrosive pool: Hardness −${R.CORRODE_HARDNESS} next slot.`
+            ? `  ☣ ${label(e.side)} ends the slot in a corrosive pool: Hardness −${bout.rules.CORRODE_HARDNESS} next slot.`
             : `  ♨ ${label(e.side)} ends the slot in a smoldering area: ${e.damage} damage and the breath's verb → ${Math.max(0, e.woundsLeft)}.`);
         break;
       case 'revision':

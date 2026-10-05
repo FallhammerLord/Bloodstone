@@ -5,16 +5,21 @@ import type { Arena } from './arena.ts';
 import { flatLen, len, sub } from './geometry.ts';
 import { SIDES, checkKO, other, runExchange, type Bout, type Event, type Fighter, type Moment, type Side, type SlotRecord } from './referee.ts';
 import * as R from './rules.ts';
+import type { Rules } from './rules.ts';
 
-export interface Ruleset {
-  exchangeLimit: number;
+/** How a bout is played out, as opposed to the rules it plays by (bout.rules). */
+export interface Format {
+  /** defaults to the rules' EXCHANGE_LIMIT */
+  exchangeLimit?: number;
   /** campaign and ranked: the challenger forfeits; open lobbies may pick most Wounds [Doc] §9 */
   timeout: 'challengerForfeits' | 'mostWounds';
   /** rim pulses in the final three exchanges and a timeout verdict at the limit */
   lateGame: boolean;
 }
 
-export const DEFAULT_RULES: Ruleset = { exchangeLimit: R.EXCHANGE_LIMIT, timeout: 'challengerForfeits', lateGame: true };
+export const DEFAULT_FORMAT: Format = { timeout: 'challengerForfeits', lateGame: true };
+
+const limitOf = (bout: Bout, format: Format) => format.exchangeLimit ?? bout.rules.EXCHANGE_LIMIT;
 
 /** What one side can see. Everything on the board is visible [Doc]; only the opponent's script is not. */
 export interface View {
@@ -31,6 +36,8 @@ export interface View {
   arena: Arena;
   /** what each dragon did in every slot so far, and from where */
   record: SlotRecord[];
+  /** the rules this bout plays by: public, like the board */
+  rules: Rules;
 }
 
 export function viewOf(bout: Bout, side: Side): View {
@@ -48,6 +55,7 @@ export function viewOf(bout: Bout, side: Side): View {
     history: { A: [...bout.history.A], B: [...bout.history.B] },
     arena: structuredClone(bout.arena),
     record: bout.record.map((r) => structuredClone(r)),
+    rules: bout.rules,
   };
 }
 
@@ -59,17 +67,17 @@ export interface Controller {
   revise?(view: View, moment: Moment, opponentRevised: boolean, revealed: string | null): ActionSpec | null;
 }
 
-export function runBout(bout: Bout, controllers: Record<Side, Controller>, rules: Ruleset = DEFAULT_RULES, opts: { trace?: boolean } = {}): Event[] {
+export function runBout(bout: Bout, controllers: Record<Side, Controller>, format: Format = DEFAULT_FORMAT, opts: { trace?: boolean } = {}): Event[] {
   const ev: Event[] = [];
-  while (!bout.over && bout.exchange < rules.exchangeLimit) {
+  while (!bout.over && bout.exchange < limitOf(bout, format)) {
     const scripts = { A: controllers.A.script(viewOf(bout, 'A')), B: controllers.B.script(viewOf(bout, 'B')) };
     const revise = Object.fromEntries(
       SIDES.map((s) => [s, (b: Bout, side: Side, m: Moment, opp: boolean, seen: string | null) => controllers[s].revise?.(viewOf(b, side), m, opp, seen) ?? null]),
     );
     ev.push(...runExchange(bout, scripts, { trace: opts.trace, revise }));
-    if (!bout.over && rules.lateGame) ev.push(...rimPulse(bout, rules));
+    if (!bout.over && format.lateGame) ev.push(...rimPulse(bout, format));
   }
-  if (!bout.over && rules.lateGame) ev.push(...timeout(bout, rules));
+  if (!bout.over && format.lateGame) ev.push(...timeout(bout, format));
   return ev;
 }
 
@@ -78,13 +86,13 @@ export function runBout(bout: Bout, controllers: Record<Side, Controller>, rules
  * maximum Wounds to dragons on the outer rim. Pulse 1 can't kill; pulse 2 kills only a dragon pulse 1
  * already hit; pulse 3 kills any dragon in range.
  */
-export function rimPulse(bout: Bout, rules: Ruleset): Event[] {
+export function rimPulse(bout: Bout, format: Format = DEFAULT_FORMAT): Event[] {
   const ev: Event[] = [];
-  const pulse = bout.exchange - (rules.exchangeLimit - 3);
+  const pulse = bout.exchange - (limitOf(bout, format) - 3);
   if (pulse < 1 || pulse > 3) return ev;
   for (const s of SIDES) {
     const f = bout.fighters[s];
-    if (flatLen(f.pos) < R.ARENA_RADIUS - R.RIM_DEPTH) continue;
+    if (flatLen(f.pos) < bout.rules.ARENA_RADIUS - bout.rules.RIM_DEPTH) continue;
     let damage = Math.floor(f.sheet.wounds / 3);
     const canKill = pulse === 3 || (pulse === 2 && f.pulsed);
     const capped = !canKill && damage >= f.wounds;
@@ -98,11 +106,11 @@ export function rimPulse(bout: Bout, rules: Ruleset): Event[] {
 }
 
 /** Timeouts are never lethal [Doc] §8. */
-export function timeout(bout: Bout, rules: Ruleset): Event[] {
+export function timeout(bout: Bout, format: Format = DEFAULT_FORMAT): Event[] {
   const F = bout.fighters;
   let winner: Side;
   let reason: string;
-  if (rules.timeout === 'challengerForfeits' || F.A.wounds === F.B.wounds) {
+  if (format.timeout === 'challengerForfeits' || F.A.wounds === F.B.wounds) {
     winner = bout.challenged;
     reason = 'timeout: the challenger forfeits, non-lethally';
   } else {

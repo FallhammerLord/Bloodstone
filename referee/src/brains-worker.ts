@@ -55,7 +55,7 @@ const controller = (p: Player): Controller =>
 
 const results: Result[] = [];
 for (const job of workerData.jobs as Job[]) {
-  const bout = newBout(job.A, job.B, R.START_SEPARATION / R.PACE, job.challenged, { boulders: standardBoulders(job.arenaSeed), seed: job.arenaSeed });
+  const bout = newBout(job.A, job.B, R.DEFAULT_RULES.START_SEPARATION / R.PACE, job.challenged, { boulders: standardBoulders(job.arenaSeed), seed: job.arenaSeed });
   const startPos = { A: { ...bout.fighters.A.pos }, B: { ...bout.fighters.B.pos } };
   const ev = runBout(bout, { A: controller(job.playerA), B: controller(job.playerB) });
   const end = ev.find((e) => e.kind === 'boutEnd');

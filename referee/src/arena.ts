@@ -4,6 +4,7 @@
 import { dist, flat, flatLen, isqrt, sub, vec, type Vec } from './geometry.ts';
 import { seededRandom } from './random.ts';
 import * as R from './rules.ts';
+import { DEFAULT_RULES, type Rules } from './rules.ts';
 
 export type BoulderSize = 'small' | 'medium' | 'large';
 
@@ -54,39 +55,40 @@ export interface ArenaSetup {
   obstacles?: ObstacleSetup[];
 }
 
-const boulder = (id: number, size: BoulderSize, pos: Vec): Obstacle => ({
-  id, kind: 'boulder', size, pos, wounds: R.BOULDERS[size].wounds, radius: R.BOULDERS[size].radius, height: R.BOULDERS[size].height,
+const boulder = (rules: Rules, id: number, size: BoulderSize, pos: Vec): Obstacle => ({
+  id, kind: 'boulder', size, pos, wounds: rules.BOULDERS[size].wounds, radius: rules.BOULDERS[size].radius, height: rules.BOULDERS[size].height,
 });
 
 /** A standard arena's boulder count, 1d4+2 [Proposed]: a seeded throw, never an open floor. */
-export function standardBoulders(seed: number): number {
-  return R.BOULDERS_PER_ARENA.plus + 1 + Math.floor(seededRandom(seed * 7 + 3)() * R.BOULDERS_PER_ARENA.dice);
+export function standardBoulders(seed: number, rules: Rules = DEFAULT_RULES): number {
+  return rules.BOULDERS_PER_ARENA.plus + 1 + Math.floor(seededRandom(seed * 7 + 3)() * rules.BOULDERS_PER_ARENA.dice);
 }
 
 /** Four unbreakable pillars at the quadrants [Doc], plus boulders. Boulders never land on a dragon's starting spot. */
-export function makeArena(setup: ArenaSetup = {}, keepClear: Vec[] = []): Arena {
+export function makeArena(setup: ArenaSetup = {}, keepClear: Vec[] = [], rules: Rules = DEFAULT_RULES): Arena {
   const obstacles: Obstacle[] = [];
-  const d = isqrt(Math.floor((R.PILLAR_RING * R.PILLAR_RING) / 2));
+  const ring = rules.ARENA_RADIUS - rules.PILLAR_INSET;
+  const d = isqrt(Math.floor((ring * ring) / 2));
   for (const [sx, sy] of [[1, 1], [-1, 1], [-1, -1], [1, -1]]) {
-    obstacles.push({ id: obstacles.length + 1, kind: 'pillar', size: null, pos: vec(sx * d, sy * d), radius: R.PILLAR_RADIUS, height: R.PILLAR_HEIGHT, wounds: null });
+    obstacles.push({ id: obstacles.length + 1, kind: 'pillar', size: null, pos: vec(sx * d, sy * d), radius: rules.PILLAR_RADIUS, height: R.PILLAR_HEIGHT, wounds: null });
   }
   for (const o of setup.obstacles ?? []) {
-    if (!(o.size in R.BOULDERS)) throw new Error(`Unknown boulder size "${o.size}". Sizes: small, medium, large.`);
-    obstacles.push(boulder(obstacles.length + 1, o.size, vec(Math.round(o.x * R.PACE), Math.round(o.y * R.PACE))));
+    if (!(o.size in rules.BOULDERS)) throw new Error(`Unknown boulder size "${o.size}". Sizes: small, medium, large.`);
+    obstacles.push(boulder(rules, obstacles.length + 1, o.size, vec(Math.round(o.x * R.PACE), Math.round(o.y * R.PACE))));
   }
 
   const rng = seededRandom(setup.seed ?? 1);
   const sizes: BoulderSize[] = ['small', 'medium', 'large'];
-  const limit = R.ARENA_RADIUS - R.RIM_DEPTH;
+  const limit = rules.ARENA_RADIUS - rules.RIM_DEPTH;
   for (let n = 0; n < (setup.boulders ?? 0); n++) {
     const size = sizes[Math.floor(rng() * 3)];
-    const r = R.BOULDERS[size].radius;
+    const r = rules.BOULDERS[size].radius;
     for (let tries = 0; tries < 60; tries++) {
       const p = vec(Math.floor((rng() * 2 - 1) * limit), Math.floor((rng() * 2 - 1) * limit));
       if (flatLen(p) > limit) continue;
-      if (keepClear.some((c) => dist(flat(c), p) < r + R.BOULDER_CLEARANCE)) continue;
+      if (keepClear.some((c) => dist(flat(c), p) < r + rules.BOULDER_CLEARANCE)) continue;
       if (obstacles.some((o) => dist(o.pos, p) < o.radius + r + R.PACE)) continue;
-      obstacles.push(boulder(obstacles.length + 1, size, p));
+      obstacles.push(boulder(rules, obstacles.length + 1, size, p));
       break;
     }
   }
@@ -94,9 +96,9 @@ export function makeArena(setup: ArenaSetup = {}, keepClear: Vec[] = []): Arena 
 }
 
 /** The obstacle a dragon's body would overlap at pos, if any. A dragon above an obstacle's top flies over it. */
-export function obstacleAt(arena: Arena, pos: Vec): Obstacle | null {
+export function obstacleAt(arena: Arena, pos: Vec, rules: Rules): Obstacle | null {
   for (const o of arena.obstacles) {
-    if (pos.z < o.height && flatLen(sub(pos, o.pos)) < o.radius + R.BODY_RADIUS) return o;
+    if (pos.z < o.height && flatLen(sub(pos, o.pos)) < o.radius + rules.BODY_RADIUS) return o;
   }
   return null;
 }

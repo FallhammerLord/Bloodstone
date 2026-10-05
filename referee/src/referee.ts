@@ -11,7 +11,7 @@
 // The resolver lives in src/referee/, one concern per module; this file is its public face.
 // Not modeled yet: compounds, hazards beyond boulders, claw sweep timing, Acumen-scaled punishes, extended morphs.
 
-export { SIDES, other, buildSheet, newBout } from './referee/state.ts';
+export { SIDES, other, buildSheet, newBout, cloneBout } from './referee/state.ts';
 export type { Side, Statuses, Marks, Chain, Fighter, Bout, ShardSetup, SlotRecord, FighterSetup } from './referee/state.ts';
 export type { Event, PlanInfo } from './referee/events.ts';
 export { timing } from './referee/plan.ts';

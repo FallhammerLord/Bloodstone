@@ -40,7 +40,7 @@ test('a charge held a second slot earns +3, for Bite and Breath', () => {
     const one = hits(run(TD_WATER, sep, [`charge:${name}`, name, 'hold'], ['hold', 'hold', 'hold']).ev);
     const two = run(TD_WATER, sep, [`charge:${name}`, `charge:${name}`, name], ['hold', 'hold', 'hold']);
     assert.equal(hits(two.ev).length, 1);
-    assert.equal(hits(two.ev)[0].damage, one[0].damage + R.CHARGE_BONUS, name);
+    assert.equal(hits(two.ev)[0].damage, one[0].damage + R.DEFAULT_RULES.CHARGE_BONUS, name);
   }
 });
 
@@ -52,7 +52,7 @@ test('a second charge slot can\'t run into slot 3: it releases there', () => {
 test('Bellows Chest restores the +3 on a one-slot Breath charge, then adds its own', () => {
   const plain = hits(run(TD_WATER, 5, ['charge:breath', 'breath', 'hold'], ['hold', 'hold', 'hold']).ev)[0];
   const ev = runExchange(newBout(BELLOWS, TD_WATER, 5), { A: ['charge:breath', 'breath', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
-  assert.equal(hits(ev)[0].damage, plain.damage + R.CHARGE_BONUS + 3, 'Wyrmling Bellows: +3 restored, +3 its own');
+  assert.equal(hits(ev)[0].damage, plain.damage + R.DEFAULT_RULES.CHARGE_BONUS + 3, 'Wyrmling Bellows: +3 restored, +3 its own');
 });
 
 test('lunge: only a Bite right after an Approach that moved', () => {
@@ -87,7 +87,7 @@ test('pounce: a Claw right after a Strafe reaches from Close, and pierces', () =
   simulateSlot(bout, { A: parseAction('strafe:cw'), B: parseAction('hold') });
   const ev = simulateSlot(bout, { A: parseAction('claw:left'), B: parseAction('hold') });
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 9 - (6 - R.POUNCE_PIERCE), 'Claw 9 against the Wyrm\'s Hardness 6, pierced to 3');
+  assert.equal(hits(ev)[0].damage, 9 - (6 - R.DEFAULT_RULES.POUNCE_PIERCE), 'Claw 9 against the Wyrm\'s Hardness 6, pierced to 3');
 });
 
 test('pounce: only the Claw right after the Strafe', () => {

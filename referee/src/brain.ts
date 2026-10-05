@@ -12,8 +12,9 @@ import type { Controller, View } from './bout.ts';
 import { obstacleAt } from './arena.ts';
 import { add, flat, flatLen, scaleTo, sub } from './geometry.ts';
 import { seededRandom } from './random.ts';
-import { simulateSlot, runExchange, type Bout, type Event, type Fighter, type Moment, type Side } from './referee.ts';
+import { cloneBout, simulateSlot, runExchange, type Bout, type Event, type Fighter, type Moment, type Side } from './referee.ts';
 import * as R from './rules.ts';
+import type { Rules } from './rules.ts';
 
 // ---------------------------------------------------------------- styles and skill
 
@@ -194,6 +195,7 @@ function pick<T>(items: T[], weights: number[], rng: () => number): T {
 
 interface Situation {
   f: Fighter;
+  rules: Rules;
   globalSlot: number;
   z: number;
   readyAt: Partial<Record<ActionName, number>>;
@@ -213,7 +215,7 @@ function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   if (ready('breath')) out.push({ name: 'breath' });
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });
   if (ready('dodge')) out.push({ name: 'dodge' });
-  if (s.f.sheet.flies && s.z < R.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
+  if (s.f.sheet.flies && s.z < s.rules.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
   if (s.z > 0) out.push({ name: 'dive', depth: depth() });
   // A charge takes this slot and the next; it must release by slot 3.
   if (s.globalSlot % R.SLOTS_PER_EXCHANGE < 2) {
@@ -265,8 +267,8 @@ function advance(s: Situation, a: ActionSpec): Situation {
   const readyAt = { ...s.readyAt };
   const cd = ACTIONS[a.name].cooldown;
   if (cd > 0) readyAt[a.name] = s.globalSlot + cd + 1;
-  const step = R.BAND_MOVE; // a Leap or Dive carries a band
-  const z = a.name === 'leap' && s.f.sheet.flies ? Math.min(R.MAX_ALTITUDE, s.z + step) : a.name === 'dive' ? Math.max(0, s.z - step) : a.name === 'claw' && s.f.sheet.aspect === 'talons' ? 0 : s.z;
+  const step = s.rules.BAND_MOVE; // a Leap or Dive carries a band
+  const z = a.name === 'leap' && s.f.sheet.flies ? Math.min(s.rules.MAX_ALTITUDE, s.z + step) : a.name === 'dive' ? Math.max(0, s.z - step) : a.name === 'claw' && s.f.sheet.aspect === 'talons' ? 0 : s.z;
   return { ...s, globalSlot: s.globalSlot + 1, z, readyAt };
 }
 
@@ -296,7 +298,7 @@ export function value(style: BrainStyle, o: Outcome): number {
   const big = myHits.filter((h) => h.damage >= 9).length;
   const punishes = myHits.filter((h) => h.parts.some((p) => p.includes('punish'))).length;
   const theirMisses = o.events.filter((e) => (e.kind === 'whiff' || e.kind === 'nearMiss' || e.kind === 'evade') && e.attacker === them).length;
-  const late = o.after.exchange >= R.EXCHANGE_LIMIT - 3 && flatLen(me1.pos) >= R.ARENA_RADIUS - R.RIM_DEPTH;
+  const late = o.after.exchange >= o.after.rules.EXCHANGE_LIMIT - 3 && flatLen(me1.pos) >= o.after.rules.ARENA_RADIUS - o.after.rules.RIM_DEPTH;
   const rim = late ? -0.15 : 0;
 
   // Every style reads leverage [Proposed]: a target with a wall or obstacle within a band behind it can be
@@ -331,7 +333,7 @@ function pinned(b: Bout, f: Fighter, from: Fighter): boolean {
   if (flatLen(back) === 0) return false;
   for (let k = 1; k <= R.BAND / R.PACE; k++) {
     const p = add(f.pos, scaleTo(back, k * R.PACE));
-    if (flatLen(p) > R.ARENA_RADIUS || obstacleAt(b.arena, p)) return true;
+    if (flatLen(p) > b.rules.ARENA_RADIUS || obstacleAt(b.arena, p, b.rules)) return true;
   }
   return false;
 }
@@ -362,7 +364,7 @@ function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me
     case 'boxer-puncher':
       return dealt - taken + rim;
     case 'aerialist':
-      return dealt - taken + (me1.pos.z > 0 && op1.pos.z === 0 && sep <= R.STOOP_RANGE ? 0.06 : 0) + rim;
+      return dealt - taken + (me1.pos.z > 0 && op1.pos.z === 0 && sep <= o.after.rules.STOOP_RANGE ? 0.06 : 0) + rim;
     case 'reader':
       return dealt - taken + (op1.marks.revisionLockedFor > o.after.exchange ? 0.05 : 0) + (me1.marks.eye !== null ? 0.03 : 0) + rim;
     case 'kite-focus':
@@ -396,7 +398,7 @@ function boutFromView(view: View): Bout {
   return {
     fighters, challenged: 'B', exchange: view.exchange, globalSlot: view.globalSlot,
     startWounds: { ...view.startWounds }, history: structuredClone(view.history) as Bout['history'],
-    record: structuredClone(view.record), arena: structuredClone(view.arena), over: false, winner: null,
+    record: structuredClone(view.record), arena: structuredClone(view.arena), over: false, winner: null, rules: view.rules,
   };
 }
 
@@ -440,8 +442,8 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const me = view.side;
       const them = view.opp.side;
       const sep = view.separation;
-      const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt };
-      const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt };
+      const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt, rules: view.rules };
+      const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt, rules: view.rules };
 
       // Candidates: mostly in the style's lean, some anything-goes, plus last exchange's script.
       const candidates: ActionSpec[][] = [];
@@ -468,7 +470,7 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const values = candidates.map((c) => {
         let total = 0;
         for (const g of guesses) {
-          const b = structuredClone(base);
+          const b = cloneBout(base);
           const events = runExchange(b, { [me]: c, [them]: g } as Record<Side, ActionSpec[]>);
           total += value(style, { before: base, after: b, events, me });
         }
@@ -491,8 +493,8 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const base = boutFromView(view);
       const me = view.side;
       const them = view.opp.side;
-      const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt };
-      const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt };
+      const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt, rules: view.rules };
+      const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt, rules: view.rules };
       const options = [current[2], ...legalActions(mine, rng).filter((a) => !a.charge && !a.setup && a.name !== current[2].name && allowed(style, a))];
       let theirOptions = legalActions(theirs, rng);
       // A charge on the board releases next slot: no guessing needed.
@@ -511,7 +513,7 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const values = options.map((o, i) => {
         let total = 0;
         for (const g of guesses) {
-          const b = structuredClone(base);
+          const b = cloneBout(base);
           const events = simulateSlot(b, { [me]: i === 0 ? o : { ...o, revised: true }, [them]: g } as Record<Side, ActionSpec>);
           total += value(style, { before: base, after: b, events, me });
         }
@@ -527,7 +529,7 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
 
 /** The best answer to one guessed opponent script, chosen slot by slot by playing each option in the Referee. */
 function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, guess: ActionSpec[], mine: Situation, rng: () => number): ActionSpec[] {
-  const b = structuredClone(base);
+  const b = cloneBout(base);
   let s = mine;
   const out: ActionSpec[] = [];
   for (let i = 0; i < R.SLOTS_PER_EXCHANGE; i++) {
@@ -542,11 +544,11 @@ function counterScript(style: BrainStyle, base: Bout, me: Side, them: Side, gues
     const first = (x: ActionSpec): ActionSpec => (x.setup === 'strafe' ? { name: 'strafe', dir: x.dir } : x.setup === 'approach' ? { name: 'approach' } : x);
     const second = (x: ActionSpec): ActionSpec => ({ name: x.name, sweep: x.sweep });
     for (const a of legalActions(s, rng).filter((x) => (!(x.charge || x.setup) || twoSlot(x)) && allowed(style, x))) {
-      const trial = structuredClone(b);
+      const trial = cloneBout(b);
       const events = simulateSlot(trial, { [me]: first(a), [them]: guess[i] } as Record<Side, ActionSpec>);
       let v = value(style, { before: b, after: trial, events, me });
       if (twoSlot(a) && !trial.over) {
-        const mid = structuredClone(trial);
+        const mid = cloneBout(trial);
         const more = simulateSlot(trial, { [me]: second(a), [them]: guess[i + 1] } as Record<Side, ActionSpec>);
         v = (v + value(style, { before: mid, after: trial, events: more, me })) / 2;
       }
@@ -632,7 +634,7 @@ function tell(style: BrainStyle, script: ActionSpec[], view: View, show: boolean
       break;
     case 'bite-focus':
       if (sep <= R.MELEE_EDGE) set(0, { name: 'retreat' });
-      else if (sep > R.BITE_REACH) set(0, { name: 'approach' });
+      else if (sep > view.rules.BITE_REACH) set(0, { name: 'approach' });
       break;
     case 'breath-focus':
       if (sep <= R.CLOSE_EDGE) set(0, { name: 'retreat' });

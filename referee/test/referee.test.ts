@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction } from '../src/actions.ts';
 import { hatch, matchup } from '../src/hatch.ts';
+import * as R from '../src/rules.ts';
 import { newBout, runExchange, timing, type Event, type FighterSetup, type Side } from '../src/referee.ts';
 
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
@@ -59,9 +60,9 @@ test('element wheel: each element beats the three clockwise of it; opposites are
 // ---- Timing (§4) ----
 
 test('timing shifts move the active window; the action stays 30 ticks', () => {
-  assert.deepEqual(timing([12, 6, 12], -3, 5), [9, 4, 17]);
-  assert.deepEqual(timing([12, 6, 12], -5, 3), [7, 8, 15]);
-  for (const t of [timing([12, 6, 12], 3, 5), timing([15, 6, 9], 9, 9)]) {
+  assert.deepEqual(timing(R.DEFAULT_RULES, [12, 6, 12], -3, 5), [9, 4, 17]);
+  assert.deepEqual(timing(R.DEFAULT_RULES, [12, 6, 12], -5, 3), [7, 8, 15]);
+  for (const t of [timing(R.DEFAULT_RULES, [12, 6, 12], 3, 5), timing(R.DEFAULT_RULES, [15, 6, 9], 9, 9)]) {
     assert.equal(t[0] + t[1] + t[2], 30);
     assert.ok(t[1] >= 3, 'active window floor');
   }

@@ -4,7 +4,7 @@ import { HOLD, parseAction, type ActionSpec } from './actions.ts';
 import type { ArenaSetup } from './arena.ts';
 import { aiController, STYLES, type Style } from './ai.ts';
 import { brainController, BRAIN_STYLES, SKILLS, type BrainStyle, type Skill } from './brain.ts';
-import { DEFAULT_RULES, type Controller, type Ruleset, type View } from './bout.ts';
+import { DEFAULT_FORMAT, type Controller, type Format, type View } from './bout.ts';
 import type { FighterSetup, Moment, Side } from './referee.ts';
 import * as R from './rules.ts';
 
@@ -31,7 +31,7 @@ export interface Scenario {
   /** play a full bout: exchange limit, rim pulses, timeout */
   bout?: boolean;
   exchangeLimit?: number;
-  timeout?: Ruleset['timeout'];
+  timeout?: Format['timeout'];
   /** ai: a crude style (brawler, skirmisher, guardian, mixed) or a brain style (swarmer, out-boxer, ...); skill for brains */
   A: FighterSetup & { ai?: Style | BrainStyle; seed?: number; skill?: Skill };
   B: FighterSetup & { ai?: Style | BrainStyle; seed?: number; skill?: Skill };
@@ -40,20 +40,20 @@ export interface Scenario {
   arena?: ArenaSetup;
 }
 
-export function rulesFor(sc: Scenario): Ruleset {
+export function formatFor(sc: Scenario): Format {
   if (sc.bout) {
     return {
-      exchangeLimit: sc.exchangeLimit ?? DEFAULT_RULES.exchangeLimit,
-      timeout: sc.timeout ?? DEFAULT_RULES.timeout,
+      exchangeLimit: sc.exchangeLimit,
+      timeout: sc.timeout ?? DEFAULT_FORMAT.timeout,
       lateGame: true,
     };
   }
   // Without "bout", play only the listed exchanges: no pulses, no timeout verdict.
-  return { ...DEFAULT_RULES, exchangeLimit: sc.exchanges?.length ?? 1, lateGame: false };
+  return { ...DEFAULT_FORMAT, exchangeLimit: sc.exchanges?.length ?? 1, lateGame: false };
 }
 
 export function separationOf(sc: Scenario): number {
-  return sc.separation ?? R.START_SEPARATION / R.PACE;
+  return sc.separation ?? R.DEFAULT_RULES.START_SEPARATION / R.PACE;
 }
 
 function conditionHolds(cond: string, view: View, opponentRevised: boolean, revealed: string | null): boolean {

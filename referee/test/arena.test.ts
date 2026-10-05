@@ -78,11 +78,9 @@ test('Stalwart: a True Dragon\'s own zones never harm it', () => {
 
 test('Stalwart: each charging slot widens a True Dragon\'s released Breath by ½ pace', () => {
   // At a ½-pace radius, a slow target retreating out of it slips a plain blast; a charged one is widened.
-  const r0 = R.BREATH.blast.radius;
-  (R.BREATH.blast as { radius: number }).radius = Math.floor(R.PACE / 2);
-  const plain = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['hold', 'breath'], ['hold', 'retreat']);
-  const charged = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['charge:breath', 'charge:breath', 'breath'], ['hold', 'hold', 'retreat']);
-  (R.BREATH.blast as { radius: number }).radius = r0;
+  const rules = R.rulesWith({ BREATH: { blast: { radius: Math.floor(R.PACE / 2) } } });
+  const plain = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5, 'B', {}, rules), ['hold', 'breath'], ['hold', 'retreat']);
+  const charged = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5, 'B', {}, rules), ['charge:breath', 'charge:breath', 'breath'], ['hold', 'hold', 'retreat']);
   assert.equal(hits(plain).filter((h) => h.attacker === 'A').length, 0, 'the plain blast misses the retreat');
   assert.equal(hits(charged).filter((h) => h.attacker === 'A').length, 1, 'two charging slots widen it a pace: it catches the retreat');
 });
@@ -93,7 +91,7 @@ test('Water pushes the target back a band', () => {
   const bout = newBout({ name: 'T', morph: 'wyrm', stone: 'water' }, TD_WATER, 4);
   const before = bout.fighters.B.pos.x;
   run(bout, ['breath'], ['hold']);
-  assert.equal(bout.fighters.B.pos.x - before, R.WATER_PUSH);
+  assert.equal(bout.fighters.B.pos.x - before, R.DEFAULT_RULES.WATER_PUSH);
 });
 
 const AIR_WYRM: FighterSetup = { name: 'G', morph: 'wyrm', stone: 'air' };
@@ -102,17 +100,17 @@ const sepOf = (bout: Bout) => Math.hypot(bout.fighters.A.pos.x - bout.fighters.B
 test('Air\'s vortex pulls the target a band toward the breather', () => {
   const bout = newBout(AIR_WYRM, TD_WATER, 8);
   run(bout, ['breath'], ['hold']);
-  assert.equal(Math.round(sepOf(bout)), 8 * R.PACE - R.AIR_PULL);
+  assert.equal(Math.round(sepOf(bout)), 8 * R.PACE - R.DEFAULT_RULES.AIR_PULL);
 });
 
 test('the pull stops at Close: the vortex at the breather\'s heart throws Melee back out', () => {
   const close = newBout(AIR_WYRM, TD_WATER, 4.5);
   run(close, ['breath'], ['hold']);
-  assert.ok(sepOf(close) > R.MELEE_EDGE && sepOf(close) <= R.MELEE_EDGE + R.SNAP, 'pulled only to the edge of Close');
+  assert.ok(sepOf(close) > R.MELEE_EDGE && sepOf(close) <= R.MELEE_EDGE + R.DEFAULT_RULES.SNAP, 'pulled only to the edge of Close');
   const melee = newBout(AIR_WYRM, TD_WATER, 2);
   const ev = run(melee, ['breath'], ['hold']);
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The vortex at its heart throws it out')));
-  assert.ok(sepOf(melee) > R.MELEE_EDGE && sepOf(melee) <= R.MELEE_EDGE + R.SNAP);
+  assert.ok(sepOf(melee) > R.MELEE_EDGE && sepOf(melee) <= R.MELEE_EDGE + R.DEFAULT_RULES.SNAP);
 });
 
 test('the vortex lowers a flier a band but never grounds it', () => {
@@ -169,7 +167,7 @@ test('seeded boulders: same seed, same map; starting spots stay clear', () => {
   assert.deepEqual(a, b);
   assert.equal(a.obstacles.length, 7);
   for (const o of a.obstacles.filter((x) => x.kind === 'boulder')) {
-    for (const k of keep) assert.ok(Math.hypot(o.pos.x - k.x, o.pos.y - k.y) >= o.radius + R.BOULDER_CLEARANCE);
+    for (const k of keep) assert.ok(Math.hypot(o.pos.x - k.x, o.pos.y - k.y) >= o.radius + R.DEFAULT_RULES.BOULDER_CLEARANCE);
   }
 });
 
@@ -219,23 +217,23 @@ test('Water\'s jet pushes the target back a whole band', () => {
   const bout = newBout(TD_WATER, TD_AIR, 5);
   const x0 = bout.fighters.B.pos.x;
   run(bout, ['breath'], ['hold']);
-  assert.equal(bout.fighters.B.pos.x - x0, R.WATER_PUSH);
+  assert.equal(bout.fighters.B.pos.x - x0, R.DEFAULT_RULES.WATER_PUSH);
 });
 
 test('a push into the arena wall slams for 3', () => {
   const bout = newBout(TD_WATER, TD_AIR, 5);
-  bout.fighters.A.pos = { x: R.ARENA_RADIUS - 6 * R.PACE, y: 0, z: 0 };
-  bout.fighters.B.pos = { x: R.ARENA_RADIUS - R.PACE, y: 0, z: 0 };
+  bout.fighters.A.pos = { x: R.DEFAULT_RULES.ARENA_RADIUS - 6 * R.PACE, y: 0, z: 0 };
+  bout.fighters.B.pos = { x: R.DEFAULT_RULES.ARENA_RADIUS - R.PACE, y: 0, z: 0 };
   const w0 = bout.fighters.B.wounds;
   const ev = run(bout, ['breath'], ['hold']);
-  assert.ok(ev.some((e) => e.kind === 'note' && e.text === `Slammed into the arena wall: takes ${R.SLAM_DAMAGE}.`));
-  assert.equal(w0 - bout.fighters.B.wounds, hits(ev)[0].damage + R.SLAM_DAMAGE);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text === `Slammed into the arena wall: takes ${R.DEFAULT_RULES.SLAM_DAMAGE}.`));
+  assert.equal(w0 - bout.fighters.B.wounds, hits(ev)[0].damage + R.DEFAULT_RULES.SLAM_DAMAGE);
 });
 
 test('a push into an obstacle slams for 3', () => {
   const bout = newBout(TD_WATER, TD_AIR, 5, 'B', { obstacles: [{ size: 'large', x: 5, y: 0 }] });
   const ev = run(bout, ['breath'], ['hold']);
-  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Slammed into') && e.text.endsWith(`takes ${R.SLAM_DAMAGE}.`)));
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Slammed into') && e.text.endsWith(`takes ${R.DEFAULT_RULES.SLAM_DAMAGE}.`)));
 });
 
 test('Water\'s jet shoves a boulder it strikes', () => {
@@ -295,7 +293,7 @@ test('Scales, Dodge and a Breath charge held to the end each fill Affinity + the
     const bout = newBout(TD_WATER, TD_WATER, 6);
     const m0 = bout.fighters.A.meter;
     simulateSlot(bout, { A: parseAction(action), B: parseAction('hold') });
-    assert.equal(bout.fighters.A.meter, m0 + 9 + R.METER_BASE_FILL, action);
+    assert.equal(bout.fighters.A.meter, m0 + 9 + R.DEFAULT_RULES.METER_BASE_FILL, action);
   }
   const bite = newBout(TD_WATER, TD_WATER, 6);
   const m0 = bite.fighters.A.meter;
@@ -308,7 +306,7 @@ test('a landed Breath fills the breather by its Affinity + the base fill', () =>
   const m0 = bout.fighters.A.meter;
   const ev = run(bout, ['breath'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(bout.fighters.A.meter, m0 + 3 + R.METER_BASE_FILL, 'True Dragon + Earth, Affinity 3');
+  assert.equal(bout.fighters.A.meter, m0 + 3 + R.DEFAULT_RULES.METER_BASE_FILL, 'True Dragon + Earth, Affinity 3');
 });
 
 test('a full meter makes the next landed hit true damage, then empties; a miss spends nothing', () => {
@@ -364,24 +362,19 @@ test('Stomp deals 3 + Hardness ÷ 3, and its quake shatters boulders inside its 
 test('between slots, separation snaps to the nearest ½ pace', () => {
   const bout = newBout(TD_WATER, TD_WATER, 6.2);
   run(bout, ['hold'], ['hold']);
-  assert.equal(Math.round(sepOf(bout)) % R.SNAP, 0);
+  assert.equal(Math.round(sepOf(bout)) % R.DEFAULT_RULES.SNAP, 0);
   assert.equal(Math.round(sepOf(bout)), 6 * R.PACE);
 });
 
 // ---- Aim settles by Accuracy [Proposed] ----
 
 test('aim follows through the wind-up and settles 12 − Accuracy ticks out: radius then decides slow movers', () => {
-  const r0 = R.BREATH.blast.radius;
   const fire = (radius: number, target: FighterSetup, move: string) => {
-    (R.BREATH.blast as { radius: number }).radius = Math.floor(radius * R.PACE);
-    const ev = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, target, 5), ['breath'], [move]);
+    const rules = R.rulesWith({ BREATH: { blast: { radius: Math.floor(radius * R.PACE) } } });
+    const ev = run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, target, 5, 'B', {}, rules), ['breath'], [move]);
     return hits(ev).filter((h) => h.attacker === 'A').length;
   };
-  try {
-    assert.equal(fire(0.5, TD_WATER, 'retreat'), 0, "a ½-pace blast misses a slow True Dragon's retreat");
-    assert.equal(fire(0.75, TD_WATER, 'retreat'), 1, 'a ¾-pace blast catches it');
-    assert.equal(fire(1, { name: 'W', morph: 'wyvern', stone: 'water' }, 'retreat'), 0, "a Wyvern's quick move slips even 1 pace");
-  } finally {
-    (R.BREATH.blast as { radius: number }).radius = r0;
-  }
+  assert.equal(fire(0.5, TD_WATER, 'retreat'), 0, "a ½-pace blast misses a slow True Dragon's retreat");
+  assert.equal(fire(0.75, TD_WATER, 'retreat'), 1, 'a ¾-pace blast catches it');
+  assert.equal(fire(1, { name: 'W', morph: 'wyvern', stone: 'water' }, 'retreat'), 0, "a Wyvern's quick move slips even 1 pace");
 });

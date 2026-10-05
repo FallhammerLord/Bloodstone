@@ -3,6 +3,7 @@
 import { ACTIONS, HOLD, describe, type ActionSpec } from '../actions.ts';
 import { dist, type Vec } from '../geometry.ts';
 import * as R from '../rules.ts';
+import type { Rules } from '../rules.ts';
 import type { Event } from './events.ts';
 import { eff } from './riders.ts';
 import { A, E, type Fighter, J, V, W, tech } from './state.ts';
@@ -70,17 +71,17 @@ export function lastActiveTick(p: Plan, t: number): number {
 }
 
 /** A crunch half's profile: wind-up and recovery halve, rounding down; the active window absorbs the rest [Proposed]. */
-export function halfTiming(profile: readonly [number, number, number], extraRecovery: number): [number, number, number] {
+export function halfTiming(rules: Rules, profile: readonly [number, number, number], extraRecovery: number): [number, number, number] {
   let w = Math.floor(profile[0] / 2);
   let r = Math.floor(profile[2] / 2) + extraRecovery;
   let a = R.HALF - w - r;
-  if (a < R.MIN_ACTIVE) {
-    let need = R.MIN_ACTIVE - a;
+  if (a < rules.MIN_ACTIVE) {
+    let need = rules.MIN_ACTIVE - a;
     const fromR = Math.min(r, need);
     r -= fromR;
     need -= fromR;
     w -= need;
-    a = R.MIN_ACTIVE;
+    a = rules.MIN_ACTIVE;
   }
   return [w, a, r];
 }
@@ -101,23 +102,23 @@ export function phase(p: Plan, t: number): Phase {
 }
 
 /** Shifts move the active window's edges; the action always totals 30 ticks [Doc]. */
-export function timing(profile: readonly [number, number, number], windupShift: number, recoveryShift: number): [number, number, number] {
+export function timing(rules: Rules, profile: readonly [number, number, number], windupShift: number, recoveryShift: number): [number, number, number] {
   let w = Math.max(0, profile[0] + windupShift);
   let r = Math.max(0, profile[2] + recoveryShift);
   let a = R.TICKS_PER_SLOT - w - r;
-  if (a < R.MIN_ACTIVE) {
+  if (a < rules.MIN_ACTIVE) {
     // Shifts past the floor are lost: trim recovery first, then wind-up.
-    let need = R.MIN_ACTIVE - a;
+    let need = rules.MIN_ACTIVE - a;
     const fromR = Math.min(r, need);
     r -= fromR;
     need -= fromR;
     w -= need;
-    a = R.MIN_ACTIVE;
+    a = rules.MIN_ACTIVE;
   }
   return [w, a, r];
 }
 
-export function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: number, slot: number, prevLanded: boolean, ev: Event[]): Plan {
+export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: ActionSpec, g: number, slot: number, prevLanded: boolean, ev: Event[]): Plan {
   let spec = requested;
   const note = (text: string) => ev.push({ kind: 'note', tick: 0, side: f.side, text });
 
@@ -197,8 +198,8 @@ export function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: num
     const gr = f.marks.goaded;
     f.marks.goaded = null;
     if (spec.name === 'retreat' || (gr >= E && spec.name === 'dodge')) {
-      f.wounds -= R.TECHNIQUE_POINTS;
-      note(`Goaded into a ${describe(spec)}: takes ${R.TECHNIQUE_POINTS}.`);
+      f.wounds -= rules.TECHNIQUE_POINTS;
+      note(`Goaded into a ${describe(spec)}: takes ${rules.TECHNIQUE_POINTS}.`);
       if (gr >= V) f.status.rattled = true;
     }
   }
@@ -210,7 +211,7 @@ export function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: num
   if (cooldown > 0 && !spec.charge) f.readyAt[spec.name] = g + cooldown + 1;
 
   // Timing shifts move the active window's edges.
-  let wShift = f.status.rattled ? R.RATTLED_WINDUP : 0;
+  let wShift = f.status.rattled ? rules.RATTLED_WINDUP : 0;
   let rShift = 0;
   const snap = tech(f, 'snapping-jaw');
   if (spec.name === 'bite' && snap >= W) {
@@ -226,7 +227,7 @@ export function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: num
     wShift -= 3;
     f.marks.quick = null;
   }
-  let [windup, active, recovery] = timing(def.profile, wShift, rShift);
+  let [windup, active, recovery] = timing(rules, def.profile, wShift, rShift);
 
   let moveTotal = 0;
   let travel = active;
@@ -235,18 +236,18 @@ export function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: num
     // Evasion buys a move's timing and finesse, not (for band moves) its reach [Proposed]. Staggered halves it.
     const evasion = Math.max(1, Math.floor(eff(f, 'evasion', {}).value / (f.status.staggered ? 2 : 1)));
     if (spec.name === 'strafe') {
-      moveTotal = Math.min(evasion * R.EVASION_STEP, R.MOVE_CAP);
+      moveTotal = Math.min(evasion * rules.EVASION_STEP, rules.MOVE_CAP);
     } else {
       // Approach, Retreat, Leap and Dive carry a band; Evasion picks the landing within it.
-      const finesse = Math.floor((evasion * R.PACE) / R.MOVE_DEPTH_DIVISOR);
-      moveTotal = R.BAND_MOVE + (spec.depth === 'long' ? finesse : spec.depth === 'short' ? -finesse : 0);
+      const finesse = Math.floor((evasion * R.PACE) / rules.MOVE_DEPTH_DIVISOR);
+      moveTotal = rules.BAND_MOVE + (spec.depth === 'long' ? finesse : spec.depth === 'short' ? -finesse : 0);
       // Bounding Haunches: an Approach carries two bands [Doc].
-      if (bounding) moveTotal += R.BAND_MOVE;
+      if (bounding) moveTotal += rules.BAND_MOVE;
     }
     // Wind-up, then an evasive active window of 2 × Evasion ticks, then recovery; travel runs 72 ÷ Evasion ticks.
-    active = Math.min(R.TICKS_PER_SLOT - windup, Math.max(R.MIN_ACTIVE, R.EVADE_TICKS_PER_POINT * evasion));
+    active = Math.min(R.TICKS_PER_SLOT - windup, Math.max(rules.MIN_ACTIVE, rules.EVADE_TICKS_PER_POINT * evasion));
     recovery = R.TICKS_PER_SLOT - windup - active;
-    travel = Math.min(R.TICKS_PER_SLOT - windup, Math.max(1, Math.round(R.MOVE_SPEED / evasion)));
+    travel = Math.min(R.TICKS_PER_SLOT - windup, Math.max(1, Math.round(rules.MOVE_SPEED / evasion)));
     if (spec.name === 'strafe' && sw >= W && (sw < A || spec.shift)) moveTotal = Math.max(0, moveTotal - R.PACE);
     if (spec.shift) shiftTotal = (sw >= A ? 2 : 1) * R.PACE;
     if (f.status.slowed) travel = Math.min(R.TICKS_PER_SLOT - windup, travel + 3);
@@ -278,7 +279,7 @@ export function makePlan(f: Fighter, opp: Fighter, requested: ActionSpec, g: num
   }
   if (spec.crunch) f.marks.crunchedIn = Math.floor(g / R.SLOTS_PER_EXCHANGE);
   const halves: [number, number, number][] | null = spec.crunch
-    ? [halfTiming(def.profile, 0), halfTiming(def.profile, crunchTech >= A ? 3 : 6)]
+    ? [halfTiming(rules, def.profile, 0), halfTiming(rules, def.profile, crunchTech >= A ? 3 : 6)]
     : null;
   const [w0, a0, r0] = charging ? [0, R.TICKS_PER_SLOT, 0] : halves ? halves[0] : [windup, active, recovery];
 

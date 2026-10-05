@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction, type ActionSpec } from '../src/actions.ts';
 import { aiController, STYLES } from '../src/ai.ts';
-import { DEFAULT_RULES, rimPulse, runBout, viewOf, type Controller } from '../src/bout.ts';
+import { DEFAULT_FORMAT, rimPulse, runBout, viewOf, type Controller } from '../src/bout.ts';
 import { newBout, runExchange, type Event, type FighterSetup } from '../src/referee.ts';
 import * as R from '../src/rules.ts';
 
@@ -29,7 +29,7 @@ test('a revision replaces slot 3 and flashes', () => {
 test('a side sees that the opponent revised, never what to', () => {
   // Controllers see the board and a yes/no flash. No script, revised or not, is part of what they see.
   const view = viewOf(newBout(TD_WATER, TD_WATER, 4), 'A');
-  assert.deepEqual(Object.keys(view).sort(), ['arena', 'exchange', 'globalSlot', 'history', 'me', 'opp', 'record', 'separation', 'side', 'startWounds']);
+  assert.deepEqual(Object.keys(view).sort(), ['arena', 'exchange', 'globalSlot', 'history', 'me', 'opp', 'record', 'rules', 'separation', 'side', 'startWounds']);
   assert.ok(!JSON.stringify(view).includes('slots'));
 });
 
@@ -64,15 +64,15 @@ test('a revised slot 3 gets no chain bonus', () => {
 // ---- Late pressure (§5) ----
 
 function onRim(bout: ReturnType<typeof newBout>) {
-  bout.fighters.A.pos = { x: -(R.ARENA_RADIUS - R.PACE), y: 0, z: 0 };
+  bout.fighters.A.pos = { x: -(R.DEFAULT_RULES.ARENA_RADIUS - R.PACE), y: 0, z: 0 };
 }
 
 test('pulse 1 can\'t kill: it leaves 1 point at worst', () => {
   const bout = newBout(TD_WATER, TD_WATER, 6);
   onRim(bout);
   bout.fighters.A.wounds = 5;
-  bout.exchange = DEFAULT_RULES.exchangeLimit - 2; // pulse 1
-  rimPulse(bout, DEFAULT_RULES);
+  bout.exchange = R.DEFAULT_RULES.EXCHANGE_LIMIT - 2; // pulse 1
+  rimPulse(bout);
   assert.equal(bout.fighters.A.wounds, 1);
   assert.equal(bout.over, false);
 });
@@ -81,16 +81,16 @@ test('pulse 2 kills only a dragon pulse 1 already hit', () => {
   const fresh = newBout(TD_WATER, TD_WATER, 6);
   onRim(fresh);
   fresh.fighters.A.wounds = 5;
-  fresh.exchange = DEFAULT_RULES.exchangeLimit - 1;
-  rimPulse(fresh, DEFAULT_RULES);
+  fresh.exchange = R.DEFAULT_RULES.EXCHANGE_LIMIT - 1;
+  rimPulse(fresh);
   assert.equal(fresh.fighters.A.wounds, 1);
 
   const pulsed = newBout(TD_WATER, TD_WATER, 6);
   onRim(pulsed);
   pulsed.fighters.A.wounds = 5;
   pulsed.fighters.A.pulsed = true;
-  pulsed.exchange = DEFAULT_RULES.exchangeLimit - 1;
-  rimPulse(pulsed, DEFAULT_RULES);
+  pulsed.exchange = R.DEFAULT_RULES.EXCHANGE_LIMIT - 1;
+  rimPulse(pulsed);
   assert.equal(pulsed.over, true);
   assert.equal(pulsed.winner, 'B');
 });
@@ -98,8 +98,8 @@ test('pulse 2 kills only a dragon pulse 1 already hit', () => {
 test('pulses deal a third of maximum Wounds and spare the center', () => {
   const bout = newBout(TD_WATER, TD_WATER, 6);
   onRim(bout);
-  bout.exchange = DEFAULT_RULES.exchangeLimit;
-  const ev = rimPulse(bout, DEFAULT_RULES);
+  bout.exchange = R.DEFAULT_RULES.EXCHANGE_LIMIT;
+  const ev = rimPulse(bout);
   assert.equal(bout.fighters.A.wounds, 45 - 15);
   assert.equal(bout.fighters.B.wounds, 45);
   assert.equal(ev.filter((e) => e.kind === 'pulse').length, 1);
@@ -110,7 +110,7 @@ test('pulses deal a third of maximum Wounds and spare the center', () => {
 test('a bout runs to the exchange limit, then the challenger forfeits', () => {
   const bout = newBout(TD_WATER, TD_WATER, 6, 'B');
   const ev = runBout(bout, { A: scripted([]), B: scripted([]) });
-  assert.equal(bout.exchange, DEFAULT_RULES.exchangeLimit);
+  assert.equal(bout.exchange, R.DEFAULT_RULES.EXCHANGE_LIMIT);
   assert.equal(bout.winner, 'B');
   assert.ok(ev.some((e) => e.kind === 'boutEnd' && e.reason.startsWith('timeout')));
   assert.equal(bout.fighters.A.wounds, 45, 'timeouts are never lethal');
@@ -118,7 +118,7 @@ test('a bout runs to the exchange limit, then the challenger forfeits', () => {
 
 test('open-lobby timeout can go to most Wounds', () => {
   const bout = newBout(TD_WATER, TD_WATER, 4, 'B');
-  runBout(bout, { A: scripted([['bite', 'hold', 'hold']]), B: scripted([]) }, { ...DEFAULT_RULES, timeout: 'mostWounds' });
+  runBout(bout, { A: scripted([['bite', 'hold', 'hold']]), B: scripted([]) }, { ...DEFAULT_FORMAT, timeout: 'mostWounds' });
   assert.equal(bout.winner, 'A');
 });
 

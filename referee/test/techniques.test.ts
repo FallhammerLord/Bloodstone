@@ -118,7 +118,7 @@ test('Bounding Haunches: an Approach carries twice as far', () => {
   const bound = newBout(withTech(TD_WATER, 'Bounding Haunches', 'juvenile'), TD_WATER, 8);
   run(plain, ['approach'], ['hold']);
   run(bound, ['approach'], ['hold']);
-  assert.equal(bound.fighters.A.pos.x - plain.fighters.A.pos.x, R.BAND_MOVE);
+  assert.equal(bound.fighters.A.pos.x - plain.fighters.A.pos.x, R.DEFAULT_RULES.BAND_MOVE);
 });
 
 test('Thornscale: attackers landing into Scales take 3', () => {

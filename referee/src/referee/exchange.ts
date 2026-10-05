@@ -96,14 +96,14 @@ export function snapSeparation(bout: Bout) {
   const line = flat(sub(B.pos, A.pos));
   const d = flatLen(line);
   if (d === 0) return;
-  const target = Math.round(d / R.SNAP) * R.SNAP;
+  const target = Math.round(d / bout.rules.SNAP) * bout.rules.SNAP;
   const diff = target - d;
   if (diff === 0) return;
   const half = scaleTo(line, Math.trunc(diff / 2));
   const nA = { ...sub(A.pos, half), z: A.pos.z };
   const nB = { ...add(B.pos, scaleTo(line, diff - Math.trunc(diff / 2))), z: B.pos.z };
-  const ok = (p: Vec) => flatLen(p) <= R.ARENA_RADIUS && !obstacleAt(bout.arena, p);
-  if (!ok(nA) || !ok(nB) || dist(nA, nB) < R.BODY_GAP || dist(nA, nB) > R.LEASH) return;
+  const ok = (p: Vec) => flatLen(p) <= bout.rules.ARENA_RADIUS && !obstacleAt(bout.arena, p, bout.rules);
+  if (!ok(nA) || !ok(nB) || dist(nA, nB) < bout.rules.BODY_GAP || dist(nA, nB) > bout.rules.LEASH) return;
   A.pos = nA;
   B.pos = nB;
 }
@@ -112,8 +112,8 @@ export function snapSeparation(bout: Bout) {
 export function gravity(bout: Bout, s: Side, ev: Event[]) {
   const f = bout.fighters[s];
   if (f.pos.z === 0 || bout.history[s].slice(-R.SLOTS_PER_EXCHANGE).includes('leap')) return;
-  let z = Math.max(0, f.pos.z - R.GRAVITY_DROP);
-  const below = obstacleAt(bout.arena, { ...f.pos, z });
+  let z = Math.max(0, f.pos.z - bout.rules.GRAVITY_DROP);
+  const below = obstacleAt(bout.arena, { ...f.pos, z }, bout.rules);
   if (below) z = Math.max(z, below.height);
   f.pos = { ...f.pos, z };
   ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: z === 0 ? 'No Leap this exchange: gravity brings it down to land.' : `No Leap this exchange: gravity drops it to ${(z / R.PACE).toFixed(1)} paces.` });
@@ -176,8 +176,8 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
   const prev = bout.record.at(-1);
   const prevLanded = (s: Side) => !!prev && prev.landed[s] && prev.actions[s] === specs[s].name;
   const plans: Record<Side, Plan> = {
-    A: makePlan(F.A, F.B, specs.A, g, slot, prevLanded('A'), ev),
-    B: makePlan(F.B, F.A, specs.B, g, slot, prevLanded('B'), ev),
+    A: makePlan(bout.rules, F.A, F.B, specs.A, g, slot, prevLanded('A'), ev),
+    B: makePlan(bout.rules, F.B, F.A, specs.B, g, slot, prevLanded('B'), ev),
   };
   checkKO(bout, ev, 0); // a goaded retreat can be the last straw
 
@@ -209,14 +209,14 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     if (p.spec.name === 'dodge' && !p.evaded && tech(f, 'riposte-talons') >= A) f.readyAt.dodge = (f.readyAt.dodge ?? 0) + 1;
     // Stooping Pinions: a dive from high enough adds +3 to the next attack; the next slot can't Leap below Adult.
     const sp = tech(f, 'stooping-pinions');
-    if (p.spec.name === 'dive' && sp >= W && p.moved > 0 && p.startZ >= (sp === W ? R.STOOPING_HEIGHT.wyrmling : R.STOOPING_HEIGHT.rest)) {
+    if (p.spec.name === 'dive' && sp >= W && p.moved > 0 && p.startZ >= (sp === W ? bout.rules.STOOPING_HEIGHT.wyrmling : bout.rules.STOOPING_HEIGHT.rest)) {
       f.marks.diveBonus = true;
       f.marks.noLeap = sp < A;
       ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, text: 'Stooping Pinions: +3 to the next attack.' });
     }
     // Guarding to the end, or drawing a Breath, fills the Acumen meter [Proposed]. A broken charge fills nothing.
-    if ((p.spec.name === 'scales' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(f, p.spec.name === 'scales' ? 'Scales' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);
-    if (p.charging && p.spec.name === 'breath' && f.marks.charge?.action === 'breath') fillMeter(f, 'drawing Breath', R.TICKS_PER_SLOT - 1, ev);
+    if ((p.spec.name === 'scales' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(bout.rules, f, p.spec.name === 'scales' ? 'Scales' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);
+    if (p.charging && p.spec.name === 'breath' && f.marks.charge?.action === 'breath') fillMeter(bout.rules, f, 'drawing Breath', R.TICKS_PER_SLOT - 1, ev);
     bout.history[s].push(p.spec.name);
     f.marks.advanced = p.spec.name === 'approach' && p.converted === null && p.moved > 0;
     f.marks.strafed = p.spec.name === 'strafe' && p.converted === null && p.moved > 0;

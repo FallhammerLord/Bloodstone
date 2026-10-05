@@ -3,7 +3,7 @@
 //   npm run tourney [-- --rounds 2]
 
 import { aiController, STYLES } from './ai.ts';
-import { DEFAULT_RULES, runBout } from './bout.ts';
+import { runBout } from './bout.ts';
 import type { CoreStone, Morph } from './hatch.ts';
 import { newBout, type FighterSetup, type Side } from './referee.ts';
 import { standardBoulders } from './arena.ts';
@@ -69,8 +69,8 @@ for (const a of entrants) {
             const rng = seededRandom(seed);
             const la = withShards ? randomLoadout(rng) : undefined;
             const lb = withShards ? randomLoadout(rng) : undefined;
-            const bout = newBout({ ...a.setup, shards: la }, { ...b.setup, shards: lb }, R.START_SEPARATION / R.PACE, challenged, { boulders: standardBoulders(seed), seed });
-            const events = runBout(bout, { A: aiController(styleA, seed), B: aiController(styleB, seed + 1) }, DEFAULT_RULES);
+            const bout = newBout({ ...a.setup, shards: la }, { ...b.setup, shards: lb }, R.DEFAULT_RULES.START_SEPARATION / R.PACE, challenged, { boulders: standardBoulders(seed), seed });
+            const events = runBout(bout, { A: aiController(styleA, seed), B: aiController(styleB, seed + 1) });
             const end = events.find((e) => e.kind === 'boutEnd');
             if (end?.reason.startsWith('timeout')) endings.timeout++;
             else if (events.some((e) => e.kind === 'pulse' && e.woundsLeft <= 0)) endings.pulse++;
