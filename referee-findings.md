@@ -1,6 +1,36 @@
 # Referee Findings
 *What building and testing the Dragon Duel rules engine has shown so far. For the project chat. Companion to `dragon-duel-design.md`.*
 
+## Round 11: Claws +3, vortex ½ pace, swings move Wounds
+
+Three changes since Round 10, in one run, so attribution is by reasoning:
+- **Every Claw +3 Sharpness** (Water 6, Earth 9, Fire 9, Air 12).
+- **Air's vortex radius ½ pace** (was 1), aiming its land rate at Fire's.
+- **The body side of every swing is Wounds, in 6s** [Proposed]. Signature defenses stay at base (True Dragon Wounds, Wyvern Evasion, Wyrm Hardness); no swing feeds a derived stat.
+
+Master, 1,752 bouts.
+
+| | Round 10 | Round 11 |
+|---|---|---|
+| Damage: Breath / Bite / Claw | 34 / 40 / 25% | 28 / 29 / 42% |
+| Air Breath lands | 75% | 55% (Fire 45%) |
+| Stones (Air / Fire / Earth / Water) | 67 / 49 / 45 / 39 | 69 / 53 / 44 / 34 |
+| Morphs (TD / Wyrm / Wyvern) | 53 / 50 / 47 | 48 / 52 / 50 |
+| Wyrm + Water / Wyrm + Air | 36 / 68% | 32 / 73% |
+| Top / bottom pairing | TD + Air 73% / Wyrm + Water 36% | TD + Air 74% / TD + Water 24% |
+| claw-focus | 63% | 63% |
+| Timeouts | 18% | 15% |
+| Crunchling vs plain | 71% | 74% |
+
+**What it shows:**
+- **Claw is now the main attack (42% of damage)**, as expected from raising every Claw. Melee is where bouts are decided.
+- **The vortex fix worked:** Air's Breath lands 55%, close to Fire's 45%.
+- **Morphs are tight (48–52%).** The Wounds swing kept every morph's identity and the morph spread narrowed.
+- **The swing didn't rescue Wyrm + Water (32%), and Wyrm + Air rose (73%).** Raising every Claw outweighed the durability change: Wyrm + Air (Claw 9, 36 Wounds) gained more from Claws than it lost from Hardness.
+- **Stone balance follows the attack mix.** Air's peak is Claw and Water's valley is Claw. In Breath-heavy rounds Water won 53%; with Claw at 42% of damage it wins 34%, and True Dragon + Water (no swing, the plain Water dragon) is last at 24%. Water's peak, Affinity, defends against the least-used attack (Breath, 28%).
+
+**The structural point:** each stone has a peak in one attack or defense, so whichever attack dominates crowns the stone that peaks in it. Stones balance when the three attacks carry roughly equal shares of damage. Round 7 came closest (34 / 38 / 28), and Air still led there, so Air's lead is partly the shape of its kit (pull into its own Claw) and partly the mix.
+
 ## Round 10: Air's vortex
 
 Changes from Round 9 [Proposed]:
