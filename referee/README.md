@@ -72,8 +72,9 @@ Leap rises and Dive descends, up to one band each, to a ceiling of 9 paces. Appr
 
 ## Aspects
 
-Each morph bends one rule (design doc §2). The True Dragon's Aspect is having none.
-- **Wyvern, Talons:** it bends the one-band move rule. A Claw from the air against a grounded opponent anywhere within Far is a stoop: the Wyvern flies to the ground during the wind-up, lands at Melee, and swipes both ways. Against an airborne opponent it simply claws. Its price is positional: it must leap first, and it lands in Bite range. From the ground its Claw reaches only 2 paces (forelimbs are wings).
+Each morph bends one rule (design doc §2).
+- **True Dragon, Stalwart** [Proposed]: its charges hold. A hit breaks a True Dragon's charge only if it deals 6 or more after the charging guard. Its 45 Wounds are base (the old +9 Aspect is folded in).
+- **Wyvern, Talons:** it bends the one-band move rule. A Claw from the air against a grounded opponent anywhere within Far is a stoop: the Wyvern flies to the ground during the wind-up, lands at Melee, and swipes both ways. Against an airborne opponent it simply claws. Its price is positional: it must have been aloft since the exchange began, and it lands in Bite range. From the ground its Claw reaches only 2 paces (forelimbs are wings).
 - **Wyrm, Serpentine:** its Strafe tests Evasion with Dodge's +3. It is grounded: its Leap is a hop, and it can't Dive.
 
 ## Breath effects

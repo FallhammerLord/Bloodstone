@@ -51,7 +51,7 @@ export const MATCHUP = 3;
 export const DAMAGE_FLOOR = 1;
 export const STOMP_DAMAGE = 3;
 export const BITE_PIERCE = 3; // [Doc] Bite is piercing; [Assumed] it ignores 3 Hardness
-export const TRUE_DRAGON_WOUNDS = 9; // the True Dragon's Aspect: a flat +9 Wounds (3 Wounds)
+export const STALWART_BREAK = 6; // [Proposed] the True Dragon's Aspect, Stalwart: only a hit of 6 or more (after the charging guard) breaks its charge
 
 // ---- Guards ----
 export const SCALES_HARDNESS = 3; // [Assumed] Hardness bonus while guarding with Scales

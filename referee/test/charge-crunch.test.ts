@@ -19,7 +19,8 @@ test('a charged Bite releases next slot for +3, whatever that slot scripted', ()
 });
 
 test('the charging slot guards like Scales, and a landed hit breaks the charge', () => {
-  const { ev } = run(TD_WATER, { name: 'A', morph: 'true-dragon', stone: 'air' }, 2, ['charge:bite', 'hold'], ['claw:left', 'hold']);
+  // A Wyvern charges (a True Dragon's Stalwart charge would hold through this hit).
+  const { ev } = run({ name: 'V', morph: 'wyvern', stone: 'water' }, { name: 'A', morph: 'true-dragon', stone: 'air' }, 2, ['charge:bite', 'hold'], ['claw:left', 'hold']);
   assert.equal(hits(ev)[0].damage, 9 - (3 + 3), 'Claw 9 against Hardness 3 + 3 guarding');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
   assert.equal(hits(ev).length, 1, 'no release');

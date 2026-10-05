@@ -61,10 +61,18 @@ test('Serpentine: a strafing Wyrm evades like a dodge; a retreating one does not
   assert.equal(hits(ev).length, 1);
 });
 
-test('the True Dragon\'s Aspect, Stalwart: a flat +9 Wounds', () => {
+test('the True Dragon\'s Aspect, Stalwart: its 45 Wounds are base, and a hit under 6 can\'t break its charge', () => {
   const td = newBout(TD_WATER, TD_WATER, 4).fighters.A.sheet;
   assert.equal(td.aspect, 'stalwart');
-  assert.equal(td.wounds, 36 + 9);
+  assert.equal(td.wounds, 45);
+  // A Wyrm + Water Claw of 3 into a charging True Dragon (Hardness 3 + 3 guarding) deals the floor of 1: the charge holds.
+  const chip = newBout(TD_WATER, { name: 'H', morph: 'wyrm', stone: 'water' }, 2);
+  const ev = run(chip, ['charge:breath', 'breath'], ['claw:left', 'hold']);
+  assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('Stalwart: the charge holds')));
+  assert.equal(hits(ev).filter((h) => h.attacker === 'A').length, 1, 'the Breath still releases');
+  // An Earth Bite of 12 into the same guard deals 9: that breaks it. A Wyvern's charge breaks to any hit.
+  const big = newBout(TD_WATER, { name: 'E', morph: 'true-dragon', stone: 'earth' }, 2);
+  assert.ok(run(big, ['charge:breath', 'breath'], ['bite', 'hold']).some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
 });
 
 // ---- Breath effects (§3) ----
@@ -228,7 +236,7 @@ test('Water\'s jet shoves a boulder it strikes', () => {
 });
 
 test('a landed jet breaks a charge', () => {
-  const ev = run(newBout(TD_WATER, TD_AIR, 5), ['breath', 'hold'], ['charge:breath', 'breath']);
+  const ev = run(newBout(TD_WATER, { name: 'W', morph: 'wyvern', stone: 'air' }, 5), ['breath', 'hold'], ['charge:breath', 'breath']);
   assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
 });
 

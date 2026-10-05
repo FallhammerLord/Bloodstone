@@ -1176,8 +1176,13 @@ function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: number,
   p.landedHalves++;
   def.wounds -= total;
   if (defPlan.charging && def.marks.charge) {
-    def.marks.charge = null;
-    ev.push({ kind: 'note', tick: t, side: def.side, text: 'The hit breaks the charge.' });
+    // Stalwart [Proposed]: a True Dragon's charge shrugs off a hit under 6.
+    if (def.sheet.aspect === 'stalwart' && total < R.STALWART_BREAK) {
+      ev.push({ kind: 'note', tick: t, side: def.side, text: `Stalwart: the charge holds through a hit of ${total}.` });
+    } else {
+      def.marks.charge = null;
+      ev.push({ kind: 'note', tick: t, side: def.side, text: 'The hit breaks the charge.' });
+    }
   }
   if (p.halves && p.landedHalves === 2 && p.spec.name === 'bite' && tech(bout.fighters[s], 'gnashing-teeth') >= V) {
     def.pending.rattled = true;

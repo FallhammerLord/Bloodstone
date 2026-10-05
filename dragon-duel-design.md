@@ -71,7 +71,7 @@ A hidden baseline; each morph and each stone takes one +3 peak and one −3 vall
 | Morph | Wounds | Evasion | Hardness | Accuracy (egg) |
 |---|---|---|---|---|
 | Baseline | 30 | 6 | 3 | 6 (+0) |
-| True Dragon | 36 | 3 | 3 | 6 (+3) |
+| True Dragon | 45 | 3 | 3 | 6 (+3) |
 | Wyvern | 24 | 9 | 3 | 6 (−3) |
 | Wyrm | 30 | 6 | 6 | 3 (−3) |
 
@@ -111,8 +111,8 @@ Each morph prefers one element and dislikes the element that beats it.
 
 | Pairing | Swing | Derived knock-on |
 |---|---|---|
-| True Dragon + Fire | Breath 15 → 18, Wounds 36 → 30: a breath cannon | Affinity 6 → 9 |
-| True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill | |
+| True Dragon + Fire | Breath 15 → 18, Wounds 45 → 39: a breath cannon | Affinity 6 → 9 |
+| True Dragon + Earth | Bite 12 → 9, Wounds 45 → 51: the hardest True Dragon to kill | |
 | Wyvern + Air | Claw 9 → 12, Wounds 24 → 18 | |
 | Wyvern + Fire | Breath 15 → 12, Wounds 24 → 30: the toughest Wyvern | Affinity 6 → 3 |
 | Wyrm + Water | Affinity 9 → 12, Wounds 30 → 24: a sea serpent the elements slide off | |
@@ -129,7 +129,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Aspect** is the player-facing name for that bend ("bend" stays as design shorthand).
 - Morphs offer interesting choices and never overshadow base dragons. A True Dragon stands alongside an Ouroboros proudly. Unlock depth measures cost in lifetimes, never power.
 - No RPS at the egg or morph level.
-- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart:** its Aspect is a flat +9 Wounds (3 Wounds), applied after the elemental swing.
+- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 45. Its charges hold: a hit breaks a True Dragon's charge only if it deals 6 or more after the charging guard.
 - **[Proposed]** Readability balances specialists: an Aspect telegraphs through the silhouette.
 - **[Proposed]** Audit rule: an Aspect may change its holder's own actions or respond to generic attack types, never another morph's features.
 - Balance watches pick rate against win rate across every choice. No Aspect should be an obvious best pick.
@@ -284,7 +284,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 12 − 6 = 6. **[Proposed]** Every Breath rose 3, and Affinity with it (it derives from Breath), so Breath damage nets out the same while every Affinity, and so every Acumen meter, gains.
 - **Stomp:** 3 true damage plus Staggered.
 - **Floor:** every landed hit deals at least 1 point.
-- A True Dragon's 45 points (36 plus Stalwart's 9) fall to five landed bites or eight landed breaths.
+- A True Dragon's 45 points fall to five landed bites or eight landed breaths.
 
 **Modifiers:** Intimidate +3 to the next attack; +3 on a chain's third link; punish +3, raised by Acumen; graze −3. Crunched actions carry no modifier: the reward is doing the thing twice.
 
