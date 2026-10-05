@@ -27,20 +27,20 @@ test('swing table: every pairing in the design doc, with derived knock-ons', () 
   const tdE = hatch('true-dragon', 'earth');
   assert.deepEqual([tdE.bite, tdE.wounds], [9, 42 + 9]);
   const wa = hatch('wyvern', 'air');
-  assert.deepEqual([wa.claw, wa.evasion, wa.accuracy], [12, 6, 3]);
+  assert.deepEqual([wa.claw, wa.evasion, wa.accuracy], [15, 6, 3]);
   const wf = hatch('wyvern', 'fire');
   assert.deepEqual([wf.breath, wf.evasion, wf.affinity, wf.accuracy], [9, 12, 0, 9]);
   const ww = hatch('wyrm', 'water');
   assert.deepEqual([ww.affinity, ww.hardness], [9, 3]);
   const wr = hatch('wyrm', 'air');
-  assert.deepEqual([wr.claw, wr.hardness], [6, 9]);
+  assert.deepEqual([wr.claw, wr.hardness], [9, 9]);
 });
 
 test('neutral pairings keep the base tables', () => {
   const h = hatch('true-dragon', 'water');
   assert.equal(h.preference, 'neutral');
   assert.deepEqual([h.wounds, h.evasion, h.hardness, h.accuracy], [36 + 9, 3, 3, 6]);
-  assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [3, 9, 9, 6]);
+  assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [6, 9, 9, 6]);
 });
 
 test('element wheel: each element beats the three clockwise of it; opposites are neutral', () => {

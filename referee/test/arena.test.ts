@@ -27,7 +27,7 @@ test('Talons: from the air, a Wyvern stoops on a grounded target anywhere within
   bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
   const ev = run(bout, ['claw:left'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 12 - 3);
+  assert.equal(hits(ev)[0].damage, 15 - 3);
   assert.equal(bout.fighters.A.pos.z, 0, 'lands on the ground');
   assert.ok(Math.abs(bout.fighters.B.pos.x - bout.fighters.A.pos.x) <= R.MELEE_EDGE, 'at Melee');
 });

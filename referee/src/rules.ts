@@ -106,7 +106,7 @@ export const STOMP_RADIUS = { wyrmling: 2 * PACE, adult: 3 * PACE, venerable: 4 
 export const BREATH = {
   line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet
   narrowCone: { reach: 7 * PACE }, // Earth: half-width grows ¼ pace per pace, plus ¼ pace
-  vortex: { maxCenter: 8 * PACE, radius: PACE }, // [Proposed] Air: a ranged vortex centered on the target, 2 paces across; its edge reaches Far
+  vortex: { maxCenter: Math.floor(8.5 * PACE), radius: Math.floor(0.5 * PACE) }, // [Proposed] Air: a ranged vortex centered on the target, 1 pace across (cut from 2); its edge reaches Far
   blast: { maxCenter: Math.floor(7.5 * PACE), radius: Math.floor(0.5 * PACE) }, // Fire: lands on the target; radius cut from 1.5 to 0.5
 }; // all [Assumed]; every breath stays within Far [Doc]
 

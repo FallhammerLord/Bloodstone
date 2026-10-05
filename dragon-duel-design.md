@@ -81,16 +81,17 @@ A hidden baseline; each morph and each stone takes one +3 peak and one −3 vall
 
 | Stone | Claw | Bite | Breath | Affinity (stone) |
 |---|---|---|---|---|
-| Baseline | 6 | 9 | 9 | 3 (−6) |
-| Water | 3 | 9 | 9 | 6 (−3) |
-| Earth | 6 | 12 | 9 | 0 (−9) |
-| Fire | 6 | 6 | 12 | 3 (−9) |
-| Air | 9 | 9 | 6 | 3 (−3) |
+| Baseline | 9 | 9 | 9 | 3 (−6) |
+| Water | 6 | 9 | 9 | 6 (−3) |
+| Earth | 9 | 12 | 9 | 0 (−9) |
+| Fire | 9 | 6 | 12 | 3 (−9) |
+| Air | 12 | 9 | 6 | 3 (−3) |
 
 - **Water endures, Earth crushes, Fire scorches, Air rakes.**
 - The element that beats you peaks where you're weakest, so matchup stacks reach two layers at most.
 - Intermediates sum their parents' tilts: Salt +Bite −Claw; Magma +Breath −Affinity; Lightning +Claw −Bite; Storm +Affinity −Breath.
 - Each dragon gets the same allotment, varying only slightly with lineage.
+- **[Proposed]** Every Claw rose 3 in testing: against Hardness 3–6, Claws of 3–6 did 0–3 a hit, and only Air's Claw worked.
 
 ### Elemental Preference
 Each morph prefers one element and dislikes the element that beats it.
@@ -112,10 +113,10 @@ Each morph prefers one element and dislikes the element that beats it.
 |---|---|---|
 | True Dragon + Fire | Breath 12 → 15, Wounds 36 → 30: a breath cannon | Affinity 3 → 6 |
 | True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill | |
-| Wyvern + Air | Claw 9 → 12, Evasion 9 → 6 | Accuracy 6 → 3 |
+| Wyvern + Air | Claw 12 → 15, Evasion 9 → 6 | Accuracy 6 → 3 |
 | Wyvern + Fire | Breath 12 → 9, Evasion 9 → 12: almost impossible to pin down | Affinity 3 → 0, Accuracy 6 → 9 |
 | Wyrm + Water | Affinity 6 → 9, Hardness 6 → 3: a supple sea serpent | |
-| Wyrm + Air | Claw 9 → 6, Hardness 6 → 9 | |
+| Wyrm + Air | Claw 12 → 9, Hardness 6 → 9 | |
 
 **[Open]** Derivation amplifies swings that touch Evasion or Breath Potency, so those pairings are no longer strictly zero-sum. True Dragon + Fire gains Affinity on top of its Breath.
 
