@@ -61,9 +61,9 @@ export const DODGE_BONUS = 3; // [Assumed] Evasion bonus while dodging
 // ---- Acumen ---- [Proposed] §4 Acumen meter
 export const ACUMEN_START = 10; // [Assumed] starting Acumen for every hatchling
 // The Acumen meter [Proposed]: Affinity fuels it. It starts at age bracket × 10 + 3 × Affinity, and each trigger
-// (a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 3.
+// (a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 9.
 // Full, the next landed Bite, Claw or Breath deals true damage (no Hardness or Affinity) and drains it. A miss spends nothing.
-export const METER_BASE_FILL = 3;
+export const METER_BASE_FILL = 9; // [Proposed] raised from 3 so low-Affinity stones still fill
 export const METER_START_PER_AGE = 10;
 export const AGE_BRACKET = { wyrmling: 1, adult: 3, venerable: 5 } as const; // of five: wyrmling, juvenile, adult, elder, venerable
 export const BOULDERS_PER_ARENA = { dice: 4, plus: 2 }; // [Proposed] standard arenas throw 1d4+2 boulders: never an open floor

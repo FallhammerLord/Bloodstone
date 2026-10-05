@@ -1269,7 +1269,7 @@ function elementHolds(att: Fighter, def: Fighter, scales: boolean): string | nul
   return holds ? `Affinity ${affinity} holds against Potency ${potency}` : null;
 }
 
-/** One Acumen trigger: Affinity + 3 into the meter, capped full [Proposed]. */
+/** One Acumen trigger: Affinity + the base fill (9) into the meter, capped full [Proposed]. */
 function fillMeter(f: Fighter, why: string, t: number, ev: Event[]) {
   if (f.meter >= R.METER_MAX) return;
   const amount = R.METER_BASE_FILL + Math.max(0, eff(f, 'affinity', {}).value);

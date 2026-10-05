@@ -269,7 +269,7 @@ test('the meter starts at age bracket × 10 + 3 × Affinity', () => {
   assert.equal(bout.fighters.B.meter, 10 + 3 * 9, 'Wyrm + Water, Affinity 9');
 });
 
-test('Scales, Dodge and a Breath charge held to the end each fill Affinity + 3', () => {
+test('Scales, Dodge and a Breath charge held to the end each fill Affinity + the base fill', () => {
   for (const action of ['scales', 'dodge', 'charge:breath']) {
     const bout = newBout(TD_WATER, TD_WATER, 6);
     const m0 = bout.fighters.A.meter;
