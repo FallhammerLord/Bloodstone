@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Round 22](#round-22-brains-with-clean-patch-knowledge-and-measured-drafting) | Brains with clean patch knowledge and measured drafting; Ash Gland pulled |
 | [Checkpoint](#checkpoint-omnibus-hatch-and-ladder-together) | The omnibus after the Talons patch, read with the ladder and the hatch |
 | [Season 4](#living-ladder-season-4) | One kill per pick, as designed: 632 champions; Wyvern + Air leads the hall again |
 | [Season 3](#living-ladder-season-3) | Yields paid in Ichor, non-lethal timeouts, the array planner: champions stay rare (7) |
@@ -31,6 +32,52 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 22: brains with clean patch knowledge and measured drafting
+
+No combat rules changed. The brains changed, and one shard left the pool:
+- **Ash Gland is pulled for redesign.** It removed the opponent's revision instead of pricing it, and cost its owner its Breath damage and verb. It is still seatable by hand and documented as pulled.
+- **Patch knowledge.**
+  - Band preference follows today's reaches: Bite is at home at Melee and Close, and Breath is discounted at Melee, where any hit cancels it.
+  - Brains know who is challenged, so they know who a timeout favors.
+  - A held full meter (true damage, the guard reversal) is valued, and an opponent's is feared.
+  - Brains lean toward the actions their seated Techniques fire on, and Sidewinder Spine's shifting strafes are legal options.
+  - `test/patch-knowledge.test.ts` holds one fixed situation per core rule, so a missed brain update fails a test.
+- **Measured drafting.** `npm run measure` (20,592 adept bouts) records each style's win rate on each sheet against the field, and its win-rate change from each shard in paired bouts that differ only by that shard. Each cell is shrunk toward the sheet's or shard's pooled value. The hatchery drafts from this table in `src/brain/measured.json`, instead of tastes and tags.
+
+**What the table says:**
+- **Sheets:** the True Dragon is every style's best morph. Pooled across styles it wins 41–47%; Wyverns and Wyrms win 34–39%. (Rates sit below 50% because the subjects include the weak focus brains.)
+- **Shards, change in win rate from carrying one:**
+  - Snapping Jaw +16 points, far ahead.
+  - Hollow Bones +10.
+  - Goading Roar, Hamstring Hooks and Bounding Haunches +6.
+  - Baleful Eye −5.
+  - Thornscale, Mantle Wings, Sapping Bellow and Bellows Chest −3: they cost their carriers wins.
+- **The focus brains are measuring sticks, confirmed.**
+  - Claw-focus's rate tracks the sheet's Claw: 40% on Wyvern + Air (Claw 12), down to 13% on Wyrm + Earth.
+  - Bite-focus peaks at 35–38% on the Bite-12 sheets even without the retreat habit, so a bite-only plan is weak in itself.
+
+| | Checkpoint (before) | Round 22 |
+|---|---|---|
+| Omnibus plain: morphs (TD / Wyrm / Wyvern) | 58 / 50 / 43 | 55 / 47 / 48 |
+| Omnibus shards: morphs | 56 / 45 / 48 | 54 / 50 / 46 |
+| Omnibus plain: style range | 32–61% | 35–60% |
+| Boxing triangle (plain) | 2 of 3, 1 even | 2 of 3, 1 even |
+| Hatch: style range | 39–66% (baseline) | **41–59%** |
+| Hatch: build range | 30–60% (baseline) | **44–55%** |
+| Hatch: Wyvern + Air drafted | 25% (baseline) | 5% |
+
+**What it shows:**
+- **Drafting on results flattens the meta.** In the hatch, builds span 44–55% and styles 41–59%, the tightest yet. No build dominates when every style drafts what wins for it. The True Dragon is drafted 56% of the time, and Wyvern + Air falls from a quarter of drafts to 5%, still winning 51%.
+- **Reader recovers to parity:** 49–50% in the omnibus, 46% in the hatch (it was 30–38% on the ladder). The Ash Gland and Baleful Eye trap is gone from its drafts. Its top shards are now Snapping Jaw and Weathered Hide.
+- **The plain Wyvern recovers** from 43% to 48% in the omnibus, with brains that know the stoop's reach and the clock.
+- **Snapping Jaw is the meta's center.** It is the top shard for 9 of 13 styles, and carriers win 62% in the omnibus. A shard worth +16 points on its own is a balance question (Wyrmling: wind-up −3, recovery +5, so a faster Bite that interrupts).
+- **The True Dragon's base strength is the other balance question.** It is every style's best morph in the measured table and leads both omnibus runs.
+
+**Open, for Ken:**
+- Snapping Jaw's strength.
+- The True Dragon's base lead.
+- Whether the measured table should be rebuilt per skill (it was measured at adept), and folded into ladder learning.
 
 ## Checkpoint: omnibus, hatch and ladder together
 
