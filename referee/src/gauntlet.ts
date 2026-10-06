@@ -1,5 +1,5 @@
 // The living ladder: a population of tamers, each raising one wyrmling at a time. A dragon fights dragons on its own
-// rung (its pips of shards) until it wins or dies; three straight wins earn a pick from the last victim's spoils and
+// rung (its pips of shards) until it wins or dies; each kill earns a pick from the victim's spoils [Doc] (--kills sets more) and
 // a step up. A full three-pip array makes a wyrmling champion, who retires. A dead or retired dragon's tamer hatches
 // another. Tamers learn: skill rises with the best rung they've reached, and their drafts lean toward builds that
 // have won for them and away from builds that died, on curves: novelty fades as a tamer hatches more dragons, and a
@@ -32,7 +32,7 @@ const jsonFile = flag(argv, '--json', '');
 const cardsFile = flag(argv, '--cards', '');
 const carryFile = flag(argv, '--carry', '');
 const saveFile = flag(argv, '--save', '');
-const kills = Number(flag(argv, '--kills', '3'));
+const kills = Number(flag(argv, '--kills', '1'));
 const STREAK = kills;
 /** A yield's price, and a timeout's purse, in Ichor: one per skill rank of the ladder (rung) the dragon is on. */
 const priceAt = (rung: number) => Math.min(rung, 2) + 1;
@@ -382,7 +382,7 @@ const rungRate = (rung: number, b: string) => {
 };
 
 console.log(`The living ladder: ${TAMERS} tamers, ${ROUNDS} rounds, ${bouts} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
-console.log(`Three straight wins earn a spoils pick; a full ${WYRMLING_PIPS}-pip array makes a wyrmling champion. Tamers start as novices: adept from rung 1, master from rung 2.`);
+console.log(`${STREAK === 1 ? 'Each kill earns' : `${STREAK} straight kills earn`} a spoils pick; a full ${WYRMLING_PIPS}-pip array makes a wyrmling champion. Tamers start as novices: adept from rung 1, master from rung 2.`);
 console.log(`Season ${SEASON}${veterans.length ? `, with ${veterans.length} champion tamers from season ${lastSeason}` : ''}. Kills per pick: ${STREAK}.`);
 console.log(`Endings: ${pct((100 * ends.ko) / bouts)} KO, ${pct((100 * ends.pulse) / bouts)} rim pulse, ${pct((100 * ends.timeout) / bouts)} timeout (non-lethal), ${pct((100 * (ends.yield + yields.before)) / bouts)} yield.`);
 console.log(`Yields: ${yields.before} before the bout, ${yields.during} during; ${yields.paid} Ichor paid. By skill: ${[...yieldsBySkill].map(([k, n]) => `${k} ${n}`).join(', ')}.`);
@@ -417,7 +417,8 @@ console.log(list(melted));
 const ichors = tamers.map((t) => t.ichor);
 console.log(`  Ichor held at the end: ${ichors.reduce((a, b) => a + b, 0)} across ${ichors.filter((x) => x > 0).length} tamers (most ${Math.max(...ichors)}).`);
 console.log(`\n── Hall of champions (${hall.length}) ──`);
-for (const h of hall) console.log('  ' + h);
+for (const h of hall.slice(0, 40)) console.log('  ' + h);
+if (hall.length > 40) console.log(`  … and ${hall.length - 40} more (all in the JSON).`);
 
 const card = (t: Tamer) => {
   const d = t.dragon;
