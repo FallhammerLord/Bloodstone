@@ -77,6 +77,13 @@ test('Strafes carry a band, short or long: brains have both landings to choose f
   assert.deepEqual([...seen].sort(), ['band', 'long', 'short']);
 });
 
+test('the Drake: its hop is an option, and an open Ravener window within reach is worth holding', () => {
+  const drake: FighterSetup = { name: 'D', morph: 'drake', stone: 'earth' };
+  const bout = newBout(drake, TD_WATER, 6);
+  assert.ok(legalActions(situation(bout.fighters.A, 0, R.DEFAULT_RULES), seededRandom(1)).some((a) => a.name === 'leap'), 'the hop');
+  assert.ok(!legalActions(situation(newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 6).fighters.A, 0, R.DEFAULT_RULES), seededRandom(1)).some((a) => a.name === 'leap'), 'a Wyrm has no hop option');
+});
+
 // ---- Technique parity pass 1 [Proposed]: one fixed situation per variant the brains must know ----
 
 const pass = R.rulesWith({ ...R.TECH_PASS_1 });

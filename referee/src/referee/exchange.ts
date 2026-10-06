@@ -239,6 +239,12 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     if (f.marks.corrosion && f.marks.corrosion.until <= g) f.marks.corrosion = null;
     bout.history[s].push(p.spec.name);
     f.marks.advanced = p.spec.name === 'approach' && p.converted === null && p.moved > 0;
+    // Ravener [Proposed]: an Approach or hop that moved opens the Drake's lunge window; otherwise it runs down.
+    if (f.sheet.aspect === 'ravener') {
+      const primed = (p.spec.name === 'approach' || p.spec.name === 'leap') && p.converted === null && p.moved > 0;
+      f.marks.ravener = primed ? bout.rules.RAVENER_SLOTS : Math.max(0, f.marks.ravener - 1);
+      if (primed) ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'ravener', text: `Ravener: the next Bite within ${bout.rules.RAVENER_SLOTS} slots lunges and tracks.` });
+    }
     f.marks.strafed = p.spec.name === 'strafe' && p.converted === null && p.moved > 0;
   }
   bout.record.push({

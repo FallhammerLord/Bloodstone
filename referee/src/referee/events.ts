@@ -21,7 +21,7 @@ export type NoteTag =
   // movement
   | 'blocked-move' | 'leash' | 'carry-cut' | 'gravity'
   // aspects and attack roles
-  | 'stoop' | 'stoop-too-soon' | 'lunge' | 'pounce'
+  | 'stoop' | 'stoop-too-soon' | 'lunge' | 'pounce' | 'ravener'
   // charges and crunches
   | 'charge-held' | 'charge-released' | 'charge-broken' | 'breath-broken' | 'reflected' | 'hard-landing' | 'crunch-capped' | 'crunch-refused'
   // a scripted action that can't happen this slot

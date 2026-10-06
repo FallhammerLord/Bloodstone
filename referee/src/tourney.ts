@@ -4,16 +4,16 @@
 
 import { aiController, STYLES } from './ai.ts';
 import { runBout } from './bout.ts';
-import type { CoreStone, Morph } from './hatch.ts';
+import { CORE_MORPHS, type CoreStone, type Morph } from './hatch.ts';
 import { newBout, type FighterSetup, type Side } from './referee.ts';
 import { standardBoulders } from './arena.ts';
 import { seededRandom } from './random.ts';
 import { findShard, randomLoadout } from './shards.ts';
 import * as R from './rules.ts';
 
-const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
+const MORPHS: Morph[] = CORE_MORPHS;
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
-const MORPH_NAMES: Record<Morph, string> = { 'true-dragon': 'True Dragon', wyvern: 'Wyvern', wyrm: 'Wyrm' };
+const MORPH_NAMES: Record<Morph, string> = { 'true-dragon': 'True Dragon', wyvern: 'Wyvern', wyrm: 'Wyrm', drake: 'Drake' };
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 interface Entrant {

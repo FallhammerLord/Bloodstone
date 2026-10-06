@@ -169,8 +169,10 @@ export function value(style: BrainStyle, o: Outcome): number {
     + techniqueCarryOver(me1, op1)
     + (me1.intimidateBonus ? W.intimidatePending : 0) - (op1.intimidateBonus ? W.intimidatePending : 0)
     + (op1.marks.demoralized ? W.demoralizePending : 0) - (me1.marks.demoralized ? W.demoralizePending : 0)
-    // A setup counts while its follow-up can reach: a lunging Bite from Close, a pouncing Claw from a band past its arc.
-    + ((me1.marks.advanced && sep <= R.CLOSE_EDGE + o.after.rules.BITE_LUNGE) || (me1.marks.strafed && sep <= o.after.rules.POUNCE_REACH + o.after.rules.CLAW_REACH) ? W.setupPending : 0)
+    // A setup counts while its follow-up can reach: a lunging Bite from Close, a pouncing Claw from a band past its arc,
+    // a Drake's Ravener window while a band's move would bring it to Close.
+    + ((me1.marks.advanced && sep <= R.CLOSE_EDGE + o.after.rules.BITE_LUNGE) || (me1.marks.strafed && sep <= o.after.rules.POUNCE_REACH + o.after.rules.CLAW_REACH)
+      || (me1.marks.ravener > 0 && sep <= R.CLOSE_EDGE + o.after.rules.BAND_MOVE) ? W.setupPending : 0)
     + W.zoneStanding * (zoneThreat(o.after, op1) - zoneThreat(o.after, me1))
     + W.staggerPending * (staggerLeft(op1) - staggerLeft(me1))
     + W.stoopPending * (stoopThreat(o.after, me1, op1) - stoopThreat(o.after, op1, me1))

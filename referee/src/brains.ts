@@ -7,7 +7,7 @@
 import { writeFileSync } from 'node:fs';
 import { STYLES } from './ai.ts';
 import { BRAIN_STYLES, SKILLS, type BrainStyle, type Skill } from './brain.ts';
-import type { CoreStone, Morph } from './hatch.ts';
+import { CORE_MORPHS, type CoreStone, type Morph } from './hatch.ts';
 import { seededRandom } from './random.ts';
 import type { FighterSetup, Side } from './referee.ts';
 import type { Job, Player, Result } from './brains-worker.ts';
@@ -22,9 +22,9 @@ const jsonFile = flag(argv, '--json', '');
 const json: Record<string, unknown> = { skill, rules: rulesLabel, seed: flag(argv, '--seed', '2026') };
 if (!SKILLS.includes(skill)) throw new Error(`Skill is one of ${SKILLS.join(', ')}.`);
 
-const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
+const MORPHS: Morph[] = CORE_MORPHS;
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
-const NAMES: Record<Morph, string> = { 'true-dragon': 'True Dragon', wyvern: 'Wyvern', wyrm: 'Wyrm' };
+const NAMES: Record<Morph, string> = { 'true-dragon': 'True Dragon', wyvern: 'Wyvern', wyrm: 'Wyrm', drake: 'Drake' };
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 const pairings: { label: string; setup: FighterSetup }[] = MORPHS.flatMap((m) =>
   STONES.map((s) => ({ label: `${NAMES[m]} + ${cap(s)}`, setup: { name: `${m}-${s}`, morph: m, stone: s } })),

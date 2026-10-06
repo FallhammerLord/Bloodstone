@@ -558,3 +558,54 @@ test('a Stomp has no near misses: an unaimed quake earns no meter for missing', 
   assert.ok(!ev.some((e) => e.kind === 'nearMiss'));
   assert.equal(bout.fighters.A.meter, meter);
 });
+
+// ---- The Drake: Ravener and the hop [Proposed] ----
+
+const DRAKE: FighterSetup = { name: 'D', morph: 'drake', stone: 'earth' };
+
+test('the Drake: wingless and four-legged, peak Evasion, valley Wounds; it prefers Earth', () => {
+  const d = newBout(DRAKE, TD_WATER, 6).fighters.A.sheet;
+  assert.deepEqual([d.wounds, d.evasion, d.hardness, d.flies, d.aspect, d.preference], [30, 9, 6, false, 'ravener', 'preferred']);
+  assert.equal(d.accuracy, 3 + 3, 'Claw 9 − Evasion 9 floors at 3; preferred Earth adds 3');
+});
+
+test('the Drake\'s hop arcs up and carries a band forward, landing within the slot; slow to start, quick to recover', () => {
+  const b = newBout(DRAKE, TD_WATER, 7);
+  const x0 = b.fighters.A.pos.x;
+  const ev = runExchange(b, { A: [parseAction('leap')], B: [parseAction('hold')] }, { trace: true });
+  const peak = Math.max(...ev.filter((e): e is Extract<Event, { kind: 'trace' }> => e.kind === 'trace').map((e) => e.positions.A.z));
+  assert.ok(peak >= R.BAND - R.PACE / 2, `it rises about a band: ${peak}`);
+  assert.equal(b.fighters.A.pos.z, 0, 'and lands');
+  assert.ok(Math.abs(Math.abs(b.fighters.A.pos.x - x0) - R.BAND) <= R.PACE / 2, 'a band forward');
+  const plan = ev.filter((e): e is Extract<Event, { kind: 'slotEnd' }> => e.kind === 'slotEnd')[0].plans.A;
+  const appr = run(newBout(DRAKE, TD_WATER, 7), ['approach'], ['hold']).filter((e): e is Extract<Event, { kind: 'slotEnd' }> => e.kind === 'slotEnd')[0].plans.A;
+  assert.equal(plan.windup - appr.windup, R.DEFAULT_RULES.DRAKE_HOP_WINDUP);
+  assert.ok(plan.recovery < appr.recovery);
+});
+
+test('Ravener: an Approach or hop opens a 3-slot window, across an exchange; the first Bite in it lunges, then it closes', () => {
+  const lunges = (ev: Event[]) => ev.filter((e) => e.kind === 'note' && e.tag === 'lunge').length;
+  // Approach, Retreat (it doesn't end the window), then the next exchange's first slot: still the third slot of the window.
+  const b = newBout(DRAKE, TD_WATER, 7);
+  run(b, ['hold', 'approach', 'retreat'], ['hold', 'hold', 'hold']);
+  b.fighters.A.pos = { ...b.fighters.A.pos, x: b.fighters.B.pos.x - 4 * R.PACE };
+  const ev = run(b, ['bite', 'bite', 'hold'], ['hold', 'hold', 'hold']);
+  assert.equal(lunges(ev), 1, 'the first Bite lunges; the second, though it landed, opens nothing');
+  // The hop primes it too.
+  const h = newBout(DRAKE, TD_WATER, 8);
+  assert.equal(lunges(run(h, ['leap', 'hold', 'bite'], ['hold', 'hold', 'hold'])), 1);
+  // Past the window: no lunge.
+  const late = newBout(DRAKE, TD_WATER, 7);
+  run(late, ['approach', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.equal(lunges(run(late, ['hold', 'bite'], ['hold', 'hold'])), 0, 'three slots spent');
+});
+
+test('Ravener: within Close, the Drake\'s Bite tracks a strafe and tests no Evasion against it', () => {
+  const strafeOn = (primed: boolean) => {
+    const b = newBout(DRAKE, { name: 'G', morph: 'wyvern', stone: 'water' }, 4);
+    if (primed) b.fighters.A.marks.ravener = 3;
+    return hits(run(b, ['bite'], ['strafe:cw:short'])).filter((x) => x.attacker === 'A').length;
+  };
+  assert.equal(strafeOn(false), 0, 'unprimed, a Wyvern\'s strafe slips it');
+  assert.equal(strafeOn(true), 1, 'in the window, the Bite follows it home');
+});

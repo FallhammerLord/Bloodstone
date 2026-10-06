@@ -74,10 +74,12 @@ A hidden baseline; each morph and each stone takes one peak and one valley off i
 | True Dragon | 42 | 3 | 6 | Wounds | Evasion | Fire | Earth |
 | Wyvern | 36 | 9 | 3 | Evasion | Hardness | Air | Fire |
 | Wyrm | 30 | 6 | 9 | Hardness | Wounds | Water | Air |
+| Drake | 30 | 9 | 6 | Evasion | Wounds | Earth | Water |
 
 - **True Dragon outlasts:** the most Wounds, paid for in mobility. Its generalism lives in its kit.
 - **Wyvern is never where you aimed:** the highest Evasion, the thinnest hide; and the finest elemental resistance, since Affinity is Breath − Hardness.
 - **Wyrm shrugs:** the highest Hardness against Claw and Bite, the fewest Wounds, and the poorest elemental resistance.
+- **Drake runs it down:** wingless and four-legged, as quick as a Wyvern on the ground, the hunter's Bite.
 
 | Stone | Claw | Bite | Breath | Peak | Valley | If preferred |
 |---|---|---|---|---|---|---|
@@ -101,7 +103,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 - **Growth leans the same way:** preferred pairings weight age-up points toward the stone's attributes; disliked pairings toward the egg's.
 - **Intermediates derive:** one preferred parent counts as preference, one disliked parent as distaste, one of each cancels to neutral. For a True Dragon, Lightning is preferred, Salt disliked, Magma neutral.
-- **[Open]** Coverage: among the core three, no morph prefers Earth or dislikes Water. Extended morphs can fill it; a Lindworm or Drake preferring Earth would be natural.
+- Coverage: with the Drake, each core stone is preferred once and disliked once.
 
 ### Aspects and Parity
 - **Draconic test:** every morph fills bite, claw, breath, and scales, and earns its identity by bending one of them.
@@ -117,6 +119,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **True Dragon:** four limbs plus wings. The generalist.
 - **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude. **Talons:** the Wyvern bends the one-band move rule in its Leap: it climbs up to two bands. A Claw scripted while aloft, against a grounded opponent within Far, is a stoop: it descends to the ground during the wind-up, carrying at most one band forward (stopping 1½ paces short of where the target stood) or one band back, and swipes both left and right. A stoop from Close lands at Melee and connects; from Far it lands at Close and falls short, so the Wyvern closes in aloft first, and a Wyvern hovering at Close is a threat both players can see. The descent takes time: the wind-up grows 2 ticks per pace it falls, so a stoop from one band strikes at tick 12 (it beats a Stomp) and from two bands at tick 18 (a Stomp's quake catches it as it lands). Against an airborne opponent it simply claws. Its price is positional: it must get airborne and close first, and it lands in Bite range. **[Proposed]** A stoop hits harder the farther it falls: +1 per 2 paces of altitude it starts from (+3 from two bands), like a charge paying for its setup. **[Proposed]** It must also have been aloft since the exchange began: no Leap and stoop in the same exchange. Its Claw reaches as any Claw does, from the ground or the air.
 - **Wyrm:** serpentine and grounded. Owns lateral movement and close range. **[Proposed] Serpentine:** its Strafe tests Evasion with Dodge's bonus, against Breath too: a strafing Wyrm can slip a Breath that would otherwise skip Evasion. Its Leap is a hop that lands within the slot; it can't Dive.
+- **Drake:** wingless, four-legged and grounded; the Bite specialist. **[Proposed] Ravener:** an Approach or hop that moves opens a 3-slot window, across an exchange; a Retreat doesn't close it. The Drake's first Bite in it lunges 1 pace, and while the window is live its Bite tracks at Melee and Close (its aim follows to the strike, and it tests no Evasion against a strafe). The window closes at that Bite, landed or not; a landed Bite opens nothing. **The hop** (its Leap): it arcs a band up and carries a full band forward (short or long by Evasion), landing within the slot; slow to wind up, quick to recover. While up it clears floor zones and Stomp's quake; Breath and tracking still catch it, and it never reaches a flier.
 
 ### Extended Morphs (Aspects **[Proposed]** unless noted)
 - **Chimera:** three heads; a native cruncher.

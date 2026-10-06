@@ -38,6 +38,8 @@ export interface Plan {
   carry: { kind: 'lunge' | 'pounce'; from: Vec; to: Vec } | null;
   /** this Bite follows an Approach and may lunge [Proposed] */
   lunges: boolean;
+  /** a Drake's Bite in its Ravener window: it lunges, and tracks at Melee and Close [Proposed] */
+  ravener: boolean;
   /** this Claw follows a Strafe: it pounces and pierces [Proposed] */
   pounces: boolean;
   /** Sidewinder Spine: distance to shift along the line while strafing, and how far it has */
@@ -147,7 +149,10 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     }
   }
   // Lunge [Proposed]: a Bite right after an Approach that moved carries the dragon forward.
-  const lunges = f.marks.advanced;
+  // Ravener [Proposed]: a Drake's first Bite in its window lunges and tracks, and closes the window.
+  const ravener = f.sheet.aspect === 'ravener' && f.marks.ravener > 0 && spec.name === 'bite' && !spec.crunch && !spec.charge;
+  if (ravener) f.marks.ravener = 0;
+  const lunges = f.marks.advanced || ravener;
   f.marks.advanced = false;
   // Pounce [Proposed]: a Claw right after a Strafe that moved.
   const pounces = f.marks.strafed;
@@ -285,6 +290,8 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     wShift -= 3;
     f.marks.quick = null;
   }
+  // The Drake's hop [Proposed]: slow to start, quick to recover (a move's recovery is what the slot leaves).
+  if (spec.name === 'leap' && f.sheet.aspect === 'ravener') wShift += rules.DRAKE_HOP_WINDUP;
   let [windup, active, recovery] = timing(rules, def.profile, wShift, rShift);
 
   let hardLanding = false;
@@ -355,7 +362,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   return {
     spec, windup: w0, active: a0, recovery: r0, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, aimLock: 0, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, aimLock: 0, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch, ravener,
     pounces: pounces && spec.name === 'claw' && !spec.crunch,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus, noPin, thornsUsed: false, mobileCharge,
     charging, halves, landedHalves: 0, hardLanding, quaked: false,

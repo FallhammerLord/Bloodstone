@@ -35,6 +35,8 @@ export function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });
   if (ready('dodge')) out.push({ name: 'dodge' });
   if (s.f.sheet.flies && s.z < s.rules.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
+  // The Drake's hop: a full band forward through the air, landing within the slot; it primes Ravener.
+  if (s.f.sheet.aspect === 'ravener' && s.z === 0) out.push({ name: 'leap', depth: depth() });
   // Bellows Chest (mobile): a Breath charge carried on a Move (Wyrmling: Retreat; Juvenile: Strafe too; Venerable: any).
   const bel = s.f.loadout.techniques.find((t) => t.id === 'bellows-chest')?.grade;
   if (bel && s.rules.TECH_BELLOWS_CHEST === 'mobile' && s.globalSlot % R.SLOTS_PER_EXCHANGE < 2 && (s.readyAt.breath ?? 0) <= s.globalSlot + 1) {

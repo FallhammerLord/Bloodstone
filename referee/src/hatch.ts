@@ -1,7 +1,9 @@
 // The Hatching Engine: egg + stone → stat sheet. Order [Doc]: base adds, then derive tertiaries.
 
 
-export type Morph = 'true-dragon' | 'wyvern' | 'wyrm';
+export type Morph = 'true-dragon' | 'wyvern' | 'wyrm' | 'drake';
+/** The core morphs, in table order. */
+export const CORE_MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm', 'drake'];
 export type Element = 'water' | 'salt' | 'earth' | 'magma' | 'fire' | 'lightning' | 'air' | 'storm';
 export type CoreStone = 'water' | 'earth' | 'fire' | 'air';
 export type Age = 'wyrmling' | 'adult' | 'venerable';
@@ -12,10 +14,10 @@ export interface StatSheet {
   stone: CoreStone;
   age: Age;
   preference: Preference;
-  /** winged morphs fly; the Wyrm is serpentine and grounded [Doc] */
+  /** winged morphs fly; the Wyrm is serpentine and the Drake four-legged, both grounded [Doc] */
   flies: boolean;
-  /** the rule this morph bends [Doc] §2: True Dragon has none */
-  aspect: 'stalwart' | 'talons' | 'serpentine';
+  /** the rule this morph bends [Doc] §2 */
+  aspect: 'stalwart' | 'talons' | 'serpentine' | 'ravener';
   wounds: number;
   evasion: number;
   hardness: number;
@@ -33,6 +35,7 @@ const MORPHS: Record<Morph, { wounds: number; evasion: number; hardness: number 
   'true-dragon': { wounds: 42, evasion: 3, hardness: 6 }, // peak Wounds, valley Evasion
   wyvern: { wounds: 36, evasion: 9, hardness: 3 }, // peak Evasion, valley Hardness
   wyrm: { wounds: 30, evasion: 6, hardness: 9 }, // peak Hardness, valley Wounds
+  drake: { wounds: 30, evasion: 9, hardness: 6 }, // peak Evasion, valley Wounds: wingless, four-legged
 };
 
 type Derived = 'accuracy' | 'affinity' | 'acumen';
@@ -52,11 +55,12 @@ const DERIVED_FLOOR = 3;
 /** A disliked stone costs this many Wounds. */
 const DISLIKED_WOUNDS = 6;
 
-const ASPECTS: Record<Morph, StatSheet['aspect']> = { 'true-dragon': 'stalwart', wyvern: 'talons', wyrm: 'serpentine' };
+const ASPECTS: Record<Morph, StatSheet['aspect']> = { 'true-dragon': 'stalwart', wyvern: 'talons', wyrm: 'serpentine', drake: 'ravener' };
+const FLIERS: Morph[] = ['true-dragon', 'wyvern'];
 
 // [Doc] §2 Elemental Preference: each morph dislikes the element that beats the one it prefers.
-const PREFERS: Record<Morph, CoreStone> = { 'true-dragon': 'fire', wyvern: 'air', wyrm: 'water' };
-const DISLIKES: Record<Morph, CoreStone> = { 'true-dragon': 'earth', wyvern: 'fire', wyrm: 'air' };
+const PREFERS: Record<Morph, CoreStone> = { 'true-dragon': 'fire', wyvern: 'air', wyrm: 'water', drake: 'earth' };
+const DISLIKES: Record<Morph, CoreStone> = { 'true-dragon': 'earth', wyvern: 'fire', wyrm: 'air', drake: 'water' };
 
 export function preference(morph: Morph, stone: CoreStone): Preference {
   if (PREFERS[morph] === stone) return 'preferred';
@@ -77,7 +81,7 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
   const pref = preference(morph, stone);
   const perk = (d: Derived) => (pref === 'preferred' && s.perk === d ? 3 : 0);
   return {
-    morph, stone, age, preference: pref, flies: morph !== 'wyrm', aspect: ASPECTS[morph],
+    morph, stone, age, preference: pref, flies: FLIERS.includes(morph), aspect: ASPECTS[morph],
     wounds: m.wounds - (pref === 'disliked' ? DISLIKED_WOUNDS : 0), evasion: m.evasion, hardness: m.hardness,
     claw: s.claw, bite: s.bite, breath: s.breath,
     accuracy: Math.max(DERIVED_FLOOR, s.claw - m.evasion) + perk('accuracy'),

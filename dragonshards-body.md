@@ -34,7 +34,7 @@ Body shards buff what the egg sets: Wounds, Evasion, Hardness, and Accuracy (der
 - **Second Heart** · Venerable · 2 pips · +3 Wounds; rider: +3 Hardness at half Wounds or below; +1 Hardness
 
 ## Evasion · Wings and Haunches
-- **Hollow Bones** · Wyrmling · chip, 1 pip · +1 Evasion
+- **Coiled Sinew** · Wyrmling · chip, 1 pip · +1 Evasion (was Hollow Bones; dropped by the Wyvern and the Drake)
 - **Spring Haunch** · Juvenile · chip, 1 pip · +2 Evasion
 - **Swept Pinions** · Adult · chip, 1 pip · +3 Evasion
 - **Galewing** · Elder · 2 pips · +3 Evasion; rider: +3 more while aloft

@@ -191,7 +191,6 @@
  "shards": {
   "swarmer": {
    "Heartgrit": -0.032,
-   "Hollow Bones": 0.053,
    "Pebblescale": 0.099,
    "Slit Pupil": 0.044,
    "Whetted Nail": -0.043,
@@ -216,11 +215,11 @@
    "Riposte Talons": -0.004,
    "Mantle Wings": -0.017,
    "Sapping Bellow": -0.044,
-   "Goading Roar": 0.013
+   "Goading Roar": 0.013,
+   "Coiled Sinew": 0.053
   },
   "out-boxer": {
    "Heartgrit": -0.06,
-   "Hollow Bones": 0.165,
    "Pebblescale": 0.044,
    "Slit Pupil": 0.003,
    "Whetted Nail": 0.012,
@@ -245,11 +244,11 @@
    "Riposte Talons": 0.024,
    "Mantle Wings": -0.044,
    "Sapping Bellow": -0.027,
-   "Goading Roar": 0.041
+   "Goading Roar": 0.041,
+   "Coiled Sinew": 0.165
   },
   "slugger": {
    "Heartgrit": -0.032,
-   "Hollow Bones": 0.067,
    "Pebblescale": 0.044,
    "Slit Pupil": 0.017,
    "Whetted Nail": -0.002,
@@ -274,11 +273,11 @@
    "Riposte Talons": 0.121,
    "Mantle Wings": -0.058,
    "Sapping Bellow": 0.056,
-   "Goading Roar": 0.013
+   "Goading Roar": 0.013,
+   "Coiled Sinew": 0.067
   },
   "counterpuncher": {
    "Heartgrit": 0.079,
-   "Hollow Bones": -0.085,
    "Pebblescale": 0.085,
    "Slit Pupil": 0.017,
    "Whetted Nail": 0.012,
@@ -303,11 +302,11 @@
    "Riposte Talons": -0.004,
    "Mantle Wings": -0.017,
    "Sapping Bellow": -0.002,
-   "Goading Roar": 0.013
+   "Goading Roar": 0.013,
+   "Coiled Sinew": -0.085
   },
   "boxer-puncher": {
    "Heartgrit": -0.101,
-   "Hollow Bones": -0.03,
    "Pebblescale": -0.012,
    "Slit Pupil": 0.003,
    "Whetted Nail": -0.015,
@@ -332,11 +331,11 @@
    "Riposte Talons": -0.004,
    "Mantle Wings": 0.011,
    "Sapping Bellow": -0.002,
-   "Goading Roar": -0.112
+   "Goading Roar": -0.112,
+   "Coiled Sinew": -0.03
   },
   "aerialist": {
    "Heartgrit": -0.004,
-   "Hollow Bones": 0.053,
    "Pebblescale": 0.002,
    "Slit Pupil": 0.058,
    "Whetted Nail": -0.015,
@@ -361,11 +360,11 @@
    "Riposte Talons": 0.121,
    "Mantle Wings": -0.003,
    "Sapping Bellow": -0.002,
-   "Goading Roar": 0.054
+   "Goading Roar": 0.054,
+   "Coiled Sinew": 0.053
   },
   "reader": {
    "Heartgrit": -0.046,
-   "Hollow Bones": -0.002,
    "Pebblescale": 0.016,
    "Slit Pupil": -0.053,
    "Whetted Nail": -0.029,
@@ -390,11 +389,11 @@
    "Riposte Talons": 0.052,
    "Mantle Wings": 0.067,
    "Sapping Bellow": -0.036,
-   "Goading Roar": -0.126
+   "Goading Roar": -0.126,
+   "Coiled Sinew": -0.002
   },
   "claw-focus": {
    "Heartgrit": -0.004,
-   "Hollow Bones": 0.137,
    "Pebblescale": 0.044,
    "Slit Pupil": 0.017,
    "Whetted Nail": 0.012,
@@ -419,11 +418,11 @@
    "Riposte Talons": 0.038,
    "Mantle Wings": 0.011,
    "Sapping Bellow": 0.006,
-   "Goading Roar": -0.015
+   "Goading Roar": -0.015,
+   "Coiled Sinew": 0.137
   },
   "bite-focus": {
    "Heartgrit": 0.01,
-   "Hollow Bones": 0.04,
    "Pebblescale": 0.016,
    "Slit Pupil": 0.058,
    "Whetted Nail": -0.015,
@@ -448,11 +447,11 @@
    "Riposte Talons": -0.018,
    "Mantle Wings": 0.025,
    "Sapping Bellow": -0.002,
-   "Goading Roar": 0.027
+   "Goading Roar": 0.027,
+   "Coiled Sinew": 0.04
   },
   "breath-focus": {
    "Heartgrit": 0.01,
-   "Hollow Bones": 0.04,
    "Pebblescale": 0.058,
    "Slit Pupil": 0.017,
    "Whetted Nail": -0.002,
@@ -477,11 +476,11 @@
    "Riposte Talons": -0.004,
    "Mantle Wings": -0.044,
    "Sapping Bellow": -0.052,
-   "Goading Roar": 0.096
+   "Goading Roar": 0.096,
+   "Coiled Sinew": 0.04
   },
   "meter-focus": {
    "Heartgrit": -0.004,
-   "Hollow Bones": 0.067,
    "Pebblescale": 0.099,
    "Slit Pupil": -0.067,
    "Whetted Nail": -0.029,
@@ -506,11 +505,11 @@
    "Riposte Talons": 0.052,
    "Mantle Wings": -0.044,
    "Sapping Bellow": 0.081,
-   "Goading Roar": 0.013
+   "Goading Roar": 0.013,
+   "Coiled Sinew": 0.067
   },
   "charge-focus": {
    "Heartgrit": -0.018,
-   "Hollow Bones": -0.058,
    "Pebblescale": 0.044,
    "Slit Pupil": 0.003,
    "Whetted Nail": 0.026,
@@ -535,11 +534,11 @@
    "Riposte Talons": 0.038,
    "Mantle Wings": -0.058,
    "Sapping Bellow": -0.077,
-   "Goading Roar": -0.112
+   "Goading Roar": -0.112,
+   "Coiled Sinew": -0.058
   },
   "kite-focus": {
    "Heartgrit": 0.037,
-   "Hollow Bones": 0.012,
    "Pebblescale": 0.085,
    "Slit Pupil": -0.011,
    "Whetted Nail": 0.026,
@@ -564,7 +563,8 @@
    "Riposte Talons": -0.018,
    "Mantle Wings": 0.067,
    "Sapping Bellow": -0.044,
-   "Goading Roar": 0.054
+   "Goading Roar": 0.054,
+   "Coiled Sinew": 0.012
   }
  },
  "pooled": {
@@ -584,7 +584,6 @@
   },
   "shards": {
    "Heartgrit": -0.013,
-   "Hollow Bones": 0.035,
    "Pebblescale": 0.048,
    "Slit Pupil": 0.008,
    "Whetted Nail": -0.005,
@@ -609,7 +608,8 @@
    "Riposte Talons": 0.03,
    "Mantle Wings": -0.008,
    "Sapping Bellow": -0.011,
-   "Goading Roar": -0.003
+   "Goading Roar": -0.003,
+   "Coiled Sinew": 0.035
   }
  }
 }

@@ -11,7 +11,7 @@ import { writeFileSync } from 'node:fs';
 import { BRAIN_STYLES, type BrainStyle, type Skill } from './brain.ts';
 import type { Job, Result } from './brains-worker.ts';
 import { flag, inWorkers, rulesFromArgs, WORKERS } from './harness.ts';
-import type { CoreStone, Morph } from './hatch.ts';
+import { CORE_MORPHS, type CoreStone, type Morph } from './hatch.ts';
 import { seededRandom } from './random.ts';
 import type { FighterSetup } from './referee.ts';
 import { setPoolRules, shardPool } from './shards.ts';
@@ -26,7 +26,7 @@ const outFile = flag(argv, '--out', '');
 const SHEET_TRUST = 12;
 const SHARD_TRUST = 24;
 
-const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
+const MORPHS: Morph[] = CORE_MORPHS;
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 const SHEETS = MORPHS.flatMap((morph) => STONES.map((stone) => ({ morph, stone, key: `${morph} + ${stone}` })));
 const GENERAL = BRAIN_STYLES.filter((s) => !s.endsWith('-focus'));
@@ -138,7 +138,7 @@ const shardMargin = (name: string) => {
 for (const x of [...shards].sort((a, b) => pooled(shardCells, b.name) - pooled(shardCells, a.name))) console.log(`  ${(100 * pooled(shardCells, x.name)).toFixed(0).padStart(4)} pts ±${shardMargin(x.name).toFixed(0)}  ${x.name}`);
 console.log('\nShards by the carrier\'s morph (change in win rate; True Dragon / Wyvern / Wyrm):');
 for (const x of shards) {
-  const byMorph = (['true-dragon', 'wyvern', 'wyrm'] as Morph[]).map((m) => { const c = morphCells.get(`morph:${m}|${x.name}`); return c && c.n ? `${(100 * c.w / c.n).toFixed(0).padStart(4)}` : '   —'; });
+  const byMorph = CORE_MORPHS.map((m) => { const c = morphCells.get(`morph:${m}|${x.name}`); return c && c.n ? `${(100 * c.w / c.n).toFixed(0).padStart(4)}` : '   —'; });
   console.log(`  ${x.name.padEnd(20)} ${byMorph.join(' / ')}`);
 }
 console.log('\nEach style\'s best sheet and best shard:');

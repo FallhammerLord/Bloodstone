@@ -10,7 +10,7 @@ import { inWorkers } from './harness.ts';
 import { standardBoulders } from './arena.ts';
 import { brainController, BRAIN_STYLES } from './brain.ts';
 import { runBout } from './bout.ts';
-import type { CoreStone, Morph } from './hatch.ts';
+import { CORE_MORPHS, type CoreStone, type Morph } from './hatch.ts';
 import { newBout, type Event, type FighterSetup } from './referee.ts';
 import * as R from './rules.ts';
 import { formatFor, scenarioController, separationOf, type Scenario } from './scenario.ts';
@@ -26,7 +26,7 @@ export interface Golden {
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const hash = (ev: Event[]) => createHash('sha256').update(JSON.stringify(ev)).digest('hex').slice(0, 16);
 
-const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
+const MORPHS: Morph[] = CORE_MORPHS;
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 const SETUPS: FighterSetup[] = MORPHS.flatMap((m) => STONES.map((s) => ({ name: `${m}-${s}`, morph: m, stone: s })));
 

@@ -41,7 +41,7 @@ const ATTR_LINES: AttrLine[] = [
   { family: 'body', attr: 'wounds', rider: { condition: 'halfWounds', attr: 'hardness' }, related: 'hardness',
     names: { wyrmling: 'Heartgrit', juvenile: 'Thickblood', adult: 'Deep Keel', elder: 'Ironheart', venerable: 'Second Heart' } },
   { family: 'body', attr: 'evasion', rider: { condition: 'aloft', attr: 'evasion' }, related: 'accuracy',
-    names: { wyrmling: 'Hollow Bones', juvenile: 'Spring Haunch', adult: 'Swept Pinions', elder: 'Galewing', venerable: 'Skyvane' } },
+    names: { wyrmling: 'Coiled Sinew', juvenile: 'Spring Haunch', adult: 'Swept Pinions', elder: 'Galewing', venerable: 'Skyvane' } },
   { family: 'body', attr: 'hardness', rider: { condition: 'scales', attr: 'hardness' }, related: 'wounds',
     names: { wyrmling: 'Pebblescale', juvenile: 'Hornhide', adult: 'Shalecoat', elder: 'Bastion Plates', venerable: 'Mountainback' } },
   { family: 'body', attr: 'accuracy', rider: { condition: 'altitudeDiff', attr: 'accuracy' }, related: 'evasion',
@@ -124,8 +124,11 @@ const norm = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
  * Looks a shard up by name. Body and Bloodstone names carry their grade ("Razor Talons" is Adult).
  * Techniques keep one name across grades, so they need a grade ("Snapping Jaw", "adult").
  */
+/** Old names that saved seasons and cards still carry. */
+const LEGACY_NAMES: Record<string, string> = { hollowbones: 'Coiled Sinew' };
+
 export function findShard(name: string, grade?: Grade): Shard {
-  const n = norm(name);
+  const n = norm(LEGACY_NAMES[norm(name)] ?? name);
   for (const line of ATTR_LINES) {
     for (const g of GRADES) {
       if (norm(line.names[g]) !== n) continue;

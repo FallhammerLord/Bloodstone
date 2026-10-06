@@ -12,6 +12,20 @@ export function moveStep(rules: Rules, me: Fighter, opp: Fighter, p: Plan, oppPl
   const k = t - p.windup;
   const target = Math.floor((p.moveTotal * Math.min(k + 1, p.travel)) / p.travel);
   const delta = target - p.moved;
+  // The Drake's hop [Proposed]: it arcs DRAKE_HOP_HEIGHT up and carries its band forward, landing as its travel ends.
+  if (p.spec.name === 'leap' && me.sheet.aspect === 'ravener') {
+    const half = Math.max(1, Math.floor(p.travel / 2));
+    const peak = rules.DRAKE_HOP_HEIGHT;
+    const z = k < half ? Math.floor((peak * (k + 1)) / half) : Math.max(0, Math.floor((peak * (p.travel - k - 1)) / Math.max(1, p.travel - half)));
+    const v0 = sub(me.pos, opp.pos);
+    const sep0 = flatLen(v0);
+    if (delta <= 0 || sep0 === 0) return { ...me.pos, z };
+    const minFlat = isqrt(Math.max(0, rules.BODY_GAP * rules.BODY_GAP - v0.z * v0.z));
+    const np = { ...add(flat(opp.pos), scaleTo(flat(v0), Math.max(minFlat, sep0 - delta))), z };
+    if (flatLen(np) > rules.ARENA_RADIUS) return { ...me.pos, z };
+    p.moved = target;
+    return np;
+  }
   // A Wyrm's leap is a hop: it rises for the first half of the window and lands by the end [Assumed].
   if (p.spec.name === 'leap' && !me.sheet.flies) {
     const half = Math.max(1, Math.floor(p.travel / 2));

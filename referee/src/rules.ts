@@ -62,6 +62,13 @@ export const DEFAULT_RULES = {
   // The True Dragon's Aspect, Stalwart [Proposed]: its own zones never harm it, and each charging slot widens its
   // released Breath by ½ pace. (A 3-tick faster Breath was tried and overshot.)
   STALWART_WIDEN: Math.floor(PACE / 2),
+  // The Drake's Aspect, Ravener [Proposed]: an Approach or hop that moves primes a lunge for this many slots (across an
+  // exchange); the first Bite in the window lunges, and while it's live the Bite tracks at Melee and Close.
+  RAVENER_SLOTS: 3,
+  // The Drake's hop [Proposed]: its Leap arcs this high and a full band forward, landing within the slot; it winds up
+  // this many ticks slower and recovers as much faster.
+  DRAKE_HOP_HEIGHT: BAND,
+  DRAKE_HOP_WINDUP: 5,
   STALWART_OWN_ZONES: 1, // [Proposed] 1: a True Dragon's own zones never harm it; 0: they do, as anyone's (a measuring dial)
   // Between slots, separation snaps to the nearest ½ pace [Proposed]: where a dragon lands in a band matters only for
   // that action, and the edge cases of drift (2.96 paces against 3.04) clean up before the next.

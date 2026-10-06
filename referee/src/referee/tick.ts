@@ -93,6 +93,8 @@ function aim(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: Even
       const acc = eff(F[s], 'accuracy', { opp: F[other(s)] }).value - (F[s].status.blinded ? bout.rules.BLINDED_ACCURACY : 0);
       const lead = Math.min(p.windup, Math.max(1, bout.rules.AIM_SETTLE_BASE - acc));
       p.aimLock = Math.max(0, p.windup - lead);
+      // Ravener [Proposed]: within Close, the Drake's Bite tracks its target all the way to the strike.
+      if (p.ravener && len(p.aim) <= R.CLOSE_EDGE) p.aimLock = p.windup;
     }
     if (p.pounces && t === 0 && !p.stoop) beginPounce(bout.rules, F[s], p, ev);
     if (p.pounces && t === 0 && p.stoop) ev.push({ kind: 'note', tick: t, side: s, tag: 'pounce', text: 'Strafed into the stoop: it pounces, and pierces.' });
@@ -151,7 +153,9 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
     // Wyrm Serpentine [Assumed reading of §2]: it owns lateral movement, so its strafe evades like a dodge, and
     // [Proposed] against Breath too.
     const serpentine = def.sheet.aspect === 'serpentine' && plans[other(s)].spec.name === 'strafe' && evading === 'moving';
-    const tests = p.spec.name === 'bite' || p.spec.name === 'claw' || (p.spec.name === 'breath' && serpentine && bout.rules.SERPENTINE_BREATH);
+    // Ravener [Proposed]: within Close, the Drake's tracking Bite follows a strafe; it tests no Evasion against one.
+    const tracked = p.ravener && plans[other(s)].spec.name === 'strafe' && evading === 'moving' && dist(att.pos, def.pos) <= R.CLOSE_EDGE;
+    const tests = !tracked && (p.spec.name === 'bite' || p.spec.name === 'claw' || (p.spec.name === 'breath' && serpentine && bout.rules.SERPENTINE_BREATH));
     if (tests && evading) {
       const base = eff(def, 'evasion', {}).value;
       // Staggered, it tests half its Evasion [Proposed].

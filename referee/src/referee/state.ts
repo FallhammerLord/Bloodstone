@@ -69,8 +69,10 @@ export interface Marks {
   ratchet: number;
   /** Ash Gland (cloud): ash clinging to this dragon, Blinding it through the exchange; it falls off as a cloud at the end */
   ashStuck: { owner: Side; exchange: number; rattles: boolean } | null;
+  /** Ravener (Drake): slots left in the lunge window an Approach or hop opened */
+  ravener: number;
 }
-export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null, staggerExtra: 0, snapDebt: 0, clamped: false, noPinNext: false, ratchet: 0, ashStuck: null });
+export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null, staggerExtra: 0, snapDebt: 0, clamped: false, noPinNext: false, ratchet: 0, ashStuck: null, ravener: 0 });
 
 export interface Chain {
   action: ActionName | null;

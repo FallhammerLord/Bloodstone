@@ -108,6 +108,7 @@ Each morph bends one rule (design doc §2).
 - **True Dragon, Stalwart** [Proposed]: master of the charged Breath. Its own zones never harm it, and each charging slot widens its released Breath by ½ pace. Wounds is its peak (42).
 - **Wyvern, Talons:** it bends the one-band move rule in its Leap, which climbs two bands. A Claw from the air against a grounded opponent within Far is a stoop: the Wyvern descends to the ground during the wind-up, carrying at most a band forward (never closer than 1½ paces short of the target) or a band back (`claw:left:back`), and swipes both ways. From Close it connects; from Far it falls short. The descent takes 2 ticks a pace, so a one-band stoop strikes at tick 12 and a two-band stoop at tick 18, late enough for a Stomp to catch it landing. It deals +1 per 2 paces fallen. Against an airborne opponent it simply claws. Its price is positional: it must have been aloft since the exchange began, and it lands in Bite range.
 - **Wyrm, Serpentine:** its Strafe tests Evasion with Dodge's +3. It is grounded: its Leap is a hop, and it can't Dive.
+- **Drake, Ravener** [Proposed]: an Approach or hop that moves opens a 3-slot lunge window (`RAVENER_SLOTS`), across an exchange. Its first Bite in the window lunges and tracks at Melee and Close (no Evasion test against a strafe), and closes it. Its Leap is a forward hop: a band up and a band forward, landing in the slot (`DRAKE_HOP_HEIGHT`, `DRAKE_HOP_WINDUP`).
 
 ## Breath effects
 
@@ -191,7 +192,7 @@ A brain playing by old patch notes can't play well. For each kind of rule change
 | Reaches (bands) and shapes | `brain/styles.ts` `idealBand`; `brain/controller.ts` `tell`; `brain/read.ts` `prior` |
 | New action forms (hard landing, reversal) | `brain/options.ts` `legalActions` and `advance`; the Referee's imagined fights do the rest |
 | Intimidate, demoralize, carry-over | `brain/value.ts` `SHARED` pending terms |
-| Aspects (stoop, Talons' two-band Leap, Stalwart, Serpentine) | `brain/options.ts` `legalActions` (the back stoop) and `advance` (Leap height); `brain/value.ts` aerialist `perch`; `brain/read.ts` (the aloft context) |
+| Aspects (stoop, Talons' two-band Leap, Stalwart, Serpentine, Ravener) | `brain/options.ts` `legalActions` (the back stoop, the Drake's hop); `brain/value.ts` setup terms (the Ravener window) and `advance` (Leap height); `brain/value.ts` aerialist `perch`; `brain/read.ts` (the aloft context) |
 | Late game (rim pulses, timeouts) | `brain/value.ts` `SHARED.rim` |
 | A new style | `brain/styles.ts` (`TASTE`, `LEAN`, `MISS_TASTE`); `brain/value.ts` `WEIGHTS`; `brain/controller.ts` `tell` |
 

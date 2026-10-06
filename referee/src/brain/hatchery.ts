@@ -3,12 +3,12 @@
 // novelty bonus pulls it toward what its style has picked least, so a style explores its plausible builds.
 
 import { existsSync, readFileSync } from 'node:fs';
-import { hatch, type CoreStone, type Morph, type StatSheet } from '../hatch.ts';
+import { CORE_MORPHS, hatch, type CoreStone, type Morph, type StatSheet } from '../hatch.ts';
 import type { FighterSetup, ShardSetup } from '../referee.ts';
 import { shardPool, WYRMLING_PIPS, type Shard } from '../shards.ts';
 import { TASTE, type BrainStyle, type Skill } from './styles.ts';
 
-const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
+const MORPHS: Morph[] = CORE_MORPHS;
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 
 type Body = 'wounds' | 'evasion' | 'hardness' | 'accuracy' | 'affinity' | 'flies' | 'talons';
@@ -181,7 +181,7 @@ export function draftDragon(
 
 /** The two shards every slain dragon drops at its age grade [Doc] Spoils: its morph's Body shard and its stone's Bloodstone shard. */
 export const DROPS = {
-  morph: { 'true-dragon': 'Heartgrit', wyvern: 'Hollow Bones', wyrm: 'Pebblescale' } as Record<Morph, string>,
+  morph: { 'true-dragon': 'Heartgrit', wyvern: 'Coiled Sinew', wyrm: 'Pebblescale', drake: 'Coiled Sinew' } as Record<Morph, string>,
   stone: { water: 'Weathered Hide', earth: 'Milk Fang', fire: 'Smolder Sac', air: 'Whetted Nail' } as Record<CoreStone, string>,
 };
 

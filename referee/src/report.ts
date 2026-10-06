@@ -6,8 +6,8 @@ import type { Bout, Event, PlanInfo, Side } from './referee.ts';
 import { other } from './referee.ts';
 import * as R from './rules.ts';
 
-const MORPH_NAMES = { 'true-dragon': 'True Dragon', wyvern: 'Wyvern', wyrm: 'Wyrm' } as const;
-const ASPECT_NAMES = { stalwart: 'Stalwart', talons: 'Talons', serpentine: 'Serpentine' } as const;
+const MORPH_NAMES = { 'true-dragon': 'True Dragon', wyvern: 'Wyvern', wyrm: 'Wyrm', drake: 'Drake' } as const;
+const ASPECT_NAMES = { stalwart: 'Stalwart', talons: 'Talons', serpentine: 'Serpentine', ravener: 'Ravener' } as const;
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 export const paces = (units: number) => (units / R.PACE).toFixed(1);

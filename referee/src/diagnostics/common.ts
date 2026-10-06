@@ -3,12 +3,12 @@
 import { standardBoulders } from '../arena.ts';
 import { brainController, BRAIN_STYLES, type Skill } from '../brain.ts';
 import { runBout } from '../bout.ts';
-import type { CoreStone, Morph } from '../hatch.ts';
+import { CORE_MORPHS, type CoreStone, type Morph } from '../hatch.ts';
 import { seededRandom } from '../random.ts';
 import { newBout, type Bout, type Event, type FighterSetup, type Side } from '../referee.ts';
 import { PACE, type Rules } from '../rules.ts';
 
-export const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
+export const MORPHS: Morph[] = CORE_MORPHS;
 export const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 export const PAIRINGS: FighterSetup[] = MORPHS.flatMap((m) => STONES.map((s) => ({ name: `${m}-${s}`, morph: m, stone: s })));
 export const GENERAL = BRAIN_STYLES.filter((s) => !s.endsWith('-focus'));
