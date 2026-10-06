@@ -136,6 +136,8 @@ export function chainAtExchangeEnd(f: Fighter, ev: Event[]) {
   }
   ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: f.side, tag: 'chain-lapsed', text: `A whole exchange without a hit: the ${ACTIONS[c.action ?? 'hold'].label} chain lapses.` });
   f.chain = noChain();
+  // Ratchet Claws (escalate): a lapsed Claw chain drops the ratchet.
+  f.marks.ratchet = 0;
 }
 
 /**
@@ -198,6 +200,12 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     const f = F[s];
     if (p.landed) f.chain.hitThisExchange = true;
     if (p.spec.name === 'scales') f.chain.scalesThisExchange = true;
+    // Ratchet Claws (escalate): each consecutive landed Claw link ratchets the next Claw up; a different chain resets it.
+    if (bout.rules.TECH_RATCHET_CLAWS === 'escalate' && category(p) === 'attack' && ACTIONS[p.spec.name].cooldown === 0) {
+      const rat = tech(f, 'ratchet-claws');
+      if (p.spec.name === 'claw' && rat >= W && p.landed) f.marks.ratchet = Math.min(rat >= J ? 6 : 3, f.marks.ratchet + 1);
+      else if (p.spec.name !== 'claw') f.marks.ratchet = 0;
+    }
     if (category(p) === 'attack' && ACTIONS[p.spec.name].cooldown === 0 && p.link > 0) {
       const c = f.chain;
       if (c.action !== p.spec.name) {
@@ -214,7 +222,9 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     if (p.spec.name === 'dodge' && !p.evaded && tech(f, 'riposte-talons') >= A) f.readyAt.dodge = (f.readyAt.dodge ?? 0) + 1;
     // Stooping Pinions: a dive from high enough adds +3 to the next attack; the next slot can't Leap below Adult.
     const sp = tech(f, 'stooping-pinions');
-    if (p.spec.name === 'dive' && sp >= W && p.moved > 0 && p.startZ >= (sp === W ? bout.rules.STOOPING_HEIGHT.wyrmling : bout.rules.STOOPING_HEIGHT.rest)) {
+    // Stooping Pinions (nostack): a hard landing earns no +3; it is already the Wyvern's own dive payoff.
+    const stacked = bout.rules.TECH_STOOPING_PINIONS === 'nostack' && p.hardLanding;
+    if (p.spec.name === 'dive' && sp >= W && !stacked && p.moved > 0 && p.startZ >= (sp === W ? bout.rules.STOOPING_HEIGHT.wyrmling : bout.rules.STOOPING_HEIGHT.rest)) {
       f.marks.diveBonus = true;
       f.marks.noLeap = sp < A;
       ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'technique', text: 'Stooping Pinions: +3 to the next attack.' });

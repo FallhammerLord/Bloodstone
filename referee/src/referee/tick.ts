@@ -1,6 +1,6 @@
 // One tick, in the resolution order: movement, aim, hits, damage, end-of-window checks, KOs.
 
-import { dist, flatLen, len, sub, type Vec } from '../geometry.ts';
+import { add, dist, flatLen, len, sub, type Vec } from '../geometry.ts';
 import { describeObstacle, obstacleAt, obstacleOnLine, type Obstacle } from '../arena.ts';
 import { inShape, shapeOf } from '../shapes.ts';
 import * as R from '../rules.ts';
@@ -12,8 +12,8 @@ import { fillMeter } from './meter.ts';
 import { beginLunge, beginPounce, beginStoop, carryStep, moveStep, stoopStep } from './movement.ts';
 import { type Plan, category, evasionState, lastActiveTick, phase } from './plan.ts';
 import { eff } from './riders.ts';
-import { A, type Bout, E, SIDES, type Side, V, W, other, tech } from './state.ts';
-import { intimidateLands, riposte, smolder } from './techniques.ts';
+import { A, type Bout, E, J, SIDES, type Side, V, W, other, tech } from './state.ts';
+import { ashCloud, intimidateLands, riposte, smolder, thorns } from './techniques.ts';
 
 /**
  * One tick, in the resolution order [Proposed] §4. Each step sees what the steps before it did this tick:
@@ -206,6 +206,9 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
       // The blow lands on its owner, against its owner's own hide.
       const back = damage(bout.rules, F[r.s], F[r.s], plans[r.s], plans[r.s], t);
       F[r.s].wounds -= back.total;
+      // Thornscale (window, Elder): a guard reversal also deals the thorns.
+      const thR = tech(F[d], 'thornscale');
+      if (bout.rules.TECH_THORNSCALE === 'window' && thR >= E && dp.spec.name === 'scales' && (plans[r.s].spec.name === 'claw' || plans[r.s].spec.name === 'bite')) thorns(bout, r.s, thR, t, ev);
       ev.push({ kind: 'note', tick: t, side: d, tag: 'reflected', text: `The full Acumen meter turns the ${plans[r.s].spec.name} back on its owner.` });
       ev.push({ kind: 'hit', tick: t, attacker: d, action: plans[r.s].spec.name, damage: back.total, parts: ['reflected by a full Acumen meter:', ...back.parts], tags: ['reflected'], interrupt: false, trade: false, woundsLeft: F[r.s].wounds });
       continue;
@@ -243,6 +246,8 @@ function endOfWindow(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, 
       dp.evaded = true;
       F[other(s)].marks.quick = 'any';
     }
+    // Ash Gland (cloud, Juvenile): the cloud forms where the breath strikes, landed or not: here, its aim point.
+    if (p.spec.name === 'breath' && p.origin && p.aim && bout.rules.TECH_ASH_GLAND === 'cloud' && tech(F[s], 'ash-gland') >= J) ashCloud(bout, s, add(p.origin, p.aim), t, ev);
     if (!p.nearMiss) {
       ev.push({ kind: 'whiff', tick: t, attacker: s, action: p.spec.name });
       return;

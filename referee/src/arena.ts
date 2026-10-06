@@ -21,8 +21,12 @@ export interface Obstacle {
 }
 
 export interface Zone {
-  /** burning (Fire) and corrosive (Earth) lie on the floor; smolder is Smoldering Maw's lingering breath */
-  kind: 'burning' | 'corrosive' | 'smolder';
+  /** burning (Fire) and corrosive (Earth) lie on the floor; smolder is Smoldering Maw's lingering breath; ash is Ash Gland's cloud */
+  kind: 'burning' | 'corrosive' | 'smolder' | 'ash';
+  /** smolder under Smoldering Maw (linger): verb ground, on the floor rather than hanging in the air */
+  floor?: boolean;
+  /** an ash cloud from a Venerable Ash Gland also Rattles */
+  rattles?: boolean;
   /** smolder only: the breath's element, whose verb it carries */
   element?: 'water' | 'earth' | 'fire' | 'air';
   /** smolder only: Venerable Smoldering Maw lets overlapping areas stack */
@@ -135,7 +139,7 @@ export function obstacleOnLine(arena: Arena, from: Vec, to: Vec, skip = 0): Obst
 
 export function inZone(zone: Zone, pos: Vec): boolean {
   // A lingering breath hangs where it was breathed; floor zones touch only grounded dragons.
-  if (zone.kind === 'smolder') return dist(pos, zone.center) <= zone.radius;
+  if (zone.kind === 'ash' || (zone.kind === 'smolder' && !zone.floor)) return dist(pos, zone.center) <= zone.radius;
   if (pos.z !== 0) return false;
   if (!zone.end) return flatLen(sub(pos, zone.center)) <= zone.radius;
   // A lane: distance from the segment, measured on the floor.

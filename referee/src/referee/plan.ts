@@ -51,6 +51,12 @@ export interface Plan {
   chainPaused: boolean;
   lockjawBonus: boolean;
   diveBonus: boolean;
+  /** Lockjaw (clamp, Adult): this Bite can't Pin */
+  noPin: boolean;
+  /** Thornscale (window): this guard's thorns have struck (a Wyrmling's strike once a guard) */
+  thornsUsed: boolean;
+  /** Bellows Chest (mobile): a Breath charge carried on a move; a landed hit breaks it */
+  mobileCharge: boolean;
   /** the charging slot of a charge: it guards like Scales and attacks nothing */
   charging: boolean;
   /** a crunch: two attacks of 15 ticks each */
@@ -131,7 +137,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   if (f.marks.charge) {
     const c = f.marks.charge;
     if (requested.charge && requested.name === c.action && c.slots === 1 && slot < 2) {
-      spec = { name: c.action, sweep: c.sweep, charge: true };
+      spec = { name: c.action, sweep: c.sweep, charge: true, move: requested.move, dir: requested.dir };
       holding = true;
       note('charge-held', `Holds the ${ACTIONS[spec.name].label} charge a second slot.`);
     } else {
@@ -147,9 +153,18 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   const pounces = f.marks.strafed;
   f.marks.strafed = false;
 
-  // Lockjaw Venerable: a Bite the slot after a landed Lockjaw Bite gains +3. Nothing is forced.
-  const lockjawBonus = f.marks.lockjawFollow && spec.name === 'bite';
+  // Lockjaw Venerable: a Bite the slot after a landed Lockjaw Bite gains +3 (under the parity variants, the next
+  // attack of any kind). Nothing is forced.
+  const lockjawBonus = f.marks.lockjawFollow && (spec.name === 'bite' || (rules.TECH_LOCKJAW !== 'base' && ACTIONS[spec.name].category === 'attack'));
   f.marks.lockjawFollow = false;
+  // Lockjaw (clamp): a jaw shut on a Pin can't Bite this slot; at Adult it may, but that Bite can't Pin.
+  if (f.marks.clamped && spec.name === 'bite') {
+    note('held-instead', 'Lockjaw: the jaw is still clamped; it can\'t Bite this slot, and holds instead.');
+    spec = HOLD;
+  }
+  f.marks.clamped = false;
+  const noPin = f.marks.noPinNext && spec.name === 'bite';
+  f.marks.noPinNext = false;
   const ready = f.readyAt[spec.name] ?? 0;
   if (ready > g + (spec.charge ? 1 : 0)) {
     note('held-instead', `${describe(spec)} is still cooling down; holds instead.`);
@@ -207,6 +222,22 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     }
   }
 
+  // Bellows Chest (mobile): a Breath charge carried on a move. The slot scripts as charge plus Move; the Move resolves
+  // on its own timing, and the charge holds unless a landed hit breaks it. A moving charge doesn't guard.
+  let mobileCharge = false;
+  if (spec.charge && spec.name === 'breath' && spec.move) {
+    const bel = tech(f, 'bellows-chest');
+    const ok = rules.TECH_BELLOWS_CHEST === 'mobile' && bel >= W && (spec.move === 'retreat' || (bel >= J && spec.move === 'strafe') || bel >= V);
+    if (ok) {
+      if (!holding) f.marks.charge = { action: 'breath', slots: 1 };
+      mobileCharge = true;
+      note('technique', `Bellows Chest: charges the Breath on the move (${spec.move}).`);
+      spec = { name: spec.move, ...(spec.dir ? { dir: spec.dir } : {}) };
+    } else {
+      note('technique', 'A charge on the move needs Bellows Chest (Wyrmling: Retreat; Juvenile: Strafe too; Venerable: any Move): charges in place.');
+      spec = { name: spec.name, charge: true };
+    }
+  }
   const def = ACTIONS[spec.name];
   const rip = tech(f, 'riposte-talons');
   const cooldown = def.cooldown + (spec.name === 'dodge' && rip >= W && rip < A ? 1 : 0);
@@ -217,10 +248,34 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   let wShift = f.status.rattled ? rules.RATTLED_WINDUP : 0;
   let rShift = 0;
   const snap = tech(f, 'snapping-jaw');
-  if (spec.name === 'bite' && snap >= W) {
-    wShift += snap === W ? -3 : -5;
-    rShift += snap >= A ? 3 : 5;
+  // Snapping Jaw (borrow): a snap's ticks come out of the next slot's wind-up, whatever it is; a Hold settles it.
+  const owed = f.marks.snapDebt;
+  f.marks.snapDebt = 0;
+  if (owed && spec.name !== 'hold') {
+    wShift += owed;
+    note('technique', `Snapping Jaw: pays back ${owed} ticks of wind-up borrowed by last slot's snap.`);
   }
+  if (spec.name === 'bite' && snap >= W) {
+    if (rules.TECH_SNAPPING_JAW === 'base') {
+      wShift += snap === W ? -3 : -5;
+      rShift += snap >= A ? 3 : 5;
+    } else {
+      // The active window shifts earlier and keeps its length; the debt is taken as the wind-up starts.
+      const lead = snap === W ? 3 : 5;
+      wShift -= lead;
+      rShift += lead;
+      f.marks.snapDebt = snap === J ? 5 : 3;
+    }
+  }
+  // Lockjaw (recovery): every Bite recovers slower, +5 (+3 from Adult).
+  const lj = tech(f, 'lockjaw');
+  if (spec.name === 'bite' && lj >= W && rules.TECH_LOCKJAW === 'recovery') rShift += lj >= A ? 3 : 5;
+  // Ratchet Claws (escalate): Claw recovers 3 ticks slower (from Adult, only an unratcheted Claw).
+  const ratchetC = tech(f, 'ratchet-claws');
+  if (spec.name === 'claw' && ratchetC >= W && rules.TECH_RATCHET_CLAWS === 'escalate' && (ratchetC < A || f.marks.ratchet === 0)) rShift += 3;
+  // Thornscale (window): a thorned guard's window closes 3 ticks early (2 from Adult).
+  const thornT = tech(f, 'thornscale');
+  if (spec.name === 'scales' && thornT >= W && rules.TECH_THORNSCALE === 'window') rShift += thornT >= A ? 2 : 3;
   const ham = tech(f, 'hamstring-hooks');
   if (spec.name === 'claw' && ham >= W) rShift += ham >= A ? 3 : 5;
   const bound = tech(f, 'bounding-haunches');
@@ -304,7 +359,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
     moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, aimLock: 0, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch,
     pounces: pounces && spec.name === 'claw' && !spec.crunch,
-    shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus,
+    shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus, noPin, thornsUsed: false, mobileCharge,
     charging, halves, landedHalves: 0, hardLanding, quaked: false,
   };
 }

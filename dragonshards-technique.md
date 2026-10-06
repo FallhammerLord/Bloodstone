@@ -205,6 +205,7 @@ Intimidate strips the opponent's next chain bonus instead of granting your +3. Y
 - **Venerable:** as Elder; the target is Rattled
 
 ### Baleful Eye · Information
+**[Cut]** Out of the suite and the shard pool (technique parity pass 1). Kept here for the record.
 Intimidating in slot 1 or 2 reveals the opponent's scripted slot 3 during the revision window. No +3; you remain open.
 - **Wyrmling:** reveals only whether it's an attack
 - **Juvenile:** reveals its category

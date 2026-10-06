@@ -57,6 +57,8 @@ export interface ActionSpec {
   crunch?: boolean;
   /** a band move landing short of or past the band's 3 paces, as far as Evasion allows [Proposed] */
   depth?: 'short' | 'long';
+  /** Bellows Chest (mobile): a Breath charge carried on this Move [Proposed] */
+  move?: 'approach' | 'retreat' | 'strafe' | 'leap' | 'dive';
   /** Claw from the air: the stoop carries back a band instead of forward */
   back?: boolean;
   /** Dive: a hard landing, all the way down from two bands up or more, with a free Stomp where it lands [Doc] */
@@ -70,6 +72,14 @@ export function parseAction(text: string): ActionSpec {
   const [raw, detail, extra] = text.trim().toLowerCase().split(':');
   if (raw === 'charge') {
     if (detail !== 'bite' && detail !== 'breath') throw new Error(`Charge a Bite or a Breath: "charge:bite" or "charge:breath".`);
+    // Bellows Chest (mobile): "charge:breath:retreat", "charge:breath:strafe:cw".
+    if (detail === 'breath' && extra) {
+      const move = extra as NonNullable<ActionSpec['move']>;
+      if (!['approach', 'retreat', 'strafe', 'leap', 'dive'].includes(move)) throw new Error(`A charge moves with a Move: "charge:breath:retreat".`);
+      const dir = text.trim().toLowerCase().split(':')[3];
+      if (move === 'strafe' && dir !== 'cw' && dir !== 'ccw') throw new Error(`A strafing charge needs a direction: "charge:breath:strafe:cw".`);
+      return { name: 'breath', charge: true, move, ...(dir ? { dir: dir as 'cw' | 'ccw' } : {}) };
+    }
     return { name: detail, charge: true };
   }
   if (raw === 'crunch') {
@@ -102,7 +112,7 @@ export function parseAction(text: string): ActionSpec {
 
 export function describe(spec: ActionSpec): string {
   const base = ACTIONS[spec.name].label;
-  const label = spec.charge ? `${base} (charging)` : spec.released ? `${base} (charged)` : spec.crunch ? `${base} ×2 (crunched)` : base;
+  const label = spec.charge ? `${base} (charging${spec.move ? `, on a ${spec.move}` : ''})` : spec.released ? `${base} (charged)` : spec.crunch ? `${base} ×2 (crunched)` : base;
   if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''})`;
   if (spec.sweep) return `${label} (${spec.sweep}${spec.back ? ', stooping back' : ''})`;
   if (spec.depth) return `${label} (${spec.depth})`;

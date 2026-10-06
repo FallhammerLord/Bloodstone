@@ -56,6 +56,6 @@ export type Event =
   | { kind: 'revision'; side: Side; moment: Moment; from: string; to: string }
   | { kind: 'pulse'; side: Side; pulse: number; damage: number; woundsLeft: number; capped: boolean }
   | { kind: 'obstacle'; tick: number; attacker: Side; action: ActionName; obstacle: string; damage: number; destroyed: boolean; through: boolean }
-  | { kind: 'zone'; tick: number; owner: Side; zone: 'burning' | 'corrosive' | 'smolder'; center: Vec; end?: Vec }
-  | { kind: 'zoneEffect'; side: Side; zone: 'burning' | 'corrosive' | 'smolder'; damage: number; woundsLeft: number }
+  | { kind: 'zone'; tick: number; owner: Side; zone: 'burning' | 'corrosive' | 'smolder' | 'ash'; center: Vec; end?: Vec }
+  | { kind: 'zoneEffect'; side: Side; zone: 'burning' | 'corrosive' | 'smolder' | 'ash'; damage: number; woundsLeft: number }
   | { kind: 'boutEnd'; winner: Side; reason: string };

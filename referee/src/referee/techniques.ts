@@ -13,12 +13,17 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
   const def = bout.fighters[other(s)];
   const note = (side: Side, text: string) => ev.push({ kind: 'note', tick: t, side, tag: 'technique', text });
 
-  // Lockjaw: a landed Bite Pins; the biter's next slot locks to Bite (Adult: Bite or Guard).
+  // Lockjaw: a landed Bite Pins (Wyrmling: a chain's final link). Under clamp the jaw stays shut: the biter can't Bite
+  // next slot (from Adult it may, but that Bite can't Pin). A Venerable's next attack on the Pinned target gains +3.
   const lj = p.spec.name === 'bite' ? tech(att, 'lockjaw') : -1;
-  if (lj >= W && (lj >= J || p.link === 3)) {
+  if (lj >= W && (lj >= J || p.link === 3) && !p.noPin) {
     def.pending.pinned = true;
     if (lj >= V) att.marks.lockjawFollow = true;
-    note(def.side, 'Lockjaw: Pinned next slot.');
+    if (bout.rules.TECH_LOCKJAW === 'clamp') {
+      if (lj >= A) att.marks.noPinNext = true;
+      else att.marks.clamped = true;
+    }
+    note(def.side, `Lockjaw: Pinned next slot${bout.rules.TECH_LOCKJAW === 'clamp' ? (lj >= A ? '; the biter\'s next Bite can\'t Pin' : '; the jaw clamps, and the biter can\'t Bite next slot') : ''}.`);
   }
   // Hamstring Hooks: a landed Claw Staggers (Elder: slows its next move; Venerable: no Leap).
   const hh = p.spec.name === 'claw' ? tech(att, 'hamstring-hooks') : -1;
@@ -28,17 +33,32 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
     if (hh >= V) def.pending.grounded = true;
     note(def.side, `Hamstring Hooks: Staggered next slot${hh >= E ? ', and slowed' : ''}${hh >= V ? ', and can\'t Leap' : ''}.`);
   }
-  // Thornscale: attackers landing into Scales take 3 (Wyrmling: Claw only; Juvenile: Claw and Bite).
+  // Thornscale: attackers landing into Scales take 3 (Wyrmling: Claw only; Juvenile: Claw and Bite). Under window,
+  // Claw or Bite at every grade: a Wyrmling's thorns strike the first into each guard, a Juvenile's every one.
   const th = tech(def, 'thornscale');
   const intoScales = guarding(defPlan, t);
-  if (th >= W && intoScales && (p.spec.name === 'claw' || (th >= J && p.spec.name === 'bite'))) {
-    att.wounds -= bout.rules.TECHNIQUE_POINTS;
-    if (th >= V) att.pending.rattled = true;
-    note(s, `Thornscale: takes ${bout.rules.TECHNIQUE_POINTS} from the spines${th >= V ? ' and is Rattled' : ''}.`);
+  const windowed = bout.rules.TECH_THORNSCALE === 'window';
+  const thornHits = windowed
+    ? (p.spec.name === 'claw' || p.spec.name === 'bite') && (th >= J || !defPlan.thornsUsed)
+    : p.spec.name === 'claw' || (th >= J && p.spec.name === 'bite');
+  if (th >= W && intoScales && thornHits) {
+    defPlan.thornsUsed = true;
+    thorns(bout, s, th, t, ev);
   }
   // Ash Gland: locks the target's revision next exchange. (A Wyrmling's 'clean hits only' is every hit, now grazes are gone.)
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
-  if (ash >= W) {
+  if (ash >= W && bout.rules.TECH_ASH_GLAND === 'cloud') ashCloud(bout, s, { ...def.pos }, t, ev);
+  // Sapping Bellow (gland) [provisional reading]: the bellow rides the Breath. A landed Breath demoralizes (its next Bite
+  // or Claw loses 3); from Juvenile it also strips the next chain bonus; Elder its pending Intimidate; Venerable Rattles.
+  const sapB = p.spec.name === 'breath' && bout.rules.TECH_SAPPING_BELLOW === 'gland' ? tech(att, 'sapping-bellow') : -1;
+  if (sapB >= W) {
+    def.marks.demoralized = true;
+    if (sapB >= J) def.marks.sapped = 'any';
+    if (sapB >= E) def.intimidateBonus = false;
+    if (sapB >= V) def.pending.rattled = true;
+    note(def.side, `Sapping Bellow: the breath demoralizes${sapB >= J ? ' and saps the next chain bonus' : ''}${sapB >= V ? '; Rattled' : ''}.`);
+  }
+  if (ash >= W && bout.rules.TECH_ASH_GLAND === 'pulled') {
     def.marks.revisionLockedFor = bout.exchange + 1;
     if (ash >= E) def.pending.blinded = true;
     if (ash >= V) def.pending.rattled = true;
@@ -76,7 +96,8 @@ export function intimidateLands(bout: Bout, s: Side, t: number, ev: Event[]) {
   // Whatever form it takes, an Intimidate that reaches demoralizes: the target's next Bite or Claw loses 3 [Proposed].
   opp.marks.demoralized = true;
   ev.push({ kind: 'note', tick: t, side: opp.side, tag: 'demoralized', text: `Demoralized: its next Bite or Claw loses ${bout.rules.DEMORALIZE}.` });
-  const sap = tech(f, 'sapping-bellow');
+  // Under gland, Sapping Bellow works through the Breath, and the Intimidate is a plain one.
+  const sap = bout.rules.TECH_SAPPING_BELLOW === 'gland' ? -1 : tech(f, 'sapping-bellow');
   const eye = tech(f, 'baleful-eye');
   const goad = tech(f, 'goading-roar');
   if (sap >= W) {
@@ -107,13 +128,57 @@ export function smolder(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, e
   const f = bout.fighters[s];
   const sm = tech(f, 'smoldering-maw');
   if (sm < W) return;
+  const linger = bout.rules.TECH_SMOLDERING_MAW === 'linger';
+  // Under linger, a breath that leaves ground (Fire's lane, an Earth pool) only lingers longer; one that leaves none lays
+  // its verb as ground. A verbless lance lays nothing.
+  if (linger && (f.sheet.stone === 'fire' || (f.sheet.stone === 'earth' && !bout.rules.EARTH_CORRODES))) return;
+  if (linger && bout.rules.TECH_LANCE_THROAT === 'pierce' && tech(f, 'lance-throat') >= W) return;
   const reach = tech(f, 'lance-throat') >= W ? R.FAR_EDGE : f.sheet.stone === 'water' ? bout.rules.BREATH.line.reach : f.sheet.stone === 'earth' ? bout.rules.BREATH.narrowCone.reach : f.sheet.stone === 'air' ? bout.rules.BREATH.vortex.maxCenter : bout.rules.BREATH.blast.maxCenter;
   // The area is centered where the breath reaches its target, or its full reach.
   const center = add(origin, scaleTo(aim, Math.min(len(aim), reach)));
+  const center0 = linger ? { ...center, z: 0 } : center;
+  if (linger && bout.rules.ZONE_MAX) {
+    // Verb ground counts toward the cap on a dragon's ground; the oldest goes out.
+    const mine = bout.arena.zones.filter((z) => z.owner === s && z.kind !== 'ash' && (z.kind !== 'smolder' || z.floor));
+    if (mine.length >= bout.rules.ZONE_MAX) bout.arena.zones = bout.arena.zones.filter((z) => !mine.slice(0, mine.length - bout.rules.ZONE_MAX + 1).includes(z));
+  }
   bout.arena.zones.push({
-    kind: 'smolder', element: f.sheet.stone, stacks: sm >= V, center,
+    kind: 'smolder', element: f.sheet.stone, stacks: sm >= V, center: center0, ...(linger ? { floor: true } : {}),
     radius: sm === W ? bout.rules.SMOLDER_RADIUS.center : bout.rules.SMOLDER_RADIUS.full,
     lastSlot: bout.globalSlot - 1 + (sm >= A ? 2 : 1), owner: s,
   });
   ev.push({ kind: 'zone', tick: t, owner: s, zone: 'smolder', center });
+}
+
+/** Thornscale's spines: the attacker takes 3; a Venerable's also Rattle. */
+export function thorns(bout: Bout, s: Side, th: number, t: number, ev: Event[]) {
+  const att = bout.fighters[s];
+  att.wounds -= bout.rules.TECHNIQUE_POINTS;
+  if (th >= V) att.pending.rattled = true;
+  ev.push({ kind: 'note', tick: t, side: s, tag: 'technique', text: `Thornscale: takes ${bout.rules.TECHNIQUE_POINTS} from the spines${th >= V ? ' and is Rattled' : ''}.` });
+}
+
+/**
+ * Ash Gland (cloud) [Proposed]: an ash cloud where the breath strikes, a sphere through the next slot (Smoldering Maw's
+ * linger adds its slots). Dragons inside as it forms, and dragons ending a slot inside, are Blinded (a Venerable's also
+ * Rattled). The breather's own cloud blinds it too, except under Stalwart. One cloud per dragon: a new one replaces it.
+ */
+export function ashCloud(bout: Bout, s: Side, center: Vec, t: number, ev: Event[]) {
+  const f = bout.fighters[s];
+  const ash = tech(f, 'ash-gland');
+  if (ash < W || bout.rules.TECH_ASH_GLAND !== 'cloud') return;
+  const maw = bout.rules.TECH_SMOLDERING_MAW === 'linger' ? tech(f, 'smoldering-maw') : -1;
+  const extra = maw >= A ? 2 : maw >= W ? 1 : 0;
+  const radius = ash >= E ? Math.floor(1.5 * R.PACE) : bout.rules.ASH_CLOUD_RADIUS;
+  bout.arena.zones = bout.arena.zones.filter((z) => !(z.kind === 'ash' && z.owner === s));
+  const zone = { kind: 'ash' as const, center, radius, lastSlot: bout.globalSlot + extra, owner: s, rattles: ash >= V };
+  bout.arena.zones.push(zone);
+  ev.push({ kind: 'zone', tick: t, owner: s, zone: 'ash', center });
+  for (const side of [s, other(s)]) {
+    const g = bout.fighters[side];
+    if (dist(g.pos, center) > radius || (side === s && g.sheet.aspect === 'stalwart')) continue;
+    g.pending.blinded = true;
+    if (zone.rattles) g.pending.rattled = true;
+    ev.push({ kind: 'note', tick: t, side, tag: 'technique', text: `Caught in the ash cloud: Blinded${zone.rattles ? ' and Rattled' : ''}.` });
+  }
 }

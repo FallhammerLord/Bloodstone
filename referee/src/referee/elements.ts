@@ -10,7 +10,7 @@ import type { Event } from './events.ts';
 import { checkKO } from './exchange.ts';
 import { type Plan, guarding } from './plan.ts';
 import { eff } from './riders.ts';
-import { type Bout, E, type Fighter, J, SIDES, type Side, V, W, other, tech } from './state.ts';
+import { A, type Bout, E, type Fighter, J, SIDES, type Side, V, W, other, tech } from './state.ts';
 
 /** Raw force of an attack against an obstacle: no Hardness, no modifiers. */
 export function obstacleDamage(rules: Rules, att: Fighter, action: ActionName): number {
@@ -128,10 +128,14 @@ export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, scales
   // Scales presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
   const scalesAff = scales ? rules.SCALES_AFFINITY : 0;
   const mantle = scales ? tech(def, 'mantle-wings') : -1;
-  const mantleAff = mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
-  // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable.
+  // Mantle Wings (verbguard) blocks the verb instead; only a Venerable's guard rises to +6 against Breath.
+  const mantleAff = rules.TECH_MANTLE_WINGS === 'verbguard'
+    ? (mantle >= V ? 3 : 0)
+    : mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
+  // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable. Under pierce, a Wyrmling's pierces 3 at Far.
   const lance = tech(att, 'lance-throat');
-  const pierce = lance >= V && sep > R.CLOSE_EDGE ? 6 : lance >= J ? 3 : 0;
+  const far = sep > R.CLOSE_EDGE;
+  const pierce = lance >= V && far ? 6 : lance >= J ? 3 : lance === W && far && rules.TECH_LANCE_THROAT === 'pierce' ? 3 : 0;
   return { aff, scalesAff, mantleAff, pierce, affinity: Math.max(0, aff.value + scalesAff + mantleAff - pierce) };
 }
 
@@ -186,17 +190,23 @@ export function leaveZone(bout: Bout, s: Side, p: Plan, origin: Vec, aim: Vec, t
   const stone = f.sheet.stone;
   if (stone !== 'fire' && stone !== 'earth') return;
   if (stone === 'earth' && R2.EARTH_CORRODES) return; // Earth corrodes on the hit instead
+  // Lance Throat (pierce): a verbless line leaves no ground.
+  if (R2.TECH_LANCE_THROAT === 'pierce' && tech(f, 'lance-throat') >= W) return;
   const kind = stone === 'fire' ? 'burning' : 'corrosive';
   const potency = eff(f, 'breath', {}).value;
   const charged = p.spec.released ? (p.spec.full ? 2 : 1) : 0;
-  const linger = R2.ZONE_DURATION_DIVISOR ? Math.floor(potency / R2.ZONE_DURATION_DIVISOR) + charged * R2.ZONE_CHARGE_SLOTS : R2.ZONE_SLOTS;
+  // Smoldering Maw (linger): the ground lingers 1 slot longer (2 from Adult).
+  const maw = R2.TECH_SMOLDERING_MAW === 'linger' ? tech(f, 'smoldering-maw') : -1;
+  const longer = maw >= A ? 2 : maw >= W ? 1 : 0;
+  const linger = (R2.ZONE_DURATION_DIVISOR ? Math.floor(potency / R2.ZONE_DURATION_DIVISOR) + charged * R2.ZONE_CHARGE_SLOTS : R2.ZONE_SLOTS) + longer;
   const damage = kind === 'burning' ? (R2.BURN_DIVISOR ? Math.floor(potency / R2.BURN_DIVISOR) : R2.BURN_DAMAGE) : 0;
   const along = (d: number) => flat(add(origin, scaleTo(aim, d)));
   const zone: Zone = kind === 'burning' && R2.FIRE_LANE
     ? { kind, center: along(R.MELEE_EDGE), end: along(R.FAR_EDGE), radius: R2.BREATH.blast.radius, damage, lastSlot: bout.globalSlot - 1 + linger, owner: s }
     : { kind, center: along(Math.min(len(aim), stone === 'fire' ? R2.BREATH.blast.maxCenter : R2.BREATH.narrowCone.reach)), radius: R2.ZONE_RADIUS, damage, lastSlot: bout.globalSlot - 1 + linger, owner: s };
   if (R2.ZONE_MAX) {
-    const mine = bout.arena.zones.filter((z) => z.owner === s && z.kind !== 'smolder');
+    // The cap counts ground: under Smoldering Maw (linger), verb ground counts too.
+    const mine = bout.arena.zones.filter((z) => z.owner === s && z.kind !== 'ash' && (z.kind !== 'smolder' || z.floor));
     if (mine.length >= R2.ZONE_MAX) bout.arena.zones = bout.arena.zones.filter((z) => !mine.slice(0, mine.length - R2.ZONE_MAX + 1).includes(z));
   }
   bout.arena.zones.push(zone);
@@ -216,7 +226,18 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
     for (const s of SIDES) {
       const f = bout.fighters[s];
       if (!inZone(z, f.pos)) continue;
-      if (plans[s].spec.name === 'scales' && tech(f, 'mantle-wings') >= E) continue;
+      // Ash Gland (cloud): ending a slot in the cloud Blinds (a Venerable's also Rattles); the breather's own blinds it, but
+      // not a Stalwart. Blindness isn't elemental: no Affinity contest, and no guard against it.
+      if (z.kind === 'ash') {
+        if (z.owner === s && f.sheet.aspect === 'stalwart') continue;
+        f.pending.blinded = true;
+        if (z.rattles) f.pending.rattled = true;
+        ev.push({ kind: 'zoneEffect', side: s, zone: 'ash', damage: 0, woundsLeft: f.wounds });
+        continue;
+      }
+      const mantleW = tech(f, 'mantle-wings');
+      const mantleGround = bout.rules.TECH_MANTLE_WINGS === 'verbguard' ? mantleW >= A : mantleW >= E;
+      if (plans[s].spec.name === 'scales' && mantleGround) continue;
       // Stalwart: a True Dragon's own zones never harm it [Proposed].
       if (z.owner === s && f.sheet.aspect === 'stalwart') continue;
       // The zone's element contests the dragon's Affinity, as the breath did [Proposed].
@@ -246,8 +267,13 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
         const away = sub(f.pos, z.center);
         if (held) continue;
         if (z.element === 'water') shove(bout, s, away, bout.rules.SMOLDER_PUSH);
-        if (z.element === 'air') shove(bout, s, sub(bout.fighters[z.owner].pos, f.pos), bout.rules.SMOLDER_PULL);
-        if (z.element === 'earth') f.pending.corroded = true;
+        // Verb ground (linger) pulls toward its own center; the base lingering breath tugs toward the breather.
+        if (z.element === 'air') shove(bout, s, z.floor ? sub(z.center, f.pos) : sub(bout.fighters[z.owner].pos, f.pos), bout.rules.SMOLDER_PULL);
+        if (z.element === 'earth' && z.floor && bout.rules.EARTH_CORRODES) {
+          // Verb ground corrodes through the next slot, at the breather's corrosion.
+          const bonus = Math.floor(eff(bout.fighters[z.owner], 'breath', {}).value / bout.rules.CORRODE_DIVISOR);
+          f.marks.corrosion = { bonus: Math.max(bonus, f.marks.corrosion?.bonus ?? 0), until: Math.max(g + 1, f.marks.corrosion?.until ?? 0) };
+        } else if (z.element === 'earth') f.pending.corroded = true;
       }
     }
     // Smoldering Maw Elder: the lingering area eats at obstacles inside it.

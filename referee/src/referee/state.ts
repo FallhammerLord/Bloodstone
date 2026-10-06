@@ -59,8 +59,16 @@ export interface Marks {
   corrosion: { bonus: number; until: number } | null;
   /** Stomp caught it mid-move [Proposed]: Staggered for this many slots more after the next */
   staggerExtra: number;
+  /** Snapping Jaw (borrow): ticks of wind-up the next slot's action owes */
+  snapDebt: number;
+  /** Lockjaw (clamp): the jaw is shut; this dragon can't Bite next slot */
+  clamped: boolean;
+  /** Lockjaw (clamp, Adult): next slot's Bite can't Pin */
+  noPinNext: boolean;
+  /** Ratchet Claws (escalate): + this much to the next Claw */
+  ratchet: number;
 }
-export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null, staggerExtra: 0 });
+export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null, staggerExtra: 0, snapDebt: 0, clamped: false, noPinNext: false, ratchet: 0 });
 
 export interface Chain {
   action: ActionName | null;

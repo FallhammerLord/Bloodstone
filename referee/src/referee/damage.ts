@@ -19,7 +19,7 @@ import { techniqueOnHit } from './techniques.ts';
 export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number): { total: number; parts: string[]; tags: HitTag[]; bypass: boolean } {
   // Ash Gland: the breath carries information, not harm (3 points from Adult).
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
-  if (ash >= W) return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`], tags: [], bypass: false };
+  if (ash >= W && rules.TECH_ASH_GLAND === 'pulled') return { total: ash >= A ? 3 : 0, parts: [`Ash Gland: ${ash >= A ? '3 points' : 'no damage'}`], tags: [], bypass: false };
 
   const parts: string[] = [];
   const tags: HitTag[] = [];
@@ -30,7 +30,9 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
     parts.push('true damage (full Acumen meter)');
     tags.push('true-damage');
   }
-  let v = baseDamage(rules, att, def, p, hardness, label, scales, bypass, parts, tags);
+  // Bellows Chest (mobile, Adult): a moving charge keeps the guard's +3 Affinity against Breath.
+  const mobileGuard = defPlan.mobileCharge && tech(def, 'bellows-chest') >= A;
+  let v = baseDamage(rules, att, def, p, hardness, label, scales || mobileGuard, bypass, parts, tags);
   v += modifiers(rules, att, def, p, defPlan, t, bypass, parts, tags);
   if (v < rules.DAMAGE_FLOOR) {
     v = rules.DAMAGE_FLOOR;
@@ -47,13 +49,19 @@ function hardnessFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: numb
   let guardShift = 0;
   const guardNotes: string[] = [];
   if (scales) {
+    // Thornscale (window) costs the guard's last ticks instead of its Hardness.
     const thorn = tech(def, 'thornscale');
-    if (thorn >= W && (thorn < A || p.spec.name === 'bite')) {
+    if (thorn >= W && rules.TECH_THORNSCALE === 'base' && (thorn < A || p.spec.name === 'bite')) {
       guardShift -= 3;
       guardNotes.push('Thornscale');
     }
     const mantle = tech(def, 'mantle-wings');
-    if (mantle >= W && (p.spec.name === 'claw' || (p.spec.name === 'bite' && mantle < A)) && !(mantle >= V && def.pos.z > 0)) {
+    const mantleBase = rules.TECH_MANTLE_WINGS === 'base';
+    // Mantle Wings (verbguard): −3 against Claw only; from Elder, lifted while aloft.
+    const mantleHit = mantleBase
+      ? (p.spec.name === 'claw' || (p.spec.name === 'bite' && mantle < A)) && !(mantle >= V && def.pos.z > 0)
+      : p.spec.name === 'claw' && !(mantle >= E && def.pos.z > 0);
+    if (mantle >= W && mantleHit) {
       guardShift -= 3;
       guardNotes.push('Mantle Wings');
     }
@@ -92,13 +100,21 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
       const claw = eff(att, 'claw', { link: p.spec.revised ? 0 : p.link });
       // A pounce out of a strafe pierces like a Bite [Proposed].
       const felt = p.pounces ? Math.max(0, hardness - rules.POUNCE_PIERCE) : hardness;
-      v = claw.value - felt;
-      parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}${p.pounces && hardness ? ` pierced to ${felt} (pounce)` : ''}`);
-      if (p.pounces) tags.push('pounce');
-      // Ratchet Claws: an escalating chain. Each landed link adds to the next (Wyrmling: only into the third).
       const rat = tech(att, 'ratchet-claws');
+      // Ratchet Claws (escalate, Venerable): a Claw ratcheted to +3 or more pierces 3 Hardness.
+      const ratchetPierce = rules.TECH_RATCHET_CLAWS === 'escalate' && rat >= V && att.marks.ratchet >= 3 ? 3 : 0;
+      const shown = Math.max(0, felt - ratchetPierce);
+      v = claw.value - shown;
+      parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}${p.pounces && hardness ? ` pierced to ${felt} (pounce)` : ''}${ratchetPierce && felt ? ` pierced to ${shown} (Ratchet Claws)` : ''}`);
+      if (p.pounces) tags.push('pounce');
+      // Ratchet Claws (escalate): each consecutive landed Claw link adds +1 to the next Claw, up to +3 (+6 from Juvenile).
+      if (rules.TECH_RATCHET_CLAWS === 'escalate' && rat >= W && att.marks.ratchet > 0) {
+        v += att.marks.ratchet;
+        parts.push(`+${att.marks.ratchet} ratchet (Ratchet Claws)`);
+      }
+      // Ratchet Claws: an escalating chain. Each landed link adds to the next (Wyrmling: only into the third).
       const prior = p.link - 1;
-      if (rat >= W && !crunched && prior > 0 && (rat >= J || p.link === 3)) {
+      if (rules.TECH_RATCHET_CLAWS === 'base' && rat >= W && !crunched && prior > 0 && (rat >= J || p.link === 3)) {
         const step = rat >= V ? 2 : 1;
         const esc = rat === W ? step : prior * step;
         v += esc;
@@ -134,6 +150,12 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
       if (tech(att, 'smoldering-maw') >= W) {
         v -= 3;
         parts.push('−3 Smoldering Maw (it lingers instead)');
+      }
+      // Ash Gland (cloud): the breath keeps its damage less 3, Wyrmling and Juvenile; full from Adult.
+      const ashC = tech(att, 'ash-gland');
+      if (rules.TECH_ASH_GLAND === 'cloud' && ashC >= W && ashC < A) {
+        v -= 3;
+        parts.push('−3 Ash Gland (it clouds instead)');
       }
       if (m > 0) parts.push(`+${m} matchup`);
       if (m < 0) parts.push(`${m} matchup`);
@@ -199,7 +221,7 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
     if (sapped) {
       att.marks.sapped = null;
       parts.push('chain bonus sapped (Sapping Bellow)');
-    } else if (rat >= W) {
+    } else if (rat >= W && rules.TECH_RATCHET_CLAWS === 'base') {
       // Ratchet Claws pays for its escalation out of the final link's bonus.
       const bonus = rules.CHAIN_THIRD_LINK_BONUS - (rat >= A ? 1 : 3);
       v += bonus;
@@ -215,9 +237,16 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
     v += 3;
     parts.push('+3 Lockjaw follow-up');
   }
-  if (p.diveBonus) {
+  // Stooping Pinions (nostack): the dive's +3 never adds to a stoop.
+  if (p.diveBonus && !(p.stoop && rules.TECH_STOOPING_PINIONS === 'nostack')) {
     v += 3;
     parts.push('+3 Stooping Pinions');
+  }
+  // Snapping Jaw (borrow_dmg): a snapped Bite deals 3 less, Wyrmling through Adult; Elder's interrupt +3 refunds it.
+  const snap = p.spec.name === 'bite' ? tech(att, 'snapping-jaw') : -1;
+  if (rules.TECH_SNAPPING_JAW === 'borrow_dmg' && snap >= W && snap < E) {
+    v -= 3;
+    parts.push('−3 snapped (Snapping Jaw)');
   }
   if (p.spec.name === 'bite' && defPhase === 'windup' && tech(att, 'snapping-jaw') >= E) {
     v += 3;
@@ -248,7 +277,7 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   p.landed = true;
   p.landedHalves++;
   def.wounds -= total;
-  if (defPlan.charging && def.marks.charge) {
+  if ((defPlan.charging || defPlan.mobileCharge) && def.marks.charge) {
     def.marks.charge = null;
     ev.push({ kind: 'note', tick: t, side: def.side, tag: 'charge-broken', text: 'The hit breaks the charge.' });
   }
@@ -263,7 +292,7 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   const interrupt = (phase(defPlan, t) === 'windup' && !chargedBreath) || meleeBreath;
   if (interrupt) defPlan.interruptedAt = t;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, tags, interrupt, trade, woundsLeft: def.wounds });
-  if (p.spec.name === 'breath' && p.aim && tech(bout.fighters[s], 'ash-gland') < 0) {
+  if (p.spec.name === 'breath' && p.aim && carriesVerb(bout.rules, bout.fighters[s]) && !verbGuarded(bout.rules, bout.fighters[s], def, defPlan, t)) {
     if (verbs) verbs.push({ s, aim: p.aim });
     else breathVerb(bout, s, p, p.aim, t, ev);
   }
@@ -276,4 +305,17 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
     const slots = caught ? bout.rules.STOMP_MOVER_STAGGER : 1;
     ev.push({ kind: 'note', tick: t, side: def.side, tag: 'staggered', text: `${caught ? 'Caught mid-move: ' : ''}Staggered for the next ${slots === 1 ? 'slot' : `${slots} slots`}: Evasion halved.` });
   }
+}
+
+/** Whether a breath carries its element's verb: not under a pulled Ash Gland, nor a piercing Lance Throat. */
+export function carriesVerb(rules: Rules, att: Fighter): boolean {
+  if (rules.TECH_ASH_GLAND === 'pulled' && tech(att, 'ash-gland') >= W) return false;
+  if (rules.TECH_LANCE_THROAT === 'pierce' && tech(att, 'lance-throat') >= W) return false;
+  return true;
+}
+
+/** Mantle Wings (verbguard): Scales against a Breath at Melee or Close (any range from Juvenile) blocks its verb. */
+export function verbGuarded(rules: Rules, att: Fighter, def: Fighter, defPlan: Plan, t: number): boolean {
+  const mantle = tech(def, 'mantle-wings');
+  return rules.TECH_MANTLE_WINGS === 'verbguard' && mantle >= W && guarding(defPlan, t) && (mantle >= J || dist(att.pos, def.pos) <= R.CLOSE_EDGE);
 }
