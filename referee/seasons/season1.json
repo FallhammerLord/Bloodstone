@@ -1,0 +1,357 @@
+{
+ "season": 1,
+ "note": "Reconstructed from the season 1 hall of champions and tamer cards; wins are a floor except for carded tamers.",
+ "tamers": [
+  {
+   "name": "Sulila Gal",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 28,
+   "ichor": 0,
+   "champions": [
+    "Holloweye (true-dragon + air, Hollow Bones, Heartgrit, Smolder Sac), 9\u20130, season 1 round 40"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 9,
+     "d": 0
+    },
+    "wyvern + air": {
+     "w": 12,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Karen Ash",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 9,
+   "losses": 0,
+   "hatched": 1,
+   "ichor": 0,
+   "champions": [
+    "Ironhorn (true-dragon + fire, Heartgrit, Hollow Bones, Pebblescale), 9\u20130, season 1 round 9"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Yramor Quen",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 9,
+   "losses": 1,
+   "hatched": 2,
+   "ichor": 0,
+   "champions": [
+    "Hollowclaw (wyvern + water, Whetted Nail, Heartgrit, Smolder Sac), 9\u20130, season 1 round 11"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Galvel Ila",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 2,
+   "hatched": 3,
+   "ichor": 0,
+   "champions": [
+    "Rimehorn (wyvern + air, Milk Fang, Pebblescale, Whetted Nail), 9\u20130, season 1 round 12"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Cortor Tor",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 54,
+   "losses": 26,
+   "hatched": 28,
+   "ichor": 0,
+   "champions": [
+    "Duskclaw (wyvern + air, Pebblescale, Heartgrit, Milk Fang), 9\u20130, season 1 round 14",
+    "Rimetail (wyvern + earth, Heartgrit, Milk Fang, Hollow Bones), 9\u20130, season 1 round 65"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 0
+    },
+    "wyvern + earth": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Yrayra Ash",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 3,
+   "hatched": 4,
+   "ichor": 0,
+   "champions": [
+    "Slatewing (wyvern + air, Weathered Hide, Heartgrit, Smolder Sac), 9\u20130, season 1 round 20"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Ostash Ren",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 9,
+   "losses": 4,
+   "hatched": 5,
+   "ichor": 0,
+   "champions": [
+    "Vaneclaw (wyvern + earth, Pebblescale, Heartgrit, Smolder Sac), 9\u20130, season 1 round 22"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Corush Lin",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 9,
+   "losses": 6,
+   "hatched": 7,
+   "ichor": 0,
+   "champions": [
+    "Stormclaw (wyvern + air, Smolder Sac, Whetted Nail, Heartgrit), 9\u20130, season 1 round 28"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Ilayra Bryn",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 11,
+   "hatched": 12,
+   "ichor": 0,
+   "champions": [
+    "Hollowheart (wyvern + fire, Whetted Nail, Pebblescale, Smolder Sac), 9\u20130, season 1 round 36"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Yrazar Yra",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 9,
+   "losses": 8,
+   "hatched": 9,
+   "ichor": 0,
+   "champions": [
+    "Vaneheart (wyvern + air, Milk Fang, Whetted Nail, Smolder Sac), 9\u20130, season 1 round 38"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Ilamor Gal",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 11,
+   "hatched": 12,
+   "ichor": 0,
+   "champions": [
+    "Thorntail (wyrm + water, Milk Fang, Whetted Nail, Heartgrit), 9\u20130, season 1 round 43"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Zarbryn Bryn",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 20,
+   "hatched": 21,
+   "ichor": 0,
+   "champions": [
+    "Rimespine (true-dragon + fire, Milk Fang, Heartgrit, Whetted Nail), 9\u20130, season 1 round 47"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Kathi Ash",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 9,
+   "losses": 15,
+   "hatched": 16,
+   "ichor": 0,
+   "champions": [
+    "Thorntail (wyvern + air, Whetted Nail, Milk Fang, Pebblescale), 9\u20130, season 1 round 51"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Rendra Dra",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 17,
+   "hatched": 18,
+   "ichor": 0,
+   "champions": [
+    "Mirecrest (wyvern + earth, Smolder Sac, Heartgrit, Milk Fang), 9\u20130, season 1 round 54"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Morzar Yra",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 9,
+   "losses": 23,
+   "hatched": 24,
+   "ichor": 0,
+   "champions": [
+    "Hollowfang (wyvern + water, Hollow Bones, Pebblescale, Whetted Nail), 9\u20130, season 1 round 54"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Zarvel Mor",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 22,
+   "hatched": 23,
+   "ichor": 0,
+   "champions": [
+    "Brinecrest (wyvern + air, Heartgrit, Weathered Hide, Whetted Nail), 9\u20130, season 1 round 56"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Ashquen Cor",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 9,
+   "losses": 34,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Flinthorn (true-dragon + fire, Milk Fang, Hollow Bones, Gnashing Teeth), 9\u20130, season 1 round 69"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Zarash Ila",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 9,
+   "losses": 25,
+   "hatched": 26,
+   "ichor": 0,
+   "champions": [
+    "Stormtail (wyvern + earth, Smolder Sac, Whetted Nail, Weathered Hide), 9\u20130, season 1 round 76"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Velzar Gal",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 9,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Rimewing (true-dragon + fire, Smolder Sac, Hollow Bones, Whetted Nail), 9\u20130, season 1 round 79"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 0
+    }
+   }
+  }
+ ]
+}

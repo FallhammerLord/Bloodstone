@@ -5,9 +5,11 @@
 // have won for them and away from builds that died, on curves: novelty fades as a tamer hatches more dragons, and a
 // build's record counts for more the more fights it has. At a spoils pick a tamer can seat a shard, or melt one into
 // Ichor (the tamer's, surviving its dragons) and freeze a shard of its choosing, or bank the Ichor and keep chasing.
-//   npm run gauntlet [-- --tamers N] [--rounds N] [--seed N] [--json file] [--cards file]
+//   npm run gauntlet [-- --tamers N] [--rounds N] [--seed N] [--json file] [--cards file] [--carry file] [--save file]
+// Seasons: --save writes every tamer's state at the end; --carry reads a saved roster and keeps its champion tamers
+// (any tamer who raised a champion) for this season, rerolling the rest fresh.
 
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { BRAIN_STYLES, type BrainStyle, type Skill } from './brain.ts';
 import { chooseSpoils, DROPS, draftDragon, ICHOR, Picks } from './brain/hatchery.ts';
 import type { Job, Result } from './brains-worker.ts';
@@ -23,6 +25,8 @@ const ROUNDS = Number(flag(argv, '--rounds', '60'));
 const seed = Number(flag(argv, '--seed', '2026'));
 const jsonFile = flag(argv, '--json', '');
 const cardsFile = flag(argv, '--cards', '');
+const carryFile = flag(argv, '--carry', '');
+const saveFile = flag(argv, '--save', '');
 const STREAK = 3;
 /** A rung's skill for unclaimed dragons, and a tamer's skill from the best rung it has reached. */
 const SKILL_AT: Skill[] = ['novice', 'adept', 'master'];
@@ -84,10 +88,32 @@ const buildOf = (s: FighterSetup) => `${s.morph} + ${s.stone}`;
 const shardsOf = (s: FighterSetup) => (s.shards ?? []).map((x) => x.shard);
 const kit = (s: FighterSetup) => `${buildOf(s)}${s.shards?.length ? `, ${shardsOf(s).join(', ')}` : ''}`;
 
-const tamers: Tamer[] = Array.from({ length: TAMERS }, (_, id) => ({
-  id, name: `${name(2)} ${name(1)}`, style: BRAIN_STYLES[id % BRAIN_STYLES.length], best: 0, wins: 0, losses: 0, hatched: 0,
-  champions: [], prefs: new Map(), picks: new Picks(), ichor: 0, history: [], dragon: null, graveyard: [],
-}));
+/** What a tamer carries between seasons. Their dragons don't: every season hatches fresh. */
+interface SavedTamer {
+  name: string;
+  style: BrainStyle;
+  best: number;
+  wins: number;
+  losses: number;
+  hatched: number;
+  ichor: number;
+  champions: string[];
+  prefs: Record<string, { w: number; d: number }>;
+}
+const veterans: SavedTamer[] = carryFile
+  ? (JSON.parse(readFileSync(carryFile, 'utf8')).tamers as SavedTamer[]).filter((t) => t.champions.length)
+  : [];
+const tamers: Tamer[] = Array.from({ length: Math.max(TAMERS, veterans.length) }, (_, id) => {
+  const v = veterans[id];
+  return {
+    id, name: v?.name ?? `${name(2)} ${name(1)}`, style: v?.style ?? BRAIN_STYLES[id % BRAIN_STYLES.length], best: v?.best ?? 0,
+    wins: v?.wins ?? 0, losses: v?.losses ?? 0, hatched: v?.hatched ?? 0, champions: v ? [...v.champions] : [],
+    prefs: new Map(Object.entries(v?.prefs ?? {})), picks: new Picks(), ichor: v?.ichor ?? 0,
+    history: v ? [`Veteran: carries ${v.wins}–${v.losses}, ${v.hatched} dragons, ${v.champions.length} champion${v.champions.length === 1 ? '' : 's'}, ${v.ichor} Ichor.`] : [],
+    dragon: null, graveyard: [],
+  };
+});
+const isVeteran = (t: Tamer) => t.id < veterans.length;
 const wildPicks = new Picks();
 
 // The census.
@@ -319,6 +345,25 @@ const card = (t: Tamer) => {
     '',
   ].join('\n');
 };
+if (veterans.length) {
+  console.log(`\n── Veterans: last season's ${veterans.length} champion tamers, this season ──`);
+  for (const t of tamers.filter(isVeteran)) {
+    const before = veterans[t.id];
+    const won = t.wins - before.wins, lost = t.losses - before.losses, champs = t.champions.length - before.champions.length;
+    console.log(`  ${t.name.padEnd(14)} ${t.style.padEnd(15)} ${String(won).padStart(3)}–${String(lost).padEnd(3)} ${pct((100 * won) / Math.max(1, won + lost))}  champions +${champs}  Ichor ${t.ichor}`);
+  }
+  const vet = tamers.filter(isVeteran), fresh = tamers.filter((t) => !isVeteran(t));
+  const rate = (ts: Tamer[], base: (t: Tamer) => [number, number]) => {
+    const [w, n] = ts.reduce(([a, b], t) => { const [x, y] = base(t); return [a + x, b + y]; }, [0, 0]);
+    return rateWithMargin(w, n);
+  };
+  console.log(`  Veterans ${rate(vet, (t) => [t.wins - veterans[t.id].wins, t.wins - veterans[t.id].wins + t.losses - veterans[t.id].losses])}, fresh tamers ${rate(fresh, (t) => [t.wins, t.wins + t.losses])}.`);
+}
+if (saveFile) {
+  const saved: SavedTamer[] = tamers.map((t) => ({ name: t.name, style: t.style, best: t.best, wins: t.wins, losses: t.losses, hatched: t.hatched, ichor: t.ichor, champions: t.champions, prefs: Object.fromEntries(t.prefs) }));
+  writeFileSync(saveFile, JSON.stringify({ seed, tamers: saved }, null, 1) + '\n');
+  console.log(`Wrote ${saveFile}.`);
+}
 const chosen = tamers[0];
 const decorated = [...tamers].sort((a, b) => b.champions.length - a.champions.length || b.wins - a.wins)[0];
 console.log(`\nChosen tamer: ${chosen.name} (${chosen.style}), ${chosen.wins}–${chosen.losses}, ${chosen.hatched} dragons, ${chosen.champions.length} champions.`);
