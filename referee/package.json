@@ -17,6 +17,7 @@
     "pool": "node --experimental-strip-types --no-warnings src/pool.ts",
     "draft": "node --experimental-strip-types --no-warnings src/draft.ts",
     "gauntlet": "node --experimental-strip-types --no-warnings src/gauntlet.ts",
+    "measure": "node --experimental-strip-types --no-warnings src/measure.ts",
     "check": "tsc --noEmit"
   },
   "devDependencies": {

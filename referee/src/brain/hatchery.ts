@@ -2,6 +2,7 @@
 // its style wants, then draws with weighted chance: skill sets how closely it sticks to its style's best pick, and a
 // novelty bonus pulls it toward what its style has picked least, so a style explores its plausible builds.
 
+import { existsSync, readFileSync } from 'node:fs';
 import { hatch, type CoreStone, type Morph, type StatSheet } from '../hatch.ts';
 import type { FighterSetup, ShardSetup } from '../referee.ts';
 import { shardPool, WYRMLING_PIPS, type Shard } from '../shards.ts';
@@ -92,8 +93,28 @@ const attackValue = (style: BrainStyle, s: StatSheet) =>
 const SHEETS = MORPHS.flatMap((morph) => STONES.map((stone) => ({ morph, stone, sheet: hatch(morph, stone) })));
 const bodyValue = (s: StatSheet, b: Body) => (b === 'flies' ? (s.flies ? 1 : 0) : b === 'talons' ? (s.aspect === 'talons' ? 1 : 0) : s[b]);
 
-/** How much a style wants each hatched sheet: its attacks plus its body wants, each compared across the hatchery. */
+/**
+ * What drafting brains know (npm run measure): each style's measured win rate on each sheet, and its measured
+ * win-rate change from each shard. With the table, brains draft on results; without it, on their style's tastes.
+ */
+interface Measured {
+  sheets: Record<string, Record<string, number>>;
+  shards: Record<string, Record<string, number>>;
+}
+const MEASURED_FILE = new URL('./measured.json', import.meta.url);
+export const MEASURED: Measured | null = existsSync(MEASURED_FILE) ? JSON.parse(readFileSync(MEASURED_FILE, 'utf8')) : null;
+/** Score units per unit of measured win rate: a sheet 10 points above even scores 1.2; a shard worth +5 points, 0.6. */
+const MEASURED_SCALE = 12;
+
+/** How much a style wants each hatched sheet: its measured win rate there, or failing a table, its tastes. */
 export function sheetScores(style: BrainStyle): number[] {
+  const m = MEASURED?.sheets[style];
+  if (m) return SHEETS.map((x) => MEASURED_SCALE * ((m[`${x.morph} + ${x.stone}`] ?? 0.5) - 0.5));
+  return tasteScores(style);
+}
+
+/** The old way, kept as the fallback: its attacks plus its body wants, each compared across the hatchery. */
+function tasteScores(style: BrainStyle): number[] {
   const attack = zscores(SHEETS.map((x) => attackValue(style, x.sheet)));
   const score = attack.slice();
   for (const [b, w] of Object.entries(BODY_WANTS[style]) as [Body, number][]) {
@@ -102,12 +123,15 @@ export function sheetScores(style: BrainStyle): number[] {
   return score;
 }
 
-/** How much a style wants a shard on a given sheet. */
+/** How much a style wants a shard on a given sheet: its measured worth, or failing a table, its tags. */
 export function shardScore(style: BrainStyle, shard: Shard, sheet: StatSheet): number {
   const kind = shard.kind as { family: string; attr?: string; technique?: string };
+  // A flight Technique does nothing for a dragon that can't fly: a fact, not a measurement.
+  if (kind.family === 'technique' && (TECHNIQUE_TAGS[kind.technique ?? ''] ?? []).includes('air') && !sheet.flies) return -2;
+  const m = MEASURED?.shards[style]?.[shard.name];
+  if (m !== undefined) return MEASURED_SCALE * m;
   if (kind.family === 'technique') {
     const tags = TECHNIQUE_TAGS[kind.technique ?? ''] ?? [];
-    if (tags.includes('air') && !sheet.flies) return -2;
     const want = (t: Tag) => (t === 'claw' || t === 'bite' || t === 'breath' ? TASTE[style][t] : TAG_WANTS[style]?.[t] ?? 0.1);
     return 1 * Math.max(...tags.map(want));
   }
