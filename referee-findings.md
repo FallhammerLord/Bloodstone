@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Season 4](#living-ladder-season-4) | One kill per pick, as designed: 632 champions; Wyvern + Air leads the hall again |
 | [Season 3](#living-ladder-season-3) | Yields paid in Ichor, non-lethal timeouts, the array planner: champions stay rare (7) |
 | [Season 2](#living-ladder-season-2) | Talons rework, Ichor freezing, learning curves; season 1's champion tamers return |
 | [Living ladder](#the-living-ladder) | Tamers raise wyrmlings rung by rung on spoils; does Air Wyvern survive selection? |
@@ -29,6 +30,36 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Living ladder, season 4
+
+`npm run gauntlet -- --seed 2029 --carry seasons/season3.json`: 250 tamers, 80 rounds, 10,059 bouts. Season 3's 7 champion tamers return; 243 are fresh. The one change: **each kill earns a spoils pick,** as the design doc has it (seasons 1–3 needed three straight kills). Yields, timeouts, Ichor and the planner are unchanged.
+
+| | Season 3 (3 kills a pick) | Season 4 (1 kill) |
+|---|---|---|
+| Dragons hatched | 9,034 | 9,882 |
+| First shard earned | 10% | **42%** |
+| Champions | 7 | **632** (1 in 16 dragons) |
+| Endings: KO / timeout / yield | 88 / 5 / 6% | 91 / 4 / 4% |
+| Picks: seated / frozen / banked | 556 / 471 / 318 | 3,677 / 2,912 / 2,559 |
+| Skill: novice / adept / master | 40 / 53 / 61% | 45 / 42 / 52% |
+
+**What it shows:**
+- **Champions are routine; the ladder now has a top.** 632 champions, and the rungs hold real populations: 740 to 1,400 fights per build on rung 1 for the common builds. Rung-2 rates now carry useful margins.
+- **Wyvern + Air leads the hall again: 187 champions,** with a 52% win rate that holds on every rung (51 / 53 / 52%), and a field share that grows (26% → 28%). Under three kills a pick it sat at 47–49%. One explanation is that shards come fast now, and its kit (Whetted Nail, Hollow Bones, claw Techniques) adds to a sheet built around its Claw. That is a hypothesis to check with a shard-on/shard-off comparison.
+- **True Dragon + Fire fades.** It wins 48% and drops by rung (49 → 46 → 45%), yet it is the most-hatched build (28%), and learning keeps raising it (25% → 30%). Styles keep choosing it on taste, not results; the learning signal at 48% is too weak to turn them.
+- **True Dragon + Earth is the strongest and least chosen:** 57% on every rung, hatched 4%. No style's wants point at it. This is a brain-side blind spot, not a balance problem.
+- **Wyrm + Earth stays solid** (52%, 136 champions). The other Wyrm stones are rare and weak (34–47%).
+- **Techniques are the norm.** 2,912 frozen, led by Ash Gland, Smoldering Maw, Lockjaw and Raking Talons. Most attribute chips are melted for Ichor (Hollow Bones 1,507, Heartgrit 1,478), not seated.
+- **Skill compresses.** Champions come fast, so most tamers reach master early, and rung 0 is full of masters' fresh dragons. Novices win 45%, adepts 42% and masters 52%. Skill-aware matchmaking would separate them again.
+- **Veterans:** 56% ±4 and 23 champions among 7 tamers (Ashbryn Ka raised 5).
+- **Styles:** swarmer and slugger lead (55%); reader (38%) and bite-focus (37%) trail.
+
+**Open:**
+- Wyvern + Air with shards.
+- True Dragon + Earth's neglect.
+- Skill-aware matchmaking on rung 0.
+- The reader and bite-focus brains.
 
 ## Living ladder, season 3
 
