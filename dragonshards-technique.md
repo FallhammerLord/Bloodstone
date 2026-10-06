@@ -40,12 +40,14 @@ Technique shards change how an action behaves. Every Technique is a sidegrade: e
 ## Bite
 
 ### Snapping Jaw · Timing
-Bite winds up faster and recovers slower.
-- **Wyrmling:** wind-up −3 ticks, recovery +5 ticks
-- **Juvenile:** wind-up −5 ticks, recovery +5 ticks
-- **Adult:** wind-up −5 ticks, recovery +3 ticks
-- **Elder:** as Adult; a Bite that interrupts deals +3
+**[Proposed, suite v0.3]** Bite strikes earlier, borrowing the time: its active window comes sooner and keeps its length, recovery runs that much longer, and your next slot's action (unless it Holds) winds up later by the debt. A snapped Bite deals 3 less.
+- **Wyrmling:** the Bite strikes 3 ticks sooner; recovery +3; debt 3
+- **Juvenile:** 5 ticks sooner; recovery +5; debt 5
+- **Adult:** 5 ticks sooner; recovery +5; debt 3
+- **Elder:** as Adult; the Bite deals full damage, and a Bite that interrupts deals +3
 - **Venerable:** as Elder; an interrupted Breath still triggers its cooldown
+
+*Suite v0.2:* wind-up −3 / −5 / −5 ticks, recovery +5 / +5 / +3, no debt and no damage cost.
 
 ### Lockjaw · Control
 A landed Bite Pins the target. **[Open]** Its price: the forced follow-up Bite was cut because it looped (each landed Bite re-locked the next slot). Lockjaw needs a new cost, such as Bite recovery +5 ticks (+3 from Adult), mirroring Hamstring Hooks.
