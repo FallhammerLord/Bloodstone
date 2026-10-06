@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Season 2](#living-ladder-season-2) | Talons rework, Ichor freezing, learning curves; season 1's champion tamers return |
 | [Living ladder](#the-living-ladder) | Tamers raise wyrmlings rung by rung on spoils; does Air Wyvern survive selection? |
 | [Baseline](#baseline-random-loadouts-and-the-hatch) | Fresh baseline: random wyrmling loadouts, and brains that draft their own builds |
 | [21](#round-21-whole-band-reaches-breath-loses-melee-the-guard-reversal-hard-landings) | Whole-band reaches, Breath loses Melee, the guard reversal, hard landings |
@@ -27,6 +28,42 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Living ladder, season 2
+
+`npm run gauntlet -- --seed 2027 --carry seasons/season1.json`: 250 tamers, 80 rounds, 10,064 bouts. Season 1's 19 champion tamers return as veterans, rebuilt from the hall of champions (masters, with their champion builds as proven picks); 231 tamers are fresh. Changes since season 1:
+- **Talons rework.**
+  - A Wyvern's Leap climbs two bands.
+  - The stoop descends to the ground and carries at most a band, so it connects from Close and falls short from Far.
+  - The descent takes 2 ticks a pace: a one-band stoop strikes at tick 12, a two-band stoop at tick 18, which a Stomp catches as it lands.
+  - Stoop damage is +1 per 2 paces fallen.
+- **Ichor.** A spoils pick can seat a shard; melt one (1 Ichor a pip, kept by the tamer) and freeze a shard of the tamer's choosing (2 a pip); or melt and bank to keep chasing.
+- **Learning curves.** Novelty fades as a tamer hatches more dragons; a build's record weighs in by win rate, trusted more with more fights.
+
+| | Season 1 | Season 2 |
+|---|---|---|
+| Wyvern + Air (win rate; share of rung-2 field) | 56%; 31% | **49%; 19%** |
+| True Dragon + Fire | 55%; 19% | **56%; 33%** |
+| Morph champions (Wyvern / True Dragon / Wyrm) | 14 / 5 / 1 | 1 / 6 / 1 |
+| First shard earned | 13% of dragons | 9% |
+| Champions | 20 | **8** |
+| Techniques entering the ladder | 1 | 439 frozen, 22 seated from victims' arrays |
+| Timeouts | 7% | 5% |
+
+**What it shows:**
+- **The Talons rework took the Air Wyvern from first to the middle.** It wins 49%, and its share of the rung-2 field fell from 31% to 19%. It still raised a champion (Slateclaw, boxer-puncher). No Wyvern build tops the table now.
+- **True Dragon + Fire is the new top build.** It leads at 56%, holds 52% on rung 2, and raised 4 of 8 champions. Its share grows with each rung (24% → 30% → 33%). True Dragon + Air follows (67% on rung 2, 18 fights).
+- **The Wyrm stays last overall,** but Wyrm + Earth is level at 50% and raised a champion. Wyrm + Air is the weakest build (30%).
+- **Freezing made Techniques real.** 439 shards were frozen, mostly Techniques (Ash Gland 62, Smoldering Maw 38, Lockjaw 28). Champions now carry them: Snapping Jaw, Ash Gland, Raking Talons, Bounding Haunches.
+- **Chasing costs champions.** Tamers banked 551 times. A Technique costs 2 Ichor, so a master who banks its first pick needs six straight wins for one pip instead of three; most of those dragons die first. First shards fell from 13% to 9%, and champions from 20 to 8. This is the trade-off working, perhaps too strongly at a 2:1 freeze rate.
+- **Veterans win, and raise no champions.** The 19 veterans won 62% ±2 against fresh tamers' 49%: master skill from the first fight. All 19 raised none. Masters bank most (patience 0.8), so they chase Techniques with dragons that die before the second pick. Sulila Gal went 51–29 and froze two Lockjaws and a Scything Forelimbs into dragons that never climbed.
+- **Learning converges on style favorites.** As novelty fades, a 49% build carries no penalty, so styles drift to their best-scoring sheets: Wyvern + Air hatches rose 22% → 26%, True Dragon + Fire 19% → 25%. Proven losers fade (Wyrm + Fire 5% → 2%).
+- **Styles:** kite-focus (60%) and meter-focus (58%) lead; reader (30%) and bite-focus (34%) still trail.
+
+**Open questions:**
+- Should freezing cost less (3 Ichor for a one-pip Technique over two picks, or 1:1 for attribute chips)? Or should patience drop, so masters chase less?
+- True Dragon + Fire is the next build to examine.
+- Reader and bite-focus need a look as brains.
 
 ## The living ladder
 
