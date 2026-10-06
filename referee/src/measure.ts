@@ -4,7 +4,7 @@
 //           and without it: same opponent, arena and seeds), on random sheets.
 // Each cell is shrunk toward its row's pooled value (a sheet's rate across styles, a shard's change across styles), so
 // a style's own number only moves the estimate as far as its sample supports. Writes src/brain/measured.json.
-//   npm run measure [-- --skill adept] [--n 24] [--seed N] [--rule KEY=VALUE ...] [--out file]
+//   npm run measure [-- --skill adept] [--n 24] [--seed N] [--rule KEY=VALUE ...] [--out file] [--only "Shard,Shard"]
 // Rerun after any rules patch: the table is the brains' knowledge of what wins.
 
 import { writeFileSync } from 'node:fs';
@@ -30,7 +30,9 @@ const MORPHS: Morph[] = ['true-dragon', 'wyvern', 'wyrm'];
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 const SHEETS = MORPHS.flatMap((morph) => STONES.map((stone) => ({ morph, stone, key: `${morph} + ${stone}` })));
 const GENERAL = BRAIN_STYLES.filter((s) => !s.endsWith('-focus'));
-const shards = shardPool('wyrmling');
+// --only "A,B" measures just those shards (and skips sheets): a targeted run with more pairs, for a parity call.
+const only = flag(argv, '--only', '').split(',').map((x) => x.trim()).filter(Boolean);
+const shards = shardPool('wyrmling').filter((x) => !only.length || only.includes(x.name));
 const rng = seededRandom(seed);
 const pick = <T>(xs: readonly T[]) => xs[Math.floor(rng() * xs.length)];
 
@@ -44,7 +46,7 @@ const add = (kind: 'sheet' | 'with' | 'without', style: BrainStyle, key: string,
 };
 let s = seed * 1000;
 for (const style of BRAIN_STYLES) {
-  for (const sh of SHEETS) {
+  for (const sh of only.length ? [] : SHEETS) {
     for (let i = 0; i < N; i++) {
       const o = pick(SHEETS);
       add('sheet', style, sh.key, { name: style, morph: sh.morph, stone: sh.stone }, { name: 'field', morph: o.morph, stone: o.stone }, pick(GENERAL), (s += 2), 0);
@@ -99,7 +101,8 @@ for (const style of BRAIN_STYLES) {
   sheets[style] = {};
   shardTable[style] = {};
   for (const sh of SHEETS) {
-    const c = sheetCells.get(`${style}|${sh.key}`)!;
+    const c = sheetCells.get(`${style}|${sh.key}`);
+    if (!c) continue;
     sheets[style][sh.key] = round((c.w + SHEET_TRUST * pooled(sheetCells, sh.key)) / (c.n + SHEET_TRUST));
   }
   for (const shard of shards) {
@@ -116,7 +119,21 @@ console.log(`Measured ${jobs.length} bouts at ${skill} skill, ${rulesLabel}, in 
 console.log('\nSheets, pooled across styles (win rate against the field):');
 for (const x of [...SHEETS].sort((a, b) => pooled(sheetCells, b.key) - pooled(sheetCells, a.key))) console.log(`  ${(100 * pooled(sheetCells, x.key)).toFixed(0).padStart(3)}%  ${x.key}`);
 console.log('\nShards, pooled across styles (change in win rate from carrying it):');
-for (const x of [...shards].sort((a, b) => pooled(shardCells, b.name) - pooled(shardCells, a.name))) console.log(`  ${(100 * pooled(shardCells, x.name)).toFixed(0).padStart(4)} pts  ${x.name}`);
+/** A 95% margin on a pooled paired change, in points: from the spread of the per-pair differences. */
+const shardMargin = (name: string) => {
+  const diffs: number[] = [];
+  const byPair = new Map<string, number>();
+  for (const [id, m] of meta.entries()) {
+    if (m.kind === 'sheet' || m.key !== name) continue;
+    const k = `${m.style}|${m.pair}`;
+    byPair.set(k, (byPair.get(k) ?? 0) + (m.kind === 'with' ? 1 : -1) * (won.get(id) ? 1 : 0));
+  }
+  for (const d of byPair.values()) diffs.push(d);
+  const mean = diffs.reduce((a, b) => a + b, 0) / Math.max(1, diffs.length);
+  const sd = Math.sqrt(diffs.reduce((a, b) => a + (b - mean) ** 2, 0) / Math.max(1, diffs.length - 1));
+  return (100 * 1.96 * sd) / Math.sqrt(Math.max(1, diffs.length));
+};
+for (const x of [...shards].sort((a, b) => pooled(shardCells, b.name) - pooled(shardCells, a.name))) console.log(`  ${(100 * pooled(shardCells, x.name)).toFixed(0).padStart(4)} pts ±${shardMargin(x.name).toFixed(0)}  ${x.name}`);
 console.log('\nShards by the carrier\'s morph (change in win rate; True Dragon / Wyvern / Wyrm):');
 for (const x of shards) {
   const byMorph = (['true-dragon', 'wyvern', 'wyrm'] as Morph[]).map((m) => { const c = morphCells.get(`morph:${m}|${x.name}`); return c && c.n ? `${(100 * c.w / c.n).toFixed(0).padStart(4)}` : '   —'; });
@@ -124,7 +141,7 @@ for (const x of shards) {
 }
 console.log('\nEach style\'s best sheet and best shard:');
 for (const style of BRAIN_STYLES) {
-  const bs = Object.entries(sheets[style]).sort((a, b) => b[1] - a[1])[0];
+  const bs = Object.entries(sheets[style]).sort((a, b) => b[1] - a[1])[0] ?? ['—', 0];
   const bd = Object.entries(shardTable[style]).sort((a, b) => b[1] - a[1])[0];
   console.log(`  ${style.padEnd(15)} ${bs[0].padEnd(20)} ${(100 * bs[1]).toFixed(0)}%   ${bd[0]} ${(100 * bd[1]).toFixed(0).padStart(3)} pts`);
 }
