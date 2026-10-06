@@ -65,9 +65,9 @@ test('a dragon imagines playing its shards: Riposte Talons puts Dodge in more of
   assert.ok(riposte > plain * 1.3, `${plain} → ${riposte}`);
 });
 
-test('Ash Gland is pulled for redesign: no brain can draft it', async () => {
+test('Ash Gland is back as the cloud: brains can draft it', async () => {
   const { shardPool } = await import('../src/shards.ts');
-  assert.ok(!shardPool('wyrmling').some((s) => s.name === 'Ash Gland'));
+  assert.ok(shardPool('wyrmling').some((s) => s.name === 'Ash Gland'));
 });
 
 // ---- Technique parity pass 1 [Proposed]: one fixed situation per variant the brains must know ----
@@ -88,7 +88,7 @@ test('Bellows Chest (mobile): a Breath charge on a Retreat is a legal option', (
   assert.ok(legal.some((a) => a.name === 'breath' && a.charge && a.move === 'retreat'));
 });
 
-test('Snapping Jaw (borrow), Ratchet Claws, Lockjaw: debt owed costs, a ratchet held pays, a clamp costs', () => {
+test('Snapping Jaw (borrow), Ratchet Claws, Lockjaw, Ash Gland: debt owed costs, a ratchet held pays, a clamp costs, clinging ash pays', () => {
   const bout = newBout(TD_WATER, TD_WATER, 2, 'B', {}, pass);
   const [me, op] = [bout.fighters.A, bout.fighters.B];
   me.marks.snapDebt = 3;
@@ -99,6 +99,9 @@ test('Snapping Jaw (borrow), Ratchet Claws, Lockjaw: debt owed costs, a ratchet 
   me.marks.ratchet = 0;
   me.marks.clamped = true;
   assert.ok(techniqueCarryOver(me, op) < 0);
+  me.marks.clamped = false;
+  op.marks.ashStuck = { owner: 'A', exchange: 1, rattles: false };
+  assert.ok(techniqueCarryOver(me, op) > 0, 'ash clinging to the opponent pays');
 });
 
 test('Ash Gland (cloud) and Smoldering Maw (linger): an enemy ash cloud or verb ground is a place not to end a slot', () => {

@@ -5,6 +5,7 @@ import { add, dist, flat, flatLen, scaleTo, sub, type Vec } from '../geometry.ts
 import { obstacleAt } from '../arena.ts';
 import * as R from '../rules.ts';
 import { zonesAtSlotEnd } from './elements.ts';
+import { ashClings, ashFalls } from './techniques.ts';
 import type { Event, PlanInfo } from './events.ts';
 import { fillMeter } from './meter.ts';
 import { type Plan, category, makePlan } from './plan.ts';
@@ -83,6 +84,7 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
   }
   if (!bout.over) for (const s of SIDES) chainAtExchangeEnd(bout.fighters[s], ev);
   if (!bout.over) for (const s of SIDES) gravity(bout, s, ev);
+  if (!bout.over) ashFalls(bout, ev);
   return ev;
 }
 
@@ -193,6 +195,7 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     if (trace) ev.push({ kind: 'trace', tick: t, positions: { A: { ...F.A.pos }, B: { ...F.B.pos } } });
   }
   if (!bout.over) zonesAtSlotEnd(bout, plans, g, ev);
+  if (!bout.over) ashClings(bout, slot);
   if (!bout.over) snapSeparation(bout);
 
   for (const s of SIDES) {

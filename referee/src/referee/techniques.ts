@@ -5,7 +5,7 @@ import * as R from '../rules.ts';
 import type { Event, NoteTag } from './events.ts';
 import { type Plan, guarding } from './plan.ts';
 import { eff } from './riders.ts';
-import { A, type Bout, E, J, type Side, V, W, other, tech } from './state.ts';
+import { A, type Bout, E, J, SIDES, type Side, V, W, other, tech } from './state.ts';
 
 /** What a landed hit sets off, by the attacker's and defender's Techniques. */
 export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: number, ev: Event[]) {
@@ -46,8 +46,14 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
     thorns(bout, s, th, t, ev);
   }
   // Ash Gland: locks the target's revision next exchange. (A Wyrmling's 'clean hits only' is every hit, now grazes are gone.)
+  // Under cloud, the ash sticks to the dragon it hits: Blinded through the exchange, then it falls off as a cloud.
   const ash = p.spec.name === 'breath' ? tech(att, 'ash-gland') : -1;
-  if (ash >= W && bout.rules.TECH_ASH_GLAND === 'cloud') ashCloud(bout, s, { ...def.pos }, t, ev);
+  if (ash >= W && bout.rules.TECH_ASH_GLAND === 'cloud') {
+    def.marks.ashStuck = { owner: s, exchange: bout.exchange, rattles: ash >= V };
+    def.pending.blinded = true;
+    if (ash >= V) def.pending.rattled = true;
+    note(def.side, `Ash Gland: the ash clings, Blinding it through the exchange${ash >= V ? ' and Rattling it' : ''}; then it falls as a cloud.`);
+  }
   // Sapping Bellow (gland) [provisional reading]: the bellow rides the Breath. A landed Breath demoralizes (its next Bite
   // or Claw loses 3); from Juvenile it also strips the next chain bonus; Elder its pending Intimidate; Venerable Rattles.
   const sapB = p.spec.name === 'breath' && bout.rules.TECH_SAPPING_BELLOW === 'gland' ? tech(att, 'sapping-bellow') : -1;
@@ -158,25 +164,64 @@ export function thorns(bout: Bout, s: Side, th: number, t: number, ev: Event[]) 
   ev.push({ kind: 'note', tick: t, side: s, tag: 'technique', text: `Thornscale: takes ${bout.rules.TECHNIQUE_POINTS} from the spines${th >= V ? ' and is Rattled' : ''}.` });
 }
 
+/** How long an ash cloud hangs from now: ASH_CLOUD_EXCHANGES exchanges (0: the rest of the bout), plus linger's slots. */
+function ashLastSlot(bout: Bout, s: Side): number {
+  const n = bout.rules.ASH_CLOUD_EXCHANGES;
+  if (!n) return Number.MAX_SAFE_INTEGER;
+  const maw = bout.rules.TECH_SMOLDERING_MAW === 'linger' ? tech(bout.fighters[s], 'smoldering-maw') : -1;
+  return bout.globalSlot - 1 + n * R.SLOTS_PER_EXCHANGE + (maw >= A ? 2 : maw >= W ? 1 : 0);
+}
+
+/** Lays an ash cloud; one per dragon, so a new one replaces the old. */
+function layAsh(bout: Bout, s: Side, center: Vec, rattles: boolean) {
+  const ash = tech(bout.fighters[s], 'ash-gland');
+  const radius = ash >= E ? Math.floor(1.5 * R.PACE) : bout.rules.ASH_CLOUD_RADIUS;
+  bout.arena.zones = bout.arena.zones.filter((z) => !(z.kind === 'ash' && z.owner === s));
+  const zone = { kind: 'ash' as const, center, radius, lastSlot: ashLastSlot(bout, s), owner: s, rattles };
+  bout.arena.zones.push(zone);
+  return zone;
+}
+
 /**
- * Ash Gland (cloud) [Proposed]: an ash cloud where the breath strikes, a sphere through the next slot (Smoldering Maw's
- * linger adds its slots). Dragons inside as it forms, and dragons ending a slot inside, are Blinded (a Venerable's also
- * Rattled). The breather's own cloud blinds it too, except under Stalwart. One cloud per dragon: a new one replaces it.
+ * Ash Gland (cloud) [Proposed]: at the exchange's end, clinging ash falls off where its dragon stands and hangs there
+ * as a cloud (ASH_CLOUD_EXCHANGES). It Blinds whoever ends a slot inside, from the next slot on.
+ */
+export function ashFalls(bout: Bout, ev: Event[]) {
+  for (const side of SIDES) {
+    const f = bout.fighters[side];
+    const stuck = f.marks.ashStuck;
+    if (!stuck) continue;
+    f.marks.ashStuck = null;
+    layAsh(bout, stuck.owner, { ...f.pos }, stuck.rattles);
+    ev.push({ kind: 'zone', tick: R.TICKS_PER_SLOT - 1, owner: stuck.owner, zone: 'ash', center: { ...f.pos } });
+  }
+}
+
+/** Ash Gland (cloud): clinging ash Blinds its dragon again at each slot's end, until the exchange is out. */
+export function ashClings(bout: Bout, slot: number) {
+  if (slot >= R.SLOTS_PER_EXCHANGE - 1) return;
+  for (const f of Object.values(bout.fighters)) {
+    if (!f.marks.ashStuck || f.marks.ashStuck.exchange !== bout.exchange) continue;
+    f.pending.blinded = true;
+    if (f.marks.ashStuck.rattles) f.pending.rattled = true;
+  }
+}
+
+/**
+ * Ash Gland (cloud) [Proposed], Juvenile on: a breath that misses still clouds where it strikes. Dragons inside as it
+ * forms, and dragons ending a slot inside, are Blinded (a Venerable's also Rattled). The breather's own cloud blinds it
+ * too, except under Stalwart. One cloud per dragon: a new one replaces it.
  */
 export function ashCloud(bout: Bout, s: Side, center: Vec, t: number, ev: Event[]) {
   const f = bout.fighters[s];
   const ash = tech(f, 'ash-gland');
   if (ash < W || bout.rules.TECH_ASH_GLAND !== 'cloud') return;
-  const maw = bout.rules.TECH_SMOLDERING_MAW === 'linger' ? tech(f, 'smoldering-maw') : -1;
-  const extra = maw >= A ? 2 : maw >= W ? 1 : 0;
-  const radius = ash >= E ? Math.floor(1.5 * R.PACE) : bout.rules.ASH_CLOUD_RADIUS;
-  bout.arena.zones = bout.arena.zones.filter((z) => !(z.kind === 'ash' && z.owner === s));
-  const zone = { kind: 'ash' as const, center, radius, lastSlot: bout.globalSlot + extra, owner: s, rattles: ash >= V };
-  bout.arena.zones.push(zone);
+  const zone = layAsh(bout, s, center, ash >= V);
+  const radius = zone.radius;
   ev.push({ kind: 'zone', tick: t, owner: s, zone: 'ash', center });
   for (const side of [s, other(s)]) {
     const g = bout.fighters[side];
-    if (dist(g.pos, center) > radius || (side === s && g.sheet.aspect === 'stalwart')) continue;
+    if (dist(g.pos, center) > radius || (side === s && g.sheet.aspect === 'stalwart' && bout.rules.STALWART_OWN_ZONES)) continue;
     g.pending.blinded = true;
     if (zone.rattles) g.pending.rattled = true;
     ev.push({ kind: 'note', tick: t, side, tag: 'technique', text: `Caught in the ash cloud: Blinded${zone.rattles ? ' and Rattled' : ''}.` });

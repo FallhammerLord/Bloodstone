@@ -63,6 +63,7 @@ export const DEFAULT_RULES = {
   // The True Dragon's Aspect, Stalwart [Proposed]: its own zones never harm it, and each charging slot widens its
   // released Breath by ½ pace. (A 3-tick faster Breath was tried and overshot.)
   STALWART_WIDEN: Math.floor(PACE / 2),
+  STALWART_OWN_ZONES: 1, // [Proposed] 1: a True Dragon's own zones never harm it; 0: they do, as anyone's (a measuring dial)
   // Between slots, separation snaps to the nearest ½ pace [Proposed]: where a dragon lands in a band matters only for
   // that action, and the edge cases of drift (2.96 paces against 3.04) clean up before the next.
   SNAP: Math.floor(PACE / 2),
@@ -139,19 +140,21 @@ export const DEFAULT_RULES = {
   SMOLDER_RADIUS: { center: PACE, full: 2 * PACE }, // Smoldering Maw: the area's center, then all of it
   LANCE_WIDEN: PACE / 2, // Lance Throat Elder: the line's half-width grows this much by its end
   STOOPING_HEIGHT: { wyrmling: 6 * PACE, rest: 3 * PACE }, // Stooping Pinions: how high a dive must start
-  // ---- Technique parity pass 1 [Proposed] ---- (technique-parity-pass-1.md). Each key's first value is today's rule.
-  TECH_SNAPPING_JAW: 'base' as 'base' | 'borrow' | 'borrow_dmg', // borrow: the snap's ticks come out of your next slot
-  TECH_LOCKJAW: 'base' as 'base' | 'clamp' | 'recovery', // clamp: a Pin keeps the jaw shut; your next slot can't Bite
-  TECH_RATCHET_CLAWS: 'base' as 'base' | 'escalate', // escalate: each landed Claw link adds +1 to the next Claw
-  TECH_THORNSCALE: 'base' as 'base' | 'window', // window: thorns cost the guard's last ticks, not its Hardness
-  TECH_BELLOWS_CHEST: 'base' as 'base' | 'mobile', // mobile: a Breath charge on the move
-  TECH_MANTLE_WINGS: 'base' as 'base' | 'verbguard', // verbguard: Scales also blocks a Breath's verb
+  // ---- Technique parity pass 1 ---- (technique-parity-pass-1.md). Suite v0.3 locks the pass: each default is its
+  // locked variant, with Snapping Jaw at borrow_dmg; Sapping Bellow stays at base until its text is written. 'base' is v0.2.
+  TECH_SNAPPING_JAW: 'borrow_dmg' as 'base' | 'borrow' | 'borrow_dmg', // borrow: the snap's ticks come out of your next slot
+  TECH_LOCKJAW: 'clamp' as 'base' | 'clamp' | 'recovery', // clamp: a Pin keeps the jaw shut; your next slot can't Bite
+  TECH_RATCHET_CLAWS: 'escalate' as 'base' | 'escalate', // escalate: each landed Claw link adds +1 to the next Claw
+  TECH_THORNSCALE: 'window' as 'base' | 'window', // window: thorns cost the guard's last ticks, not its Hardness
+  TECH_BELLOWS_CHEST: 'mobile' as 'base' | 'mobile', // mobile: a Breath charge on the move
+  TECH_MANTLE_WINGS: 'verbguard' as 'base' | 'verbguard', // verbguard: Scales also blocks a Breath's verb
   TECH_SAPPING_BELLOW: 'base' as 'base' | 'gland', // gland: the bellow rides the Breath (provisional reading: a landed Breath demoralizes)
-  TECH_LANCE_THROAT: 'base' as 'base' | 'pierce', // pierce: a verbless line that pierces Affinity
-  TECH_SMOLDERING_MAW: 'base' as 'base' | 'linger', // linger: ground lingers longer; a groundless breath lays its verb as ground
-  TECH_STOOPING_PINIONS: 'base' as 'base' | 'nostack', // nostack: the dive's +3 never adds to a stoop or a hard landing
-  TECH_ASH_GLAND: 'pulled' as 'pulled' | 'cloud', // cloud: the blinding breath, back in the pool
+  TECH_LANCE_THROAT: 'pierce' as 'base' | 'pierce', // pierce: a verbless line that pierces Affinity
+  TECH_SMOLDERING_MAW: 'linger' as 'base' | 'linger', // linger: ground lingers longer; a groundless breath lays its verb as ground
+  TECH_STOOPING_PINIONS: 'nostack' as 'base' | 'nostack', // nostack: the dive's +3 never adds to a stoop or a hard landing
+  TECH_ASH_GLAND: 'cloud' as 'pulled' | 'cloud', // cloud: the blinding breath, back in the pool
   ASH_CLOUD_RADIUS: PACE, // Ash Gland's Wyrmling cloud radius, a measuring dial
+  ASH_CLOUD_EXCHANGES: 0, // [Proposed] how many exchanges an ash cloud hangs once it falls; 0: the rest of the bout
   // ---- Attack shapes ----
   // Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").
   // Reach is in whole range bands [Doc]; widths and radii are paces, tuned by attributes.
@@ -181,6 +184,13 @@ export const TECH_PASS_1: Partial<Rules> = {
   TECH_SNAPPING_JAW: 'borrow', TECH_LOCKJAW: 'clamp', TECH_RATCHET_CLAWS: 'escalate', TECH_THORNSCALE: 'window',
   TECH_BELLOWS_CHEST: 'mobile', TECH_MANTLE_WINGS: 'verbguard', TECH_SAPPING_BELLOW: 'gland', TECH_LANCE_THROAT: 'pierce',
   TECH_SMOLDERING_MAW: 'linger', TECH_STOOPING_PINIONS: 'nostack', TECH_ASH_GLAND: 'cloud',
+};
+
+/** Suite v0.2: every TECH_ key at its pre-lock rule (suite v0.3 locked the parity pass). `--rule SUITE_V02=on` applies it. */
+export const SUITE_V02: Partial<Rules> = {
+  TECH_SNAPPING_JAW: 'base', TECH_LOCKJAW: 'base', TECH_RATCHET_CLAWS: 'base', TECH_THORNSCALE: 'base',
+  TECH_BELLOWS_CHEST: 'base', TECH_MANTLE_WINGS: 'base', TECH_SAPPING_BELLOW: 'base', TECH_LANCE_THROAT: 'base',
+  TECH_SMOLDERING_MAW: 'base', TECH_STOOPING_PINIONS: 'base', TECH_ASH_GLAND: 'pulled',
 };
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };

@@ -41,6 +41,8 @@ export const SHARED = {
   clamped: 0.01,
   /** Ash Gland (cloud): ending a slot in an enemy cloud means a Blinded next slot, as a fraction of Wounds */
   ashThreat: 0.03,
+  /** Ash Gland (cloud): ash clinging to a dragon Blinds it through the exchange, then falls as a cloud where it stands */
+  ashStuck: 0.02,
   /** a pending Intimidate bonus, yours or theirs, still counts when the slot ends */
   intimidatePending: 0.03,
   /** a pending demoralize on either side */
@@ -276,5 +278,6 @@ export function techniqueCarryOver(me: Fighter, op: Fighter): number {
   const W = SHARED;
   return -W.snapDebt * (me.marks.snapDebt - op.marks.snapDebt)
     + W.ratchet * (me.marks.ratchet - op.marks.ratchet)
-    - W.clamped * ((me.marks.clamped ? 1 : 0) - (op.marks.clamped ? 1 : 0));
+    - W.clamped * ((me.marks.clamped ? 1 : 0) - (op.marks.clamped ? 1 : 0))
+    - W.ashStuck * ((me.marks.ashStuck ? 1 : 0) - (op.marks.ashStuck ? 1 : 0));
 }

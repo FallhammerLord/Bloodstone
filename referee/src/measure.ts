@@ -4,7 +4,7 @@
 //           and without it: same opponent, arena and seeds), on random sheets.
 // Each cell is shrunk toward its row's pooled value (a sheet's rate across styles, a shard's change across styles), so
 // a style's own number only moves the estimate as far as its sample supports. Writes src/brain/measured.json.
-//   npm run measure [-- --skill adept] [--n 24] [--seed N] [--rule KEY=VALUE ...] [--out file] [--only "Shard,Shard"]
+//   npm run measure [-- --skill adept] [--n 24] [--seed N] [--rule KEY=VALUE ...] [--out file] [--only "Shard,Shard"] [--sheets "morph + stone,..."]
 // Rerun after any rules patch: the table is the brains' knowledge of what wins.
 
 import { writeFileSync } from 'node:fs';
@@ -32,7 +32,9 @@ const SHEETS = MORPHS.flatMap((morph) => STONES.map((stone) => ({ morph, stone, 
 const GENERAL = BRAIN_STYLES.filter((s) => !s.endsWith('-focus'));
 // --only "A,B" measures just those shards (and skips sheets): a targeted run with more pairs, for a parity call.
 const only = flag(argv, '--only', '').split(',').map((x) => x.trim()).filter(Boolean);
-const shards = shardPool('wyrmling').filter((x) => !only.length || only.includes(x.name));
+// --sheets "true-dragon + fire,..." measures just those sheets (and skips shards): a targeted run for a morph or stone call.
+const onlySheets = flag(argv, '--sheets', '').split(',').map((x) => x.trim()).filter(Boolean);
+const shards = onlySheets.length ? [] : shardPool('wyrmling').filter((x) => !only.length || only.includes(x.name));
 const rng = seededRandom(seed);
 const pick = <T>(xs: readonly T[]) => xs[Math.floor(rng() * xs.length)];
 
@@ -46,7 +48,7 @@ const add = (kind: 'sheet' | 'with' | 'without', style: BrainStyle, key: string,
 };
 let s = seed * 1000;
 for (const style of BRAIN_STYLES) {
-  for (const sh of only.length ? [] : SHEETS) {
+  for (const sh of only.length ? [] : SHEETS.filter((x) => !onlySheets.length || onlySheets.includes(x.key))) {
     for (let i = 0; i < N; i++) {
       const o = pick(SHEETS);
       add('sheet', style, sh.key, { name: style, morph: sh.morph, stone: sh.stone }, { name: 'field', morph: o.morph, stone: o.stone }, pick(GENERAL), (s += 2), 0);

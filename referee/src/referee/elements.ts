@@ -229,7 +229,7 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
       // Ash Gland (cloud): ending a slot in the cloud Blinds (a Venerable's also Rattles); the breather's own blinds it, but
       // not a Stalwart. Blindness isn't elemental: no Affinity contest, and no guard against it.
       if (z.kind === 'ash') {
-        if (z.owner === s && f.sheet.aspect === 'stalwart') continue;
+        if (z.owner === s && f.sheet.aspect === 'stalwart' && bout.rules.STALWART_OWN_ZONES) continue;
         f.pending.blinded = true;
         if (z.rattles) f.pending.rattled = true;
         ev.push({ kind: 'zoneEffect', side: s, zone: 'ash', damage: 0, woundsLeft: f.wounds });
@@ -239,7 +239,7 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
       const mantleGround = bout.rules.TECH_MANTLE_WINGS === 'verbguard' ? mantleW >= A : mantleW >= E;
       if (plans[s].spec.name === 'scales' && mantleGround) continue;
       // Stalwart: a True Dragon's own zones never harm it [Proposed].
-      if (z.owner === s && f.sheet.aspect === 'stalwart') continue;
+      if (z.owner === s && f.sheet.aspect === 'stalwart' && bout.rules.STALWART_OWN_ZONES) continue;
       // The zone's element contests the dragon's Affinity, as the breath did [Proposed].
       const held = elementHolds(bout.rules, bout.fighters[z.owner], f, plans[s].spec.name === 'scales');
       if (held && z.kind !== 'smolder') {

@@ -128,13 +128,14 @@ Breath charges across two slots, with the charge slot's Scales-guard defense. Th
 - **Venerable:** as Elder; you may Move during the charge slot
 
 ### Ash Gland · Information
-**[Pulled for redesign]** Out of the shard pool: it removes the opponent's slot-3 revision instead of pricing it, and costs its owner its Breath damage. Brainstorm pending (an ash cloud that Blinds what stands in it, or a price on revising).
-Breath deals no damage and locks the opponent's slot-3 revision next exchange.
-- **Wyrmling:** the lock applies only on a clean hit
-- **Juvenile:** the lock applies on a hit or graze
-- **Adult:** deals 3 points
-- **Elder:** as Adult; the target is Blinded
-- **Venerable:** as Elder; the target is also Rattled
+**[Proposed, suite v0.3]** The ash cloud. Breath deals 3 less. A landed Breath's ash clings to the target: it is Blinded through the rest of the exchange, wherever it moves. At the exchange's end the ash falls off where the target stands and hangs there as a cloud for the rest of the bout. A dragon ending a slot inside is Blinded next slot. One cloud per dragon: a new one replaces the old. A True Dragon's own cloud never blinds it.
+- **Wyrmling:** the cloud reaches 1 pace from its center
+- **Juvenile:** a Breath that misses still clouds where it strikes, blinding whoever is inside as it forms
+- **Adult:** the Breath keeps its full damage
+- **Elder:** as Adult; the cloud reaches 1.5 paces
+- **Venerable:** as Elder; the ash and the cloud also Rattle
+
+*Suite v0.2 (pulled):* Breath dealt no damage and locked the opponent's slot-3 revision next exchange.
 
 ---
 

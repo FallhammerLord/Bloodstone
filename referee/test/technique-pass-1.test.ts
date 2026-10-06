@@ -8,6 +8,8 @@ import { newBout, runExchange, type Bout, type Event, type FighterSetup, type Sh
 import type { Grade } from '../src/shards.ts';
 import * as R from '../src/rules.ts';
 import { ashCloud } from '../src/referee/techniques.ts';
+import { runSlot } from '../src/referee/exchange.ts';
+import { dist } from '../src/geometry.ts';
 import type { Rules } from '../src/rules.ts';
 
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
@@ -18,7 +20,8 @@ const withTech = (base: FighterSetup, shard: string, grade: Grade, extra: ShardS
   const pips = grade === 'elder' || grade === 'venerable' ? (two ? [0, 1, 2] : [0, 1]) : two ? [0, 1] : [0];
   return { ...base, shards: [{ shard, grade, pips }, ...extra] };
 };
-const rules = (o: Partial<Rules>) => R.rulesWith(o);
+// Each variant against suite v0.2, one key at a time.
+const rules = (o: Partial<Rules>) => R.rulesWith({ ...R.SUITE_V02, ...o });
 const bout = (a: FighterSetup, b: FighterSetup, sep: number, r: Rules) => newBout(a, b, sep, 'B', {}, r);
 const run = (b: Bout, A: string[], B: string[]) => runExchange(b, { A: A.map(parseAction), B: B.map(parseAction) });
 const hits = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'hit' }> => e.kind === 'hit');
@@ -127,21 +130,43 @@ test('Smoldering Maw (linger): a Fire lane lingers a slot longer; Water verb gro
   assert.ok(Math.abs(b.fighters.B.pos.x - before.x) >= R.PACE - 1, 'and is pushed a pace from the center');
 });
 
-test('Ash Gland (cloud): a landed breath Blinds a dragon at the strike point and a flier above it; the cloud Blinds again', () => {
+test('Ash Gland (cloud): the ash clings through the exchange, then falls as a cloud that hangs for the bout', () => {
   const r = rules({ TECH_ASH_GLAND: 'cloud' });
-  // A Fire breather: its verb doesn't move the target out of the cloud (a Water jet would push it clear).
+  // Slot by slot: a Fire breather (its verb doesn't move the target) lands in slot 1.
   const b = bout(withTech(TD_FIRE, 'Ash Gland', 'wyrmling'), TD_WATER, 4, r);
-  const ev = run(b, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']);
-  assert.ok(ev.some((e) => e.kind === 'zone' && e.zone === 'ash'), 'the cloud forms');
-  assert.ok(notes(ev).some((n) => n.startsWith('Caught in the ash cloud')), 'and Blinds the target');
-  assert.ok(ev.some((e) => e.kind === 'zoneEffect' && e.zone === 'ash'), 'ending the next slot inside Blinds again');
-  // The cloud is a sphere: a flier a pace above the strike point is caught as it forms.
-  const air = bout(withTech(TD_FIRE, 'Ash Gland', 'wyrmling'), TD_WATER, 4, r);
+  b.exchange = 1;
+  const ev: Event[] = [];
+  runSlot(b, 0, { A: parseAction('breath'), B: parseAction('hold') }, ev, false);
+  assert.ok(hits(ev)[0].parts.some((p) => p.includes('Ash Gland')), 'the breath keeps its damage, less 3');
+  assert.ok(b.fighters.B.marks.ashStuck, 'the ash clings');
+  runSlot(b, 1, { A: parseAction('hold'), B: parseAction('retreat') }, ev, false);
+  assert.ok(b.fighters.B.status.blinded, 'Blinded in slot 2');
+  runSlot(b, 2, { A: parseAction('hold'), B: parseAction('retreat') }, ev, false);
+  assert.ok(b.fighters.B.status.blinded, 'and in slot 3, wherever it went');
+  assert.ok(!b.arena.zones.some((z) => z.kind === 'ash'), 'no cloud yet');
+  // Over a whole exchange: at its end the ash falls where the dragon stands, and hangs.
+  const c = bout(withTech(TD_FIRE, 'Ash Gland', 'wyrmling'), TD_WATER, 4, r);
+  run(c, ['breath', 'hold', 'hold'], ['hold', 'retreat', 'retreat']);
+  const z = c.arena.zones.find((x) => x.kind === 'ash')!;
+  assert.ok(z && dist(z.center, c.fighters.B.pos) === 0, 'the cloud falls at the dragon');
+  assert.equal(c.fighters.B.marks.ashStuck, null);
+  for (let i = 0; i < 3; i++) run(c, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.ok(c.arena.zones.some((x) => x.kind === 'ash'), 'it hangs for the rest of the bout');
+  assert.ok(c.fighters.B.pending.blinded, 'and Blinds whoever ends a slot inside');
+  // ASH_CLOUD_EXCHANGES bounds it.
+  const d = bout(withTech(TD_FIRE, 'Ash Gland', 'wyrmling'), TD_WATER, 4, rules({ TECH_ASH_GLAND: 'cloud', ASH_CLOUD_EXCHANGES: 1 }));
+  run(d, ['breath', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  run(d, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
+  assert.ok(!d.arena.zones.some((x) => x.kind === 'ash'), 'one exchange, then it fades');
+});
+
+test('Ash Gland (cloud), Juvenile: a breath that misses still clouds where it strikes, a sphere', () => {
+  const r = rules({ TECH_ASH_GLAND: 'cloud' });
+  const air = bout(withTech(TD_FIRE, 'Ash Gland', 'juvenile'), TD_WATER, 4, r);
   const ground = { ...air.fighters.B.pos };
   air.fighters.B.pos = { ...ground, z: R.PACE };
   ashCloud(air, 'A', ground, 12, []);
-  assert.ok(air.fighters.B.pending.blinded);
-  assert.ok(hits(ev)[0].parts.some((p) => p.includes('Ash Gland')), 'the breath keeps its damage, less 3');
+  assert.ok(air.fighters.B.pending.blinded, 'a flier a pace above the strike point is caught as it forms');
 });
 
 test('Stooping Pinions (nostack): a Dive into a stoop gets no +3; a Dive into a Bite gets +3', () => {
@@ -168,8 +193,9 @@ test('Sapping Bellow (gland, provisional): a landed Breath demoralizes', () => {
 
 test('Baleful Eye is cut, and Ash Gland returns only as the cloud', async () => {
   const { shardPool, setPoolRules } = await import('../src/shards.ts');
-  assert.ok(!shardPool('wyrmling').some((s) => s.name === 'Baleful Eye' || s.name === 'Ash Gland'));
-  setPoolRules(rules({ TECH_ASH_GLAND: 'cloud' }));
-  assert.ok(shardPool('wyrmling').some((s) => s.name === 'Ash Gland'));
+  assert.ok(!shardPool('wyrmling').some((s) => s.name === 'Baleful Eye'));
+  assert.ok(shardPool('wyrmling').some((s) => s.name === 'Ash Gland'), 'suite v0.3 seats the cloud');
+  setPoolRules(rules({}));
+  assert.ok(!shardPool('wyrmling').some((s) => s.name === 'Ash Gland'), 'pulled under v0.2');
   setPoolRules(R.DEFAULT_RULES);
 });

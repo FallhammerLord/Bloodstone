@@ -7,6 +7,8 @@ import { newBout, runExchange, type Bout, type Event, type FighterSetup, type Sh
 import type { Grade } from '../src/shards.ts';
 import * as R from '../src/rules.ts';
 
+// The Techniques as suite v0.2 wrote them, where v0.3 changed them (test/technique-pass-1.test.ts covers v0.3).
+const v02 = (a: FighterSetup, b: FighterSetup, sep: number) => newBout(a, b, sep, 'B', {}, R.rulesWith({ ...R.SUITE_V02 }));
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
 const withTech = (base: FighterSetup, shard: string, grade: Grade, extra: ShardSetup[] = []): FighterSetup => {
   const pips = grade === 'elder' || grade === 'venerable' ? [0, 1] : [0];
@@ -19,7 +21,7 @@ const notes = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'note'
 const slotPlans = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'slotEnd' }> => e.kind === 'slotEnd').map((e) => e.plans);
 
 test('Snapping Jaw: faster wind-up, slower recovery; Adult terms are lighter', () => {
-  const plan = (g: Grade) => slotPlans(run(newBout(withTech(TD_WATER, 'Snapping Jaw', g), TD_WATER, 4), ['bite'], ['hold']))[0].A;
+  const plan = (g: Grade) => slotPlans(run(v02(withTech(TD_WATER, 'Snapping Jaw', g), TD_WATER, 4), ['bite'], ['hold']))[0].A;
   assert.deepEqual([plan('wyrmling').windup, plan('wyrmling').recovery], [9, 17]);
   assert.deepEqual([plan('juvenile').windup, plan('juvenile').recovery], [7, 17]);
   assert.deepEqual([plan('adult').windup, plan('adult').recovery], [7, 15]);
@@ -58,13 +60,13 @@ test('Scything Forelimbs: the claw arc widens', () => {
 test('Ratchet Claws: each landed Claw link adds +1 to the next; the final link\'s bonus pays for it', () => {
   // True Dragon + Air claws 9 against Hardness 3: 6 a hit. Links: 6, 6 + 1, 6 + 2 + (3 − 3).
   const air: FighterSetup = { name: 'Ash', morph: 'true-dragon', stone: 'air' };
-  const ev = run(newBout(withTech(air, 'Ratchet Claws', 'juvenile'), TD_WATER, 2), ['claw:left', 'claw:left', 'claw:left'], ['hold', 'hold', 'hold']);
+  const ev = run(v02(withTech(air, 'Ratchet Claws', 'juvenile'), TD_WATER, 2), ['claw:left', 'claw:left', 'claw:left'], ['hold', 'hold', 'hold']);
   assert.deepEqual(hits(ev).map((h) => h.damage), [6, 7, 8]);
 });
 
 test('Ratchet Claws Elder: the escalating chain holds through a hitless exchange', () => {
   const air: FighterSetup = { name: 'Ash', morph: 'true-dragon', stone: 'air' };
-  const bout = newBout(withTech(air, 'Ratchet Claws', 'elder'), TD_WATER, 2);
+  const bout = v02(withTech(air, 'Ratchet Claws', 'elder'), TD_WATER, 2);
   run(bout, ['claw:left', 'claw:left', 'hold'], ['hold', 'hold', 'hold']);
   const quiet = run(bout, ['hold', 'hold', 'hold'], ['hold', 'hold', 'hold']);
   assert.ok(notes(quiet).some((n) => n.startsWith('Ratchet Claws')));
@@ -90,7 +92,7 @@ test('Smoldering Maw: −3 on the hit, then the area lingers and stings at slot 
 });
 
 test('Ash Gland: no damage, and the target can\'t revise next exchange', () => {
-  const bout = newBout(withTech(TD_WATER, 'Ash Gland', 'juvenile'), TD_WATER, 4);
+  const bout = v02(withTech(TD_WATER, 'Ash Gland', 'juvenile'), TD_WATER, 4);
   const ev = run(bout, ['breath'], ['hold']);
   assert.equal(hits(ev)[0].damage, 0);
   let asked = false;
@@ -135,8 +137,8 @@ test('Riposte Talons: a successful Dodge earns a free claw', () => {
 });
 
 test('Mantle Wings: Scales adds Affinity against breath', () => {
-  const plain = hits(run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['breath'], ['scales']))[0].damage;
-  const mantle = hits(run(newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, withTech(TD_WATER, 'Mantle Wings', 'juvenile'), 5), ['breath'], ['scales']))[0].damage;
+  const plain = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['breath'], ['scales']))[0].damage;
+  const mantle = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, withTech(TD_WATER, 'Mantle Wings', 'juvenile'), 5), ['breath'], ['scales']))[0].damage;
   assert.equal(plain - mantle, 3);
 });
 

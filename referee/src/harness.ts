@@ -3,7 +3,7 @@
 
 import { availableParallelism } from 'node:os';
 import { Worker } from 'node:worker_threads';
-import { DEFAULT_RULES, PACE, rulesWith, TECH_PASS_1, type Rules } from './rules.ts';
+import { DEFAULT_RULES, PACE, rulesWith, TECH_PASS_1, SUITE_V02, type Rules } from './rules.ts';
 
 /**
  * Rule overrides from repeated `--rule KEY=VALUE` flags. KEY is a DEFAULT_RULES path (BREATH.blast.radius);
@@ -19,6 +19,12 @@ export function rulesFromArgs(argv: string[]): { rules: Rules; overrides: Record
     if (spec === 'TECH_PASS_1=on') {
       Object.assign(overrides, TECH_PASS_1);
       labels.push('TECH_PASS_1');
+      return;
+    }
+    // SUITE_V02=on puts every Technique parity key back to its pre-lock rule.
+    if (spec === 'SUITE_V02=on') {
+      Object.assign(overrides, SUITE_V02);
+      labels.push('SUITE_V02');
       return;
     }
     // A word-valued rule (a Technique variant): KEY=word.
