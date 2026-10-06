@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Round 24](#round-24-suite-v03-locked-clinging-ash-why-true-dragon--fire-leads) | Suite v0.3 locked; clinging ash; Snapping Jaw in the hatch; the True Dragon + Fire lead is its sheet |
 | [Round 23](#round-23-technique-parity-pass-1) | Technique parity pass 1: one real outlier (Snapping Jaw); the rest was noise |
 | [Round 22](#round-22-brains-with-clean-patch-knowledge-and-measured-drafting) | Brains with clean patch knowledge and measured drafting; Ash Gland pulled |
 | [Checkpoint](#checkpoint-omnibus-hatch-and-ladder-together) | The omnibus after the Talons patch, read with the ladder and the hatch |
@@ -33,6 +34,47 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 24: suite v0.3 locked, clinging ash, why True Dragon + Fire leads
+
+**Suite v0.3 is the default.** Every parity-pass key defaults to its variant, with Snapping Jaw at `borrow_dmg`. Sapping Bellow stays at base until its text is written. `--rule SUITE_V02=on` restores v0.2. Tests: 183 pass; one scenario golden re-recorded (bout goldens carry no shards).
+
+**Ash Gland, reworked (Ken):** a landed Breath's ash clings to the target, Blinding it through the rest of the exchange wherever it moves. At the exchange's end it falls where the target stands and hangs as a cloud for the rest of the bout (`ASH_CLOUD_EXCHANGES`, 0 = the bout; one cloud per dragon). Brains value clinging ash in `techniqueCarryOver`.
+
+**Re-measured at 96 pairs (adept), merged into the brains' table:**
+
+| Shard | Overall | True Dragon / Wyvern / Wyrm |
+|---|---|---|
+| Ash Gland (clinging) | **−5 ±3** | −10 / −2 / −2 |
+| Sapping Bellow (base) | −1 ±3 | −5 / −1 / +3 |
+
+Ash Gland sits at the edge of the ±5 band, and its cost lands on the True Dragon. A TD carrier is mostly TD + Fire, so the Breath's −3 costs the game's biggest hit.
+
+**Hatch at master under v0.3 (2,496 bouts):**
+- **Snapping Jaw is the most-drafted shard,** on 17% of dragons, and wins 52% ±3: popular and neutral.
+  - Boxer-puncher drafts it most (14% of its picks, its #1). Then claw-focus 8%, aerialist 7%, slugger 7%. Out-boxer almost never takes it (1%).
+  - It rides the True Dragon: 526 of 835 carriers, winning 53%. Wyvern carriers win 52%, Wyrm carriers 49%.
+  - Why: the table rates it +5 pooled, and a top-5 shard for 7 styles. Per-style shard cells carry about ±10, though; claw-focus rating it +9 is noise. A master drafts tightly (temperature 0.35), so a top-ranked shard gets drafted a lot even when it wins at par.
+- **The True Dragon:** 66% of drafts, 51% ±2. True Dragon + Fire is 42% of drafts at 52% ±2. Wyrm + Earth 12% at 53%; True Dragon + Earth 7% at 57%.
+
+**Why True Dragon + Fire leads.** At 48 pairs per style, pooled (margins about ±4):
+
+| Sheet | Base | Own zones harm it | No charge widening |
+|---|---|---|---|
+| True Dragon + Fire | 54% | 51% | 54% |
+| True Dragon + Earth | 46% | 46% | 45% |
+| True Dragon + Air | 44% | 45% | 45% |
+| True Dragon + Water | 40% | 41% | 39% |
+| Wyrm + Earth | 43% | 43% | 43% |
+
+- **Stalwart isn't the cause:** turning off zone immunity moves TD + Fire −3 (noise); turning off the charge widening moves it 0.
+- **The sheet is the cause.** The preferred swing puts +3 into Fire's peak, so TD + Fire carries Breath 18: the only 18 in the hatchery (the next highest attacks are 12). It keeps 39 Wounds, more than every non-TD sheet but Wyrm + Air.
+- **The True Dragon as generalist holds.** On its other stones it sits at 40–46%, level with Wyrm + Earth. The convergence is True Dragon + Fire specifically, and the hatch amplifies it.
+
+**Open, for Ken:**
+- Sapping Bellow's text (options laid out in chat).
+- Ash Gland at −5: a dial before its terms (the Breath's −3, or `ASH_CLOUD_EXCHANGES`).
+- True Dragon + Fire's Breath 18: whether a preferred swing into a damage peak should be +3.
 
 ## Round 23: Technique parity pass 1
 
