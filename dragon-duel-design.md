@@ -52,7 +52,7 @@
 | Tertiary | Accuracy, Affinity, Acumen | Derived at hatching, then grown |
 
 - **Wounds:** the health pool. 3 points make one Wound.
-- **Evasion:** how fast and finely a dragon moves; tested on dodge and strafe. **[Proposed]** Approach, Retreat, Leap and Dive carry a full band for every dragon; Evasion buys where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves (72 ÷ Evasion ticks), how long it counts as evading (2 × Evasion ticks of active window), and how far a Strafe carries (⅓ pace per point).
+- **Evasion:** how fast and finely a dragon moves; tested on dodge and strafe. **[Proposed]** Every primary move (Approach, Retreat, Strafe, Leap, Dive) carries a full band for every dragon, a Strafe's as 3 paces of arc around the opponent; Evasion buys where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves (72 ÷ Evasion ticks), and how long it counts as evading (2 × Evasion ticks of active window).
 - **Hardness:** damage reduction; improved when guarding.
 - **Claw Sharpness, Bite Force, Breath Potency:** attack damage.
 - **Accuracy:** **[Proposed]** how late an attack's aim settles: it tracks through the wind-up and settles 12 − Accuracy ticks before the strike (never less than 1, never longer than the wind-up), so movement after that is what the shape must cover. Also tracking and reach without leaving position; sets the phantom band around hitboxes.
@@ -230,7 +230,7 @@ Each morph prefers one element and dislikes the element that beats it.
 **Attack shapes**
 - **Reach is in whole range bands;** widths and radii are paces, tuned by attributes.
 - **Bite:** forward and narrow, through Close. High damage, piercing.
-- **Claw:** an arc sweeping right-to-left or left-to-right, to Melee's edge and just into Close on either side, from the ground or the air. Short wind-up, long active window, short recovery: the natural strafe punish.
+- **Claw:** an arc sweeping right-to-left or left-to-right, from the ground or the air. **[Proposed]** It reaches Melee's edge forward, sweeps half into Close at the sides (4½ paces), and wraps a pace behind the shoulders, so it still catches a full-band strafe. Short wind-up, long active window, short recovery: the natural strafe punish.
 - **Breath:** a shaped area set by element. Skips Evasion. Reaches through Far. Cooldown 2. **At Melee a Breath is lost to any hit before it resolves,** a Bite or Claw trade included: Melee belongs to the body. A charged Breath's release can't be interrupted.
 - **Stomp:** a ground quake through whole bands: Close at wyrmling, Far at adult, Far at venerable with Hardness ÷ 2. **[Proposed]** 3 + Hardness ÷ 3 true damage, and it shatters boulders inside its radius; Staggers. Cooldown 2. Modified by age only. Misses anything aloft. **[Proposed]** Hits burrowed dragons and forces them up; its long wind-up leaves it open to interruption. **[Proposed]** A Stomp that lands on a dragon mid-move Staggers it for two slots, and a Staggered dragon tests half its Evasion: Stomp is the answer to a dragon that won't stop moving.
 
@@ -240,7 +240,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - An action reaches at least its minimum distance within its band; modifiers extend reach to the band's outer edge, never beyond.
 - **Three degrees of freedom:** advance or retreat along the line between dragons, strafe around the opponent, leap or fly. Altitude is ordinary movement.
 - Obstacles restrict movement, and so does the opponent's body. Obstructions are physical: **[Proposed]** an attack shape stops where it meets an obstacle and damages it instead.
-- **[Proposed]** Approach, Retreat, Leap and Dive carry exactly one band (3 paces), adjusted short or long by Evasion (a Wyvern's Leap climbs two); Strafe carries Evasion × ⅓ pace. Bands are the range game; paces are hit geometry, which settles near misses (a lunge's extra pace can still reach into the next band). Where a dragon lands in a band matters only for that action: between slots, separation snaps to the nearest ½ pace.
+- **[Proposed]** Approach, Retreat, Strafe, Leap and Dive carry exactly one band (3 paces), adjusted short or long by Evasion (a Wyvern's Leap climbs two); a Strafe's band is 3 paces of arc around the opponent at its separation. Bands are the range game; paces are hit geometry, which settles near misses (a lunge's extra pace can still reach into the next band). Where a dragon lands in a band matters only for that action: between slots, separation snaps to the nearest ½ pace.
 
 **Threat map**
 | Band | Bite | Claw | Breath | Stomp |

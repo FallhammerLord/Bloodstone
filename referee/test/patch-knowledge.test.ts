@@ -70,6 +70,13 @@ test('Ash Gland is back as the cloud: brains can draft it', async () => {
   assert.ok(shardPool('wyrmling').some((s) => s.name === 'Ash Gland'));
 });
 
+test('Strafes carry a band, short or long: brains have both landings to choose from', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 6);
+  const seen = new Set<string>();
+  for (let i = 1; i <= 40; i++) for (const a of legalActions(situation(bout.fighters.A, 0, R.DEFAULT_RULES), seededRandom(i))) if (a.name === 'strafe' && !a.shift) seen.add(a.depth ?? 'band');
+  assert.deepEqual([...seen].sort(), ['band', 'long', 'short']);
+});
+
 // ---- Technique parity pass 1 [Proposed]: one fixed situation per variant the brains must know ----
 
 const pass = R.rulesWith({ ...R.TECH_PASS_1 });

@@ -43,9 +43,8 @@ export const DEFAULT_RULES = {
   BOULDER_CLEARANCE: 2 * PACE, // [Assumed] random boulders keep this far from starting spots
   START_SEPARATION: Math.floor(6.5 * PACE), // [Doc] Far, just outside Bite range
   // ---- Movement ----
-  MOVE_CAP: BAND, // [Proposed] a move carries at most one band
-  EVASION_STEP: NOTCH, // [Assumed] a Strafe carries ⅓ pace per point of Evasion (Evasion 9 = one band)
-  // Band moves [Proposed]: Approach, Retreat, Leap and Dive each carry one band (3 paces), for every dragon. Evasion buys
+  // Band moves [Proposed]: every primary move (Approach, Retreat, Strafe, Leap, Dive) carries one band (3 paces), for
+  // every dragon; a Strafe's band is 3 paces of arc around the opponent. Evasion buys
   // where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves
   // (72 ÷ Evasion ticks), and how long it counts as evading (2 × Evasion ticks of active window).
   BAND_MOVE: BAND,
@@ -160,8 +159,9 @@ export const DEFAULT_RULES = {
   // Reach is in whole range bands [Doc]; widths and radii are paces, tuned by attributes.
   BITE_REACH: CLOSE_EDGE, // Bite reaches through Close [Doc]: Melee into Close
   BITE_HALF_WIDTH: PACE / 2, // [Assumed] narrow: how far off the aim line it still catches
-  CLAW_REACH: MELEE_EDGE + NOTCH, // Claw's arc reaches Melee's edge and sweeps just into Close [Doc], from the ground or the air
-  CLAW_BACK: PACE / 2, // [Assumed] arc wraps slightly behind the shoulders
+  CLAW_REACH: MELEE_EDGE + NOTCH, // Claw's arc reaches Melee's edge forward [Doc], from the ground or the air
+  CLAW_SIDE: MELEE_EDGE + Math.floor(1.5 * PACE), // [Proposed] and sweeps half into Close at the sides, to catch a full-band strafe
+  CLAW_BACK: PACE, // [Proposed] the arc wraps a pace behind the shoulders (was ½)
   STOMP_RADIUS: { wyrmling: CLOSE_EDGE, adult: FAR_EDGE, venerable: FAR_EDGE }, // Stomp quakes whole bands [Doc]: Close, then Far
   BREATH: {
     line: { reach: 9 * PACE, halfWidth: PACE / 2 }, // Water: high-pressure jet

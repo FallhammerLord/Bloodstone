@@ -111,7 +111,7 @@ const HABITS: Record<Style, Habit> = { brawler, skirmisher, guardian, mixed };
 /** How far this dragon expects to have moved; it can't know the opponent's moves. */
 /** Where this dragon expects to be after a move; it can't know the opponent's moves. Rough on purpose. */
 function predict(sep: number, z: number, a: ActionSpec, view: View, staggered: boolean): { sep: number; z: number } {
-  let step = Math.min(view.me.sheet.evasion * view.rules.EVASION_STEP, view.rules.MOVE_CAP);
+  let step = view.rules.BAND_MOVE;
   if (staggered) step = Math.floor(step / 2);
   if (a.name === 'approach') return { sep: Math.max(view.rules.BODY_GAP, sep - step), z };
   if (a.name === 'retreat') return { sep: Math.min(view.rules.LEASH, sep + step), z };

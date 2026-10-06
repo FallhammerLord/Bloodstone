@@ -91,8 +91,14 @@ export function parseAction(text: string): ActionSpec {
   const name = raw as ActionName;
   if (name === 'strafe') {
     if (detail !== 'cw' && detail !== 'ccw') throw new Error(`Strafe needs a direction: "strafe:cw" or "strafe:ccw".`);
-    if (extra !== undefined && extra !== 'in' && extra !== 'out') throw new Error(`A strafe shift is "in" or "out": "strafe:cw:in".`);
-    return extra ? { name, dir: detail, shift: extra } : { name, dir: detail };
+    // "strafe:cw", "strafe:cw:long", "strafe:cw:in", "strafe:cw:in:short": a shift (Sidewinder Spine) and a landing depth.
+    const out: ActionSpec = { name, dir: detail };
+    for (const x of text.trim().toLowerCase().split(':').slice(2)) {
+      if (x === 'in' || x === 'out') out.shift = x;
+      else if (x === 'short' || x === 'long') out.depth = x;
+      else throw new Error(`A strafe takes a shift ("in" or "out") and a depth ("short" or "long"): "strafe:cw:in:long".`);
+    }
+    return out;
   }
   if (name === 'claw') {
     const sweep = detail ?? 'left';
@@ -113,7 +119,7 @@ export function parseAction(text: string): ActionSpec {
 export function describe(spec: ActionSpec): string {
   const base = ACTIONS[spec.name].label;
   const label = spec.charge ? `${base} (charging${spec.move ? `, on a ${spec.move}` : ''})` : spec.released ? `${base} (charged)` : spec.crunch ? `${base} ×2 (crunched)` : base;
-  if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''})`;
+  if (spec.dir) return `${label} (${spec.dir === 'cw' ? 'clockwise' : 'counterclockwise'}${spec.shift ? `, shifting ${spec.shift}` : ''}${spec.depth ? `, ${spec.depth}` : ''})`;
   if (spec.sweep) return `${label} (${spec.sweep}${spec.back ? ', stooping back' : ''})`;
   if (spec.depth) return `${label} (${spec.depth})`;
   if (spec.hard) return `${label} (hard landing)`;

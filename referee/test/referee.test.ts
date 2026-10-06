@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction } from '../src/actions.ts';
 import { hatch, matchup } from '../src/hatch.ts';
+import { inShape } from '../src/shapes.ts';
 import * as R from '../src/rules.ts';
 import { newBout, runExchange, timing, type Event, type FighterSetup, type Side } from '../src/referee.ts';
 
@@ -98,9 +99,10 @@ test('a chain needs each link to land', () => {
 });
 
 test('breath skips Evasion and applies the matchup', () => {
-  // Wyrm + Water (Breath 12) against a strafing True Dragon + Earth (Affinity 3): 12 − 3 + 3 + 2. The strafe's evasive
-  // window has closed by tick 12, so the Breath also catches it in recovery (+3 punish).
-  const { hits } = fight({ name: 'Tide', morph: 'wyrm', stone: 'water' }, { name: 'Clod', morph: 'true-dragon', stone: 'earth' }, 7, ['breath'], ['strafe:cw']);
+  // Wyrm + Water (Breath 12) against an approaching True Dragon + Earth (Affinity 3): 12 − 3 + 3 + 2. The move's evasive
+  // window has closed by tick 12, so the Breath also catches it in recovery (+3 punish). (A full-band strafe leaves the
+  // jet's line by geometry.)
+  const { hits } = fight({ name: 'Tide', morph: 'wyrm', stone: 'water' }, { name: 'Clod', morph: 'true-dragon', stone: 'earth' }, 7, ['breath'], ['approach']);
   assert.equal(hitsBy(hits, 'A')[0].damage, 12 - 3 + R.DEFAULT_RULES.MATCHUP + R.DEFAULT_RULES.ELEMENT_BREATH_MOD.water + R.DEFAULT_RULES.PUNISH_BONUS, 'Potency 12, Affinity 3, +3 matchup, +2 Water, +3 punish');
 });
 
@@ -132,11 +134,12 @@ test('a strafe during the wind-up slips a bite', () => {
 });
 
 test('stomp deals 3 + Hardness ÷ 3 true damage and Staggers: the next move runs on half its Evasion', () => {
-  // Wyrm + Air has Evasion 6: a strafe normally carries 2 paces; Staggered, Evasion 3 carries 1.
-  const { hits, bout } = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['stomp', 'hold'], ['hold', 'strafe:cw']);
+  // Wyrm + Air has Evasion 6: a strafe evades for 12 ticks; Staggered, Evasion 3 evades for 6 (it still carries its band).
+  const { hits, events } = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['stomp', 'hold'], ['hold', 'strafe:cw']);
   assert.equal(hits[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(3 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR.wyrmling)); // True Dragon Hardness 3
-  const free = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['hold', 'hold'], ['hold', 'strafe:cw']).bout;
-  assert.ok(Math.abs(bout.fighters.B.pos.y) < Math.abs(free.fighters.B.pos.y), 'the staggered strafe carries less');
+  const free = fight(TD_WATER, { name: 'Coil', morph: 'wyrm', stone: 'air' }, 1.5, ['hold', 'hold'], ['hold', 'strafe:cw']).events;
+  const strafeWindow = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'slotEnd' }> => e.kind === 'slotEnd')[1].plans.B.active;
+  assert.ok(strafeWindow(events) < strafeWindow(free), 'the staggered strafe evades for less');
 });
 
 test('the leash turns a retreat at Very Far into a roar', () => {
@@ -199,4 +202,33 @@ test('Scales adds Affinity against breath, as it adds Hardness against Bite and 
     return ev.filter((e) => e.kind === 'hit').map((e) => e.kind === 'hit' && e.damage)[0];
   };
   assert.equal(Number(at('hold')) - Number(at('scales')), 3);
+});
+
+test('every dragon strafes a full band: 3 paces of arc at its separation, short or long by Evasion', () => {
+  for (const morph of ['true-dragon', 'wyvern', 'wyrm'] as const) {
+    const b = newBout(TD_WATER, { name: 'S', morph, stone: 'water' }, 6);
+    const before = { ...b.fighters.B.pos };
+    runExchange(b, { A: [parseAction('hold')], B: [parseAction('strafe:cw')] });
+    const after = b.fighters.B.pos;
+    const r = Math.hypot(before.x - b.fighters.A.pos.x, before.y - b.fighters.A.pos.y);
+    const ang = Math.abs(Math.atan2(after.y - b.fighters.A.pos.y, after.x - b.fighters.A.pos.x) - Math.atan2(before.y - b.fighters.A.pos.y, before.x - b.fighters.A.pos.x));
+    assert.ok(Math.abs(ang * r - R.BAND) <= R.PACE / 2, `${morph}: ${(ang * r / R.PACE).toFixed(2)} paces of arc`);
+  }
+  const wyv = (depth: string) => {
+    const b = newBout(TD_WATER, { name: 'S', morph: 'wyvern', stone: 'water' }, 6);
+    const y0 = b.fighters.B.pos.y;
+    runExchange(b, { A: [parseAction('hold')], B: [parseAction(`strafe:cw${depth}`)] });
+    return Math.abs(b.fighters.B.pos.y - y0);
+  };
+  assert.ok(wyv(':short') < wyv('') && wyv('') < wyv(':long'), 'Evasion picks the landing');
+});
+
+test('the Claw sweeps half into Close at the sides, Melee\'s edge forward, a pace behind', () => {
+  const sheet = hatch('true-dragon', 'water');
+  const o = { x: 0, y: 0, z: 0 }, aim = { x: R.PACE, y: 0, z: 0 };
+  const at = (x: number, y: number) => inShape(R.DEFAULT_RULES, 'claw', sheet, o, aim, { x: x * R.PACE, y: y * R.PACE, z: 0 }, 0);
+  assert.ok(at(0, 4), 'level with the shoulders at 4 paces (Close): caught');
+  assert.ok(!at(4, 0), 'straight ahead at 4 paces: beyond Melee');
+  assert.ok(at(3, 0), 'straight ahead at Melee\'s edge: caught');
+  assert.ok(at(-0.9, 2) && !at(-1.5, 2), 'it wraps a pace behind the shoulders');
 });

@@ -16,9 +16,9 @@
  {
   "name": "brains.json",
   "winner": "B",
-  "exchanges": 4,
+  "exchanges": 6,
   "wounds": "-5/15",
-  "hash": "fc95897a9c5833d5"
+  "hash": "1d73b2014685e2f7"
  },
  {
   "name": "breath-effects.json",
@@ -67,7 +67,7 @@
   "winner": "B",
   "exchanges": 2,
   "wounds": "0/18",
-  "hash": "1562885f52eaaad6"
+  "hash": "a8562f77f1672190"
  },
  {
   "name": "intimidate-punish.json",
@@ -109,7 +109,7 @@
   "winner": "-",
   "exchanges": 1,
   "wounds": "45/23",
-  "hash": "7d558f84f32b98e9"
+  "hash": "8f2bf7499b6cf2a3"
  },
  {
   "name": "shards.json",
@@ -123,7 +123,7 @@
   "winner": "-",
   "exchanges": 2,
   "wounds": "9/30",
-  "hash": "268613292fcf9ea0"
+  "hash": "d4ba91ad0da83f56"
  },
  {
   "name": "techniques.json",
@@ -137,6 +137,6 @@
   "winner": "-",
   "exchanges": 1,
   "wounds": "45/18",
-  "hash": "721b15e59ee6bb66"
+  "hash": "d44266645d1e5148"
  }
 ]

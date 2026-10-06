@@ -25,6 +25,11 @@ export interface ShapeMods {
   widen?: boolean;
 }
 
+/** The Claw's arc: Melee's edge forward, half into Close at the sides, a pace behind the shoulders. */
+function clawArc(rules: Rules, f: number, d: number, extra: number, grow: number): boolean {
+  return f <= rules.CLAW_REACH + extra + grow && d <= rules.CLAW_SIDE + extra + grow && f >= -rules.CLAW_BACK - grow;
+}
+
 export function inShape(rules: Rules, shape: Shape, sheet: StatSheet, origin: Vec, aim: Vec, target: Vec, grow: number, mods: ShapeMods = {}): boolean {
   const { forward: f, offAxis: l } = frame(origin, aim, target);
   const extra = mods.reach ?? 0;
@@ -32,10 +37,10 @@ export function inShape(rules: Rules, shape: Shape, sheet: StatSheet, origin: Ve
     case 'bite':
       return f > 0 && f <= rules.BITE_REACH + grow && l <= rules.BITE_HALF_WIDTH + grow;
     case 'claw':
-      return dist(origin, target) <= rules.CLAW_REACH + extra + grow && f >= -rules.CLAW_BACK - grow;
+      return clawArc(rules, f, dist(origin, target), extra, grow);
     case 'stoop':
       // Landing from a stoop, the talons swipe both left and right: the full claw arc to either side.
-      return dist(origin, target) <= rules.CLAW_REACH + extra + grow && f >= -rules.CLAW_BACK - grow;
+      return clawArc(rules, f, dist(origin, target), extra, grow);
     case 'lance': {
       // Lance Throat: a narrow line to Far's outer edge [Doc].
       const half = rules.BREATH.line.halfWidth + (mods.widen ? Math.floor((Math.max(0, f) * rules.LANCE_WIDEN) / R.FAR_EDGE) : 0);

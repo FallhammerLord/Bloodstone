@@ -482,17 +482,17 @@ test('aim follows through the wind-up and settles 12 − Accuracy ticks out: rad
 // ---- Serpentine against Breath, and Stomp catching movers [Proposed] ----
 
 test('Serpentine: a strafing Wyrm slips a Breath (Evasion 6 + 3 against Accuracy 6); a held one takes it', () => {
-  // Earth's cone is wide enough at 5 paces that the strafe stays inside it: geometry first, then the Evasion test.
+  // Earth's cone is wide enough at 5 paces that a short strafe stays inside it: geometry first, then the Evasion test.
   const breathOn = (move: string) => {
     const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5);
     return run(bout, ['breath'], [move]);
   };
-  const strafing = breathOn('strafe:cw');
+  const strafing = breathOn('strafe:cw:short');
   assert.equal(hits(strafing).filter((h) => h.attacker === 'A').length, 0);
   assert.ok(strafing.some((e) => e.kind === 'evade' && e.action === 'breath' && e.how === 'serpentine'));
   assert.equal(hits(breathOn('hold')).filter((h) => h.attacker === 'A').length, 1);
   const off = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5, 'B', {}, R.rulesWith({ SERPENTINE_BREATH: 0 }));
-  assert.equal(hits(run(off, ['breath'], ['strafe:cw'])).filter((h) => h.attacker === 'A').length, 1, 'with the dial off, Breath skips Evasion');
+  assert.equal(hits(run(off, ['breath'], ['strafe:cw:short'])).filter((h) => h.attacker === 'A').length, 1, 'with the dial off, Breath skips Evasion');
 });
 
 test('a Stomp that lands mid-move Staggers for two slots, and a Staggered Wyrm can\'t slip a Breath', () => {

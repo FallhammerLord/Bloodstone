@@ -294,10 +294,8 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   if (def.category === 'move') {
     // Evasion buys a move's timing and finesse, not (for band moves) its reach [Proposed]. Staggered halves it.
     const evasion = Math.max(1, Math.floor(eff(f, 'evasion', {}).value / (f.status.staggered ? 2 : 1)));
-    if (spec.name === 'strafe') {
-      moveTotal = Math.min(evasion * rules.EVASION_STEP, rules.MOVE_CAP);
-    } else {
-      // Approach, Retreat, Leap and Dive carry a band; Evasion picks the landing within it.
+    {
+      // Every primary move carries a band (a Strafe's as arc); Evasion picks the landing within it.
       const finesse = Math.floor((evasion * R.PACE) / rules.MOVE_DEPTH_DIVISOR);
       moveTotal = rules.BAND_MOVE + (spec.depth === 'long' ? finesse : spec.depth === 'short' ? -finesse : 0);
       // Bounding Haunches: an Approach carries two bands [Doc].

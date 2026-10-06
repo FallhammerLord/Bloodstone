@@ -52,14 +52,16 @@ export function moveStep(rules: Rules, me: Fighter, opp: Fighter, p: Plan, oppPl
     }
     case 'strafe': {
       if (flatSep === 0) return me.pos;
-      const tangent = p.spec.dir === 'cw' ? vec(flatV.y, -flatV.x) : vec(-flatV.y, flatV.x);
+      // A Strafe's band is arc [Proposed]: this tick's distance turns the dragon around the opponent at its separation.
+      const turn = Math.min(Math.PI, delta / flatSep) * (p.spec.dir === 'cw' ? -1 : 1);
+      const around = vec(Math.round(flatV.x * Math.cos(turn) - flatV.y * Math.sin(turn)), Math.round(flatV.x * Math.sin(turn) + flatV.y * Math.cos(turn)));
       // Sidewinder Spine: shift along the line while strafing, spread over the same ticks.
       const k2 = Math.min(t - p.windup + 1, p.travel);
       const shiftNow = Math.floor((p.shiftTotal * k2) / p.travel) - p.shifted;
       p.shifted += shiftNow;
       const radius = Math.max(rules.BODY_GAP, flatSep + (p.spec.shift === 'in' ? -shiftNow : shiftNow));
-      np = { ...add(flat(opp.pos), scaleTo(add(flatV, scaleTo(tangent, delta)), radius)), z: me.pos.z };
-      if (dist(np, opp.pos) > rules.LEASH) np = { ...add(flat(opp.pos), scaleTo(add(flatV, scaleTo(tangent, delta)), flatSep)), z: me.pos.z };
+      np = { ...add(flat(opp.pos), scaleTo(around, radius)), z: me.pos.z };
+      if (dist(np, opp.pos) > rules.LEASH) np = { ...add(flat(opp.pos), scaleTo(around, flatSep)), z: me.pos.z };
       break;
     }
     case 'leap': {
