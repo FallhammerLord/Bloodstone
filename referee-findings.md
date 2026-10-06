@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Checkpoint](#checkpoint-omnibus-hatch-and-ladder-together) | The omnibus after the Talons patch, read with the ladder and the hatch |
 | [Season 4](#living-ladder-season-4) | One kill per pick, as designed: 632 champions; Wyvern + Air leads the hall again |
 | [Season 3](#living-ladder-season-3) | Yields paid in Ichor, non-lethal timeouts, the array planner: champions stay rare (7) |
 | [Season 2](#living-ladder-season-2) | Talons rework, Ichor freezing, learning curves; season 1's champion tamers return |
@@ -30,6 +31,47 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Checkpoint: omnibus, hatch and ladder together
+
+Two master omnibus runs (`npm run brains -- --skill master`, plain and `--shards`, 2,544 bouts each, seed 2026) after the Talons patch, read against the baseline (before the patch) and the season 4 ladder. Single runs: morph and style margins ±6, stone ±7, pairings ±12. The three instruments, and what each isolates:
+- **Omnibus:** balance (dealt builds, random styles) and brains (identical dragons).
+- **Hatch:** the meta (each style drafts).
+- **Ladder:** selection and the economy.
+
+| | Omnibus, plain | Omnibus, shards | Ladder, season 4 |
+|---|---|---|---|
+| Morphs: True Dragon / Wyrm / Wyvern | **58** / 50 / **43** | 56 / 45 / 48 | — |
+| Stones: Earth / Water / Fire / Air | 55 / 53 / 49 / **44** | 52 / 45 / 51 / 52 | — |
+| True Dragon + Earth | 65% | 59% | 57% |
+| Wyvern + Air | **42%** | **52%** | 52% |
+| True Dragon + Fire | 50% | 59% | 48% |
+| Wyrm + Earth | 59% | 45% | 52% |
+| Timeouts | 8% | 9% | 4% (non-lethal) |
+
+**Mechanics (plain omnibus):**
+- Breath deals 44% of damage (lands 58%), Bite 36%, Claw 14%, Stomp 6%.
+- Stoops fell to 0.12 a bout, from 0.17 at the baseline and 0.86 in Wyvern + Air's own bouts before the patch. The stoop is now a setup play, not a reflex.
+- Wyverns travel 20.6 paces a bout (the two-band Leap).
+- The brains still beat the crude AIs 85% of the time.
+
+**What it shows:**
+- **The Talons patch landed, perhaps a little hard without shards.** Plain, the Wyvern fell from 50% at the baseline to 43% and Air from 55% to 44%. With shards, Wyvern + Air recovers to 52%, matching the ladder. The hypothesis from season 4 holds in direction: shards lift the Air Wyvern by about 10 points (single runs, ±12 each). Its kit (Whetted Nail, Hollow Bones, claw Techniques) carries it.
+- **True Dragon + Earth is strong in every instrument:** 65% plain, 59% with shards, 57% on the ladder. Its strength is real, and only its neglect by the styles' drafts keeps it rare. The True Dragon leads the morphs in both omnibus runs (58%, 56%).
+- **The instruments disagree where styles choose:**
+  - True Dragon + Fire: 50% plain, 59% with shards, 48% on the ladder.
+  - True Dragon + Water: 65% plain, but 45% with shards and 1% of hatches on the ladder.
+
+  Builds that look strong when dealt at random can look weak when chosen by the styles that like them. Pool before acting on any single pairing.
+- **The boxing triangle holds for the first time:** swarmer over out-boxer 71%, slugger over swarmer 67%, out-boxer and slugger even.
+- **Reader is a drafting problem, not a fighting one.** On identical dragons it wins 51%; on the ladder it wins 30–38%. Its body wants (Accuracy, Affinity) steer it into weak builds. Fixing its drafting comes before any tuning of its play.
+- **Bite-focus and claw-focus are weak as fighters:** 36% and 32% on identical dragons. Claw-focus reaches 53% on the ladder only by drafting Wyvern + Air with claw shards. These are brain problems, best fixed as brains, not as rules.
+- **Ash Gland is the tamers' favorite and an underperformer.** It is the most-frozen Technique on the ladder (317), yet dragons carrying it win 46% here. Snapping Jaw leads again (59%) and Ratchet Claws trails (43%). The styles' tag wants overvalue Ash Gland.
+
+**Next, in order:**
+1. Reader's drafting, and Ash Gland's appeal (brain wants).
+2. The bite-focus and claw-focus brains.
+3. A pooled pairing run (two more seeds) before any balance change to True Dragon + Earth, the plain Wyvern, or Water.
 
 ## Living ladder, season 4
 
