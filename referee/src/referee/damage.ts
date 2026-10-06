@@ -151,12 +151,6 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
         v -= 3;
         parts.push('−3 Smoldering Maw (it lingers instead)');
       }
-      // Ash Gland (cloud): the breath keeps its damage less 3, Wyrmling and Juvenile; full from Adult.
-      const ashC = tech(att, 'ash-gland');
-      if (rules.TECH_ASH_GLAND === 'cloud' && ashC >= W && ashC < A) {
-        v -= 3;
-        parts.push('−3 Ash Gland (it clouds instead)');
-      }
       if (m > 0) parts.push(`+${m} matchup`);
       if (m < 0) parts.push(`${m} matchup`);
       break;

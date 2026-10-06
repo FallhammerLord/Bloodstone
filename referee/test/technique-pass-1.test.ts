@@ -137,7 +137,7 @@ test('Ash Gland (cloud): the ash clings through the exchange, then falls as a cl
   b.exchange = 1;
   const ev: Event[] = [];
   runSlot(b, 0, { A: parseAction('breath'), B: parseAction('hold') }, ev, false);
-  assert.ok(hits(ev)[0].parts.some((p) => p.includes('Ash Gland')), 'the breath keeps its damage, less 3');
+  assert.ok(!hits(ev)[0].parts.some((p) => p.includes('Ash Gland')), 'the breath keeps its full damage');
   assert.ok(b.fighters.B.marks.ashStuck, 'the ash clings');
   runSlot(b, 1, { A: parseAction('hold'), B: parseAction('retreat') }, ev, false);
   assert.ok(b.fighters.B.status.blinded, 'Blinded in slot 2');

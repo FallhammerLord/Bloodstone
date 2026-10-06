@@ -130,10 +130,10 @@ Breath charges across two slots, with the charge slot's Scales-guard defense. Th
 - **Venerable:** as Elder; you may Move during the charge slot
 
 ### Ash Gland · Information
-**[Proposed, suite v0.3]** The ash cloud. Breath deals 3 less. A landed Breath's ash clings to the target: it is Blinded through the rest of the exchange, wherever it moves. At the exchange's end the ash falls off where the target stands and hangs there as a cloud for the rest of the bout. A dragon ending a slot inside is Blinded next slot. One cloud per dragon: a new one replaces the old. A True Dragon's own cloud never blinds it.
+**[Proposed, suite v0.3]** The ash cloud. A landed Breath's ash clings to the target: it is Blinded through the rest of the exchange, wherever it moves. At the exchange's end the ash falls off where the target stands and hangs there as a cloud for the rest of the bout. A dragon ending a slot inside is Blinded next slot. One cloud per dragon: a new one replaces the old. A True Dragon's own cloud never blinds it.
 - **Wyrmling:** the cloud reaches 1 pace from its center
 - **Juvenile:** a Breath that misses still clouds where it strikes, blinding whoever is inside as it forms
-- **Adult:** the Breath keeps its full damage
+- **Adult:** as Juvenile **[Open]**: its old perk (full Breath damage) is now every grade's; it needs a new one
 - **Elder:** as Adult; the cloud reaches 1.5 paces
 - **Venerable:** as Elder; the ash and the cloud also Rattle
 
