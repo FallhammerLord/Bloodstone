@@ -2,12 +2,14 @@
 // rung (its pips of shards) until it wins or dies; three straight wins earn a pick from the last victim's spoils and
 // a step up. A full three-pip array makes a wyrmling champion, who retires. A dead or retired dragon's tamer hatches
 // another. Tamers learn: skill rises with the best rung they've reached, and their drafts lean toward builds that
-// have won for them and away from builds that died.
+// have won for them and away from builds that died, on curves: novelty fades as a tamer hatches more dragons, and a
+// build's record counts for more the more fights it has. At a spoils pick a tamer can seat a shard, or melt one into
+// Ichor (the tamer's, surviving its dragons) and freeze a shard of its choosing, or bank the Ichor and keep chasing.
 //   npm run gauntlet [-- --tamers N] [--rounds N] [--seed N] [--json file] [--cards file]
 
 import { writeFileSync } from 'node:fs';
 import { BRAIN_STYLES, type BrainStyle, type Skill } from './brain.ts';
-import { DROPS, draftDragon, pickSpoil, Picks } from './brain/hatchery.ts';
+import { chooseSpoils, DROPS, draftDragon, ICHOR, Picks } from './brain/hatchery.ts';
 import type { Job, Result } from './brains-worker.ts';
 import { flag, inWorkers, rateWithMargin, WORKERS } from './harness.ts';
 import { hatch } from './hatch.ts';
@@ -25,8 +27,12 @@ const STREAK = 3;
 /** A rung's skill for unclaimed dragons, and a tamer's skill from the best rung it has reached. */
 const SKILL_AT: Skill[] = ['novice', 'adept', 'master'];
 const skillAt = (pips: number): Skill => SKILL_AT[Math.min(pips, 2)];
-/** Learning: a draft leans this much toward a build per win it has brought its tamer, and away per death. */
-const LEARN = { win: 0.15, death: 0.6, min: -2, max: 1.5 };
+/**
+ * The learning curves. Novelty fades with experience: its weight is 1 ÷ (1 + dragons hatched ÷ fade). A build's
+ * record weighs in as scale × (win rate − ½) × n ÷ (n + trust), n its fights: one lucky win barely moves a draft,
+ * ten fights mostly decide it, and a proven build outweighs novelty.
+ */
+const LEARN = { fade: 5, scale: 4, trust: 4 };
 
 const rng = seededRandom(seed);
 const pick = <T>(xs: readonly T[]) => xs[Math.floor(rng() * xs.length)];
@@ -68,6 +74,7 @@ interface Tamer {
   champions: string[];
   prefs: Map<string, { w: number; d: number }>;
   picks: Picks;
+  ichor: number;
   history: string[];
   dragon: Dragon | null;
   graveyard: string[];
@@ -79,7 +86,7 @@ const kit = (s: FighterSetup) => `${buildOf(s)}${s.shards?.length ? `, ${shardsO
 
 const tamers: Tamer[] = Array.from({ length: TAMERS }, (_, id) => ({
   id, name: `${name(2)} ${name(1)}`, style: BRAIN_STYLES[id % BRAIN_STYLES.length], best: 0, wins: 0, losses: 0, hatched: 0,
-  champions: [], prefs: new Map(), picks: new Picks(), history: [], dragon: null, graveyard: [],
+  champions: [], prefs: new Map(), picks: new Picks(), ichor: 0, history: [], dragon: null, graveyard: [],
 }));
 const wildPicks = new Picks();
 
@@ -103,6 +110,9 @@ const styleFights = new Map<string, Rate>();
 const styleChampions = new Map<string, number>();
 const skillFights = new Map<string, Rate>();
 const spoilPicks = new Map<string, number>();
+const melted = new Map<string, number>();
+const frozen = new Map<string, number>();
+let banks = 0;
 const hall: string[] = [];
 const ends = { ko: 0, pulse: 0, timeout: 0 };
 let bouts = 0;
@@ -110,9 +120,11 @@ let bouts = 0;
 function hatchFor(t: Tamer, round: number) {
   const bias = (b: string) => {
     const p = t.prefs.get(b);
-    return p ? Math.max(LEARN.min, Math.min(LEARN.max, LEARN.win * p.w - LEARN.death * p.d)) : 0;
+    const n = p ? p.w + p.d : 0;
+    return n ? LEARN.scale * (p!.w / n - 0.5) * (n / (n + LEARN.trust)) : 0;
   };
-  const setup = draftDragon(t.style, skillOf(t), rng, t.picks, dragonName(), { pips: 0, bias });
+  const novelty = 1 / (1 + t.hatched / LEARN.fade);
+  const setup = draftDragon(t.style, skillOf(t), rng, t.picks, dragonName(), { pips: 0, bias, novelty });
   t.hatched++;
   t.dragon = { name: setup.name, setup, build: buildOf(setup), pips: 0, streak: 0, wins: 0, losses: 0, born: round, nth: t.hatched };
   count(hatches, t.dragon.build);
@@ -193,20 +205,37 @@ for (let round = 1; round <= ROUNDS; round++) {
       if (d.streak >= STREAK) {
         d.streak = 0;
         const owned = new Set(shardsOf(d.setup));
-        const pool: Shard[] = [findShard(DROPS.morph[l.setup.morph], 'wyrmling'), findShard(DROPS.stone[l.setup.stone], 'wyrmling'),
+        const spoils: Shard[] = [findShard(DROPS.morph[l.setup.morph], 'wyrmling'), findShard(DROPS.stone[l.setup.stone], 'wyrmling'),
           ...(l.setup.shards ?? []).map((s) => findShard(s.shard, s.grade))]
-          .filter((s, k, all) => !owned.has(s.name) && s.pips <= WYRMLING_PIPS - d.pips && all.findIndex((x) => x.name === s.name) === k);
-        const spoil = pickSpoil(t.style, skillOf(t), hatch(d.setup.morph, d.setup.stone), pool, rng);
-        if (spoil) {
-          const pips = Array.from({ length: spoil.pips }, (_, k) => d.pips + k);
-          d.setup = { ...d.setup, shards: [...(d.setup.shards ?? []), { shard: spoil.name, grade: spoil.grade, pips }] };
-          d.pips += spoil.pips;
-          count(spoilPicks, spoil.name);
-          if (d.pips === 1) count(climbed, d.build);
+          .filter((s, k, all) => all.findIndex((x) => x.name === s.name) === k);
+        const choice = chooseSpoils(t.style, skillOf(t), hatch(d.setup.morph, d.setup.stone), spoils, WYRMLING_PIPS - d.pips, owned, t.ichor, rng);
+        const offer = spoils.map((s) => s.name).join(', ');
+        let seat: Shard | null = null;
+        if (choice?.kind === 'seat') {
+          seat = choice.shard;
+          count(spoilPicks, seat.name);
+          t.history.push(`R${round} · ◆ ${d.name} takes ${seat.name} from the spoils (of ${offer}).`);
+        } else if (choice) {
+          t.ichor += ICHOR.meltPerPip * choice.melt.pips;
+          count(melted, choice.melt.name);
+          if (choice.kind === 'freeze') {
+            seat = choice.shard;
+            t.ichor -= ICHOR.freezePerPip * seat.pips;
+            count(frozen, seat.name);
+            t.history.push(`R${round} · ❄ ${d.name} melts ${choice.melt.name} from the spoils (of ${offer}) and freezes ${seat.name} from ${t.name}'s Ichor (${t.ichor} left).`);
+          } else {
+            banks++;
+            t.history.push(`R${round} · ♨ ${d.name} melts ${choice.melt.name} from the spoils (of ${offer}) and banks it: ${t.name} holds ${t.ichor} Ichor. It stays on rung ${d.pips} to chase a better shard.`);
+          }
+        }
+        if (seat) {
+          const pips = Array.from({ length: seat.pips }, (_, k) => d.pips + k);
+          d.setup = { ...d.setup, shards: [...(d.setup.shards ?? []), { shard: seat.name, grade: seat.grade, pips }] };
+          if (d.pips === 0) count(climbed, d.build);
+          d.pips += seat.pips;
           const was = skillOf(t);
           t.best = Math.max(t.best, d.pips);
-          t.history.push(`R${round} · ◆ ${d.name} takes ${spoil.name} from the spoils (of ${pool.map((s) => s.name).join(', ')}).` +
-            (skillOf(t) !== was ? ` ${t.name} is now ${skillOf(t)}.` : ''));
+          if (skillOf(t) !== was) t.history.push(`R${round} · ${t.name} is now ${skillOf(t)}.`);
         }
         if (d.pips >= WYRMLING_PIPS) {
           t.champions.push(`${d.name} (${kit(d.setup)}), ${d.wins}–0, round ${round}`);
@@ -254,8 +283,16 @@ for (const [s, f] of [...styleFights].sort((a, b) => b[1].w / b[1].n - a[1].w / 
 }
 console.log('\n── Skill: win rate of tamers\' dragons by their tamer\'s skill (they meet their own rung) ──');
 for (const s of SKILL_AT) if (skillFights.get(s)) console.log(`  ${rateWithMargin(skillFights.get(s)!.w, skillFights.get(s)!.n)}  ${s}`);
-console.log('\n── Spoils taken ──');
-console.log('  ' + [...spoilPicks].sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(', '));
+const list = (m: Map<string, number>) => '  ' + [...m].sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(', ');
+console.log(`\n── Spoils: ${total(spoilPicks)} seated, ${total(frozen)} frozen from Ichor, ${banks} banked (melted to chase) ──`);
+console.log('  Seated from the spoils:');
+console.log(list(spoilPicks));
+console.log('  Frozen from Ichor:');
+console.log(list(frozen));
+console.log('  Melted:');
+console.log(list(melted));
+const ichors = tamers.map((t) => t.ichor);
+console.log(`  Ichor held at the end: ${ichors.reduce((a, b) => a + b, 0)} across ${ichors.filter((x) => x > 0).length} tamers (most ${Math.max(...ichors)}).`);
 console.log(`\n── Hall of champions (${hall.length}) ──`);
 for (const h of hall) console.log('  ' + h);
 
@@ -270,6 +307,7 @@ const card = (t: Tamer) => {
     `| Style | ${t.style} |`,
     `| Skill | ${skillOf(t)} (best rung ${t.best}) |`,
     `| Record | ${t.wins}–${t.losses} |`,
+    `| Ichor | ${t.ichor} |`,
     `| Dragons hatched | ${t.hatched}, lost ${t.losses} |`,
     `| Champions | ${t.champions.length ? t.champions.join('; ') : 'none yet'} |`,
     `| Current dragon | ${d ? `${d.name} (${kit(d.setup)}), rung ${d.pips}, streak ${d.streak}, ${d.wins}–0` : 'none'} |`,
@@ -294,7 +332,7 @@ if (jsonFile) {
   writeFileSync(jsonFile, JSON.stringify({
     seed, tamers: TAMERS, rounds: ROUNDS, bouts, endings: ends, hatches: obj(hatches), climbed: obj(climbed), champions: obj(championBuilds),
     buildFights: obj(buildFights), rungFights: rungFights.map(obj), rungField: rungField.map(obj), hatchesByThird: hatchesByThird.map(obj),
-    styles: obj(styleFights), styleChampions: obj(styleChampions), skills: obj(skillFights), spoils: obj(spoilPicks), hall,
+    styles: obj(styleFights), styleChampions: obj(styleChampions), skills: obj(skillFights), spoils: obj(spoilPicks), frozen: obj(frozen), melted: obj(melted), banks, hall,
   }, null, 1) + '\n');
   console.log(`Wrote ${jsonFile}.`);
 }

@@ -341,7 +341,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 **Carving:** the tamer carves seams into the bloodstone, spending Ichor. Allowance: Juvenile 1, Adult 2, Elder 3, Venerable 4, up to ten in a life; wyrmlings can't bear carving. **[Proposed]** An unused allowance carries one age, then goes stale; Venerable's never stales. With up to five lineage seams, a fully realized stone holds fifteen player-chosen seams before the morph's natural ones. **[Proposed]** Seams index by valence and pip, which every morph shares, so stone-held seams map onto any egg.
 
-**Ichor:** the blood in the bloodstone, spent to carve seams, the channels that carry elemental might. A resource in the spirit of Warframe's Endo. Sources: victories; melting shards down; **[Proposed]** overwritten pips; **[Proposed]** resting venerables.
+**Ichor:** the blood in the bloodstone, spent to carve seams, the channels that carry elemental might. A resource in the spirit of Warframe's Endo. Sources: victories; melting shards down; **[Proposed]** overwritten pips; **[Proposed]** resting venerables. **Freezing:** Ichor freezes into a shard of the tamer's choosing, at the grade its amount buys. It is how Techniques enter a tamer's hands: a tamer can seat what the spoils offer and climb, or melt it and freeze toward the shard it wants, staying on its ladder longer. **[Proposed]** A melted shard yields 1 Ichor per pip; freezing costs 2 per pip. Ichor belongs to the tamer and outlives its dragons.
 
 **Hub effect:** inner pips gain seams at every age-up, making the core the natural home for heirlooms.
 

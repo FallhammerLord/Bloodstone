@@ -71,11 +71,11 @@ export class Picks {
   add(style: BrainStyle, key: string) {
     this.counts.set(`${style}|${key}`, this.count(style, key) + 1);
   }
-  /** A bonus for keys this style has picked less than its most-picked option. */
-  novelty(style: BrainStyle, keys: string[]): number[] {
+  /** A bonus for keys this style has picked less than its most-picked option, scaled (a tamer's novelty fades). */
+  novelty(style: BrainStyle, keys: string[], scale = 1): number[] {
     const c = keys.map((k) => this.count(style, k));
     const top = Math.max(...c);
-    return c.map((n) => NOVELTY * (1 - n / (top + 1)));
+    return c.map((n) => scale * NOVELTY * (1 - n / (top + 1)));
   }
 }
 
@@ -130,11 +130,11 @@ function draw<T>(items: T[], scores: number[], temperature: number, rng: () => n
 /** A brain's draft: egg and bloodstone, then wyrmling-grade shards up to its ladder's pips. */
 export function draftDragon(
   style: BrainStyle, skill: Skill, rng: () => number, picks: Picks, name: string = style,
-  { pips = LADDER_PIPS[skill], bias }: { pips?: number; bias?: (build: string) => number } = {},
+  { pips = LADDER_PIPS[skill], bias, novelty: scale = 1 }: { pips?: number; bias?: (build: string) => number; novelty?: number } = {},
 ): FighterSetup {
   const t = TEMPERATURE[skill];
   const keys = SHEETS.map((x) => `${x.morph} + ${x.stone}`);
-  const novelty = picks.novelty(style, keys);
+  const novelty = picks.novelty(style, keys, scale);
   const base = sheetScores(style);
   const pickIndex = draw(SHEETS.map((_, i) => i), base.map((s, i) => s + novelty[i] + (bias?.(keys[i]) ?? 0)), t, rng);
   const { morph, stone, sheet } = SHEETS[pickIndex];
@@ -146,7 +146,7 @@ export function draftDragon(
   while (free.length) {
     const options = pool.filter((s) => s.pips <= free.length && !shards.some((x) => x.shard === s.name));
     if (!options.length) break;
-    const nov = picks.novelty(style, options.map((s) => `shard|${s.name}`));
+    const nov = picks.novelty(style, options.map((s) => `shard|${s.name}`), scale);
     const s = draw(options, options.map((o, i) => shardScore(style, o, sheet) + nov[i]), t, rng);
     picks.add(style, `shard|${s.name}`);
     shards.push({ shard: s.name, grade: s.grade, pips: free.slice(0, s.pips) });
@@ -161,8 +161,44 @@ export const DROPS = {
   stone: { water: 'Weathered Hide', earth: 'Milk Fang', fire: 'Smolder Sac', air: 'Whetted Nail' } as Record<CoreStone, string>,
 };
 
-/** A victor's spoils pick: the shard its style wants most from the pool, drawn at its skill's temperature. */
-export function pickSpoil(style: BrainStyle, skill: Skill, sheet: StatSheet, pool: Shard[], rng: () => number): Shard | null {
-  if (!pool.length) return null;
-  return draw(pool, pool.map((s) => shardScore(style, s, sheet)), TEMPERATURE[skill], rng);
+
+/** Ichor [Doc]: a melted shard yields Ichor by its pips; Ichor freezes into a shard of the tamer's choosing at a higher rate. */
+export const ICHOR = { meltPerPip: 1, freezePerPip: 2 };
+/** How much a skill values banking Ichor toward a better shard over seating what's on offer now. */
+const PATIENCE: Record<Skill, number> = { novice: 0.3, adept: 0.6, master: 0.8 };
+
+export type SpoilsChoice =
+  | { kind: 'seat'; shard: Shard }
+  | { kind: 'freeze'; melt: Shard; shard: Shard }
+  | { kind: 'bank'; melt: Shard };
+
+/**
+ * A victor's spoils pick, with Ichor. It can seat a spoils shard; or melt one into its tamer's Ichor and freeze a
+ * shard of its choosing from the bank (seating that instead); or melt and bank, staying on its rung to chase a
+ * better shard next pick. It scores each by its style, banking at its skill's patience, and draws at its temperature.
+ */
+export function chooseSpoils(
+  style: BrainStyle, skill: Skill, sheet: StatSheet, spoils: Shard[], room: number, owned: Set<string>, ichor: number, rng: () => number,
+): SpoilsChoice | null {
+  if (!spoils.length) return null;
+  const score = (s: Shard) => shardScore(style, s, sheet);
+  const fits = (s: Shard) => s.pips <= room && !owned.has(s.name);
+  // Melt the shard worth the most Ichor, the least wanted among those.
+  const melt = [...spoils].sort((a, b) => b.pips - a.pips || score(a) - score(b))[0];
+  const bank = ichor + ICHOR.meltPerPip * melt.pips;
+  const catalog = shardPool('wyrmling').filter(fits);
+  const options: SpoilsChoice[] = [];
+  const values: number[] = [];
+  for (const s of spoils.filter(fits)) {
+    options.push({ kind: 'seat', shard: s });
+    values.push(score(s));
+  }
+  for (const s of catalog.filter((x) => ICHOR.freezePerPip * x.pips <= bank && !spoils.some((o) => o.name === x.name))) {
+    options.push({ kind: 'freeze', melt, shard: s });
+    values.push(score(s));
+  }
+  const goal = Math.max(0, ...catalog.map(score));
+  options.push({ kind: 'bank', melt });
+  values.push(PATIENCE[skill] * goal);
+  return draw(options, values, TEMPERATURE[skill], rng);
 }
