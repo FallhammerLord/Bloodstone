@@ -7,7 +7,7 @@
 // Ichor (the tamer's, surviving its dragons) and freeze a shard of its choosing, or bank the Ichor and keep chasing;
 // it plans the whole array, working with what the field is likely to offer and its odds of living to the next pick.
 // Yields [Proposed]: before a bout or at an exchange boundary a tamer may yield to save its dragon, paying the victor
-// Ichor by the ladder (novice 1, adept 2, master 3), or a shard from its array when short. Timeouts don't kill
+// Ichor by the ladder (novice 1, adept 2, master 3); without the Ichor, it can't yield. Timeouts don't kill
 // either: the victor is paid the same Ichor. A yield or timeout counts toward the victor's streak; a pick it earns
 // waits for the next kill, since only a slain dragon leaves spoils.
 //   npm run gauntlet [-- --tamers N] [--rounds N] [--seed N] [--json file] [--cards file] [--carry file] [--save file]
@@ -149,7 +149,7 @@ const styleChampions = new Map<string, number>();
 const skillFights = new Map<string, Rate>();
 const spoilPicks = new Map<string, number>();
 const matchups = new Map<string, Rate>();
-const yields = { before: 0, during: 0, ichor: 0, ransom: 0, paid: 0 };
+const yields = { before: 0, during: 0, paid: 0 };
 const timeoutPurse = { paid: 0, minted: 0 };
 const yieldsBySkill = new Map<string, number>();
 const melted = new Map<string, number>();
@@ -190,8 +190,8 @@ const reseat = (shards: Shard[]): FighterSetup['shards'] => {
   return shards.map((sh) => ({ shard: sh.name, grade: sh.grade, pips: Array.from({ length: sh.pips }, () => at++) }));
 };
 const worthOf = (d: Dragon) => PICK_ICHOR * d.pips + (PICK_ICHOR * Math.min(d.streak, STREAK)) / STREAK + 0.5;
-/** Can this tamer pay a yield's price, in Ichor or a shard? */
-const canPay = (t: Tamer, d: Dragon) => t.ichor >= priceAt(d.pips) || d.pips > 0;
+/** A yield needs its price in Ichor: without it, a tamer can't yield. */
+const canPay = (t: Tamer, d: Dragon) => t.ichor >= priceAt(d.pips);
 /** The chance a dragon of this build beats that one, as the tamer reads it: masters by matchup, adepts by build. */
 function odds(me: Side_, them: Side_): number {
   const shrink = (r: Rate | undefined) => (r ? (r.w + 2) / (r.n + 4) : 0.5);
@@ -229,12 +229,12 @@ function likelyOffers(rung: number): Shard[][] {
 const spoilsOf = (f: FighterSetup): Shard[] => [findShard(DROPS.morph[f.morph], 'wyrmling'), findShard(DROPS.stone[f.stone], 'wyrmling'), ...shardList(f)]
   .filter((sh, k, all) => all.findIndex((x) => x.name === sh.name) === k);
 
-/** A pick from an offer (a slain dragon's spoils, or a yielder's array as ransom), planned as an array. Returns the shard taken. */
-function spoilsPick(t: Tamer, d: Dragon, spoils: Shard[], round: number, source = 'the spoils'): Shard | null {
+/** A pick from a slain dragon's spoils, planned as an array. */
+function spoilsPick(t: Tamer, d: Dragon, spoils: Shard[], round: number) {
   const choice = chooseSpoils(t.style, skillOf(t), hatch(d.setup.morph, d.setup.stone), {
     offer: spoils, seated: shardList(d.setup), room: WYRMLING_PIPS - d.pips, ichor: t.ichor, reach: reachOf(t, d), likely: likelyOffers(d.pips),
   }, rng);
-  const offer = `${source}: ${spoils.map((x) => x.name).join(', ')}`;
+  const offer = `the spoils (of ${spoils.map((x) => x.name).join(', ')})`;
   let seat: Shard | null = null;
   if (choice?.kind === 'seat') {
     seat = choice.shard;
@@ -269,14 +269,6 @@ function spoilsPick(t: Tamer, d: Dragon, spoils: Shard[], round: number, source 
     t.history.push(`R${round} · ★ ${d.name} becomes a wyrmling champion and retires.`);
     t.dragon = null;
   }
-  return choice ? (choice.kind === 'seat' ? choice.shard : choice.melt) : null;
-}
-
-/** A ransom leaves the yielder's array; the dragon drops to the rung its pips now make. */
-function takeFrom(d: Dragon, t: Tamer, shard: Shard, round: number) {
-  d.setup = { ...d.setup, shards: reseat(shardList(d.setup).filter((x) => x.name !== shard.name)) };
-  d.pips -= shard.pips;
-  t.history.push(`R${round} · ⚑ ${d.name} lives, paying ${shard.name} from its array as ransom; it drops to rung ${d.pips}.`);
 }
 
 for (let round = 1; round <= ROUNDS; round++) {
@@ -335,7 +327,6 @@ for (let round = 1; round <= ROUNDS; round++) {
     const lethal = ending === 'ko' || ending === 'pulse';
     const price = priceAt(rung);
     let purse = 0;
-    let ransomFrom: Dragon | null = null;
 
     if (l.tamer) {
       const t = l.tamer;
@@ -351,17 +342,13 @@ for (let round = 1; round <= ROUNDS; round++) {
         // A yield or a timeout: the dragon lives, its streak resets, and its tamer pays the victor.
         d.streak = 0;
         if (ending === 'yield') count(yieldsBySkill, skillOf(t));
-        if (t.ichor >= price || ending === 'timeout') {
-          purse = Math.min(t.ichor, price);
-          t.ichor -= purse;
-          if (ending === 'yield') { yields.ichor++; yields.paid += purse; }
-          else { timeoutPurse.paid += purse; timeoutPurse.minted += price - purse; purse = price; }
-          t.history.push(`R${round} · ⚑ ${d.name} (${kit(d.setup)}) ${ending === 'timeout' ? 'loses on the clock to' : 'yields to'} ${foe(w)} (${how}) and lives; ${t.name} pays ${Math.min(purse, price)} Ichor (${t.ichor} left).`);
-        } else {
-          // Short of Ichor: the victor takes a shard of its choosing from the yielder's array as ransom.
-          ransomFrom = d;
-          yields.ransom++;
-        }
+        // A yield is only offered with the price in hand; a timeout pays what the loser has, the victory the rest.
+        const paid = Math.min(t.ichor, price);
+        t.ichor -= paid;
+        if (ending === 'yield') yields.paid += paid;
+        else { timeoutPurse.paid += paid; timeoutPurse.minted += price - paid; }
+        purse = price;
+        t.history.push(`R${round} · ⚑ ${d.name} (${kit(d.setup)}) ${ending === 'timeout' ? 'loses on the clock to' : 'yields to'} ${foe(w)} (${how}) and lives; ${t.name} pays ${paid} Ichor (${t.ichor} left).`);
       }
     } else if (!lethal) purse = price;
     if (w.tamer) {
@@ -372,21 +359,13 @@ for (let round = 1; round <= ROUNDS; round++) {
       d.streak++;
       pref(t, d.build).w++;
       if (lethal) t.history.push(`R${round} · ✓ ${d.name} slays ${foe(l)}, ${how}. Streak ${d.streak}.`);
-      else t.history.push(`R${round} · ✓ ${d.name} beats ${foe(l)} (${how})${ransomFrom ? '' : `, paid ${purse} Ichor`}. Streak ${d.streak}.`);
+      else t.history.push(`R${round} · ✓ ${d.name} beats ${foe(l)} (${how}), paid ${purse} Ichor. Streak ${d.streak}.`);
       t.ichor += purse;
-      // A ransom: the victor picks from the yielder's array, to seat or melt.
-      if (ransomFrom) {
-        const taken = spoilsPick(t, d, shardList(ransomFrom.setup), round, `${who(l)}'s array as ransom`);
-        if (taken) takeFrom(ransomFrom, l.tamer!, taken, round);
-      }
       // Spoils come only from a slain dragon: a pick the streak earned waits for the next kill.
       if (t.dragon === d && lethal && d.streak >= STREAK) {
         d.streak = 0;
         spoilsPick(t, d, spoilsOf(l.setup), round);
       }
-    } else if (ransomFrom) {
-      // An unclaimed victor takes the yielder's largest shard.
-      takeFrom(ransomFrom, l.tamer!, shardList(ransomFrom.setup).sort((a, b) => b.pips - a.pips)[0], round);
     }
   }
   bouts += pairs.length;
@@ -406,7 +385,7 @@ console.log(`The living ladder: ${TAMERS} tamers, ${ROUNDS} rounds, ${bouts} bou
 console.log(`Three straight wins earn a spoils pick; a full ${WYRMLING_PIPS}-pip array makes a wyrmling champion. Tamers start as novices: adept from rung 1, master from rung 2.`);
 console.log(`Season ${SEASON}${veterans.length ? `, with ${veterans.length} champion tamers from season ${lastSeason}` : ''}. Kills per pick: ${STREAK}.`);
 console.log(`Endings: ${pct((100 * ends.ko) / bouts)} KO, ${pct((100 * ends.pulse) / bouts)} rim pulse, ${pct((100 * ends.timeout) / bouts)} timeout (non-lethal), ${pct((100 * (ends.yield + yields.before)) / bouts)} yield.`);
-console.log(`Yields: ${yields.before} before the bout, ${yields.during} during; ${yields.ichor} paid in Ichor (${yields.paid} in all), ${yields.ransom} in a ransom shard. By skill: ${[...yieldsBySkill].map(([k, n]) => `${k} ${n}`).join(', ')}.`);
+console.log(`Yields: ${yields.before} before the bout, ${yields.during} during; ${yields.paid} Ichor paid. By skill: ${[...yieldsBySkill].map(([k, n]) => `${k} ${n}`).join(', ')}.`);
 console.log(`Timeouts paid ${timeoutPurse.paid + timeoutPurse.minted} Ichor to victors (${timeoutPurse.paid} from the losers' banks).`);
 const dragons = total(hatches);
 console.log(`Dragons hatched ${dragons}; ${total(climbed)} earned a first shard (${pct((100 * total(climbed)) / dragons)}); ${hall.length} became champions.`);
