@@ -65,6 +65,8 @@ export interface Controller {
   script(view: View): ActionSpec[];
   /** revealed: what Baleful Eye shows of the opponent's slot 3, or null */
   revise?(view: View, moment: Moment, opponentRevised: boolean, revealed: string | null): ActionSpec | null;
+  /** at an exchange boundary, during scripting: whether this side yields the bout to save its dragon [Proposed] */
+  yields?(view: View): boolean;
 }
 
 export function runBout(bout: Bout, controllers: Record<Side, Controller>, format: Format = DEFAULT_FORMAT, opts: { trace?: boolean } = {}): Event[] {
@@ -76,6 +78,17 @@ export function runBout(bout: Bout, controllers: Record<Side, Controller>, forma
     );
     ev.push(...runExchange(bout, scripts, { trace: opts.trace, revise }));
     if (!bout.over && format.lateGame) ev.push(...rimPulse(bout, format));
+    // A yield [Proposed]: at an exchange boundary a tamer may yield to save its dragon. Non-lethal; the victor is
+    // paid in Ichor instead of spoils. If both would, the challenger yields.
+    if (!bout.over && bout.exchange < limitOf(bout, format)) {
+      const yielding = SIDES.filter((s) => controllers[s].yields?.(viewOf(bout, s)));
+      if (yielding.length) {
+        const s = yielding.length === 2 ? other(bout.challenged) : yielding[0];
+        bout.over = true;
+        bout.winner = other(s);
+        ev.push({ kind: 'boutEnd', winner: bout.winner, reason: `yield: ${bout.fighters[s].name} yields to save its dragon` });
+      }
+    }
   }
   if (!bout.over && format.lateGame) ev.push(...timeout(bout, format));
   return ev;

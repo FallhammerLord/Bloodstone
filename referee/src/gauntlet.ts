@@ -4,7 +4,12 @@
 // another. Tamers learn: skill rises with the best rung they've reached, and their drafts lean toward builds that
 // have won for them and away from builds that died, on curves: novelty fades as a tamer hatches more dragons, and a
 // build's record counts for more the more fights it has. At a spoils pick a tamer can seat a shard, or melt one into
-// Ichor (the tamer's, surviving its dragons) and freeze a shard of its choosing, or bank the Ichor and keep chasing.
+// Ichor (the tamer's, surviving its dragons) and freeze a shard of its choosing, or bank the Ichor and keep chasing;
+// it plans the whole array, working with what the field is likely to offer and its odds of living to the next pick.
+// Yields [Proposed]: before a bout or at an exchange boundary a tamer may yield to save its dragon, paying the victor
+// Ichor by the ladder (novice 1, adept 2, master 3), or a shard from its array when short. Timeouts don't kill
+// either: the victor is paid the same Ichor. A yield or timeout counts toward the victor's streak; a pick it earns
+// waits for the next kill, since only a slain dragon leaves spoils.
 //   npm run gauntlet [-- --tamers N] [--rounds N] [--seed N] [--json file] [--cards file] [--carry file] [--save file]
 // Seasons: --save writes every tamer's state at the end; --carry reads a saved roster and keeps its champion tamers
 // (any tamer who raised a champion) for this season, rerolling the rest fresh.
@@ -27,7 +32,12 @@ const jsonFile = flag(argv, '--json', '');
 const cardsFile = flag(argv, '--cards', '');
 const carryFile = flag(argv, '--carry', '');
 const saveFile = flag(argv, '--save', '');
-const STREAK = 3;
+const kills = Number(flag(argv, '--kills', '3'));
+const STREAK = kills;
+/** A yield's price, and a timeout's purse, in Ichor: one per skill rank of the ladder (rung) the dragon is on. */
+const priceAt = (rung: number) => Math.min(rung, 2) + 1;
+/** A dragon's worth to its tamer, in Ichor: its seated pips at freeze price, plus its streak toward the next pick. */
+const PICK_ICHOR = 2;
 /** A rung's skill for unclaimed dragons, and a tamer's skill from the best rung it has reached. */
 const SKILL_AT: Skill[] = ['novice', 'adept', 'master'];
 const skillAt = (pips: number): Skill => SKILL_AT[Math.min(pips, 2)];
@@ -100,9 +110,11 @@ interface SavedTamer {
   champions: string[];
   prefs: Record<string, { w: number; d: number }>;
 }
-const veterans: SavedTamer[] = carryFile
-  ? (JSON.parse(readFileSync(carryFile, 'utf8')).tamers as SavedTamer[]).filter((t) => t.champions.length)
-  : [];
+// Last season's champion tamers return: those who raised a champion in the saved season.
+const carried = carryFile ? JSON.parse(readFileSync(carryFile, 'utf8')) as { season?: number; tamers: SavedTamer[] } : null;
+const lastSeason = carried?.season ?? 1;
+const SEASON = carried ? lastSeason + 1 : 1;
+const veterans: SavedTamer[] = carried ? carried.tamers.filter((t) => t.champions.some((c) => c.includes(`season ${lastSeason}`))) : [];
 const tamers: Tamer[] = Array.from({ length: Math.max(TAMERS, veterans.length) }, (_, id) => {
   const v = veterans[id];
   return {
@@ -136,11 +148,15 @@ const styleFights = new Map<string, Rate>();
 const styleChampions = new Map<string, number>();
 const skillFights = new Map<string, Rate>();
 const spoilPicks = new Map<string, number>();
+const matchups = new Map<string, Rate>();
+const yields = { before: 0, during: 0, ichor: 0, ransom: 0, paid: 0 };
+const timeoutPurse = { paid: 0, minted: 0 };
+const yieldsBySkill = new Map<string, number>();
 const melted = new Map<string, number>();
 const frozen = new Map<string, number>();
 let banks = 0;
 const hall: string[] = [];
-const ends = { ko: 0, pulse: 0, timeout: 0 };
+const ends = { ko: 0, pulse: 0, timeout: 0, yield: 0 };
 let bouts = 0;
 
 function hatchFor(t: Tamer, round: number) {
@@ -165,41 +181,150 @@ const pref = (t: Tamer, b: string) => {
 };
 
 const t0 = Date.now();
+type Side_ = { tamer: Tamer | null; setup: FighterSetup; style: BrainStyle; skill: Skill; pips: number };
+/** A shard list for a setup. */
+const shardList = (f: FighterSetup) => (f.shards ?? []).map((x) => findShard(x.shard, x.grade));
+/** Reseats an array from pip 0 after a shard leaves it. */
+const reseat = (shards: Shard[]): FighterSetup['shards'] => {
+  let at = 0;
+  return shards.map((sh) => ({ shard: sh.name, grade: sh.grade, pips: Array.from({ length: sh.pips }, () => at++) }));
+};
+const worthOf = (d: Dragon) => PICK_ICHOR * d.pips + (PICK_ICHOR * Math.min(d.streak, STREAK)) / STREAK + 0.5;
+/** Can this tamer pay a yield's price, in Ichor or a shard? */
+const canPay = (t: Tamer, d: Dragon) => t.ichor >= priceAt(d.pips) || d.pips > 0;
+/** The chance a dragon of this build beats that one, as the tamer reads it: masters by matchup, adepts by build. */
+function odds(me: Side_, them: Side_): number {
+  const shrink = (r: Rate | undefined) => (r ? (r.w + 2) / (r.n + 4) : 0.5);
+  if (me.skill === 'master') return shrink(matchups.get(`${buildOf(me.setup)}|${buildOf(them.setup)}`));
+  const mine = shrink(rungFights[me.pips].get(buildOf(me.setup))), theirs = shrink(rungFights[me.pips].get(buildOf(them.setup)));
+  return mine / (mine + theirs);
+}
+/** A tamer's pre-bout yield: when its dragon's expected loss outweighs the price and what a win would bring. */
+function yieldsBefore(s: Side_, them: Side_): boolean {
+  if (!s.tamer || s.skill === 'novice' || !canPay(s.tamer, s.tamer.dragon!)) return false;
+  const lose = 1 - odds(s, them);
+  return lose * worthOf(s.tamer.dragon!) - (1 - lose) * (PICK_ICHOR / STREAK + priceAt(s.pips)) > priceAt(s.pips);
+}
+/** The chance a dragon reaches its next pick: three straight wins at its build's rate on its rung, its own record leaning in. */
+function reachOf(t: Tamer, d: Dragon): number {
+  const r = rungFights[Math.min(d.pips, 2)].get(d.build);
+  const base = r ? (r.w + 2) / (r.n + 4) : 0.5;
+  const p = (d.wins + 4 * base) / (d.wins + d.losses + 4);
+  return p ** STREAK;
+}
+/** What the next victims on a rung are likely to drop: a few draws from the field there. */
+function likelyOffers(rung: number): Shard[][] {
+  const field = [...rungField[Math.min(rung, 2)]];
+  const total = field.reduce((a, [, n]) => a + n, 0);
+  if (!total) return [];
+  return Array.from({ length: 3 }, () => {
+    let x = rng() * total;
+    const [b] = field.find(([, n]) => (x -= n) <= 0) ?? field[field.length - 1];
+    const [morph, stone] = b.split(' + ') as [FighterSetup['morph'], FighterSetup['stone']];
+    return [findShard(DROPS.morph[morph], 'wyrmling'), findShard(DROPS.stone[stone], 'wyrmling')];
+  });
+}
+
+/** What a slain dragon leaves: its morph's and its stone's generated drops, and its intact array. */
+const spoilsOf = (f: FighterSetup): Shard[] => [findShard(DROPS.morph[f.morph], 'wyrmling'), findShard(DROPS.stone[f.stone], 'wyrmling'), ...shardList(f)]
+  .filter((sh, k, all) => all.findIndex((x) => x.name === sh.name) === k);
+
+/** A pick from an offer (a slain dragon's spoils, or a yielder's array as ransom), planned as an array. Returns the shard taken. */
+function spoilsPick(t: Tamer, d: Dragon, spoils: Shard[], round: number, source = 'the spoils'): Shard | null {
+  const choice = chooseSpoils(t.style, skillOf(t), hatch(d.setup.morph, d.setup.stone), {
+    offer: spoils, seated: shardList(d.setup), room: WYRMLING_PIPS - d.pips, ichor: t.ichor, reach: reachOf(t, d), likely: likelyOffers(d.pips),
+  }, rng);
+  const offer = `${source}: ${spoils.map((x) => x.name).join(', ')}`;
+  let seat: Shard | null = null;
+  if (choice?.kind === 'seat') {
+    seat = choice.shard;
+    count(spoilPicks, seat.name);
+    t.history.push(`R${round} · ◆ ${d.name} takes ${seat.name} from ${offer}.`);
+  } else if (choice) {
+    t.ichor += ICHOR.meltPerPip * choice.melt.pips;
+    count(melted, choice.melt.name);
+    if (choice.kind === 'freeze') {
+      seat = choice.shard;
+      t.ichor -= ICHOR.freezePerPip * seat.pips;
+      count(frozen, seat.name);
+      t.history.push(`R${round} · ❄ ${d.name} melts ${choice.melt.name} from ${offer} and freezes ${seat.name} from ${t.name}'s Ichor (${t.ichor} left).`);
+    } else {
+      banks++;
+      t.history.push(`R${round} · ♨ ${d.name} melts ${choice.melt.name} from ${offer} and banks it: ${t.name} holds ${t.ichor} Ichor. It stays on rung ${d.pips}.`);
+    }
+  }
+  if (seat) {
+    d.setup = { ...d.setup, shards: reseat([...shardList(d.setup), seat]) };
+    if (d.pips === 0) count(climbed, d.build);
+    d.pips += seat.pips;
+    const was = skillOf(t);
+    t.best = Math.max(t.best, d.pips);
+    if (skillOf(t) !== was) t.history.push(`R${round} · ${t.name} is now ${skillOf(t)}.`);
+  }
+  if (d.pips >= WYRMLING_PIPS) {
+    t.champions.push(`${d.name} (${kit(d.setup)}), ${d.wins}–${d.losses}, season ${SEASON} round ${round}`);
+    count(championBuilds, d.build);
+    count(styleChampions, t.style);
+    hall.push(`R${round}  ${d.name.padEnd(12)} ${kit(d.setup).padEnd(62)} ${t.name} (${t.style}), dragon #${d.nth}, ${d.wins}–${d.losses}`);
+    t.history.push(`R${round} · ★ ${d.name} becomes a wyrmling champion and retires.`);
+    t.dragon = null;
+  }
+  return choice ? (choice.kind === 'seat' ? choice.shard : choice.melt) : null;
+}
+
+/** A ransom leaves the yielder's array; the dragon drops to the rung its pips now make. */
+function takeFrom(d: Dragon, t: Tamer, shard: Shard, round: number) {
+  d.setup = { ...d.setup, shards: reseat(shardList(d.setup).filter((x) => x.name !== shard.name)) };
+  d.pips -= shard.pips;
+  t.history.push(`R${round} · ⚑ ${d.name} lives, paying ${shard.name} from its array as ransom; it drops to rung ${d.pips}.`);
+}
+
 for (let round = 1; round <= ROUNDS; round++) {
   for (const t of tamers) if (!t.dragon) hatchFor(t, round);
   // Each rung pairs its dragons at random; an odd one out meets an unclaimed dragon of its rung.
-  type Side_ = { tamer: Tamer | null; setup: FighterSetup; style: BrainStyle; skill: Skill; pips: number };
-  const bouts_: [Side_, Side_][] = [];
+  const pairs: [Side_, Side_][] = [];
   for (let rung = 0; rung < WYRMLING_PIPS; rung++) {
     const here = shuffle(tamers.filter((t) => t.dragon!.pips === rung));
     const side = (t: Tamer): Side_ => ({ tamer: t, setup: t.dragon!.setup, style: t.style, skill: skillOf(t), pips: rung });
-    for (let i = 0; i + 1 < here.length; i += 2) bouts_.push([side(here[i]), side(here[i + 1])]);
+    for (let i = 0; i + 1 < here.length; i += 2) pairs.push([side(here[i]), side(here[i + 1])]);
     if (here.length % 2) {
       const style = pick(BRAIN_STYLES);
       const setup = draftDragon(style, skillAt(rung), rng, wildPicks, `an unclaimed ${style}'s ${dragonName()}`, { pips: rung });
-      bouts_.push([side(here[here.length - 1]), { tamer: null, setup, style, skill: skillAt(rung), pips: rung }]);
+      pairs.push([side(here[here.length - 1]), { tamer: null, setup, style, skill: skillAt(rung), pips: rung }]);
     }
   }
-  const jobs: Job[] = bouts_.map(([a, b], i) => ({
+  // Before the bout, each tamer sees the other dragon and may yield.
+  const challenged = pairs.map((): Side => (rng() < 0.5 ? 'A' : 'B'));
+  const early = pairs.map(([a, b], i): Side | null => {
+    const ya = yieldsBefore(a, b), yb = yieldsBefore(b, a);
+    return ya && yb ? (challenged[i] === 'A' ? 'B' : 'A') : ya ? 'A' : yb ? 'B' : null;
+  });
+  const policy = (s: Side_) => (s.tamer && canPay(s.tamer, s.tamer.dragon!)
+    ? { value: worthOf(s.tamer.dragon!), gain: PICK_ICHOR / STREAK + priceAt(s.pips), price: priceAt(s.pips) } : undefined);
+  const jobs: Job[] = pairs.flatMap(([a, b], i) => (early[i] ? [] : [{
     id: i, group: 'gauntlet', A: a.setup, B: b.setup,
     playerA: { kind: 'brain', style: a.style, skill: a.skill, seed: bouts * 2 + i * 2 + seed },
     playerB: { kind: 'brain', style: b.style, skill: b.skill, seed: bouts * 2 + i * 2 + 1 + seed },
-    challenged: rng() < 0.5 ? 'A' : 'B', arenaSeed: (bouts + i) * 31 + 7 + seed,
-  }));
+    challenged: challenged[i], arenaSeed: (bouts + i) * 31 + 7 + seed, yieldA: policy(a), yieldB: policy(b),
+  } satisfies Job]));
   const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs })).flat();
   const byId = new Map(results.map((r) => [r.id, r]));
 
-  for (const [i, pair] of bouts_.entries()) {
-    const r = byId.get(i)!;
-    ends[r.ending]++;
-    const how = `${r.ending === 'ko' ? 'KO' : r.ending === 'pulse' ? 'rim pulse' : 'timeout'} in exchange ${r.exchanges}`;
-    const winSide: Side = r.winner;
+  for (const [i, pair] of pairs.entries()) {
+    const r = byId.get(i);
+    const ending = r ? r.ending : 'yield';
+    const winSide: Side = r ? r.winner : early[i] === 'A' ? 'B' : 'A';
+    if (r) ends[r.ending]++;
+    else yields.before++;
+    if (r?.ending === 'yield') yields.during++;
+    const how = !r ? 'yielded before the bout' : `${{ ko: 'KO', pulse: 'rim pulse', timeout: 'timeout', yield: 'yield' }[r.ending]} in exchange ${r.exchanges}`;
     const [w, l] = winSide === 'A' ? pair : [pair[1], pair[0]];
     const rung = w.pips;
     for (const s of pair) count(rungField[rung], buildOf(s.setup));
     for (const s of [w, l]) {
       const won = s === w;
       tally(rungFights[rung], buildOf(s.setup), won);
+      tally(matchups, `${buildOf(s.setup)}|${buildOf((s === w ? l : w).setup)}`, won);
       if (!s.tamer) continue;
       tally(buildFights, buildOf(s.setup), won);
       tally(styleFights, s.style, won);
@@ -207,19 +332,38 @@ for (let round = 1; round <= ROUNDS; round++) {
     }
     const who = (s: Side_) => (s.tamer ? `${s.tamer.name}'s ${s.setup.name}` : s.setup.name);
     const foe = (s: Side_) => `${who(s)} (${kit(s.setup)}; ${s.style}, ${s.skill})`;
+    const lethal = ending === 'ko' || ending === 'pulse';
+    const price = priceAt(rung);
+    let purse = 0;
+    let ransomFrom: Dragon | null = null;
 
-    // The loser dies.
     if (l.tamer) {
       const t = l.tamer;
       const d = t.dragon!;
       t.losses++;
       d.losses++;
       pref(t, d.build).d++;
-      t.history.push(`R${round} · ✗ ${d.name} (${kit(d.setup)}) falls to ${foe(w)}, ${how}. Record ${d.wins}–1.`);
-      t.graveyard.push(`${d.name}: ${kit(d.setup)}, ${d.wins} wins, fell in round ${round}`);
-      t.dragon = null;
-    }
-    // The victor's streak, and spoils on the third straight kill.
+      if (lethal) {
+        t.history.push(`R${round} · ✗ ${d.name} (${kit(d.setup)}) falls to ${foe(w)}, ${how}. Record ${d.wins}–${d.losses}.`);
+        t.graveyard.push(`${d.name}: ${kit(d.setup)}, ${d.wins} wins, fell in round ${round}`);
+        t.dragon = null;
+      } else {
+        // A yield or a timeout: the dragon lives, its streak resets, and its tamer pays the victor.
+        d.streak = 0;
+        if (ending === 'yield') count(yieldsBySkill, skillOf(t));
+        if (t.ichor >= price || ending === 'timeout') {
+          purse = Math.min(t.ichor, price);
+          t.ichor -= purse;
+          if (ending === 'yield') { yields.ichor++; yields.paid += purse; }
+          else { timeoutPurse.paid += purse; timeoutPurse.minted += price - purse; purse = price; }
+          t.history.push(`R${round} · ⚑ ${d.name} (${kit(d.setup)}) ${ending === 'timeout' ? 'loses on the clock to' : 'yields to'} ${foe(w)} (${how}) and lives; ${t.name} pays ${Math.min(purse, price)} Ichor (${t.ichor} left).`);
+        } else {
+          // Short of Ichor: the victor takes a shard of its choosing from the yielder's array as ransom.
+          ransomFrom = d;
+          yields.ransom++;
+        }
+      }
+    } else if (!lethal) purse = price;
     if (w.tamer) {
       const t = w.tamer;
       const d = t.dragon!;
@@ -227,54 +371,25 @@ for (let round = 1; round <= ROUNDS; round++) {
       d.wins++;
       d.streak++;
       pref(t, d.build).w++;
-      t.history.push(`R${round} · ✓ ${d.name} slays ${foe(l)}, ${how}. Streak ${d.streak}.`);
-      if (d.streak >= STREAK) {
-        d.streak = 0;
-        const owned = new Set(shardsOf(d.setup));
-        const spoils: Shard[] = [findShard(DROPS.morph[l.setup.morph], 'wyrmling'), findShard(DROPS.stone[l.setup.stone], 'wyrmling'),
-          ...(l.setup.shards ?? []).map((s) => findShard(s.shard, s.grade))]
-          .filter((s, k, all) => all.findIndex((x) => x.name === s.name) === k);
-        const choice = chooseSpoils(t.style, skillOf(t), hatch(d.setup.morph, d.setup.stone), spoils, WYRMLING_PIPS - d.pips, owned, t.ichor, rng);
-        const offer = spoils.map((s) => s.name).join(', ');
-        let seat: Shard | null = null;
-        if (choice?.kind === 'seat') {
-          seat = choice.shard;
-          count(spoilPicks, seat.name);
-          t.history.push(`R${round} · ◆ ${d.name} takes ${seat.name} from the spoils (of ${offer}).`);
-        } else if (choice) {
-          t.ichor += ICHOR.meltPerPip * choice.melt.pips;
-          count(melted, choice.melt.name);
-          if (choice.kind === 'freeze') {
-            seat = choice.shard;
-            t.ichor -= ICHOR.freezePerPip * seat.pips;
-            count(frozen, seat.name);
-            t.history.push(`R${round} · ❄ ${d.name} melts ${choice.melt.name} from the spoils (of ${offer}) and freezes ${seat.name} from ${t.name}'s Ichor (${t.ichor} left).`);
-          } else {
-            banks++;
-            t.history.push(`R${round} · ♨ ${d.name} melts ${choice.melt.name} from the spoils (of ${offer}) and banks it: ${t.name} holds ${t.ichor} Ichor. It stays on rung ${d.pips} to chase a better shard.`);
-          }
-        }
-        if (seat) {
-          const pips = Array.from({ length: seat.pips }, (_, k) => d.pips + k);
-          d.setup = { ...d.setup, shards: [...(d.setup.shards ?? []), { shard: seat.name, grade: seat.grade, pips }] };
-          if (d.pips === 0) count(climbed, d.build);
-          d.pips += seat.pips;
-          const was = skillOf(t);
-          t.best = Math.max(t.best, d.pips);
-          if (skillOf(t) !== was) t.history.push(`R${round} · ${t.name} is now ${skillOf(t)}.`);
-        }
-        if (d.pips >= WYRMLING_PIPS) {
-          t.champions.push(`${d.name} (${kit(d.setup)}), ${d.wins}–0, round ${round}`);
-          count(championBuilds, d.build);
-          count(styleChampions, t.style);
-          hall.push(`R${round}  ${d.name.padEnd(12)} ${kit(d.setup).padEnd(62)} ${t.name} (${t.style}), dragon #${d.nth}, ${d.wins}–0`);
-          t.history.push(`R${round} · ★ ${d.name} becomes a wyrmling champion and retires.`);
-          t.dragon = null;
-        }
+      if (lethal) t.history.push(`R${round} · ✓ ${d.name} slays ${foe(l)}, ${how}. Streak ${d.streak}.`);
+      else t.history.push(`R${round} · ✓ ${d.name} beats ${foe(l)} (${how})${ransomFrom ? '' : `, paid ${purse} Ichor`}. Streak ${d.streak}.`);
+      t.ichor += purse;
+      // A ransom: the victor picks from the yielder's array, to seat or melt.
+      if (ransomFrom) {
+        const taken = spoilsPick(t, d, shardList(ransomFrom.setup), round, `${who(l)}'s array as ransom`);
+        if (taken) takeFrom(ransomFrom, l.tamer!, taken, round);
       }
+      // Spoils come only from a slain dragon: a pick the streak earned waits for the next kill.
+      if (t.dragon === d && lethal && d.streak >= STREAK) {
+        d.streak = 0;
+        spoilsPick(t, d, spoilsOf(l.setup), round);
+      }
+    } else if (ransomFrom) {
+      // An unclaimed victor takes the yielder's largest shard.
+      takeFrom(ransomFrom, l.tamer!, shardList(ransomFrom.setup).sort((a, b) => b.pips - a.pips)[0], round);
     }
   }
-  bouts += bouts_.length;
+  bouts += pairs.length;
 }
 
 // ── Report ──
@@ -289,7 +404,10 @@ const rungRate = (rung: number, b: string) => {
 
 console.log(`The living ladder: ${TAMERS} tamers, ${ROUNDS} rounds, ${bouts} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
 console.log(`Three straight wins earn a spoils pick; a full ${WYRMLING_PIPS}-pip array makes a wyrmling champion. Tamers start as novices: adept from rung 1, master from rung 2.`);
-console.log(`Endings: ${pct((100 * ends.ko) / bouts)} KO, ${pct((100 * ends.pulse) / bouts)} rim pulse, ${pct((100 * ends.timeout) / bouts)} timeout.`);
+console.log(`Season ${SEASON}${veterans.length ? `, with ${veterans.length} champion tamers from season ${lastSeason}` : ''}. Kills per pick: ${STREAK}.`);
+console.log(`Endings: ${pct((100 * ends.ko) / bouts)} KO, ${pct((100 * ends.pulse) / bouts)} rim pulse, ${pct((100 * ends.timeout) / bouts)} timeout (non-lethal), ${pct((100 * (ends.yield + yields.before)) / bouts)} yield.`);
+console.log(`Yields: ${yields.before} before the bout, ${yields.during} during; ${yields.ichor} paid in Ichor (${yields.paid} in all), ${yields.ransom} in a ransom shard. By skill: ${[...yieldsBySkill].map(([k, n]) => `${k} ${n}`).join(', ')}.`);
+console.log(`Timeouts paid ${timeoutPurse.paid + timeoutPurse.minted} Ichor to victors (${timeoutPurse.paid} from the losers' banks).`);
 const dragons = total(hatches);
 console.log(`Dragons hatched ${dragons}; ${total(climbed)} earned a first shard (${pct((100 * total(climbed)) / dragons)}); ${hall.length} became champions.`);
 
@@ -361,7 +479,7 @@ if (veterans.length) {
 }
 if (saveFile) {
   const saved: SavedTamer[] = tamers.map((t) => ({ name: t.name, style: t.style, best: t.best, wins: t.wins, losses: t.losses, hatched: t.hatched, ichor: t.ichor, champions: t.champions, prefs: Object.fromEntries(t.prefs) }));
-  writeFileSync(saveFile, JSON.stringify({ seed, tamers: saved }, null, 1) + '\n');
+  writeFileSync(saveFile, JSON.stringify({ season: SEASON, seed, tamers: saved }, null, 1) + '\n');
   console.log(`Wrote ${saveFile}.`);
 }
 const chosen = tamers[0];

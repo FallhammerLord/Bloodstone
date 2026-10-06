@@ -10,7 +10,7 @@
    "hatched": 58,
    "ichor": 0,
    "champions": [
-    "Holloweye (true-dragon + air, Hollow Bones, Heartgrit, Smolder Sac), 9–0, season 1 round 40"
+    "Holloweye (true-dragon + air, Hollow Bones, Heartgrit, Smolder Sac), 9\u20130, season 1 round 40"
    ],
    "prefs": {
     "true-dragon + air": {
@@ -36,7 +36,7 @@
    "hatched": 32,
    "ichor": 1,
    "champions": [
-    "Ironhorn (true-dragon + fire, Heartgrit, Hollow Bones, Pebblescale), 9–0, season 1 round 9"
+    "Ironhorn (true-dragon + fire, Heartgrit, Hollow Bones, Pebblescale), 9\u20130, season 1 round 9"
    ],
    "prefs": {
     "true-dragon + fire": {
@@ -62,7 +62,7 @@
    "hatched": 33,
    "ichor": 0,
    "champions": [
-    "Hollowclaw (wyvern + water, Whetted Nail, Heartgrit, Smolder Sac), 9–0, season 1 round 11"
+    "Hollowclaw (wyvern + water, Whetted Nail, Heartgrit, Smolder Sac), 9\u20130, season 1 round 11"
    ],
    "prefs": {
     "wyvern + water": {
@@ -84,7 +84,7 @@
    "hatched": 38,
    "ichor": 0,
    "champions": [
-    "Rimehorn (wyvern + air, Milk Fang, Pebblescale, Whetted Nail), 9–0, season 1 round 12"
+    "Rimehorn (wyvern + air, Milk Fang, Pebblescale, Whetted Nail), 9\u20130, season 1 round 12"
    ],
    "prefs": {
     "wyvern + air": {
@@ -102,8 +102,8 @@
    "hatched": 61,
    "ichor": 0,
    "champions": [
-    "Duskclaw (wyvern + air, Pebblescale, Heartgrit, Milk Fang), 9–0, season 1 round 14",
-    "Rimetail (wyvern + earth, Heartgrit, Milk Fang, Hollow Bones), 9–0, season 1 round 65"
+    "Duskclaw (wyvern + air, Pebblescale, Heartgrit, Milk Fang), 9\u20130, season 1 round 14",
+    "Rimetail (wyvern + earth, Heartgrit, Milk Fang, Hollow Bones), 9\u20130, season 1 round 65"
    ],
    "prefs": {
     "wyvern + air": {
@@ -137,7 +137,7 @@
    "hatched": 35,
    "ichor": 2,
    "champions": [
-    "Slatewing (wyvern + air, Weathered Hide, Heartgrit, Smolder Sac), 9–0, season 1 round 20"
+    "Slatewing (wyvern + air, Weathered Hide, Heartgrit, Smolder Sac), 9\u20130, season 1 round 20"
    ],
    "prefs": {
     "wyvern + air": {
@@ -171,7 +171,7 @@
    "hatched": 27,
    "ichor": 0,
    "champions": [
-    "Vaneclaw (wyvern + earth, Pebblescale, Heartgrit, Smolder Sac), 9–0, season 1 round 22"
+    "Vaneclaw (wyvern + earth, Pebblescale, Heartgrit, Smolder Sac), 9\u20130, season 1 round 22"
    ],
    "prefs": {
     "wyvern + earth": {
@@ -193,7 +193,7 @@
    "hatched": 43,
    "ichor": 0,
    "champions": [
-    "Stormclaw (wyvern + air, Smolder Sac, Whetted Nail, Heartgrit), 9–0, season 1 round 28"
+    "Stormclaw (wyvern + air, Smolder Sac, Whetted Nail, Heartgrit), 9\u20130, season 1 round 28"
    ],
    "prefs": {
     "wyvern + air": {
@@ -211,7 +211,7 @@
    "hatched": 46,
    "ichor": 1,
    "champions": [
-    "Hollowheart (wyvern + fire, Whetted Nail, Pebblescale, Smolder Sac), 9–0, season 1 round 36"
+    "Hollowheart (wyvern + fire, Whetted Nail, Pebblescale, Smolder Sac), 9\u20130, season 1 round 36"
    ],
    "prefs": {
     "wyvern + fire": {
@@ -245,7 +245,7 @@
    "hatched": 42,
    "ichor": 1,
    "champions": [
-    "Vaneheart (wyvern + air, Milk Fang, Whetted Nail, Smolder Sac), 9–0, season 1 round 38"
+    "Vaneheart (wyvern + air, Milk Fang, Whetted Nail, Smolder Sac), 9\u20130, season 1 round 38"
    ],
    "prefs": {
     "wyvern + air": {
@@ -263,7 +263,7 @@
    "hatched": 43,
    "ichor": 1,
    "champions": [
-    "Thorntail (wyrm + water, Milk Fang, Whetted Nail, Heartgrit), 9–0, season 1 round 43"
+    "Thorntail (wyrm + water, Milk Fang, Whetted Nail, Heartgrit), 9\u20130, season 1 round 43"
    ],
    "prefs": {
     "wyrm + water": {
@@ -289,7 +289,7 @@
    "hatched": 50,
    "ichor": 0,
    "champions": [
-    "Rimespine (true-dragon + fire, Milk Fang, Heartgrit, Whetted Nail), 9–0, season 1 round 47"
+    "Rimespine (true-dragon + fire, Milk Fang, Heartgrit, Whetted Nail), 9\u20130, season 1 round 47"
    ],
    "prefs": {
     "true-dragon + fire": {
@@ -315,7 +315,7 @@
    "hatched": 42,
    "ichor": 1,
    "champions": [
-    "Thorntail (wyvern + air, Whetted Nail, Milk Fang, Pebblescale), 9–0, season 1 round 51"
+    "Thorntail (wyvern + air, Whetted Nail, Milk Fang, Pebblescale), 9\u20130, season 1 round 51"
    ],
    "prefs": {
     "wyvern + air": {
@@ -333,7 +333,7 @@
    "hatched": 46,
    "ichor": 1,
    "champions": [
-    "Mirecrest (wyvern + earth, Smolder Sac, Heartgrit, Milk Fang), 9–0, season 1 round 54"
+    "Mirecrest (wyvern + earth, Smolder Sac, Heartgrit, Milk Fang), 9\u20130, season 1 round 54"
    ],
    "prefs": {
     "wyvern + earth": {
@@ -363,7 +363,7 @@
    "hatched": 53,
    "ichor": 1,
    "champions": [
-    "Hollowfang (wyvern + water, Hollow Bones, Pebblescale, Whetted Nail), 9–0, season 1 round 54"
+    "Hollowfang (wyvern + water, Hollow Bones, Pebblescale, Whetted Nail), 9\u20130, season 1 round 54"
    ],
    "prefs": {
     "wyvern + water": {
@@ -393,7 +393,7 @@
    "hatched": 57,
    "ichor": 1,
    "champions": [
-    "Brinecrest (wyvern + air, Heartgrit, Weathered Hide, Whetted Nail), 9–0, season 1 round 56"
+    "Brinecrest (wyvern + air, Heartgrit, Weathered Hide, Whetted Nail), 9\u20130, season 1 round 56"
    ],
    "prefs": {
     "wyvern + air": {
@@ -411,7 +411,7 @@
    "hatched": 68,
    "ichor": 0,
    "champions": [
-    "Flinthorn (true-dragon + fire, Milk Fang, Hollow Bones, Gnashing Teeth), 9–0, season 1 round 69"
+    "Flinthorn (true-dragon + fire, Milk Fang, Hollow Bones, Gnashing Teeth), 9\u20130, season 1 round 69"
    ],
    "prefs": {
     "true-dragon + fire": {
@@ -441,7 +441,7 @@
    "hatched": 56,
    "ichor": 3,
    "champions": [
-    "Stormtail (wyvern + earth, Smolder Sac, Whetted Nail, Weathered Hide), 9–0, season 1 round 76"
+    "Stormtail (wyvern + earth, Smolder Sac, Whetted Nail, Weathered Hide), 9\u20130, season 1 round 76"
    ],
    "prefs": {
     "wyvern + earth": {
@@ -467,7 +467,7 @@
    "hatched": 65,
    "ichor": 1,
    "champions": [
-    "Rimewing (true-dragon + fire, Smolder Sac, Hollow Bones, Whetted Nail), 9–0, season 1 round 79"
+    "Rimewing (true-dragon + fire, Smolder Sac, Hollow Bones, Whetted Nail), 9\u20130, season 1 round 79"
    ],
    "prefs": {
     "true-dragon + fire": {
@@ -981,7 +981,7 @@
    "hatched": 29,
    "ichor": 0,
    "champions": [
-    "Slateclaw (wyvern + air, Snapping Jaw, Hollow Bones, Ash Gland), 9–0, round 39"
+    "Slateclaw (wyvern + air, Snapping Jaw, Hollow Bones, Ash Gland), 9\u20130, season 2 round 39"
    ],
    "prefs": {
     "wyvern + earth": {
@@ -2035,7 +2035,7 @@
    "hatched": 27,
    "ichor": 1,
    "champions": [
-    "Hollowclaw (true-dragon + fire, Milk Fang, Heartgrit, Weathered Hide), 9–0, round 45"
+    "Hollowclaw (true-dragon + fire, Milk Fang, Heartgrit, Weathered Hide), 9\u20130, season 2 round 45"
    ],
    "prefs": {
     "true-dragon + water": {
@@ -2209,7 +2209,7 @@
    "hatched": 33,
    "ichor": 0,
    "champions": [
-    "Cindertail (true-dragon + fire, Ash Gland, Smolder Sac, Pebblescale), 9–0, round 75"
+    "Cindertail (true-dragon + fire, Ash Gland, Smolder Sac, Pebblescale), 9\u20130, season 2 round 75"
    ],
    "prefs": {
     "wyrm + fire": {
@@ -2327,7 +2327,7 @@
    "hatched": 38,
    "ichor": 0,
    "champions": [
-    "Hollowmaw (true-dragon + air, Smolder Sac, Heartgrit, Ash Gland), 9–0, round 49"
+    "Hollowmaw (true-dragon + air, Smolder Sac, Heartgrit, Ash Gland), 9\u20130, season 2 round 49"
    ],
    "prefs": {
     "true-dragon + earth": {
@@ -2873,7 +2873,7 @@
    "hatched": 36,
    "ichor": 0,
    "champions": [
-    "Flintcrest (true-dragon + air, Whetted Nail, Pebblescale, Bounding Haunches), 9–0, round 78"
+    "Flintcrest (true-dragon + air, Whetted Nail, Pebblescale, Bounding Haunches), 9\u20130, season 2 round 78"
    ],
    "prefs": {
     "true-dragon + air": {
@@ -3415,7 +3415,7 @@
    "hatched": 29,
    "ichor": 0,
    "champions": [
-    "Cinderfang (true-dragon + fire, Hollow Bones, Milk Fang, Smolder Sac), 9–0, round 10"
+    "Cinderfang (true-dragon + fire, Hollow Bones, Milk Fang, Smolder Sac), 9\u20130, season 2 round 10"
    ],
    "prefs": {
     "wyvern + earth": {
@@ -7125,7 +7125,7 @@
    "hatched": 27,
    "ichor": 0,
    "champions": [
-    "Hollowmaw (true-dragon + fire, Hollow Bones, Smolder Sac, Raking Talons), 9–0, round 16"
+    "Hollowmaw (true-dragon + fire, Hollow Bones, Smolder Sac, Raking Talons), 9\u20130, season 2 round 16"
    ],
    "prefs": {
     "true-dragon + fire": {
@@ -7287,7 +7287,7 @@
    "hatched": 34,
    "ichor": 1,
    "champions": [
-    "Slateeye (wyrm + earth, Heartgrit, Hollow Bones, Snapping Jaw), 9–0, round 55"
+    "Slateeye (wyrm + earth, Heartgrit, Hollow Bones, Snapping Jaw), 9\u20130, season 2 round 55"
    ],
    "prefs": {
     "true-dragon + fire": {
@@ -9916,5 +9916,6 @@
     }
    }
   }
- ]
+ ],
+ "season": 2
 }

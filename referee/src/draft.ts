@@ -58,7 +58,7 @@ const bump = (m: Map<string, Map<string, number>>, style: string, k: string) => 
 };
 const loadoutRates = new Map<string, Rate>();
 const loadoutWins = new Map<string, Map<string, Rate>>();
-const ends = { ko: 0, pulse: 0, timeout: 0 };
+const ends = { ko: 0, pulse: 0, timeout: 0, yield: 0 };
 for (const j of jobs) {
   const r = byId.get(j.id)!;
   ends[r.ending]++;

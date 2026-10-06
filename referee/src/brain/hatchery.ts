@@ -164,41 +164,92 @@ export const DROPS = {
 
 /** Ichor [Doc]: a melted shard yields Ichor by its pips; Ichor freezes into a shard of the tamer's choosing at a higher rate. */
 export const ICHOR = { meltPerPip: 1, freezePerPip: 2 };
-/** How much a skill values banking Ichor toward a better shard over seating what's on offer now. */
-const PATIENCE: Record<Skill, number> = { novice: 0.3, adept: 0.6, master: 0.8 };
+/** What a banked Ichor is worth to a tamer beyond this pick (a future freeze, a yield's price), in shard-score units. */
+const ICHOR_VALUE = 0.3;
+/** How far ahead a tamer plans its array, in picks: a novice takes what's best now; a master plans the whole array. */
+const PLAN_DEPTH: Record<Skill, number> = { novice: 0, adept: 1, master: 2 };
+/** Each further shard serving the same want counts this much less than the one before. */
+const DIMINISH = 0.6;
 
 export type SpoilsChoice =
   | { kind: 'seat'; shard: Shard }
   | { kind: 'freeze'; melt: Shard; shard: Shard }
   | { kind: 'bank'; melt: Shard };
 
+/** What a shard mainly serves: a chip its attribute, a Technique the tag its style wants most. */
+function wantOf(style: BrainStyle, shard: Shard): string {
+  const kind = shard.kind as { family: string; attr?: string; technique?: string };
+  if (kind.family !== 'technique') return kind.attr ?? shard.name;
+  const tags = TECHNIQUE_TAGS[kind.technique ?? ''] ?? [];
+  const want = (t: Tag) => (t === 'claw' || t === 'bite' || t === 'breath' ? TASTE[style][t] : TAG_WANTS[style]?.[t] ?? 0.1);
+  return [...tags].sort((a, b) => want(b) - want(a))[0] ?? shard.name;
+}
+
+/** A whole array's worth to a style: its shards' scores, each further shard serving the same want counting less. */
+export function arrayValue(style: BrainStyle, sheet: StatSheet, shards: Shard[]): number {
+  const byWant = new Map<string, number[]>();
+  for (const s of shards) byWant.set(wantOf(style, s), [...(byWant.get(wantOf(style, s)) ?? []), shardScore(style, s, sheet)]);
+  let v = 0;
+  for (const scores of byWant.values()) scores.sort((a, b) => b - a).forEach((x, k) => (v += x * DIMINISH ** k));
+  return v;
+}
+
+interface PlanState {
+  seated: Shard[];
+  room: number;
+  ichor: number;
+}
+
+/** The spoils situation a victor plans with. */
+export interface Spoils {
+  /** what this victim offers: its two generated drops and its intact array */
+  offer: Shard[];
+  /** the dragon's seated shards and its free pips */
+  seated: Shard[];
+  room: number;
+  /** the tamer's Ichor */
+  ichor: number;
+  /** the chance this dragon reaches its next pick: three straight wins */
+  reach: number;
+  /** what the next victims are likely to offer: samples drawn from the field on its rung */
+  likely: Shard[][];
+}
+
 /**
- * A victor's spoils pick, with Ichor. It can seat a spoils shard; or melt one into its tamer's Ichor and freeze a
- * shard of its choosing from the bank (seating that instead); or melt and bank, staying on its rung to chase a
- * better shard next pick. It scores each by its style, banking at its skill's patience, and draws at its temperature.
+ * A victor's spoils pick, planned as an array [Proposed]. It can seat a shard on offer; melt one into its tamer's
+ * Ichor and freeze a shard of its choosing (seating that); or melt and bank, staying on its rung. A tamer works with
+ * what it has: it scores each choice by the best array it leads to, counting later picks only as likely as its dragon
+ * is to reach them, and only for what the field is likely to offer. Banked Ichor keeps a little worth of its own (a
+ * future freeze, a yield's price). Skill sets how far ahead it plans; it draws at its temperature.
  */
-export function chooseSpoils(
-  style: BrainStyle, skill: Skill, sheet: StatSheet, spoils: Shard[], room: number, owned: Set<string>, ichor: number, rng: () => number,
-): SpoilsChoice | null {
-  if (!spoils.length) return null;
-  const score = (s: Shard) => shardScore(style, s, sheet);
-  const fits = (s: Shard) => s.pips <= room && !owned.has(s.name);
-  // Melt the shard worth the most Ichor, the least wanted among those.
-  const melt = [...spoils].sort((a, b) => b.pips - a.pips || score(a) - score(b))[0];
-  const bank = ichor + ICHOR.meltPerPip * melt.pips;
-  const catalog = shardPool('wyrmling').filter(fits);
-  const options: SpoilsChoice[] = [];
-  const values: number[] = [];
-  for (const s of spoils.filter(fits)) {
-    options.push({ kind: 'seat', shard: s });
-    values.push(score(s));
-  }
-  for (const s of catalog.filter((x) => ICHOR.freezePerPip * x.pips <= bank && !spoils.some((o) => o.name === x.name))) {
-    options.push({ kind: 'freeze', melt, shard: s });
-    values.push(score(s));
-  }
-  const goal = Math.max(0, ...catalog.map(score));
-  options.push({ kind: 'bank', melt });
-  values.push(PATIENCE[skill] * goal);
-  return draw(options, values, TEMPERATURE[skill], rng);
+export function chooseSpoils(style: BrainStyle, skill: Skill, sheet: StatSheet, sp: Spoils, rng: () => number): SpoilsChoice | null {
+  if (!sp.offer.length) return null;
+  const catalog = shardPool('wyrmling');
+  const worth = (st: PlanState) => arrayValue(style, sheet, st.seated) + ICHOR_VALUE * st.ichor;
+  // Looking ahead, only the few best freezes are worth imagining.
+  const moves = (st: PlanState, offer: Shard[], ahead = false): [SpoilsChoice, PlanState][] => {
+    const has = new Set(st.seated.map((x) => x.name));
+    const fits = (s: Shard) => s.pips <= st.room && !has.has(s.name);
+    const score = (s: Shard) => shardScore(style, s, sheet);
+    const melt = [...offer].sort((a, b) => b.pips - a.pips || score(a) - score(b))[0];
+    const bank = st.ichor + ICHOR.meltPerPip * melt.pips;
+    const out: [SpoilsChoice, PlanState][] = [];
+    for (const s of offer.filter(fits)) out.push([{ kind: 'seat', shard: s }, { seated: [...st.seated, s], room: st.room - s.pips, ichor: st.ichor }]);
+    const freezable = catalog.filter((x) => fits(x) && ICHOR.freezePerPip * x.pips <= bank && !offer.some((o) => o.name === x.name));
+    for (const s of ahead ? freezable.sort((a, b) => score(b) - score(a)).slice(0, 3) : freezable) {
+      out.push([{ kind: 'freeze', melt, shard: s }, { seated: [...st.seated, s], room: st.room - s.pips, ichor: bank - ICHOR.freezePerPip * s.pips }]);
+    }
+    out.push([{ kind: 'bank', melt }, { ...st, ichor: bank }]);
+    return out;
+  };
+  // What a state is worth, looking `depth` picks ahead over the likely offers.
+  const future = (st: PlanState, depth: number): number => {
+    const now = worth(st);
+    if (depth === 0 || st.room === 0 || !sp.likely.length) return now;
+    let gain = 0;
+    for (const offer of sp.likely) gain += Math.max(0, Math.max(...moves(st, offer, true).map(([, next]) => future(next, depth - 1))) - now);
+    return now + sp.reach * (gain / sp.likely.length);
+  };
+  const options = moves({ seated: sp.seated, room: sp.room, ichor: sp.ichor }, sp.offer);
+  return draw(options.map(([c]) => c), options.map(([, st]) => future(st, PLAN_DEPTH[skill])), TEMPERATURE[skill], rng);
 }

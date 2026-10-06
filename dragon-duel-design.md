@@ -387,7 +387,8 @@ Dragons don't age naturally; tamers force their growth through dragon magic.
 - Every slain dragon drops two generated shards at its age grade, a Body shard of its morph's favored attribute and a Bloodstone shard of its stone's, plus any shards still intact in its array.
 - The victor picks a number of shards equal to the slain dragon's age category: 1 from a wyrmling, 5 from a venerable.
 - Campaign NPC dragons carry authored loadouts.
-- Timeouts aren't lethal. **[Proposed]** A timeout awards no shard; unpicked shards are lost with the dragon.
+- Timeouts aren't lethal. **[Proposed]** A timeout awards no shard; unpicked shards are lost with the dragon. **[Proposed]** The victor is paid Ichor instead, by the ladder: 1 on the novice ladder, 2 on adept, 3 on master, from the loser's Ichor where it has it.
+- **[Proposed] The yield.** Before a bout, having seen the other dragon, or at any exchange boundary during scripting, a tamer may yield to save its dragon. It pays the victor Ichor by the ladder (1, 2 or 3); short of that, the victor takes a shard of its choosing from the yielder's array as ransom, and the yielder drops to the rung its array now makes. With neither, it can't yield. A yield is non-lethal: no spoils, since nothing was slain. It counts toward the victor's streak, but a pick the streak earns waits for the next kill.
 
 ### Harvest, Death, Scars
 - Shards are permanent unless the dragon is harvested or slain.

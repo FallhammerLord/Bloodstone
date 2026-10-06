@@ -89,7 +89,7 @@ const pct = (w: number, n: number) => `${((100 * w) / Math.max(1, n)).toFixed(0)
 console.log(`Brain tournament at ${skill} skill, ${rulesLabel}: ${jobs.length} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
 console.log('Win rates carry a 95% margin (±): two rates whose margins overlap may not differ.');
 if (withShards) console.log('Loadouts: every dragon (crunchlings aside) carries a random, seeded 3-pip loadout of attribute chips and built Techniques, all wyrmling grade.');
-const ends = { ko: 0, pulse: 0, timeout: 0 };
+const ends = { ko: 0, pulse: 0, timeout: 0, yield: 0 };
 let ex = 0;
 for (const r of results) {
   ends[r.ending]++;

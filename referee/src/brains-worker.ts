@@ -3,7 +3,7 @@
 import { parentPort, workerData } from 'node:worker_threads';
 import { aiController, type Style } from './ai.ts';
 import { brainController, type BrainStyle, type Skill } from './brain.ts';
-import { runBout, type Controller } from './bout.ts';
+import { runBout, type Controller, type View } from './bout.ts';
 import { newBout, type FighterSetup, type NoteTag, type Side } from './referee.ts';
 import { standardBoulders } from './arena.ts';
 import * as R from './rules.ts';
@@ -16,6 +16,16 @@ export interface Player {
   seed: number;
 }
 
+/**
+ * A tamer's yield policy for this bout, in Ichor: what its dragon is worth, what a win is worth, and the price of a
+ * yield. A novice never yields mid-bout; an adept yields only a clearly lost fight; a master weighs the odds.
+ */
+export interface YieldPolicy {
+  value: number;
+  gain: number;
+  price: number;
+}
+
 export interface Job {
   id: number;
   group: string;
@@ -25,13 +35,15 @@ export interface Job {
   playerB: Player;
   challenged: Side;
   arenaSeed: number;
+  yieldA?: YieldPolicy;
+  yieldB?: YieldPolicy;
 }
 
 export interface Result {
   id: number;
   winner: Side;
   exchanges: number;
-  ending: 'ko' | 'pulse' | 'timeout';
+  ending: 'ko' | 'pulse' | 'timeout' | 'yield';
   /** breaths aimed, breaths landed, breath damage, all damage, Scales chosen, slots played, charges, crunches */
   stats: [number, number, number, number, number, number, number, number];
   /** damage dealt by each side */
@@ -51,8 +63,19 @@ export interface Result {
   setup: [number, number, number, number];
 }
 
-const controller = (p: Player): Controller =>
-  p.kind === 'brain' ? brainController(p.style as BrainStyle, p.skill, p.seed) : aiController(p.style as Style, p.seed);
+const controller = (p: Player, policy?: YieldPolicy): Controller => {
+  const c = p.kind === 'brain' ? brainController(p.style as BrainStyle, p.skill, p.seed) : aiController(p.style as Style, p.seed);
+  if (!policy || p.skill === 'novice') return c;
+  return { ...c, yields: (view: View) => {
+    // The chance of losing, from how fast each dragon is being worn down: exchanges each has left at the rate so far.
+    const n = Math.max(1, view.exchange);
+    const left = (f: View['me']) => f.wounds / Math.max(1, (f.sheet.wounds - f.wounds) / n);
+    const mine = left(view.me), theirs = left(view.opp);
+    const lose = theirs / (mine + theirs);
+    if (p.skill === 'adept' && lose < 0.75) return false;
+    return lose * policy.value - (1 - lose) * policy.gain > policy.price;
+  } };
+};
 
 const results: Result[] = [];
 const rules = rulesWith(workerData.overrides ?? {});
@@ -60,9 +83,9 @@ const mine = (workerData.jobs as Job[]).filter((_, i) => i % workerData.parts ==
 for (const job of mine) {
   const bout = newBout(job.A, job.B, rules.START_SEPARATION / R.PACE, job.challenged, { boulders: standardBoulders(job.arenaSeed, rules), seed: job.arenaSeed }, rules);
   const startPos = { A: { ...bout.fighters.A.pos }, B: { ...bout.fighters.B.pos } };
-  const ev = runBout(bout, { A: controller(job.playerA), B: controller(job.playerB) });
+  const ev = runBout(bout, { A: controller(job.playerA, job.yieldA), B: controller(job.playerB, job.yieldB) });
   const end = ev.find((e) => e.kind === 'boutEnd');
-  const ending = end?.kind === 'boutEnd' && end.reason.startsWith('timeout') ? 'timeout' : ev.some((e) => e.kind === 'pulse' && e.woundsLeft <= 0) ? 'pulse' : 'ko';
+  const ending = end?.kind === 'boutEnd' && end.reason.startsWith('yield') ? 'yield' : end?.kind === 'boutEnd' && end.reason.startsWith('timeout') ? 'timeout' : ev.some((e) => e.kind === 'pulse' && e.woundsLeft <= 0) ? 'pulse' : 'ko';
   const stats: Result['stats'] = [0, 0, 0, 0, 0, 0, 0, 0];
   const dealt: Record<Side, number> = { A: 0, B: 0 };
   const byAttack: Result['byAttack'] = {};
