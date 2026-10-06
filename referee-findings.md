@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Round 23](#round-23-technique-parity-pass-1) | Technique parity pass 1: one real outlier (Snapping Jaw); the rest was noise |
 | [Round 22](#round-22-brains-with-clean-patch-knowledge-and-measured-drafting) | Brains with clean patch knowledge and measured drafting; Ash Gland pulled |
 | [Checkpoint](#checkpoint-omnibus-hatch-and-ladder-together) | The omnibus after the Talons patch, read with the ladder and the hatch |
 | [Season 4](#living-ladder-season-4) | One kill per pick, as designed: 632 champions; Wyvern + Air leads the hall again |
@@ -32,6 +33,62 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 23: Technique parity pass 1
+
+Every change from `technique-parity-pass-1.md` is built behind its rule key; the first value of each key is today's rule. With every key at base, all 182 tests pass and the goldens match. `--rule TECH_PASS_1=on` sets every key to its first variant.
+- **Bite and Claw:**
+  - Snapping Jaw `borrow`, `borrow_dmg`
+  - Lockjaw `clamp`, `recovery`
+  - Ratchet Claws `escalate`
+- **Guard:**
+  - Thornscale `window`
+  - Mantle Wings `verbguard`
+- **Breath:**
+  - Bellows Chest `mobile`, scripted as `charge:breath:retreat`
+  - Lance Throat `pierce`
+  - Smoldering Maw `linger`
+  - Ash Gland `cloud`, back in the pool only under its key
+- **Move:** Stooping Pinions `nostack`
+- **Sapping Bellow `gland`:** a provisional reading. The spec has no section for it, so a landed Breath demoralizes.
+- **Baleful Eye** is cut.
+- **Tests:** each variant has a rule test, and the brains have a patch-knowledge case per variant: the charge on a move is legal, a clamped Bite is illegal, and debt, ratchet, clamp, ash clouds and verb ground are valued.
+
+**The instrument's noise.** A pooled shard change measured at 24 pairs per style (Round 22's table) carries about ±7 points, wider than the ±5 parity band. `measure` now prints a margin on every shard and takes `--only` for targeted runs. The parity calls below use 72–96 pairs per style (±3–4). In this instrument the field carries no shards, so a variant run alone and under the full pass are the same measurement.
+
+| Shard | Base | Variant |
+|---|---|---|
+| Snapping Jaw | **+14 ±4** | `borrow` **+8 ±3**; `borrow_dmg` **+1 ±3** |
+| Lockjaw | −1 ±3 | `clamp` −2; `recovery` −2 (±3) |
+| Ratchet Claws | −2 ±3 | `escalate` 0 ±3 |
+| Thornscale | −1 ±3 | `window` 0 ±3 |
+| Mantle Wings | −2 ±3 | `verbguard` −2 ±3 |
+| Bellows Chest | +3 ±3 | `mobile` +2 ±3 |
+| Lance Throat | 0 ±3 | `pierce` −1 ±4 |
+| Smoldering Maw | +4 ±3 | `linger` +1 ±3 |
+| Stooping Pinions | +1 ±2 | `nostack` −1 ±2 |
+| Sapping Bellow | −1 ±3 | `gland` (provisional) +1 ±3 |
+| Ash Gland | pulled | `cloud` −3 ±3 (−9 on a Wyrm) |
+| Held: Hollow Bones / Hamstring Hooks / Goading Roar | 0 / +1 / −4 (±3) | — |
+
+**What it shows:**
+- **Snapping Jaw is the only real outlier.** `borrow` cuts it from +14 to +8, still outside ±5. Only `borrow_dmg` reaches parity (+1).
+- **Every other Technique is inside ±5,** at base and under its variant. Round 22's spread (Hollow Bones +10, Thornscale, Mantle Wings and Bellows Chest −3) was largely noise. The pass's value for these is design: priced costs, new jobs, no more denial of the opponent's options. It barely moves their win rates.
+- **Ash Gland's cloud is weak on a Wyrm** (−9). The spec's data note applies: dial `ASH_CLOUD_RADIUS` before its terms.
+- **Stooping Pinions on a Wyrm reads 0,** as expected: Wyrms can't Dive.
+
+**The rebuilt table and the tournaments,** under the pass with Snapping Jaw at `borrow_dmg`. The table used 41,184 adept bouts at 48 pairs; shard margins are ±3–5.
+- **The table now spans −6 to +5 on every shard.** Ash Gland (cloud) −6 ±4 and Stooping Pinions −4 ±3 sit lowest. Snapping Jaw (`borrow_dmg`) +5 ±5.
+- **Its sheet half moved,** most notably True Dragon + Fire, from 47% to 55% pooled. It is now every general style's best sheet. That is near the edge of the two runs' combined margins, so treat it as a lean, not a finding.
+- **Hatch:** drafting on that table converges. True Dragon + Fire is 41% of drafts (the out-boxer drafts it 96% of the time) and wins 53% ±2; the True Dragon is 66% of drafts. True Dragon + Earth wins 62% ±5 at 7% of drafts. Styles span 45–59%, apart from bite-focus at 30%.
+- **Omnibus with shards:** carriers span 43–54%. No shard stands out the way Snapping Jaw did (62% in Round 22). Morphs: True Dragon 53, Wyvern 50, Wyrm 47 (±6).
+- **Omnibus plain** is identical to Round 22, as it should be: a plain run carries no shards.
+
+**Open, for Ken:**
+- **Which variants move into suite v0.3.** Snapping Jaw needs `borrow_dmg` to reach parity; the rest pass on design grounds.
+- **Sapping Bellow `gland`:** the intended text. The provisional reading measures at +1.
+- **Ash Gland's cloud radius,** before its terms.
+- **Drafting from a measured table pulls hard toward its top sheet.** The hatch is close to a True Dragon monoculture. Options: more samples for the sheet table, a floor on novelty in the hatch, or accept it as the honest read of the True Dragon's base lead (Round 22's open question).
 
 ## Round 22: brains with clean patch knowledge and measured drafting
 
