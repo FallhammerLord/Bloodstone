@@ -33,6 +33,14 @@ export const SHARED = {
    * an opponent's full meter is the same threat against you, so Breath and Bite into its guard are a risk
    */
   fullMeter: 0.03,
+  /** Snapping Jaw (borrow): per tick of wind-up a dragon owes its next slot */
+  snapDebt: 0.002,
+  /** Ratchet Claws (escalate): per point the next Claw is ratcheted up */
+  ratchet: 0.006,
+  /** Lockjaw (clamp): a jaw clamped shut can't Bite next slot */
+  clamped: 0.01,
+  /** Ash Gland (cloud): ending a slot in an enemy cloud means a Blinded next slot, as a fraction of Wounds */
+  ashThreat: 0.03,
   /** a pending Intimidate bonus, yours or theirs, still counts when the slot ends */
   intimidatePending: 0.03,
   /** a pending demoralize on either side */
@@ -156,6 +164,7 @@ export function value(style: BrainStyle, o: Outcome): number {
     + W.chargeBroken * o.events.filter((e) => e.kind === 'note' && e.side === them && e.tag === 'charge-broken').length
     + W.meterGain * Math.max(0, me1.meter - me0.meter) - W.oppMeterGain * Math.max(0, op1.meter - op0.meter)
     + (me1.meter >= R.METER_MAX ? W.fullMeter : 0) - (op1.meter >= R.METER_MAX ? W.fullMeter : 0)
+    + techniqueCarryOver(me1, op1)
     + (me1.intimidateBonus ? W.intimidatePending : 0) - (op1.intimidateBonus ? W.intimidatePending : 0)
     + (op1.marks.demoralized ? W.demoralizePending : 0) - (me1.marks.demoralized ? W.demoralizePending : 0)
     + (me1.marks.advanced || me1.marks.strafed ? W.setupPending : 0)
@@ -197,10 +206,19 @@ function stoopThreat(b: Bout, f: Fighter, target: Fighter): number {
 }
 
 /** What the enemy's live floor zones threaten a dragon standing where it is: its next slot's burn, as a fraction of its Wounds. */
-function zoneThreat(b: Bout, f: Fighter): number {
+export function zoneThreat(b: Bout, f: Fighter): number {
   let worst = 0;
   for (const z of b.arena.zones) {
-    if (z.owner === f.side || z.kind === 'smolder' || z.lastSlot < b.globalSlot || !inZone(z, f.pos)) continue;
+    // A hanging smolder is the old Smoldering Maw; verb ground (linger) and ash clouds count.
+    if (z.owner === f.side || (z.kind === 'smolder' && !z.floor) || z.lastSlot < b.globalSlot || !inZone(z, f.pos)) continue;
+    if (z.kind === 'ash') {
+      worst = Math.max(worst, SHARED.ashThreat * f.sheet.wounds);
+      continue;
+    }
+    if (z.kind === 'smolder') {
+      worst = Math.max(worst, b.rules.TECHNIQUE_POINTS);
+      continue;
+    }
     const wheel = b.rules.ZONE_MATCHUP ? matchup(b.fighters[z.owner].sheet.stone, f.sheet.stone) * b.rules.MATCHUP : 0;
     worst = Math.max(worst, z.kind === 'burning' ? Math.max(b.rules.DAMAGE_FLOOR, (z.damage ?? b.rules.BURN_DAMAGE) + wheel) : SHARED.corrosionThreat);
   }
@@ -251,4 +269,12 @@ function styleValue(style: BrainStyle, o: Outcome, { dealt, taken, band, sep, me
     + (w.meterGain ? w.meterGain * Math.max(0, me1.meter - me0.meter) : 0)
     + (w.spent ? w.spent * count((e) => e.kind === 'note' && e.side === o.me && e.tag === 'meter-spent') : 0)
     + rim;
+}
+
+/** Technique carry-overs the look-ahead's last slot can't see play out (technique parity pass 1): debt owed, ratchet held, a clamped jaw. */
+export function techniqueCarryOver(me: Fighter, op: Fighter): number {
+  const W = SHARED;
+  return -W.snapDebt * (me.marks.snapDebt - op.marks.snapDebt)
+    + W.ratchet * (me.marks.ratchet - op.marks.ratchet)
+    - W.clamped * ((me.marks.clamped ? 1 : 0) - (op.marks.clamped ? 1 : 0));
 }

@@ -11,6 +11,13 @@ export interface Situation {
   globalSlot: number;
   z: number;
   readyAt: Partial<Record<ActionName, number>>;
+  /** Lockjaw (clamp): the slot in which this dragon can't Bite, or -1 */
+  clampedSlot?: number;
+}
+
+/** A dragon's situation as its script begins. */
+export function situation(f: Fighter, globalSlot: number, rules: Rules): Situation {
+  return { f, globalSlot, z: f.pos.z, readyAt: f.readyAt, rules, clampedSlot: f.marks.clamped ? globalSlot : -1 };
 }
 
 /** Everything this dragon could script in a slot, with the details picked at random. */
@@ -21,13 +28,20 @@ export function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   // Band moves land where Evasion lets them: plain, short, or long.
   const depth = (): 'short' | 'long' | undefined => { const r = rng(); return r < 0.34 ? undefined : r < 0.67 ? 'short' : 'long'; };
   const out: ActionSpec[] = [
-    { name: 'bite' }, { name: 'claw', sweep: side() }, { name: 'approach', depth: depth() }, { name: 'retreat', depth: depth() },
+    ...(s.clampedSlot === s.globalSlot ? [] : [{ name: 'bite' as const }]), { name: 'claw', sweep: side() }, { name: 'approach', depth: depth() }, { name: 'retreat', depth: depth() },
     { name: 'strafe', dir: turn() }, { name: 'scales' }, { name: 'intimidate' },
   ];
   if (ready('breath')) out.push({ name: 'breath' });
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });
   if (ready('dodge')) out.push({ name: 'dodge' });
   if (s.f.sheet.flies && s.z < s.rules.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
+  // Bellows Chest (mobile): a Breath charge carried on a Move (Wyrmling: Retreat; Juvenile: Strafe too; Venerable: any).
+  const bel = s.f.loadout.techniques.find((t) => t.id === 'bellows-chest')?.grade;
+  if (bel && s.rules.TECH_BELLOWS_CHEST === 'mobile' && s.globalSlot % R.SLOTS_PER_EXCHANGE < 2 && (s.readyAt.breath ?? 0) <= s.globalSlot + 1) {
+    out.push({ name: 'breath', charge: true, move: 'retreat' });
+    if (bel !== 'wyrmling') out.push({ name: 'breath', charge: true, move: 'strafe', dir: turn() });
+    if (bel === 'venerable') out.push({ name: 'breath', charge: true, move: 'approach' });
+  }
   // Sidewinder Spine: a strafe that also shifts along the line, in or out.
   if (s.f.loadout.techniques.some((t) => t.id === 'sidewinder-spine')) out.push({ name: 'strafe', dir: turn(), shift: rng() < 0.5 ? 'in' : 'out' });
   if (s.z > 0) out.push({ name: 'dive', depth: depth() });
@@ -56,7 +70,8 @@ export function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   if (g1 && g1 !== 'wyrmling') out.push({ name: 'claw', sweep: side(), crunch: true });
   const g2 = grade('gnashing-teeth');
   if (g2 && g2 !== 'wyrmling') out.push({ name: 'bite', crunch: true });
-  return out;
+  // Lockjaw (clamp): no Bite in the clamped slot, charging included. (A setup's Bite comes a slot later.)
+  return s.clampedSlot === s.globalSlot ? out.filter((a) => a.name !== 'bite' || a.setup) : out;
 }
 
 /** Appends an action to a script being built, filling a charge's release slot too. */

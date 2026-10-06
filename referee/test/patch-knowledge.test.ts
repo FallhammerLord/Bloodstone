@@ -5,7 +5,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { boutFromView, scriptFor } from '../src/brain/controller.ts';
 import { seededRandom } from '../src/random.ts';
-import { inStoopReach, positionValue } from '../src/brain/value.ts';
+import { inStoopReach, positionValue, techniqueCarryOver, zoneThreat } from '../src/brain/value.ts';
+import { legalActions, situation } from '../src/brain/options.ts';
 import { bandWorth, idealBands } from '../src/brain/styles.ts';
 import { viewOf } from '../src/bout.ts';
 import { newBout, type FighterSetup } from '../src/referee.ts';
@@ -67,4 +68,44 @@ test('a dragon imagines playing its shards: Riposte Talons puts Dodge in more of
 test('Ash Gland is pulled for redesign: no brain can draft it', async () => {
   const { shardPool } = await import('../src/shards.ts');
   assert.ok(!shardPool('wyrmling').some((s) => s.name === 'Ash Gland'));
+});
+
+// ---- Technique parity pass 1 [Proposed]: one fixed situation per variant the brains must know ----
+
+const pass = R.rulesWith({ ...R.TECH_PASS_1 });
+const seat = (setup: FighterSetup, shard: string, pips = [0]): FighterSetup => ({ ...setup, shards: [{ shard, grade: 'wyrmling', pips }] });
+
+test('Lockjaw (clamp): a clamped jaw has no Bite to script', () => {
+  const bout = newBout(seat(TD_WATER, 'Lockjaw'), TD_WATER, 2, 'B', {}, pass);
+  bout.fighters.A.marks.clamped = true;
+  const legal = legalActions(situation(bout.fighters.A, 0, pass), seededRandom(1));
+  assert.ok(!legal.some((a) => a.name === 'bite' && !a.setup), 'no Bite this slot, charged or not (a setup\'s Bite comes a slot later)');
+});
+
+test('Bellows Chest (mobile): a Breath charge on a Retreat is a legal option', () => {
+  const bout = newBout(seat(TD_FIRE, 'Bellows Chest', [0, 1]), TD_WATER, 4, 'B', {}, pass);
+  const legal = legalActions(situation(bout.fighters.A, 0, pass), seededRandom(1));
+  assert.ok(legal.some((a) => a.name === 'breath' && a.charge && a.move === 'retreat'));
+});
+
+test('Snapping Jaw (borrow), Ratchet Claws, Lockjaw: debt owed costs, a ratchet held pays, a clamp costs', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 2, 'B', {}, pass);
+  const [me, op] = [bout.fighters.A, bout.fighters.B];
+  me.marks.snapDebt = 3;
+  assert.ok(techniqueCarryOver(me, op) < 0);
+  me.marks.snapDebt = 0;
+  me.marks.ratchet = 2;
+  assert.ok(techniqueCarryOver(me, op) > 0);
+  me.marks.ratchet = 0;
+  me.marks.clamped = true;
+  assert.ok(techniqueCarryOver(me, op) < 0);
+});
+
+test('Ash Gland (cloud) and Smoldering Maw (linger): an enemy ash cloud or verb ground is a place not to end a slot', () => {
+  const bout = newBout(TD_WATER, TD_WATER, 4, 'B', {}, pass);
+  const f = bout.fighters.A;
+  bout.arena.zones.push({ kind: 'ash', center: { ...f.pos }, radius: R.PACE, lastSlot: 5, owner: 'B' });
+  assert.ok(zoneThreat(bout, f) > 0, 'ash');
+  bout.arena.zones = [{ kind: 'smolder', element: 'water', floor: true, center: { ...f.pos }, radius: R.PACE, lastSlot: 5, owner: 'B' }];
+  assert.ok(zoneThreat(bout, f) > 0, 'verb ground');
 });

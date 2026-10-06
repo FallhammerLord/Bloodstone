@@ -5,7 +5,7 @@ import type { Controller, View } from '../bout.ts';
 import { seededRandom } from '../random.ts';
 import { cloneBout, simulateSlot, runExchange, type Bout, type Fighter, type Moment, type Side } from '../referee.ts';
 import * as R from '../rules.ts';
-import { type Situation, advance, legalActions, place, playable } from './options.ts';
+import { type Situation, advance, legalActions, place, playable, situation } from './options.ts';
 import { Read, pick } from './read.ts';
 import { type BrainStyle, CHARGE_LEAN, CHARGE_LEAN_DEFAULT, CRUNCH_LEAN, LEAN, SHARD_LEAN, SKILL, type Skill, TRIGGERS, allowed, bandOf } from './styles.ts';
 import { value } from './value.ts';
@@ -51,8 +51,7 @@ const PLAYOUT_TRIES = 3;
 const sepOf = (b: Bout) => Math.hypot(b.fighters.A.pos.x - b.fighters.B.pos.x, b.fighters.A.pos.y - b.fighters.B.pos.y, b.fighters.A.pos.z - b.fighters.B.pos.z);
 
 function situationOf(b: Bout, side: Side): Situation {
-  const f = b.fighters[side];
-  return { f, globalSlot: b.globalSlot, z: f.pos.z, readyAt: f.readyAt, rules: b.rules };
+  return situation(b.fighters[side], b.globalSlot, b.rules);
 }
 
 /** The opponent's likeliest script from here, by its habits: what a look-ahead expects of it. */
@@ -91,8 +90,8 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const me = view.side;
       const them = view.opp.side;
       const sep = view.separation;
-      const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt, rules: view.rules };
-      const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt, rules: view.rules };
+      const mine: Situation = situation(view.me, view.globalSlot, view.rules);
+      const theirs: Situation = situation(view.opp, view.globalSlot, view.rules);
 
       // Candidates: mostly in the style's lean, some anything-goes, plus last exchange's script.
       const candidates: ActionSpec[][] = [];
@@ -199,8 +198,8 @@ export function brainController(style: BrainStyle, skill: Skill = 'adept', seed 
       const base = boutFromView(view);
       const me = view.side;
       const them = view.opp.side;
-      const mine: Situation = { f: view.me, globalSlot: view.globalSlot, z: view.me.pos.z, readyAt: view.me.readyAt, rules: view.rules };
-      const theirs: Situation = { f: view.opp, globalSlot: view.globalSlot, z: view.opp.pos.z, readyAt: view.opp.readyAt, rules: view.rules };
+      const mine: Situation = situation(view.me, view.globalSlot, view.rules);
+      const theirs: Situation = situation(view.opp, view.globalSlot, view.rules);
       const options = [current[2], ...legalActions(mine, rng).filter((a) => !a.charge && !a.setup && a.name !== current[2].name && allowed(style, a))];
       let theirOptions = legalActions(theirs, rng);
       // A charge on the board releases next slot: no guessing needed.

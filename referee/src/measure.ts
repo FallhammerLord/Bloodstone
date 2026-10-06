@@ -35,12 +35,12 @@ const rng = seededRandom(seed);
 const pick = <T>(xs: readonly T[]) => xs[Math.floor(rng() * xs.length)];
 
 const jobs: Job[] = [];
-const meta: { kind: 'sheet' | 'with' | 'without'; style: BrainStyle; key: string; pair: number }[] = [];
-const add = (kind: 'sheet' | 'with' | 'without', style: BrainStyle, key: string, A: FighterSetup, B: FighterSetup, opp: string, s: number, pair: number) => {
+const meta: { kind: 'sheet' | 'with' | 'without'; style: BrainStyle; key: string; pair: number; morph?: Morph }[] = [];
+const add = (kind: 'sheet' | 'with' | 'without', style: BrainStyle, key: string, A: FighterSetup, B: FighterSetup, opp: string, s: number, pair: number, morph?: Morph) => {
   const id = jobs.length;
   jobs.push({ id, group: 'measure', A, B, playerA: { kind: 'brain', style, skill, seed: s }, playerB: { kind: 'brain', style: opp, skill, seed: s + 1 },
     challenged: s % 2 ? 'A' : 'B', arenaSeed: s * 31 + 7 });
-  meta.push({ kind, style, key, pair });
+  meta.push({ kind, style, key, pair, morph });
 };
 let s = seed * 1000;
 for (const style of BRAIN_STYLES) {
@@ -56,8 +56,8 @@ for (const style of BRAIN_STYLES) {
       s += 2;
       const base = { name: style, morph: me.morph, stone: me.stone };
       const B = { name: 'field', morph: o.morph, stone: o.stone };
-      add('with', style, shard.name, { ...base, shards: [{ shard: shard.name, grade: shard.grade, pips: Array.from({ length: shard.pips }, (_, k) => k) }] }, B, opp, s, i);
-      add('without', style, shard.name, base, B, opp, s, i);
+      add('with', style, shard.name, { ...base, shards: [{ shard: shard.name, grade: shard.grade, pips: Array.from({ length: shard.pips }, (_, k) => k) }] }, B, opp, s, i, me.morph);
+      add('without', style, shard.name, base, B, opp, s, i, me.morph);
     }
   }
 }
@@ -69,6 +69,7 @@ const won = new Map(results.map((r) => [r.id, r.winner === 'A']));
 type Cell = { w: number; n: number };
 const sheetCells = new Map<string, Cell>();
 const shardCells = new Map<string, Cell>(); // w = sum of (with − without) over pairs
+const morphCells = new Map<string, Cell>(); // the same, by the carrier's morph
 for (const [id, m] of meta.entries()) {
   const k = `${m.style}|${m.key}`;
   const win = won.get(id) ? 1 : 0;
@@ -78,10 +79,12 @@ for (const [id, m] of meta.entries()) {
     c.n++;
     sheetCells.set(k, c);
   } else {
-    const c = shardCells.get(k) ?? { w: 0, n: 0 };
-    c.w += m.kind === 'with' ? win : -win;
-    if (m.kind === 'with') c.n++;
-    shardCells.set(k, c);
+    for (const key of [k, `morph:${m.morph}|${m.key}`]) {
+      const c = (key === k ? shardCells : morphCells).get(key) ?? { w: 0, n: 0 };
+      c.w += m.kind === 'with' ? win : -win;
+      if (m.kind === 'with') c.n++;
+      (key === k ? shardCells : morphCells).set(key, c);
+    }
   }
 }
 const pooled = (cells: Map<string, Cell>, key: string) => {
@@ -114,6 +117,11 @@ console.log('\nSheets, pooled across styles (win rate against the field):');
 for (const x of [...SHEETS].sort((a, b) => pooled(sheetCells, b.key) - pooled(sheetCells, a.key))) console.log(`  ${(100 * pooled(sheetCells, x.key)).toFixed(0).padStart(3)}%  ${x.key}`);
 console.log('\nShards, pooled across styles (change in win rate from carrying it):');
 for (const x of [...shards].sort((a, b) => pooled(shardCells, b.name) - pooled(shardCells, a.name))) console.log(`  ${(100 * pooled(shardCells, x.name)).toFixed(0).padStart(4)} pts  ${x.name}`);
+console.log('\nShards by the carrier\'s morph (change in win rate; True Dragon / Wyvern / Wyrm):');
+for (const x of shards) {
+  const byMorph = (['true-dragon', 'wyvern', 'wyrm'] as Morph[]).map((m) => { const c = morphCells.get(`morph:${m}|${x.name}`); return c && c.n ? `${(100 * c.w / c.n).toFixed(0).padStart(4)}` : '   —'; });
+  console.log(`  ${x.name.padEnd(20)} ${byMorph.join(' / ')}`);
+}
 console.log('\nEach style\'s best sheet and best shard:');
 for (const style of BRAIN_STYLES) {
   const bs = Object.entries(sheets[style]).sort((a, b) => b[1] - a[1])[0];
