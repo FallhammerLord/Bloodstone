@@ -232,7 +232,7 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
       f.marks.noLeap = sp < A;
       ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'technique', text: 'Stooping Pinions: +3 to the next attack.' });
     }
-    // Guarding to the end, or drawing a Breath, fills the Acumen meter [Proposed]. A broken charge fills nothing.
+    // Guarding to the end, or drawing a Breath, fills Surge [Proposed]. A broken charge fills nothing.
     if ((p.spec.name === 'scales' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(bout.rules, f, p.spec.name === 'scales' ? 'Scales' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);
     if (p.charging && p.spec.name === 'breath' && f.marks.charge?.action === 'breath') fillMeter(bout.rules, f, 'drawing Breath', R.TICKS_PER_SLOT - 1, ev);
     // Corrosion wears off after its last slot.

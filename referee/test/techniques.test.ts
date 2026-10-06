@@ -32,7 +32,7 @@ test('Snapping Jaw Elder: a Bite that interrupts deals +3', () => {
   const ev = run(newBout(withTech(TD_WATER, 'Snapping Jaw', 'elder'), TD_WATER, 2), ['bite'], ['stomp']);
   const h = hits(ev)[0];
   assert.ok(h.interrupt);
-  assert.equal(h.damage, 9 + 3);
+  assert.equal(h.damage, 6 + 3);
 });
 
 test('Lockjaw: a landed Bite Pins; nothing is forced; a Venerable\'s next Bite gains +3', () => {
@@ -79,12 +79,12 @@ test('Lance Throat: breath narrows to a line reaching Far\'s outer edge, and pie
   const fire: FighterSetup = { name: 'E', morph: 'true-dragon', stone: 'fire' };
   const ev = run(newBout(withTech(fire, 'Lance Throat', 'juvenile'), TD_WATER, 8.5), ['breath'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 15 - (6 - 3) - 2, 'Potency 15, Affinity 6 pierced to 3, Fire and Water neutral, −2 Fire breath');
+  assert.equal(hits(ev)[0].damage, 18 - (12 - 3) - 2, 'Potency 18, Affinity 12 pierced to 9, Fire and Water neutral, −2 Fire breath');
 });
 
 test('Smoldering Maw: −3 on the hit, then the area lingers and stings at slot end', () => {
   const ev = run(newBout(withTech(TD_WATER, 'Smoldering Maw', 'juvenile'), TD_WATER, 4), ['breath', 'hold'], ['hold', 'hold']);
-  assert.equal(hits(ev)[0].damage, 2, 'Water into Water: 9 − 6 + 2 Water − 3 Smoldering');
+  assert.equal(hits(ev)[0].damage, 5, 'Water into Water: 18 − 12 + 2 Water − 3 Smoldering');
   // Water's push now carries the target a band, out of the lingering area; an Earth breath leaves it standing in it.
   const earth = run(newBout(withTech({ ...TD_WATER, stone: 'earth' }, 'Smoldering Maw', 'juvenile'), TD_WATER, 4), ['breath', 'hold'], ['hold', 'hold']);
   const stings = earth.filter((e) => e.kind === 'zoneEffect' && e.zone === 'smolder');
@@ -125,7 +125,7 @@ test('Bounding Haunches: an Approach carries twice as far', () => {
 test('Thornscale: attackers landing into Scales take 3', () => {
   const bout = newBout(TD_WATER, withTech(TD_WATER, 'Thornscale', 'juvenile'), 2);
   run(bout, ['claw:left'], ['scales']);
-  assert.equal(bout.fighters.A.wounds, 45 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
+  assert.equal(bout.fighters.A.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });
 
 test('Riposte Talons: a successful Dodge earns a free claw', () => {
@@ -133,12 +133,14 @@ test('Riposte Talons: a successful Dodge earns a free claw', () => {
   const bout = newBout(TD_WATER, withTech({ name: 'G', morph: 'wyvern', stone: 'water' }, 'Riposte Talons', 'juvenile'), 4);
   const ev = run(bout, ['bite'], ['dodge']);
   assert.ok(ev.some((e) => e.kind === 'evade'));
-  assert.equal(bout.fighters.A.wounds, 45 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
+  assert.equal(bout.fighters.A.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });
 
 test('Mantle Wings: Scales adds Affinity against breath', () => {
-  const plain = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, TD_WATER, 5), ['breath'], ['scales']))[0].damage;
-  const mantle = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, withTech(TD_WATER, 'Mantle Wings', 'juvenile'), 5), ['breath'], ['scales']))[0].damage;
+  // Fire into a Wyrm + Fire (Affinity 9): 18 − (9 + 3 Scales) − 2 Fire = 4, and Mantle Wings takes 3 more.
+  const wyrm: FighterSetup = { name: 'F', morph: 'wyrm', stone: 'fire' };
+  const plain = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, wyrm, 5), ['breath'], ['scales']))[0].damage;
+  const mantle = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, withTech(wyrm, 'Mantle Wings', 'juvenile'), 5), ['breath'], ['scales']))[0].damage;
   assert.equal(plain - mantle, 3);
 });
 
@@ -160,5 +162,5 @@ test('Baleful Eye: intimidating in slot 1 or 2 shows the opponent\'s slot 3 at t
 test('Goading Roar: a Retreat next slot stings for 3', () => {
   const bout = newBout(withTech(TD_WATER, 'Goading Roar', 'juvenile'), TD_WATER, 4);
   run(bout, ['intimidate', 'hold'], ['hold', 'retreat']);
-  assert.equal(bout.fighters.B.wounds, 45 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
+  assert.equal(bout.fighters.B.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });

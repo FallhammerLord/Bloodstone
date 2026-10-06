@@ -159,7 +159,7 @@ export interface SlotRecord {
   landed: Record<Side, boolean>;
   /** whether each side's Breath was off cooldown when the slot began */
   breathReady: Record<Side, boolean>;
-  /** whether each side's Acumen meter was full when the slot began */
+  /** whether each side's Surge was full when the slot began */
   meterFull?: Record<Side, boolean>;
 }
 
@@ -188,7 +188,7 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
     const { sheet, loadout } = buildSheet(setup);
     return {
       side, name: setup.name, sheet, loadout, pos: vec(x, 0),
-      wounds: sheet.wounds, meter: Math.min(R.METER_MAX, rules.AGE_BRACKET[sheet.age] * rules.METER_START_PER_AGE + 3 * sheet.affinity), readyAt: {},
+      wounds: sheet.wounds, meter: Math.min(R.METER_MAX, sheet.acumen), readyAt: {},
       status: noStatuses(), pending: noStatuses(), intimidateBonus: false,
       chain: noChain(), marks: noMarks(), pulsed: false,
     };

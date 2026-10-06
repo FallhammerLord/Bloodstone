@@ -16,13 +16,13 @@ const hits = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'hit' }
 
 test('a one-slot Bite charge releases next slot, whatever that slot scripted, with no bonus', () => {
   const { ev } = run(TD_WATER, TD_WATER, 4, ['charge:bite', 'retreat'], ['hold', 'hold']);
-  assert.deepEqual(hits(ev).map((h) => h.damage), [9]);
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6]); // Bite 9 against Hardness 6 pierced to 3
 });
 
 test('the charging slot guards like Scales, and a landed hit breaks the charge', () => {
   // A Wyvern charges (a True Dragon's Stalwart charge would hold through this hit).
   const { ev } = run({ name: 'V', morph: 'wyvern', stone: 'water' }, { name: 'A', morph: 'true-dragon', stone: 'air' }, 2, ['charge:bite', 'hold'], ['claw:left', 'hold']);
-  assert.equal(hits(ev)[0].damage, 9 - (3 + R.DEFAULT_RULES.SCALES_HARDNESS), 'Claw 9 against Hardness 3 + 3 guarding');
+  assert.equal(hits(ev)[0].damage, 12 - (3 + R.DEFAULT_RULES.SCALES_HARDNESS), 'Claw 12 against Hardness 3 + 3 guarding');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text === 'The hit breaks the charge.'));
   assert.equal(hits(ev).length, 1, 'no release');
 });

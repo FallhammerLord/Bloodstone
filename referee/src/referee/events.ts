@@ -29,7 +29,7 @@ export type NoteTag =
   // the elements
   | 'push' | 'push-stopped' | 'pull' | 'pull-stopped' | 'verb-held' | 'zone-held' | 'push-pull-cancel' | 'slam'
   | 'boulder-shoved' | 'boulder-shattered' | 'corroded'
-  // the Acumen meter
+  // Surge
   | 'meter-fill' | 'meter-full' | 'meter-spent'
   // Intimidate
   | 'intimidate-lands' | 'intimidate-short' | 'demoralized'

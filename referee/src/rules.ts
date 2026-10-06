@@ -73,12 +73,11 @@ export const DEFAULT_RULES = {
   SCALES_HARDNESS: 3, // [Assumed] Hardness bonus while guarding with Scales
   SCALES_AFFINITY: 3, // [Assumed] Affinity bonus while guarding with Scales: presenting the hide to the elements
   DODGE_BONUS: 3, // [Assumed] Evasion bonus while dodging
-  // ---- Acumen ---- [Proposed] §4 Acumen meter
-  // The Acumen meter [Proposed]: Affinity fuels it. It starts at age bracket × 10 + 3 × Affinity, and each trigger
+  // ---- Acumen ---- [Proposed] §4 Surge
+  // The Surge [Proposed]: Affinity fuels it. It starts at age bracket × 10 + 3 × Affinity, and each trigger
   // (a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 9.
   // Full, the next landed Bite, Claw or Breath deals true damage (no Hardness or Affinity) and drains it. A miss spends nothing.
   METER_BASE_FILL: 9, // [Proposed] raised from 3 so low-Affinity stones still fill
-  METER_START_PER_AGE: 10,
   GRAVITY_DROP: BAND, // [Proposed] a flier that doesn't Leap during an exchange drops a band at its end
   DEMORALIZE: 3, // [Proposed] an Intimidate that reaches also takes 3 off the target's next Bite or Claw
   STOMP_HARDNESS_DIVISOR: { wyrmling: 3, adult: 3, venerable: 2 }, // Stomp deals 3 + Hardness ÷ 3 (a Venerable's ÷ 2), and shatters boulders inside its radius
@@ -117,7 +116,7 @@ export const DEFAULT_RULES = {
   // exchange per charging slot; a corroded dragon takes +Potency ÷ 4 from every hit, and each hit on it is an Acumen trigger.
   EARTH_CORRODES: 1, // [Proposed] 1: the debuff on the hit; 0: the old pool that lowers Hardness
   CORRODE_DIVISOR: 4, // [Proposed] a corroded dragon takes +Potency ÷ this from each hit (12 → 3)
-  CORRODE_METER: 1, // [Proposed] 1: landing a hit on a corroded dragon fills the attacker's Acumen meter
+  CORRODE_METER: 1, // [Proposed] 1: landing a hit on a corroded dragon fills the attacker's Surge
   BURN_BLINDS: 0, // [Proposed] 1: a burn also Blinds for the next slot (−3 Accuracy). Off: a toggle for A:B runs
   CORRODE_HARDNESS: 3, // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
   EARTH_OBSTACLE_MULTIPLIER: 2, // Earth's slurry eats obstacles

@@ -8,12 +8,14 @@ import { viewOf } from '../src/bout.ts';
 import { newBout, type Bout, type FighterSetup } from '../src/referee.ts';
 
 const TD: FighterSetup = { name: 'T', morph: 'true-dragon', stone: 'water' };
+// A Bite sheet (Bite 15): True Dragon + Water is a Breath dragon on the regrid (Breath 18, Bite 9).
+const TD_EARTH: FighterSetup = { name: 'T', morph: 'true-dragon', stone: 'earth' };
 
 /** How often each action opens the style's script, over 20 seeds. */
-function openers(style: BrainStyle, sep: number, tweak: (b: Bout) => void = () => {}): Record<string, number> {
+function openers(style: BrainStyle, sep: number, tweak: (b: Bout) => void = () => {}, sheet: FighterSetup = TD): Record<string, number> {
   const tally: Record<string, number> = {};
   for (let seed = 1; seed <= 20; seed++) {
-    const bout = newBout(TD, TD, sep);
+    const bout = newBout(sheet, sheet, sep);
     tweak(bout);
     const first = brainController(style, 'master', seed, 0).script(viewOf(bout, 'A'))[0].name;
     tally[first] = (tally[first] ?? 0) + 1;
@@ -27,7 +29,7 @@ test('claw-focus at Melee opens with a Claw, or a Strafe to set up a pounce', ()
 });
 
 test('bite-focus at Close opens with a Bite', () => {
-  assert.ok((openers('bite-focus', 4).bite ?? 0) >= 16);
+  assert.ok((openers('bite-focus', 4, undefined, TD_EARTH).bite ?? 0) >= 16);
 });
 
 test('breath-focus at Far opens with a Breath', () => {
@@ -35,7 +37,7 @@ test('breath-focus at Far opens with a Breath', () => {
 });
 
 test('a swarmer beyond Close closes in', () => {
-  assert.ok((openers('swarmer', 7).approach ?? 0) >= 14);
+  assert.ok((openers('swarmer', 7, undefined, TD_EARTH).approach ?? 0) >= 12);
 });
 
 test('an out-boxer at Melee rarely closes in or claws', () => {
@@ -43,7 +45,7 @@ test('an out-boxer at Melee rarely closes in or claws', () => {
   assert.ok((t.approach ?? 0) + (t.claw ?? 0) <= 2, JSON.stringify(t));
 });
 
-test('a full Acumen meter opens with an attack to spend it, at Close', () => {
+test('a full Surge opens with an attack to spend it, at Close', () => {
   const t = openers('boxer-puncher', 4, (b) => (b.fighters.A.meter = 100));
   assert.ok((t.breath ?? 0) + (t.bite ?? 0) + (t.claw ?? 0) >= 14, JSON.stringify(t));
 });

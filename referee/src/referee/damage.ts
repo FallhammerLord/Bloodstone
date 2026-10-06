@@ -14,7 +14,7 @@ import { techniqueOnHit } from './techniques.ts';
 
 /**
  * What a landed hit deals: the attack's base against Hardness (or Affinity, for Breath), then every modifier.
- * A full Acumen meter makes a Bite, Claw or Breath true damage [Proposed]. Never less than the floor.
+ * A full Surge makes a Bite, Claw or Breath true damage [Proposed]. Never less than the floor.
  */
 export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number): { total: number; parts: string[]; tags: HitTag[]; bypass: boolean } {
   // Ash Gland: the breath carries information, not harm (3 points from Adult).
@@ -27,7 +27,7 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
   const scales = guarding(defPlan, t);
   const { hardness, label } = hardnessFelt(rules, att, def, p, t, scales, bypass);
   if (bypass) {
-    parts.push('true damage (full Acumen meter)');
+    parts.push('true damage (full Surge)');
     tags.push('true-damage');
   }
   // Bellows Chest (mobile, Adult): a moving charge keeps the guard's +3 Affinity against Breath.
@@ -183,7 +183,7 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
     const steroid = Math.floor(Math.max(0, eff(att, 'affinity', {}).value) / rules.METER_STEROID_DIVISOR);
     if (steroid) {
       v += steroid;
-      parts.push(`+${steroid} Acumen (Affinity ÷ ${rules.METER_STEROID_DIVISOR})`);
+      parts.push(`+${steroid} Surge (Affinity ÷ ${rules.METER_STEROID_DIVISOR})`);
     }
   }
   if (crunched) {

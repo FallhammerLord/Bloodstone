@@ -58,7 +58,7 @@ test('a revised slot 3 gets no chain bonus', () => {
   const ev = runExchange(bout, { A: ['bite', 'bite', 'claw:left'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) }, {
     revise: { A: (_b, _s, m) => (m === 2 ? parseAction('bite') : null) },
   });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [9, 9, 9]);
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 6]); // Bite 9 against Hardness 6 pierced to 3; no chain bonus on the revision
 });
 
 // ---- Late pressure (§5) ----
@@ -100,8 +100,8 @@ test('pulses deal a third of maximum Wounds and spare the center', () => {
   onRim(bout);
   bout.exchange = R.DEFAULT_RULES.EXCHANGE_LIMIT;
   const ev = rimPulse(bout);
-  assert.equal(bout.fighters.A.wounds, 45 - 15);
-  assert.equal(bout.fighters.B.wounds, 45);
+  assert.equal(bout.fighters.A.wounds, 42 - 14);
+  assert.equal(bout.fighters.B.wounds, 42);
   assert.equal(ev.filter((e) => e.kind === 'pulse').length, 1);
 });
 
@@ -113,7 +113,7 @@ test('a bout runs to the exchange limit, then the challenger forfeits', () => {
   assert.equal(bout.exchange, R.DEFAULT_RULES.EXCHANGE_LIMIT);
   assert.equal(bout.winner, 'B');
   assert.ok(ev.some((e) => e.kind === 'boutEnd' && e.reason.startsWith('timeout')));
-  assert.equal(bout.fighters.A.wounds, 45, 'timeouts are never lethal');
+  assert.equal(bout.fighters.A.wounds, 42, 'timeouts are never lethal');
 });
 
 test('open-lobby timeout can go to most Wounds', () => {

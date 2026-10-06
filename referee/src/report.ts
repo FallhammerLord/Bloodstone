@@ -91,7 +91,7 @@ export function report(bout: Bout, events: Event[]): string[] {
         buffer.push(`${at(e.tick)}${label(other(e.attacker))} evades ${label(e.attacker)}'s ${ACTIONS[e.action].label}: ${e.text}.`);
         break;
       case 'nearMiss':
-        buffer.push(`${at(e.tick)}${label(e.attacker)}'s ${ACTIONS[e.action].label} near-misses. Acumen meter ${e.meter}/${R.METER_MAX}.`);
+        buffer.push(`${at(e.tick)}${label(e.attacker)}'s ${ACTIONS[e.action].label} near-misses. Surge ${e.meter}/${R.METER_MAX}.`);
         break;
       case 'whiff':
         buffer.push(`${at(e.tick)}${label(e.attacker)}'s ${ACTIONS[e.action].label} whiffs.`);
@@ -110,7 +110,7 @@ export function report(bout: Bout, events: Event[]): string[] {
         out.push(
           `  End of slot: ${paces(e.separation)} paces apart (${bandOf(e.separation)}). ` +
             `Wounds ${name('A')} ${Math.max(0, e.wounds.A)}, ${name('B')} ${Math.max(0, e.wounds.B)}. ` +
-            `Acumen meters ${e.meters.A} / ${e.meters.B}.`,
+            `Surges ${e.meters.A} / ${e.meters.B}.`,
         );
         const aloft = (['A', 'B'] as Side[]).filter((s) => e.positions[s].z > 0);
         if (aloft.length) out.push(`  Aloft: ${aloft.map((s) => `${label(s)} ${paces(e.positions[s].z)} paces up`).join(', ')}.`);

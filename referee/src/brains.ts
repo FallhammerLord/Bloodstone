@@ -183,7 +183,7 @@ const overallStyle = BRAIN_STYLES.map((a) => {
   return { a, p: (100 * w) / n, w, n };
 }).sort((x, y) => y.p - x.p);
 for (const { a, w, n } of overallStyle) console.log(`    ${rateWithMargin(w, n)}  ${a}`);
-console.log('\n  Focus brains (one attack only; meter-focus plays the Acumen meter, charge-focus two-slot charges, kite-focus position), against the general styles and each other:');
+console.log('\n  Focus brains (one attack only; meter-focus plays Surge, charge-focus two-slot charges, kite-focus position), against the general styles and each other:');
 for (const f of BRAIN_STYLES.filter((x) => x.endsWith('-focus'))) {
   const vs = (group: readonly BrainStyle[]) => {
     let w = 0;

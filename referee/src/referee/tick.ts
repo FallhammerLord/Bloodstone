@@ -196,7 +196,7 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
   const verbs: { s: Side; aim: Vec }[] = [];
   const reflected = new Set<Side>();
   for (const r of results) {
-    // A guard with a full Acumen meter turns the blow back on the attacker and empties the meter [Doc].
+    // A guard with a full Surge turns the blow back on the attacker and empties the meter [Doc].
     const d = other(r.s);
     const dp = plans[d];
     if ((dp.spec.name === 'scales' || dp.spec.name === 'dodge') && phase(dp, t) === 'active' && F[d].meter >= R.METER_MAX) {
@@ -209,8 +209,8 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
       // Thornscale (window, Elder): a guard reversal also deals the thorns.
       const thR = tech(F[d], 'thornscale');
       if (bout.rules.TECH_THORNSCALE === 'window' && thR >= E && dp.spec.name === 'scales' && (plans[r.s].spec.name === 'claw' || plans[r.s].spec.name === 'bite')) thorns(bout, r.s, thR, t, ev);
-      ev.push({ kind: 'note', tick: t, side: d, tag: 'reflected', text: `The full Acumen meter turns the ${plans[r.s].spec.name} back on its owner.` });
-      ev.push({ kind: 'hit', tick: t, attacker: d, action: plans[r.s].spec.name, damage: back.total, parts: ['reflected by a full Acumen meter:', ...back.parts], tags: ['reflected'], interrupt: false, trade: false, woundsLeft: F[r.s].wounds });
+      ev.push({ kind: 'note', tick: t, side: d, tag: 'reflected', text: `The full Surge turns the ${plans[r.s].spec.name} back on its owner.` });
+      ev.push({ kind: 'hit', tick: t, attacker: d, action: plans[r.s].spec.name, damage: back.total, parts: ['reflected by a full Surge:', ...back.parts], tags: ['reflected'], interrupt: false, trade: false, woundsLeft: F[r.s].wounds });
       continue;
     }
     applyHit(bout, plans, r.s, r.total, r.parts, r.tags, t, trade, ev, verbs);
@@ -219,7 +219,7 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
     // A full meter is spent by the hit it empowered; a landed Breath then fills the breather's meter.
     if (r.bypass) {
       F[r.s].meter = 0;
-      ev.push({ kind: 'note', tick: t, side: r.s, tag: 'meter-spent', text: 'The Acumen meter empties into the blow: true damage.' });
+      ev.push({ kind: 'note', tick: t, side: r.s, tag: 'meter-spent', text: 'Surge empties into the blow: true damage.' });
     }
     if (reflected.has(r.s)) continue;
     if (plans[r.s].spec.name === 'breath') fillMeter(bout.rules, F[r.s], 'landed Breath', t, ev);
@@ -252,7 +252,7 @@ function endOfWindow(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, 
       ev.push({ kind: 'whiff', tick: t, attacker: s, action: p.spec.name });
       return;
     }
-    // A near miss fills the Acumen meter; it no longer grazes [Proposed].
+    // A near miss fills Surge; it no longer grazes [Proposed].
     fillMeter(bout.rules, F[s], 'near miss', t, ev);
     ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: F[s].meter });
   }

@@ -51,8 +51,8 @@ test('overlap: one covered pip strips the rider (and a Venerable\'s related poin
   const notes = seat(a, findShard('Deep Keel'), [1]);
   assert.ok(notes[0].includes('rider'));
   const { sheet, loadout } = compile(hatch('true-dragon', 'water'), a);
-  assert.equal(sheet.claw, 3 + 3 + 3, 'Sundering keeps its value; Razor Talons adds 3');
-  assert.equal(sheet.affinity, 9, 'the related point is gone');
+  assert.equal(sheet.claw, 9 + 3 + 3, 'Sundering keeps its value; Razor Talons adds 3');
+  assert.equal(sheet.affinity, 12, 'the related point is gone');
   assert.equal(loadout.riders.length, 0);
   seat(a, findShard('Heartgrit'), [2]);
   assert.equal(compile(hatch('true-dragon', 'water'), a).loadout.names.some((n) => n.startsWith('Razor')), false);
@@ -61,7 +61,7 @@ test('overlap: one covered pip strips the rider (and a Venerable\'s related poin
 test('shards add to attributes but tertiaries don\'t re-derive', () => {
   // More Breath Potency doesn't raise Affinity; more Evasion doesn't raise Accuracy [Doc].
   const { sheet } = buildSheet({ ...TD_WATER, shards: [{ shard: 'Furnace Gland', pips: [0] }, { shard: 'Swept Pinions', pips: [1] }] });
-  assert.deepEqual([sheet.breath, sheet.affinity, sheet.evasion, sheet.accuracy], [15, 9, 6, 6]);
+  assert.deepEqual([sheet.breath, sheet.affinity, sheet.evasion, sheet.accuracy], [21, 12, 6, 6]);
 });
 
 // ---- Riders in play ----
@@ -69,20 +69,20 @@ test('shards add to attributes but tertiaries don\'t re-derive', () => {
 test('Bastion Plates: +3 Hardness while guarding with Scales', () => {
   const bout = newBout(TD_WATER, { ...TD_WATER, shards: [{ shard: 'Bastion Plates', pips: [0, 1] }] }, 4);
   const ev = runExchange(bout, { A: ['bite', 'bite'].map(parseAction), B: ['scales', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 6], 'scales: Hardness 12 pierced to 9, so 9 − 9 floors at 1; then 9 − (6 pierced to 3)');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 3], 'scales: Hardness 15 pierced to 12, so 9 − 12 floors at 1; then 9 − (9 pierced to 6)');
 });
 
 test('Ironheart: +3 Hardness at half Wounds or below', () => {
   const bout = newBout(TD_WATER, { ...TD_WATER, shards: [{ shard: 'Ironheart', pips: [0, 1] }] }, 4);
   bout.fighters.B.wounds = 18;
   const ev = runExchange(bout, { A: ['bite'].map(parseAction), B: ['hold'].map(parseAction) });
-  assert.equal(hits(ev)[0].damage, 9 - (3 + 3 - 3), 'Hardness 3, +3 from the rider, pierced by 3');
+  assert.equal(hits(ev)[0].damage, 9 - (6 + 3 - 3), 'Hardness 6, +3 from the rider, pierced by 3');
 });
 
 test('Reaver Hooks: +3 Claw Sharpness on a chain\'s final link', () => {
   const bout = newBout({ ...TD_WATER, shards: [{ shard: 'Reaver Hooks', pips: [0, 1] }] }, TD_WATER, 2);
   const ev = runExchange(bout, { A: ['claw:left', 'claw:left', 'claw:left'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [3, 3, 9], 'Claw 6: 3, 3, then 6 + 3 rider + 3 chain − 3');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 12], 'Claw 12 against Hardness 6: 6, 6, then 12 + 3 rider + 3 chain − 6');
 });
 
 test('Cauldron Gullet: +3 Breath Potency against targets at Far', () => {

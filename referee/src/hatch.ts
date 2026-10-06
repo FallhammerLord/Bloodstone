@@ -1,4 +1,4 @@
-// The Hatching Engine: egg + stone → stat sheet. Order [Doc]: baselines, swing, then derive tertiaries.
+// The Hatching Engine: egg + stone → stat sheet. Order [Doc]: base adds, then derive tertiaries.
 
 
 export type Morph = 'true-dragon' | 'wyvern' | 'wyrm';
@@ -27,25 +27,34 @@ export interface StatSheet {
   acumen: number;
 }
 
-// [Proposed] §2 Starting Attributes
-const MORPHS: Record<Morph, { wounds: number; evasion: number; hardness: number; accuracyMod: number; peak: 'wounds' | 'evasion' | 'hardness' }> = {
-  'true-dragon': { wounds: 45, evasion: 3, hardness: 3, accuracyMod: 3, peak: 'wounds' },
-  wyvern: { wounds: 24, evasion: 9, hardness: 3, accuracyMod: -3, peak: 'evasion' }, // valley on Wounds, so Evasion isn't its only defense
-  wyrm: { wounds: 30, evasion: 6, hardness: 6, accuracyMod: -3, peak: 'hardness' },
+// [Proposed] §2 Starting Attributes (the wyrmling regrid). Baseline Wounds 36, Evasion 6, Hardness 6; each morph takes
+// one peak and one valley off it (Wounds in 6s, on its doubled scale).
+const MORPHS: Record<Morph, { wounds: number; evasion: number; hardness: number }> = {
+  'true-dragon': { wounds: 42, evasion: 3, hardness: 6 }, // peak Wounds, valley Evasion
+  wyvern: { wounds: 36, evasion: 9, hardness: 3 }, // peak Evasion, valley Hardness
+  wyrm: { wounds: 30, evasion: 6, hardness: 9 }, // peak Hardness, valley Wounds
 };
 
-const STONES: Record<CoreStone, { claw: number; bite: number; breath: number; affinityMod: number; peak: 'claw' | 'bite' | 'breath' | 'affinityMod' }> = {
-  water: { claw: 3, bite: 9, breath: 12, affinityMod: -3, peak: 'affinityMod' },
-  earth: { claw: 6, bite: 12, breath: 12, affinityMod: -9, peak: 'bite' },
-  fire: { claw: 6, bite: 6, breath: 15, affinityMod: -9, peak: 'breath' },
-  air: { claw: 9, bite: 9, breath: 9, affinityMod: -3, peak: 'claw' },
+type Derived = 'accuracy' | 'affinity' | 'acumen';
+// Baseline Claw 9, Bite 12, Breath 15; each stone takes one peak and one valley. A preferred stone adds +3 to its
+// derived stat ("perk").
+const STONES: Record<CoreStone, { claw: number; bite: number; breath: number; perk: Derived }> = {
+  water: { claw: 9, bite: 9, breath: 18, perk: 'acumen' }, // peak Breath, valley Bite
+  earth: { claw: 9, bite: 15, breath: 12, perk: 'accuracy' }, // peak Bite, valley Breath
+  fire: { claw: 6, bite: 12, breath: 18, perk: 'affinity' }, // peak Breath, valley Claw
+  air: { claw: 12, bite: 9, breath: 15, perk: 'accuracy' }, // peak Claw, valley Bite
 };
 
-const ACUMEN_START = 10; // [Assumed] starting Acumen for every hatchling
+/** The age categories, of five: wyrmling 1, juvenile 2, adult 3, elder 4, venerable 5. */
+const AGE_CATEGORY: Record<Age, number> = { wyrmling: 1, adult: 3, venerable: 5 };
+/** Derived stats never fall below this. */
+const DERIVED_FLOOR = 3;
+/** A disliked stone costs this many Wounds. */
+const DISLIKED_WOUNDS = 6;
 
 const ASPECTS: Record<Morph, StatSheet['aspect']> = { 'true-dragon': 'stalwart', wyvern: 'talons', wyrm: 'serpentine' };
 
-// [Doc] §2 Elemental Preference
+// [Doc] §2 Elemental Preference: each morph dislikes the element that beats the one it prefers.
 const PREFERS: Record<Morph, CoreStone> = { 'true-dragon': 'fire', wyvern: 'air', wyrm: 'water' };
 const DISLIKES: Record<Morph, CoreStone> = { 'true-dragon': 'earth', wyvern: 'fire', wyrm: 'air' };
 
@@ -55,27 +64,25 @@ export function preference(morph: Morph, stone: CoreStone): Preference {
   return 'neutral';
 }
 
+/**
+ * Egg + stone → stat sheet. The base adds come first (morph, stone, and a disliked stone's −6 Wounds); then the
+ * tertiaries derive from them: Accuracy = Claw − Evasion, Affinity = Breath − Hardness (each at least 3), Acumen = 10 ×
+ * age category; a preferred stone adds +3 to its own derived stat.
+ */
 export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): StatSheet {
   if (!(morph in MORPHS)) throw new Error(`Unknown morph "${morph}". Core morphs: ${Object.keys(MORPHS).join(', ')}.`);
   if (!(stone in STONES)) throw new Error(`Unknown stone "${stone}". Core stones: ${Object.keys(STONES).join(', ')}.`);
-  const m = { ...MORPHS[morph] };
-  const s = { ...STONES[stone] };
+  const m = MORPHS[morph];
+  const s = STONES[stone];
   const pref = preference(morph, stone);
-
-  // The swing: preferred leans into the stone, disliked into the body. The body side is always Wounds,
-  // in 6s [Proposed]: each morph's signature defense stays at its base, and no swing feeds a derived stat.
-  const sign = pref === 'preferred' ? 1 : pref === 'disliked' ? -1 : 0;
-  s[s.peak] += 3 * sign;
-  m.wounds -= 6 * sign;
-
+  const perk = (d: Derived) => (pref === 'preferred' && s.perk === d ? 3 : 0);
   return {
     morph, stone, age, preference: pref, flies: morph !== 'wyrm', aspect: ASPECTS[morph],
-    // The True Dragon's old Aspect (+9 Wounds) is folded into its base 45; Stalwart now steadies its charges.
-    wounds: m.wounds, evasion: m.evasion, hardness: m.hardness,
+    wounds: m.wounds - (pref === 'disliked' ? DISLIKED_WOUNDS : 0), evasion: m.evasion, hardness: m.hardness,
     claw: s.claw, bite: s.bite, breath: s.breath,
-    accuracy: m.evasion + m.accuracyMod,
-    affinity: s.breath + s.affinityMod,
-    acumen: ACUMEN_START,
+    accuracy: Math.max(DERIVED_FLOOR, s.claw - m.evasion) + perk('accuracy'),
+    affinity: Math.max(DERIVED_FLOOR, s.breath - m.hardness) + perk('affinity'),
+    acumen: 10 * AGE_CATEGORY[age] + perk('acumen'),
   };
 }
 

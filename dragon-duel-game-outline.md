@@ -91,7 +91,7 @@ The fight is a loop of exchanges, each with three phases:
 **Underneath, the Referee** runs 90 ticks per exchange (3 slots of 30). Each tick, in order:
 1. Movement for both dragons.
 2. Hit detection against active windows and attack shapes.
-3. Near-miss checks; Acumen meters update.
+3. Near-miss checks; Surge meters update.
 4. Damage and statuses, applied together.
 5. KO checks.
 
@@ -120,7 +120,7 @@ The screen where the game is actually played. It needs to be fast at 30 seconds 
 ### 4.1 Layout
 - **Arena view (top or center):** a top-down tactical map. Both dragons, range-band rings drawn around the opponent, obstacles, lingering areas, the leash edge.
 - **Slot rail (bottom):** three slot cards in a row, left to right. Each card shows its chosen action as an icon and its 30-tick bar split into wind-up, active, and recovery.
-- **Opponent panel (side):** everything readable about the rival: cooldowns and which slot each returns in, statuses, Acumen meter, chain progress, a charge in progress, the stone and silhouette.
+- **Opponent panel (side):** everything readable about the rival: cooldowns and which slot each returns in, statuses, Surge, chain progress, a charge in progress, the stone and silhouette.
 - **Own panel (other side):** the same readout for your own dragon.
 
 ### 4.2 Filling a Slot

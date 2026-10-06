@@ -56,69 +56,48 @@
 - **Hardness:** damage reduction; improved when guarding.
 - **Claw Sharpness, Bite Force, Breath Potency:** attack damage.
 - **Accuracy:** **[Proposed]** how late an attack's aim settles: it tracks through the wind-up and settles 12 − Accuracy ticks before the strike (never less than 1, never longer than the wind-up), so movement after that is what the shape must cover. Also tracking and reach without leaving position; sets the phantom band around hitboxes.
-- **Affinity:** elemental resistance; improved when guarding with Scales. **[Proposed]** It is the element's Evasion: a Breath's verb (push, pull, burn, corrosion) takes hold only if the breather's Potency beats the target's Affinity, ties to the higher Acumen. Affinity still subtracts from Breath damage, and it fuels the Acumen meter (below).
-- **Acumen:** battle sense, shown as an integer and mapped through a hidden curve. It converts near misses, tips close contests, and scales punishes. Its meter is visible to both players. No shards raise it; it grows only through play.
+- **Affinity:** elemental resistance; improved when guarding with Scales. **[Proposed]** It is the element's Evasion: a Breath's verb (push, pull, burn, corrosion) takes hold only if the breather's Potency beats the target's Affinity, ties to the higher Acumen. Affinity still subtracts from Breath damage, and it fuels Surge (below).
+- **Acumen:** battle sense, shown as an integer and mapped through a hidden curve. It converts near misses, tips close contests, and scales punishes. It starts Surge (below). No shards raise it; it grows only through play.
 
 **Units.** 3 points make one combat unit, everywhere. Everything runs on integers and displays as units and thirds. Damage is dealt in points: attack attributes add, Hardness and Affinity subtract. Acumen is the exception, mapping through a hidden curve.
 
-**Derivation.** Tertiaries derive once at hatching, after the elemental swing: Accuracy from Evasion plus an egg modifier, Affinity from Breath Potency plus a stone modifier, Acumen from a starting value. **[Proposed]** Acumen's starting value is seeded from egg and stone rather than rolled. After hatching, each attribute grows independently, so no attribute buys another.
+**Derivation.** **[Proposed]** Tertiaries derive once at hatching, after every base add (morph, stone, and a disliked stone's Wounds): Accuracy = Claw Sharpness − Evasion, Affinity = Breath Potency − Hardness, each at least 3; Acumen = 10 × age category. A preferred stone adds +3 to one derived stat. After hatching, each attribute grows independently, so no attribute buys another.
 
 **Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. Every defense has an attack that ignores it, which answers concentration. Single-attribute builds are avoided by design. **[Proposed]** Stomp now adds Hardness ÷ 3, kept small so Hardness stacking stays a minor gain; its radius still scales by age only. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
 
 ### Starting Attributes [Proposed]
-A hidden baseline; each morph and each stone takes one +3 peak and one −3 valley. Wounds runs on a doubled scale so a baseline hit is about a sixth of a pool.
+A hidden baseline; each morph and each stone takes one peak and one valley off it. Wounds runs on a doubled scale (it moves in 6s) so a baseline hit is about a sixth of a pool. Peaks and valleys may be shared.
 
-| Morph | Wounds | Evasion | Hardness | Accuracy (egg) |
-|---|---|---|---|---|
-| Baseline | 30 | 6 | 3 | 6 (+0) |
-| True Dragon | 45 | 3 | 3 | 6 (+3) |
-| Wyvern | 24 | 9 | 3 | 6 (−3) |
-| Wyrm | 30 | 6 | 6 | 3 (−3) |
+| Morph | Wounds | Evasion | Hardness | Peak | Valley | Prefers | Dislikes |
+|---|---|---|---|---|---|---|---|
+| Baseline | 36 | 6 | 6 | | | | |
+| True Dragon | 42 | 3 | 6 | Wounds | Evasion | Fire | Earth |
+| Wyvern | 36 | 9 | 3 | Evasion | Hardness | Air | Fire |
+| Wyrm | 30 | 6 | 9 | Hardness | Wounds | Water | Air |
 
 - **True Dragon outlasts:** the most Wounds, paid for in mobility. Its generalism lives in its kit.
-- **Wyvern is never where you aimed:** the highest Evasion, the fewest Wounds. Its valley sits on Wounds rather than a defense, so Evasion is never its only protection.
-- **Wyrm shrugs:** the highest Hardness, a narrow phantom band.
+- **Wyvern is never where you aimed:** the highest Evasion, the thinnest hide; and the finest elemental resistance, since Affinity is Breath − Hardness.
+- **Wyrm shrugs:** the highest Hardness against Claw and Bite, the fewest Wounds, and the poorest elemental resistance.
 
-| Stone | Claw | Bite | Breath | Affinity (stone) |
-|---|---|---|---|---|
-| Baseline | 6 | 9 | 12 | 6 (−6) |
-| Water | 3 | 9 | 12 | 9 (−3) |
-| Earth | 6 | 12 | 12 | 3 (−9) |
-| Fire | 6 | 6 | 15 | 6 (−9) |
-| Air | 9 | 9 | 9 | 6 (−3) |
+| Stone | Claw | Bite | Breath | Peak | Valley | If preferred |
+|---|---|---|---|---|---|---|
+| Baseline | 9 | 12 | 15 | | | |
+| Water | 9 | 9 | 18 | Breath | Bite | +3 Acumen |
+| Earth | 9 | 15 | 12 | Bite | Breath | +3 Accuracy |
+| Fire | 6 | 12 | 18 | Breath | Claw | +3 Affinity |
+| Air | 12 | 9 | 15 | Claw | Bite | +3 Accuracy |
 
 - **Water endures, Earth crushes, Fire scorches, Air rakes.**
-- The element that beats you peaks where you're weakest, so matchup stacks reach two layers at most.
+- **Derived:** Accuracy = Claw − Evasion (fast dragons swing wild); Affinity = Breath − Hardness (hard hides or elemental resistance); each at least 3. Acumen = 10 × age category.
 - Intermediates sum their parents' tilts: Salt +Bite −Claw; Magma +Breath −Affinity; Lightning +Claw −Bite; Storm +Affinity −Breath.
 - Each dragon gets the same allotment, varying only slightly with lineage.
 
 ### Elemental Preference
 Each morph prefers one element and dislikes the element that beats it.
-
-| Morph | Prefers | Dislikes |
-|---|---|---|
-| True Dragon | Fire | Earth |
-| Wyvern | Air | Fire |
-| Wyrm | Water | Air |
-
-**The swing** is zero-sum, so no pairing is simply better:
-- **Preferred stone:** +3 to the stone's peak attribute, −6 Wounds. The dragon leans into its stone: more element, less body.
-- **Disliked stone:** −3 to the stone's peak, +6 Wounds. The dragon fights its stone and toughens for it: more body, less element.
-- **[Proposed]** The body side of the swing is always Wounds. Each morph's signature defense (True Dragon Wounds, Wyvern Evasion, Wyrm Hardness) stays at its base, and no swing feeds a derived stat, so every swing is zero-sum.
-- **Neutral stone:** no swing.
-- Wounds moves in 6s on its doubled scale.
-- **Order:** the swing applies before tertiaries derive, so it carries into Accuracy and Affinity. A swing on Affinity (Water's peak) moves the stone modifier.
-
-| Pairing | Swing | Derived knock-on |
-|---|---|---|
-| True Dragon + Fire | Breath 15 → 18, Wounds 45 → 39: a breath cannon | Affinity 6 → 9 |
-| True Dragon + Earth | Bite 12 → 9, Wounds 45 → 51: the hardest True Dragon to kill | |
-| Wyvern + Air | Claw 9 → 12, Wounds 24 → 18 | |
-| Wyvern + Fire | Breath 15 → 12, Wounds 24 → 30: the toughest Wyvern | Affinity 6 → 3 |
-| Wyrm + Water | Affinity 9 → 12, Wounds 30 → 24: a sea serpent the elements slide off | |
-| Wyrm + Air | Claw 9 → 6, Wounds 30 → 36 | |
-
-**[Open]** Derivation still amplifies swings that touch Breath Potency: True Dragon + Fire gains Affinity on top of its Breath. Swings no longer touch Evasion.
+- **Preferred stone:** +3 to the stone's derived stat (Water Acumen, Earth and Air Accuracy, Fire Affinity).
+- **Disliked stone:** −6 Wounds.
+- **Neutral stone:** no change.
+- The element wheel's matchup (±3 on Breath and in verb contests) is separate from preference.
 
 - **Growth leans the same way:** preferred pairings weight age-up points toward the stone's attributes; disliked pairings toward the egg's.
 - **Intermediates derive:** one preferred parent counts as preference, one disliked parent as distaste, one of each cancels to neutral. For a True Dragon, Lightning is preferred, Salt disliked, Magma neutral.
@@ -216,7 +195,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **[Proposed]** Pacing: about 40 seconds per exchange; six to eight exchanges per fight, about four to five minutes.
 
 **Readable information.** Slots 1 and 2 lock, so a wind-up inside a locked slot can't be answered; wind-ups matter for timing, not reading. What players can act on:
-- **Between exchanges:** positions, cooldown rhythms, statuses, Acumen meters, silhouettes, the chest stone.
+- **Between exchanges:** positions, cooldown rhythms, statuses, Surge meters, silhouettes, the chest stone.
 - **During the revision window:** slots 1 and 2 resolving, revision flashes, and a charge releasing in slot 3.
 
 ### Actions
@@ -224,7 +203,7 @@ Each morph prefers one element and dislikes the element that beats it.
 |---|---|---|
 | Attack | Bite, Claw, Breath, Stomp | Shapes below |
 | Move | Approach, Retreat, Strafe, Leap, Dive | Three degrees of freedom. **[Proposed] Gravity:** a flier that doesn't Leap during an exchange drops a band at its end. A Wyvern's Leap climbs two bands (Talons). **Dive** comes down a band, or makes a **hard landing**: from two bands up or more, with Stomp ready, it comes all the way down and Stomps where it lands, spending Stomp's cooldown. |
-| Guard | Dodge, Scales | Dodge avoids harm (Evasion); Scales presents the hide: +Hardness against Bite and Claw, +Affinity against Breath and its verbs. **[Proposed]** A Scales or Dodge slot held to the end also fills the Acumen meter. **Reversal:** a guard with a full Acumen meter turns an attack that lands, Breath included, back on its owner, against the owner's own hide, and empties the meter. Unlike Dragonseeds' always-on reflector, it costs a full meter and a read. **[Open]** Scales may be renamed. |
+| Guard | Dodge, Scales | Dodge avoids harm (Evasion); Scales presents the hide: +Hardness against Bite and Claw, +Affinity against Breath and its verbs. **[Proposed]** A Scales or Dodge slot held to the end also fills Surge. **Reversal:** a guard with a full Surge turns an attack that lands, Breath included, back on its owner, against the owner's own hide, and empties the meter. Unlike Dragonseeds' always-on reflector, it costs a full meter and a read. **[Open]** Scales may be renamed. |
 | Intimidate | Intimidate | +3 to the next attack; open for that action. **[Proposed]** One that reaches (within Far) also demoralizes: the target's next Bite or Claw loses 3. |
 
 **Attack shapes**
@@ -271,8 +250,8 @@ Each morph prefers one element and dislikes the element that beats it.
 
 ### Hits
 - A dragon outside an attack's active area during its active window takes no hit.
-- **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). **[Proposed]** They fill the Acumen meter; the graze is retired. The phantom band belongs to aimed attacks: a Stomp's quake has no near misses, so a Stomp thrown from beyond its reach is a gambit on an advance, never a meter pump.
-- **Acumen meter:** visible to both players. **[Proposed]** Affinity fuels it, so Water dragons fill it best. It starts at age bracket × 10 + 3 × Affinity (wyrmling 1 through venerable 5; a wyrmling Wyrm + Water starts at 37). Each trigger adds Affinity + 9: a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath (the breather's meter). Full at 100, the next landed Bite, Claw or Breath deals true damage, ignoring Hardness and Affinity (and so any verb contest), plus a steroid of Affinity ÷ 3, and drains it to 0. A miss spends nothing; a Stomp or a Technique's side-hit never spends it. Acumen itself still breaks ties. Deterministic and streak-free.
+- **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). **[Proposed]** They fill Surge; the graze is retired. The phantom band belongs to aimed attacks: a Stomp's quake has no near misses, so a Stomp thrown from beyond its reach is a gambit on an advance, never a meter pump.
+- **Surge** (was the Acumen meter): visible to both players. **[Proposed]** Affinity fuels it, so Water dragons fill it best. **[Proposed]** It starts at Acumen (10 × age category, so 10 for a wyrmling, 13 for a Water-preferring one). Each trigger adds Affinity + 9: a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath (the breather's meter). Full at 100, the next landed Bite, Claw or Breath deals true damage, ignoring Hardness and Affinity (and so any verb contest), plus a steroid of Affinity ÷ 3, and drains it to 0. A miss spends nothing; a Stomp or a Technique's side-hit never spends it. Acumen itself still breaks ties. Deterministic and streak-free.
 
 **Evasive resolution**
 - **Strafe:** pure geometry. A dragon out of coverage is untouched; one still inside during the active window tests Evasion against Accuracy.
@@ -284,7 +263,7 @@ Each morph prefers one element and dislikes the element that beats it.
 ### Damage [Proposed]
 - **Bite:** Bite Force − Hardness. Bite is piercing: it ignores 3 Hardness. Baseline 9 − (3 − 3) = 9.
 - **Claw:** one hit, Claw Sharpness − Hardness. Baseline 6 − 3 = 3; it earns its keep by landing often, its long active window catching strafes.
-- **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 12 − 6 = 6. **[Proposed]** Every Breath rose 3, and Affinity with it (it derives from Breath), so Breath damage nets out the same while every Affinity, and so every Acumen meter, gains.
+- **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 15 − 9 = 6. **[Proposed]** Affinity derives as Breath − Hardness, so a Breath against the same stone deals the target's own Hardness: hard hides take more Breath, high-Breath stones resist it.
 - **Stomp:** 3 + Hardness ÷ 3 true damage (a Venerable's ÷ 2) plus Staggered.
 - **Floor:** every landed hit deals at least 1 point.
 - A True Dragon's 45 points fall to five landed bites or eight landed breaths.
