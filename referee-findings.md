@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Season 3](#living-ladder-season-3) | Yields paid in Ichor, non-lethal timeouts, the array planner: champions stay rare (7) |
 | [Season 2](#living-ladder-season-2) | Talons rework, Ichor freezing, learning curves; season 1's champion tamers return |
 | [Living ladder](#the-living-ladder) | Tamers raise wyrmlings rung by rung on spoils; does Air Wyvern survive selection? |
 | [Baseline](#baseline-random-loadouts-and-the-hatch) | Fresh baseline: random wyrmling loadouts, and brains that draft their own builds |
@@ -28,6 +29,50 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Living ladder, season 3
+
+`npm run gauntlet -- --seed 2028 --carry seasons/season2.json`: 250 tamers, 80 rounds, 10,055 bouts. Season 2's 8 champion tamers return; 242 are fresh. Changes since season 2:
+- **The yield.**
+  - When: before a bout, or at an exchange boundary.
+  - Price: the victor is paid Ichor by the ladder (1, 2 or 3).
+  - A tamer without the Ichor can't yield.
+  - A yield counts toward the victor's streak; a pick waits for the next kill.
+- **Timeouts don't kill.** The victor is paid the ladder's Ichor: from the loser's bank where it can, from the victory otherwise.
+- **The array planner.**
+  - Tamers value whole arrays, with diminishing returns per want.
+  - They count later picks by the chance of three straight wins.
+  - They sample likely offers from the field on their rung.
+  - Planning depth grows with skill.
+
+A first run let a yielder short of Ichor pay a ransom shard instead. That gave victors free picks without kills, about 30% of all picks, and 91 champions. It was scrapped, and the ransom removed.
+
+| | Season 2 | Season 3 |
+|---|---|---|
+| Dragons hatched | 10,126 | 9,034 |
+| First shard earned | 9% | 10% |
+| Champions | 8 | **7** |
+| Endings: KO / timeout / yield | 94 / 5 / – % | 88 / 5 / 6% |
+| Picks: seated / frozen / banked | 510 / 439 / 551 | 556 / 471 / 318 |
+| Veterans vs fresh tamers | 62% vs 49% | 64% vs 50% |
+
+**What it shows:**
+- **Yields save dragons, but not champions.** There were 615 yields (6% of bouts), almost all mid-bout, paying 721 Ichor: adepts 470, masters 145. 1,100 fewer dragons were hatched. Champions held at 7, because a yield resets the streak and a pick still needs three straight kills. Yields save a dragon's seated shards, not its climb.
+- **Ichor is the limit.** Banks are thin: 180 Ichor across 105 tamers at the end, at most 6. Many yields spend 1 Ichor saving a rung-0 dragon worth little, which drains the bank for freezes and later, costlier yields. All eight veterans ended with 0 or 1 Ichor.
+- **The planner banks less** (318 banks against 551) and seats more.
+- **The champion rate is the kills-per-pick price.** About 1 champion per 1,300 dragons at 3 kills a pick. Yields and timeouts don't move it.
+- **Builds:**
+  - True Dragon + Earth leads at 55%, and its share grows by rung (5% → 7% → 11%).
+  - True Dragon + Fire (54%) and Wyrm + Earth (53%, 61% on rung 2) follow.
+  - Wyvern + Air holds at 48%.
+  - Wyrm + Air (35%), Wyrm + Fire (38%) and Wyrm + Water (39%) trail.
+- **Veterans:** 64% ±4, and no champions again. Skill wins fights; the price of a champion is a run of luck the yield can't buy.
+- **Styles:** reader (30%) and bite-focus (33%) are still last.
+
+**Open:**
+- Kills per pick is the champion dial (`--kills`).
+- Should a yield keep the yielder's streak, or should a rung-0 yield be disallowed?
+- Reader and bite-focus need a look as brains.
 
 ## Living ladder, season 2
 
