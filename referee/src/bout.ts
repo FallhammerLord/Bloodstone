@@ -38,6 +38,8 @@ export interface View {
   record: SlotRecord[];
   /** the rules this bout plays by: public, like the board */
   rules: Rules;
+  /** who is challenged: public, and it decides a timeout */
+  challenged: Side;
 }
 
 export function viewOf(bout: Bout, side: Side): View {
@@ -56,6 +58,7 @@ export function viewOf(bout: Bout, side: Side): View {
     arena: structuredClone(bout.arena),
     record: bout.record.map((r) => structuredClone(r)),
     rules: bout.rules,
+    challenged: bout.challenged,
   };
 }
 

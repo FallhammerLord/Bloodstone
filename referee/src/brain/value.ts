@@ -6,7 +6,7 @@ import { add, flat, flatLen, scaleTo, sub } from '../geometry.ts';
 import type { Bout, Event, Fighter, Side } from '../referee.ts';
 import * as R from '../rules.ts';
 import type { Rules } from '../rules.ts';
-import { type Band, type BrainStyle, MISS_TASTE, TASTE, bandOf, idealBand } from './styles.ts';
+import { type Band, type BrainStyle, MISS_TASTE, TASTE, bandOf, idealBands } from './styles.ts';
 
 export interface Outcome {
   before: Bout;
@@ -24,10 +24,15 @@ export const SHARED = {
   pinned: 0.03,
   /** breaking the opponent's charge denies its setup */
   chargeBroken: 0.04,
-  /** each point of your own meter filled brings a true-damage hit closer (spending it costs nothing, so none hoard) */
+  /** each point of your own meter filled brings a true-damage hit, or a guard reversal, closer */
   meterGain: 0.0015,
   /** each point of the opponent's meter filled is worth denying */
   oppMeterGain: 0.0008,
+  /**
+   * a full meter held: the next landed hit deals true damage, and Scales or Dodge reverses an attack onto its owner;
+   * an opponent's full meter is the same threat against you, so Breath and Bite into its guard are a risk
+   */
+  fullMeter: 0.03,
   /** a pending Intimidate bonus, yours or theirs, still counts when the slot ends */
   intimidatePending: 0.03,
   /** a pending demoralize on either side */
@@ -119,7 +124,7 @@ const WEIGHTS: Record<BrainStyle, StyleWeights> = {
   'meter-focus': { taken: 1, meterGain: 0.004, spent: 0.06 },
   // diagnostics: being at the focus range is worth a little; landing the focus attack is the point
   'claw-focus': { taken: 1, band: { melee: 0.08, close: 0, far: -0.06, veryFar: -0.06 } },
-  'bite-focus': { taken: 1, band: { close: 0.08, melee: 0, far: 0, veryFar: -0.06 } },
+  'bite-focus': { taken: 1, band: { close: 0.08, melee: 0.08, far: 0, veryFar: -0.06 } }, // Bite reaches through Close, Melee included
   'breath-focus': { taken: 1, band: { far: 0.08, close: 0, veryFar: 0, melee: -0.06 } },
 };
 
@@ -133,6 +138,8 @@ export function value(style: BrainStyle, o: Outcome): number {
   const dealt = (op0.wounds - Math.max(0, op1.wounds)) / op0.sheet.wounds;
   const taken = (me0.wounds - Math.max(0, me1.wounds)) / me0.sheet.wounds;
   if (o.after.over) return o.after.winner === o.me ? 10 + dealt : -10 - taken;
+  // The clock: at the exchange limit the bout times out, and the challenged dragon wins [Doc].
+  if (o.after.exchange >= o.after.rules.EXCHANGE_LIMIT) return o.after.challenged === o.me ? 10 + dealt : -10 - taken;
 
   const sep = Math.hypot(me1.pos.x - op1.pos.x, me1.pos.y - op1.pos.y, me1.pos.z - op1.pos.z);
   const band = bandOf(sep);
@@ -148,6 +155,7 @@ export function value(style: BrainStyle, o: Outcome): number {
   const leverage = (pinned(o.after, op1, me1) ? W.pinned : 0) - (pinned(o.after, me1, op1) ? W.pinned : 0)
     + W.chargeBroken * o.events.filter((e) => e.kind === 'note' && e.side === them && e.tag === 'charge-broken').length
     + W.meterGain * Math.max(0, me1.meter - me0.meter) - W.oppMeterGain * Math.max(0, op1.meter - op0.meter)
+    + (me1.meter >= R.METER_MAX ? W.fullMeter : 0) - (op1.meter >= R.METER_MAX ? W.fullMeter : 0)
     + (me1.intimidateBonus ? W.intimidatePending : 0) - (op1.intimidateBonus ? W.intimidatePending : 0)
     + (op1.marks.demoralized ? W.demoralizePending : 0) - (me1.marks.demoralized ? W.demoralizePending : 0)
     + (me1.marks.advanced || me1.marks.strafed ? W.setupPending : 0)
@@ -162,10 +170,10 @@ export function value(style: BrainStyle, o: Outcome): number {
 
 export const BAND_ORDER: Band[] = ['melee', 'close', 'far', 'veryFar'];
 export function positionValue(style: BrainStyle, band: Band, me: Fighter, op: Fighter): number {
-  const mine = BAND_ORDER.indexOf(idealBand(me, TASTE[style]));
-  const theirs = BAND_ORDER.indexOf(idealBand(op, { claw: 1, bite: 1, breath: 1 }));
   const at = BAND_ORDER.indexOf(band);
-  return (at === mine ? SHARED.idealBand : -SHARED.offBand * Math.abs(at - mine)) + (at !== theirs ? SHARED.denyBand : 0);
+  const away = Math.min(...idealBands(me, TASTE[style]).map((b) => Math.abs(at - BAND_ORDER.indexOf(b))));
+  const theirs = idealBands(op, { claw: 1, bite: 1, breath: 1 });
+  return (away === 0 ? SHARED.idealBand : -SHARED.offBand * away) + (theirs.includes(band) ? 0 : SHARED.denyBand);
 }
 
 /** Slots of Stagger still ahead of a dragon. */

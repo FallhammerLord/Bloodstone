@@ -28,6 +28,8 @@ export function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });
   if (ready('dodge')) out.push({ name: 'dodge' });
   if (s.f.sheet.flies && s.z < s.rules.MAX_ALTITUDE) out.push({ name: 'leap', depth: depth() });
+  // Sidewinder Spine: a strafe that also shifts along the line, in or out.
+  if (s.f.loadout.techniques.some((t) => t.id === 'sidewinder-spine')) out.push({ name: 'strafe', dir: turn(), shift: rng() < 0.5 ? 'in' : 'out' });
   if (s.z > 0) out.push({ name: 'dive', depth: depth() });
   // Talons: a stoop can carry back a band instead of forward, to land clear of a target that chased under it.
   if (s.z > 0 && s.f.sheet.aspect === 'talons') out.push({ name: 'claw', sweep: side(), back: true });

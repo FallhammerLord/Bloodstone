@@ -128,6 +128,7 @@ Breath charges across two slots, with the charge slot's Scales-guard defense. Th
 - **Venerable:** as Elder; you may Move during the charge slot
 
 ### Ash Gland · Information
+**[Pulled for redesign]** Out of the shard pool: it removes the opponent's slot-3 revision instead of pricing it, and costs its owner its Breath damage. Brainstorm pending (an ash cloud that Blinds what stands in it, or a price on revising).
 Breath deals no damage and locks the opponent's slot-3 revision next exchange.
 - **Wyrmling:** the lock applies only on a clean hit
 - **Juvenile:** the lock applies on a hit or graze

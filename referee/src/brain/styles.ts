@@ -36,12 +36,23 @@ export const TASTE: Record<BrainStyle, { claw: number; bite: number; breath: num
 /** How much each style values forcing the opponent to miss (a whiff, near miss or evade) [Proposed]. */
 export const MISS_TASTE: Partial<Record<BrainStyle, number>> = { 'out-boxer': 1.5, counterpuncher: 1.5, 'kite-focus': 2, reader: 1, 'boxer-puncher': 1, aerialist: 1, swarmer: 0.3, slugger: 0.3 };
 
-/** The band a dragon wants: its rough damage per attempt with each attack, by land rate, times the style's taste. */
-export function idealBand(f: Fighter, taste: { claw: number; bite: number; breath: number }): Band {
+/**
+ * What each band is worth to a dragon: the best rough damage per attempt (by land rate, times the style's taste)
+ * among the attacks that reach it, by the current rules. Claw reaches Melee and just into Close; Bite reaches
+ * through Close, Melee included; Breath reaches to Far's edge, but at Melee it is lost to any hit before it resolves.
+ */
+export function bandWorth(f: Fighter, taste: { claw: number; bite: number; breath: number }): Record<Band, number> {
   const claw = Math.max(1, f.sheet.claw - 4) * 0.68 * taste.claw;
   const bite = Math.max(1, f.sheet.bite - 1) * 0.45 * taste.bite;
   const breath = Math.max(1, f.sheet.breath - 6) * 0.5 * taste.breath;
-  return claw >= bite && claw >= breath ? 'melee' : bite >= breath ? 'close' : 'far';
+  return { melee: Math.max(claw, bite, 0.5 * breath), close: Math.max(bite, breath, 0.3 * claw), far: breath, veryFar: 0 };
+}
+
+/** The bands a dragon wants: every band worth at least 90% of its best. A biter is at home at Melee and Close alike. */
+export function idealBands(f: Fighter, taste: { claw: number; bite: number; breath: number }): Band[] {
+  const worth = bandWorth(f, taste);
+  const best = Math.max(...Object.values(worth));
+  return (Object.keys(worth) as Band[]).filter((b) => worth[b] >= 0.9 * best);
 }
 
 /**
@@ -100,7 +111,8 @@ export const LEAN: Record<BrainStyle, Partial<Record<ActionName, number>> | ((ba
   aerialist: (b, aloft, oppAloft) => (aloft && !oppAloft ? (b === 'far' || b === 'veryFar' ? { approach: 4, breath: 2, claw: 1 } : { claw: 4, breath: 2, approach: 1 }) : { leap: 4, breath: 2, dive: 1 }),
   reader: (b) => (b === 'far' || b === 'veryFar' ? { intimidate: 3, breath: 2, approach: 2 } : { intimidate: 3, scales: 2, bite: 2, claw: 2 }),
   'claw-focus': (b) => (b === 'melee' ? { claw: 5, dodge: 1, scales: 1, strafe: 1 } : { approach: 4, strafe: 1, dodge: 1 }),
-  'bite-focus': (b) => (b === 'close' ? { bite: 5, strafe: 1, scales: 1, intimidate: 1 } : b === 'melee' ? { retreat: 3, bite: 2, dodge: 1 } : { approach: 4, strafe: 1 }),
+  // Bite reaches through Close, Melee included: a biter stays and bites rather than backing out of Melee.
+  'bite-focus': (b) => (b === 'close' ? { bite: 5, strafe: 1, scales: 1, intimidate: 1 } : b === 'melee' ? { bite: 5, dodge: 1, scales: 1, strafe: 1 } : { approach: 4, strafe: 1 }),
   // Kite-focus [Proposed]: a diagnostic. Position first: it backs off and slips sideways to hold Far, breathes from
   // there, and bites or claws only when caught. It measures whether kiting holds up.
   'kite-focus': (b) => (b === 'melee' ? { retreat: 4, strafe: 2, dodge: 1, claw: 1 } : b === 'close' ? { retreat: 3, breath: 2, strafe: 2 } : b === 'far' ? { breath: 4, strafe: 2, retreat: 1, scales: 1 } : { breath: 2, approach: 1, strafe: 1 }),
@@ -120,6 +132,20 @@ export const CHARGE_LEAN: Partial<Record<BrainStyle, { short: number; long: numb
   'meter-focus': { short: 1, long: 1 },
 };
 export const CHARGE_LEAN_DEFAULT = 0.4;
+/**
+ * The action that fires each Technique. A brain carrying one imagines that action more often, so it plays its shards:
+ * Riposte Talons wants Dodges, Thornscale and Mantle Wings want Scales, and so on.
+ */
+export const TRIGGERS: Record<string, ActionName> = {
+  'snapping-jaw': 'bite', lockjaw: 'bite', 'gnashing-teeth': 'bite',
+  'hamstring-hooks': 'claw', 'scything-forelimbs': 'claw', 'ratchet-claws': 'claw', 'raking-talons': 'claw',
+  'lance-throat': 'breath', 'smoldering-maw': 'breath', 'bellows-chest': 'breath',
+  'stooping-pinions': 'dive', 'sidewinder-spine': 'strafe', 'bounding-haunches': 'approach',
+  thornscale: 'scales', 'riposte-talons': 'dodge', 'mantle-wings': 'scales',
+  'sapping-bellow': 'intimidate', 'baleful-eye': 'intimidate', 'goading-roar': 'intimidate',
+};
+/** How much more a brain leans toward an action one of its Techniques fires on. */
+export const SHARD_LEAN = 1.6;
 /** A crunch, when a shard grants one, is worth a closer look. */
 export const CRUNCH_LEAN = 1.5;
 

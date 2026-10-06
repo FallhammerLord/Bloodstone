@@ -173,7 +173,7 @@ Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses i
 
 ### When a rule changes, update the brains
 
-A brain playing by old patch notes can't play well. For each kind of rule change, the brain code to check:
+A brain playing by old patch notes can't play well. For each kind of rule change, the brain code to check, and a patch-knowledge test to update in `test/patch-knowledge.test.ts` (one small fixed situation per core rule: where each attack reaches, Breath lost at Melee, who a timeout favors, the stoop's reach, playing seated shards, pulled shards):
 
 | Rule area | Brain code |
 |---|---|

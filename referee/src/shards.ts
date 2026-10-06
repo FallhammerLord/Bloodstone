@@ -77,6 +77,8 @@ interface TechniqueDef {
   pips: number;
   /** false where the mechanic it needs (crunch, charge) isn't built yet */
   built: boolean;
+  /** out of the shard pool for redesign: still seatable by hand, never drafted, dropped or dealt */
+  pulled?: boolean;
 }
 
 const TECHNIQUES: TechniqueDef[] = [
@@ -90,7 +92,7 @@ const TECHNIQUES: TechniqueDef[] = [
   { id: 'lance-throat', name: 'Lance Throat', pips: 2, built: true },
   { id: 'smoldering-maw', name: 'Smoldering Maw', pips: 1, built: true },
   { id: 'bellows-chest', name: 'Bellows Chest', pips: 2, built: true },
-  { id: 'ash-gland', name: 'Ash Gland', pips: 1, built: true },
+  { id: 'ash-gland', name: 'Ash Gland', pips: 1, built: true, pulled: true }, // pulled for redesign: it removes the opponent's revision rather than pricing it
   { id: 'stooping-pinions', name: 'Stooping Pinions', pips: 1, built: true },
   { id: 'sidewinder-spine', name: 'Sidewinder Spine', pips: 1, built: true },
   { id: 'bounding-haunches', name: 'Bounding Haunches', pips: 1, built: true },
@@ -237,7 +239,7 @@ export function compile(base: StatSheet, array: DragonArray): { sheet: StatSheet
 
 /** Every built shard a dragon could seat: attribute chips and Techniques, at one grade or (null) all of them. */
 export function shardPool(grade: Grade | null = 'wyrmling'): Shard[] {
-  const all = [...allAttrShards(), ...builtTechniques().flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
+  const all = [...allAttrShards(), ...builtTechniques().filter((t) => !t.pulled).flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
   return grade ? all.filter((s) => s.grade === grade) : all;
 }
 

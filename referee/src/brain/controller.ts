@@ -7,14 +7,14 @@ import { cloneBout, simulateSlot, runExchange, type Bout, type Fighter, type Mom
 import * as R from '../rules.ts';
 import { type Situation, advance, legalActions, place, playable } from './options.ts';
 import { Read, pick } from './read.ts';
-import { type BrainStyle, CHARGE_LEAN, CHARGE_LEAN_DEFAULT, CRUNCH_LEAN, LEAN, SKILL, type Skill, allowed, bandOf } from './styles.ts';
+import { type BrainStyle, CHARGE_LEAN, CHARGE_LEAN_DEFAULT, CRUNCH_LEAN, LEAN, SHARD_LEAN, SKILL, type Skill, TRIGGERS, allowed, bandOf } from './styles.ts';
 import { value } from './value.ts';
 
 /** Rebuilds the bout as this side sees it. Everything in a View is public, so nothing hidden leaks in. */
 export function boutFromView(view: View): Bout {
   const fighters = { [view.side]: structuredClone(view.me), [view.opp.side]: structuredClone(view.opp) } as Record<Side, Fighter>;
   return {
-    fighters, challenged: 'B', exchange: view.exchange, globalSlot: view.globalSlot,
+    fighters, challenged: view.challenged, exchange: view.exchange, globalSlot: view.globalSlot,
     startWounds: { ...view.startWounds }, history: structuredClone(view.history) as Bout['history'],
     record: structuredClone(view.record), arena: structuredClone(view.arena), over: false, winner: null, rules: view.rules,
   };
@@ -27,9 +27,12 @@ export function scriptFor(style: BrainStyle, situation: Situation, opp: Fighter,
     const legal = legalActions(s, rng).filter((a) => allowed(style, a));
     const leanTable = LEAN[style];
     const lean = typeof leanTable === 'function' ? leanTable(bandOf(sep), s.z > 0, opp.pos.z > 0) : leanTable;
+    // A dragon plays its shards: actions its Techniques fire on are imagined more often.
+    const fires = new Set(s.f.loadout.techniques.map((t) => TRIGGERS[t.id]));
     const weights = legal.map((a) => {
       // A setup sequence is weighed by the style's taste for both halves, so each style keeps its flavor.
-      const w = styled ? (a.setup ? ((lean[a.setup] ?? 0.4) + (lean[a.name] ?? 0.4)) / 2 : (lean[a.name] ?? 0.4)) : 1;
+      const base = styled ? (a.setup ? ((lean[a.setup] ?? 0.4) + (lean[a.name] ?? 0.4)) / 2 : (lean[a.name] ?? 0.4)) : 1;
+      const w = fires.has(a.name) ? base * SHARD_LEAN : base;
       return a.charge ? w * (CHARGE_LEAN[style]?.[a.long ? 'long' : 'short'] ?? CHARGE_LEAN_DEFAULT) : a.crunch ? w * CRUNCH_LEAN : w;
     });
     s = place(out, s, pick(legal, weights, rng));

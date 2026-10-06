@@ -27,7 +27,7 @@ Prefer rule-level fixes to special cases. A carve-out for one morph, stone or st
 
 1. **Tag it.** A new dial goes in `DEFAULT_RULES` (`src/rules.ts`), marked [Proposed] or [Assumed], with a one-line reason. The design doc gets the same [Proposed] text.
 2. **Test the rule, not just the number.** A test states what happens ("a push and a pull cancel"), reading values from `DEFAULT_RULES`.
-3. **Update the brains.** Check the rule-to-brain table in the README ("When a rule changes, update the brains"). A brain playing by old patch notes can't play well.
+3. **Update the brains.** Check the rule-to-brain table in the README ("When a rule changes, update the brains"), and add or change the rule's case in `test/patch-knowledge.test.ts`. A brain playing by old patch notes can't play well.
 4. **Re-record the goldens** in the same commit (`npm run golden -- --write`), and say in the message what changed and why.
 5. **Run the tournament** (`npm run brains -- --skill master`), and log the round in `referee-findings.md`: what changed, the table against the last round, what it shows.
 6. **Audit the dials** (`npm run dials`) when a [Proposed] rule settles: drop the tag in both places.
