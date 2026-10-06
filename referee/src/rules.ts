@@ -139,6 +139,19 @@ export const DEFAULT_RULES = {
   SMOLDER_RADIUS: { center: PACE, full: 2 * PACE }, // Smoldering Maw: the area's center, then all of it
   LANCE_WIDEN: PACE / 2, // Lance Throat Elder: the line's half-width grows this much by its end
   STOOPING_HEIGHT: { wyrmling: 6 * PACE, rest: 3 * PACE }, // Stooping Pinions: how high a dive must start
+  // ---- Technique parity pass 1 [Proposed] ---- (technique-parity-pass-1.md). Each key's first value is today's rule.
+  TECH_SNAPPING_JAW: 'base' as 'base' | 'borrow' | 'borrow_dmg', // borrow: the snap's ticks come out of your next slot
+  TECH_LOCKJAW: 'base' as 'base' | 'clamp' | 'recovery', // clamp: a Pin keeps the jaw shut; your next slot can't Bite
+  TECH_RATCHET_CLAWS: 'base' as 'base' | 'escalate', // escalate: each landed Claw link adds +1 to the next Claw
+  TECH_THORNSCALE: 'base' as 'base' | 'window', // window: thorns cost the guard's last ticks, not its Hardness
+  TECH_BELLOWS_CHEST: 'base' as 'base' | 'mobile', // mobile: a Breath charge on the move
+  TECH_MANTLE_WINGS: 'base' as 'base' | 'verbguard', // verbguard: Scales also blocks a Breath's verb
+  TECH_SAPPING_BELLOW: 'base' as 'base' | 'gland', // gland: the bellow rides the Breath (provisional reading: a landed Breath demoralizes)
+  TECH_LANCE_THROAT: 'base' as 'base' | 'pierce', // pierce: a verbless line that pierces Affinity
+  TECH_SMOLDERING_MAW: 'base' as 'base' | 'linger', // linger: ground lingers longer; a groundless breath lays its verb as ground
+  TECH_STOOPING_PINIONS: 'base' as 'base' | 'nostack', // nostack: the dive's +3 never adds to a stoop or a hard landing
+  TECH_ASH_GLAND: 'pulled' as 'pulled' | 'cloud', // cloud: the blinding breath, back in the pool
+  ASH_CLOUD_RADIUS: PACE, // Ash Gland's Wyrmling cloud radius, a measuring dial
   // ---- Attack shapes ----
   // Measured from the attacker along its aim ("forward") and away from the aim line in any direction ("off-axis").
   // Reach is in whole range bands [Doc]; widths and radii are paces, tuned by attributes.
@@ -162,6 +175,13 @@ export const DEFAULT_RULES = {
 };
 
 export type Rules = typeof DEFAULT_RULES;
+
+/** Technique parity pass 1: every TECH_ key at its first variant. `--rule TECH_PASS_1=on` applies it. */
+export const TECH_PASS_1: Partial<Rules> = {
+  TECH_SNAPPING_JAW: 'borrow', TECH_LOCKJAW: 'clamp', TECH_RATCHET_CLAWS: 'escalate', TECH_THORNSCALE: 'window',
+  TECH_BELLOWS_CHEST: 'mobile', TECH_MANTLE_WINGS: 'verbguard', TECH_SAPPING_BELLOW: 'gland', TECH_LANCE_THROAT: 'pierce',
+  TECH_SMOLDERING_MAW: 'linger', TECH_STOOPING_PINIONS: 'nostack', TECH_ASH_GLAND: 'cloud',
+};
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 

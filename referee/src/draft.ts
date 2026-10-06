@@ -7,7 +7,8 @@ import { writeFileSync } from 'node:fs';
 import { BRAIN_STYLES, type BrainStyle, type Skill } from './brain.ts';
 import { draftDragon, LADDER_PIPS, Picks } from './brain/hatchery.ts';
 import type { Job, Player, Result } from './brains-worker.ts';
-import { flag, inWorkers, rateWithMargin, WORKERS } from './harness.ts';
+import { flag, inWorkers, rateWithMargin, rulesFromArgs, WORKERS } from './harness.ts';
+import { setPoolRules } from './shards.ts';
 import { seededRandom } from './random.ts';
 import type { FighterSetup, Side } from './referee.ts';
 
@@ -16,6 +17,8 @@ const skill = flag(argv, '--skill', 'master') as Skill;
 const bouts = Number(flag(argv, '--bouts', '16'));
 const seed = Number(flag(argv, '--seed', '2026'));
 const jsonFile = flag(argv, '--json', '');
+const { rules: runRules, overrides, label: rulesLabel } = rulesFromArgs(argv);
+setPoolRules(runRules);
 
 
 const draftRng = seededRandom(seed * 7 + 3);
@@ -34,7 +37,7 @@ for (const sa of BRAIN_STYLES) for (const sb of BRAIN_STYLES) {
 
 
 const t0 = Date.now();
-const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs })).flat();
+const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs, overrides })).flat();
 const byId = new Map(results.map((r) => [r.id, r]));
 
 type Rate = { w: number; n: number };
@@ -92,7 +95,7 @@ const top = (m: Map<string, number>, k: number) => {
   return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, k).map(([x, c]) => `${x} ${((100 * c) / n).toFixed(0)}%`).join(', ');
 };
 
-console.log(`Hatch tournament at ${skill} skill (${LADDER_PIPS[skill]} pips of wyrmling-grade shards each): ${jobs.length} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
+console.log(`Hatch tournament at ${skill} skill, ${rulesLabel} (${LADDER_PIPS[skill]} pips of wyrmling-grade shards each): ${jobs.length} bouts in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
 console.log('Every brain drafted its egg, bloodstone and shards by its playstyle. Win rates carry a 95% margin (±).');
 console.log(`Endings: ${(100 * ends.ko / jobs.length).toFixed(0)}% KO, ${(100 * ends.pulse / jobs.length).toFixed(0)}% rim pulse, ${(100 * ends.timeout / jobs.length).toFixed(0)}% timeout.`);
 console.log('\n── Styles: win rate, and what they hatched (spread = effective number of builds) ──');

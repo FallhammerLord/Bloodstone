@@ -3,7 +3,7 @@
 
 import { availableParallelism } from 'node:os';
 import { Worker } from 'node:worker_threads';
-import { DEFAULT_RULES, PACE, rulesWith, type Rules } from './rules.ts';
+import { DEFAULT_RULES, PACE, rulesWith, TECH_PASS_1, type Rules } from './rules.ts';
 
 /**
  * Rule overrides from repeated `--rule KEY=VALUE` flags. KEY is a DEFAULT_RULES path (BREATH.blast.radius);
@@ -15,6 +15,21 @@ export function rulesFromArgs(argv: string[]): { rules: Rules; overrides: Record
   argv.forEach((a, i) => {
     if (a !== '--rule') return;
     const spec = argv[i + 1] ?? '';
+    // TECH_PASS_1=on sets every Technique parity key to its first variant.
+    if (spec === 'TECH_PASS_1=on') {
+      Object.assign(overrides, TECH_PASS_1);
+      labels.push('TECH_PASS_1');
+      return;
+    }
+    // A word-valued rule (a Technique variant): KEY=word.
+    const word = /^([A-Z_][A-Z0-9_]*)=([a-z_]+)$/.exec(spec);
+    if (word) {
+      const [, key, value] = word;
+      if (typeof (DEFAULT_RULES as Record<string, unknown>)[key] !== 'string') throw new Error(`${key} isn't a word-valued rule.`);
+      overrides[key] = value;
+      labels.push(`${key}=${value}`);
+      return;
+    }
     const m = /^([A-Za-z_][\w.]*)=(-?[\d.]+)(p?)$/.exec(spec);
     if (!m) throw new Error(`--rule takes KEY=VALUE, like BREATH.blast.radius=0.75p; got "${spec}".`);
     const [, path, num, paces] = m;

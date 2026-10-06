@@ -4,22 +4,25 @@
 //           and without it: same opponent, arena and seeds), on random sheets.
 // Each cell is shrunk toward its row's pooled value (a sheet's rate across styles, a shard's change across styles), so
 // a style's own number only moves the estimate as far as its sample supports. Writes src/brain/measured.json.
-//   npm run measure [-- --skill adept] [--n 24] [--seed N]
+//   npm run measure [-- --skill adept] [--n 24] [--seed N] [--rule KEY=VALUE ...] [--out file]
 // Rerun after any rules patch: the table is the brains' knowledge of what wins.
 
 import { writeFileSync } from 'node:fs';
 import { BRAIN_STYLES, type BrainStyle, type Skill } from './brain.ts';
 import type { Job, Result } from './brains-worker.ts';
-import { flag, inWorkers, WORKERS } from './harness.ts';
+import { flag, inWorkers, rulesFromArgs, WORKERS } from './harness.ts';
 import type { CoreStone, Morph } from './hatch.ts';
 import { seededRandom } from './random.ts';
 import type { FighterSetup } from './referee.ts';
-import { shardPool } from './shards.ts';
+import { setPoolRules, shardPool } from './shards.ts';
 
 const argv = process.argv.slice(2);
 const skill = flag(argv, '--skill', 'adept') as Skill;
 const N = Number(flag(argv, '--n', '24'));
 const seed = Number(flag(argv, '--seed', '2026'));
+const { rules: runRules, overrides, label: rulesLabel } = rulesFromArgs(argv);
+setPoolRules(runRules);
+const outFile = flag(argv, '--out', '');
 const SHEET_TRUST = 12;
 const SHARD_TRUST = 24;
 
@@ -60,7 +63,7 @@ for (const style of BRAIN_STYLES) {
 }
 
 const t0 = Date.now();
-const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs })).flat();
+const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs, overrides })).flat();
 const won = new Map(results.map((r) => [r.id, r.winner === 'A']));
 
 type Cell = { w: number; n: number };
@@ -101,11 +104,12 @@ for (const style of BRAIN_STYLES) {
     shardTable[style][shard.name] = round((c.w + SHARD_TRUST * pooled(shardCells, shard.name)) / (c.n + SHARD_TRUST));
   }
 }
-const out = new URL('./brain/measured.json', import.meta.url);
-writeFileSync(out, JSON.stringify({ skill, n: N, seed, bouts: jobs.length, sheets, shards: shardTable,
+// --out writes elsewhere (a comparison run), leaving the brains' table alone.
+const out = outFile ? new URL(outFile, `file://${process.cwd()}/`) : new URL('./brain/measured.json', import.meta.url);
+writeFileSync(out, JSON.stringify({ skill, n: N, seed, rules: rulesLabel, bouts: jobs.length, sheets, shards: shardTable,
   pooled: { sheets: Object.fromEntries(SHEETS.map((x) => [x.key, round(pooled(sheetCells, x.key))])), shards: Object.fromEntries(shards.map((x) => [x.name, round(pooled(shardCells, x.name))])) } }, null, 1) + '\n');
 
-console.log(`Measured ${jobs.length} bouts at ${skill} skill in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
+console.log(`Measured ${jobs.length} bouts at ${skill} skill, ${rulesLabel}, in ${((Date.now() - t0) / 1000).toFixed(0)} s on ${WORKERS} workers.`);
 console.log('\nSheets, pooled across styles (win rate against the field):');
 for (const x of [...SHEETS].sort((a, b) => pooled(sheetCells, b.key) - pooled(sheetCells, a.key))) console.log(`  ${(100 * pooled(sheetCells, x.key)).toFixed(0).padStart(3)}%  ${x.key}`);
 console.log('\nShards, pooled across styles (change in win rate from carrying it):');

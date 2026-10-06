@@ -2,6 +2,7 @@
 // Body and Bloodstone suites in full; Techniques are data here and take effect in the Referee.
 
 import type { StatSheet } from './hatch.ts';
+import { DEFAULT_RULES, type Rules } from './rules.ts';
 
 export type Grade = 'wyrmling' | 'juvenile' | 'adult' | 'elder' | 'venerable';
 export const GRADES: readonly Grade[] = ['wyrmling', 'juvenile', 'adult', 'elder', 'venerable'];
@@ -100,7 +101,7 @@ const TECHNIQUES: TechniqueDef[] = [
   { id: 'riposte-talons', name: 'Riposte Talons', pips: 1, built: true },
   { id: 'mantle-wings', name: 'Mantle Wings', pips: 1, built: true },
   { id: 'sapping-bellow', name: 'Sapping Bellow', pips: 1, built: true },
-  { id: 'baleful-eye', name: 'Baleful Eye', pips: 1, built: true },
+  { id: 'baleful-eye', name: 'Baleful Eye', pips: 1, built: true, pulled: true }, // cut (technique parity pass 1)
   { id: 'goading-roar', name: 'Goading Roar', pips: 1, built: true },
 ];
 
@@ -238,8 +239,16 @@ export function compile(base: StatSheet, array: DragonArray): { sheet: StatSheet
 }
 
 /** Every built shard a dragon could seat: attribute chips and Techniques, at one grade or (null) all of them. */
+/** The rules the shard pool follows (pulled shards come back under their variants). Run entry points set it. */
+let poolRules: Rules = DEFAULT_RULES;
+export function setPoolRules(rules: Rules) {
+  poolRules = rules;
+}
+
 export function shardPool(grade: Grade | null = 'wyrmling'): Shard[] {
-  const all = [...allAttrShards(), ...builtTechniques().filter((t) => !t.pulled).flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
+  // Ash Gland returns as the blinding breath when the run's rules say so.
+  const inPool = (t: TechniqueDef) => !t.pulled || (t.id === 'ash-gland' && poolRules.TECH_ASH_GLAND === 'cloud');
+  const all = [...allAttrShards(), ...builtTechniques().filter(inPool).flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
   return grade ? all.filter((s) => s.grade === grade) : all;
 }
 

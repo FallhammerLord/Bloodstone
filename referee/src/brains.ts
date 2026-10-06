@@ -12,11 +12,12 @@ import { seededRandom } from './random.ts';
 import type { FighterSetup, Side } from './referee.ts';
 import type { Job, Player, Result } from './brains-worker.ts';
 import { flag, inWorkers, rateWithMargin, rulesFromArgs, WORKERS } from './harness.ts';
-import { findShard, randomLoadout } from './shards.ts';
+import { findShard, randomLoadout, setPoolRules } from './shards.ts';
 
 const argv = process.argv.slice(2);
 const skill = flag(argv, '--skill', 'adept') as Skill;
-const { overrides, label: rulesLabel } = rulesFromArgs(argv);
+const { rules: runRules, overrides, label: rulesLabel } = rulesFromArgs(argv);
+setPoolRules(runRules);
 const jsonFile = flag(argv, '--json', '');
 const json: Record<string, unknown> = { skill, rules: rulesLabel, seed: flag(argv, '--seed', '2026') };
 if (!SKILLS.includes(skill)) throw new Error(`Skill is one of ${SKILLS.join(', ')}.`);

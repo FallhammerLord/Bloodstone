@@ -18,11 +18,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { BRAIN_STYLES, type BrainStyle, type Skill } from './brain.ts';
 import { chooseSpoils, DROPS, draftDragon, ICHOR, Picks } from './brain/hatchery.ts';
 import type { Job, Result } from './brains-worker.ts';
-import { flag, inWorkers, rateWithMargin, WORKERS } from './harness.ts';
+import { flag, inWorkers, rateWithMargin, rulesFromArgs, WORKERS } from './harness.ts';
 import { hatch } from './hatch.ts';
 import { seededRandom } from './random.ts';
 import type { FighterSetup, Side } from './referee.ts';
-import { findShard, WYRMLING_PIPS, type Shard } from './shards.ts';
+import { findShard, setPoolRules, WYRMLING_PIPS, type Shard } from './shards.ts';
 
 const argv = process.argv.slice(2);
 const TAMERS = Number(flag(argv, '--tamers', '200'));
@@ -33,6 +33,8 @@ const cardsFile = flag(argv, '--cards', '');
 const carryFile = flag(argv, '--carry', '');
 const saveFile = flag(argv, '--save', '');
 const kills = Number(flag(argv, '--kills', '1'));
+const { rules: runRules, overrides } = rulesFromArgs(argv);
+setPoolRules(runRules);
 const STREAK = kills;
 /** A yield's price, and a timeout's purse, in Ichor: one per skill rank of the ladder (rung) the dragon is on. */
 const priceAt = (rung: number) => Math.min(rung, 2) + 1;
@@ -299,7 +301,7 @@ for (let round = 1; round <= ROUNDS; round++) {
     playerB: { kind: 'brain', style: b.style, skill: b.skill, seed: bouts * 2 + i * 2 + 1 + seed },
     challenged: challenged[i], arenaSeed: (bouts + i) * 31 + 7 + seed, yieldA: policy(a), yieldB: policy(b),
   } satisfies Job]));
-  const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs })).flat();
+  const results: Result[] = (await inWorkers<Result[]>(new URL('./brains-worker.ts', import.meta.url), { jobs, overrides })).flat();
   const byId = new Map(results.map((r) => [r.id, r]));
 
   for (const [i, pair] of pairs.entries()) {
