@@ -5,6 +5,7 @@
 
 | Round | What changed |
 |---|---|
+| [Round 25](#round-25-the-wyrmling-regrid-full-band-strafes-and-the-drake) | The regrid, full-band strafes, the Drake: True Dragon + Air leads, the Drake trails |
 | [Round 24](#round-24-suite-v03-locked-clinging-ash-why-true-dragon--fire-leads) | Suite v0.3 locked; clinging ash; Snapping Jaw in the hatch; the True Dragon + Fire lead is its sheet |
 | [Round 23](#round-23-technique-parity-pass-1) | Technique parity pass 1: one real outlier (Snapping Jaw); the rest was noise |
 | [Round 22](#round-22-brains-with-clean-patch-knowledge-and-measured-drafting) | Brains with clean patch knowledge and measured drafting; Ash Gland pulled |
@@ -34,6 +35,38 @@
 | [4](#round-4-attack-roles) | attack roles |
 | [3](#round-3-focus-brains) | focus brains |
 | [2](#round-2-update) | update |
+
+## Round 25: the wyrmling regrid, full-band strafes, and the Drake
+
+Built from `wyrmling-regrid-roadmap.md`, steps 1–4 (omnibus and hatch held for later):
+1. **Strafe** carries a full band of arc, short or long by Evasion. **Claw** reaches Melee's edge forward, half into Close at the sides, a pace behind.
+2. **The regrid:** the new morph and stone grid; Accuracy = Claw − Evasion and Affinity = Breath − Hardness (each at least 3), derived after all base adds; a preferred stone's +3 lands on a derived stat; a disliked stone costs 6 Wounds. The Acumen meter is now **Surge** and starts at Acumen.
+3. **The Drake** (30 / 9 / 6, prefers Earth): Ravener's 3-slot lunge window with tracking at Melee and Close; its forward hop. Hollow Bones is now Coiled Sinew.
+4. **Ash Gland** keeps its full Breath damage.
+
+Tests: 191 pass. Goldens re-recorded at each step.
+
+**The brains' table, rebuilt** (adept, 48 pairs, 43,680 bouts, run in four chunks). Rates sit below 50% because the subjects include the focus brains; margins are about ±4 on a pooled sheet and ±4–5 on a shard.
+
+| Morph | Water | Earth | Fire | Air | Mean |
+|---|---|---|---|---|---|
+| True Dragon | 43 | 35 | 42 | **60** | 45 |
+| Wyvern | 46 | 41 | 46 | 48 | 45 |
+| Wyrm | 42 | 37 | 40 | 33 | 38 |
+| Drake | 31 | 35 | 36 | 36 | **34** |
+
+**What it shows:**
+- **True Dragon + Air is the new outlier,** at 60%, and the best sheet for 9 of 13 styles. Its sheet: Claw 12 and Accuracy 9 (Claw − Evasion 3), the highest Accuracy in the hatchery, on 42 Wounds. Accuracy 9 beats every Evasion test except a dodging Wyvern. A hypothesis, not yet tested: Claw − Evasion rewards the slowest morph on the Claw stone.
+- **The Drake trails** (31–36%), and the Wyrm sits low (33–42%). Two candidates for the Drake: the sheet (Accuracy 3 on three of four stones, 30 Wounds), or brains that don't yet play Ravener well (they know the hop and value an open window, nothing more). An ablation would split them.
+- **The Wyvern recovers** to par with the True Dragon (45 mean), with full-band strafes and Affinity as its elemental armor.
+- **Every shard sits within −4 to +6,** inside or at the edge of the margins. Snapping Jaw is 0 overall, but +13 on a True Dragon. Gnashing Teeth +6 (+14 on a True Dragon). Smoldering Maw −15 on a True Dragon.
+- **Ash Gland at full damage:** −2 ±4, inside the band (was −5).
+
+**Open, for Ken:**
+- True Dragon + Air at 60%: the Accuracy formula, or the sheet?
+- The Drake's weakness: sheet or brains (ablation first).
+- Ash Gland's Adult grade needs a new perk.
+- Omnibus and hatch, held for later.
 
 ## Round 24: suite v0.3 locked, clinging ash, why True Dragon + Fire leads
 
