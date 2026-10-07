@@ -187,14 +187,16 @@ export interface Spoils {
  * is to reach them, and only for what the field is likely to offer. Banked Ichor keeps a little worth of its own (a
  * future freeze, a yield's price). Skill sets how far ahead it plans; it draws at its temperature.
  */
-export function chooseSpoils(style: BrainStyle, skill: Skill, sheet: StatSheet, sp: Spoils, rng: () => number): SpoilsChoice | null {
+export function chooseSpoils(style: BrainStyle, skill: Skill, sheet: StatSheet, sp: Spoils, rng: () => number, bias: (s: Shard) => number = () => 0): SpoilsChoice | null {
   if (!sp.offer.length) return null;
   const catalog = shardPool('wyrmling');
-  const worth = (st: PlanState) => arrayValue(style, sheet, st.seated) + ICHOR_VALUE * st.ichor;
+  // What it learned from its own field (counterpick trials) adds to each shard it would newly seat.
+  const learned = (st: PlanState) => st.seated.slice(sp.seated.length).reduce((v, s) => v + bias(s), 0);
+  const worth = (st: PlanState) => arrayValue(style, sheet, st.seated) + learned(st) + ICHOR_VALUE * st.ichor;
   // Looking ahead, only the few best freezes are worth imagining.
   const moves = (st: PlanState, offer: Shard[], ahead = false): [SpoilsChoice, PlanState][] => {
     const fits = (s: Shard) => s.pips <= st.room && canAdd(st.seated, s);
-    const score = (s: Shard) => shardScore(style, s, sheet, st.seated.filter((x) => x.name === s.name).length);
+    const score = (s: Shard) => shardScore(style, s, sheet, st.seated.filter((x) => x.name === s.name).length) + bias(s);
     const melt = [...offer].sort((a, b) => b.pips - a.pips || score(a) - score(b))[0];
     const bank = st.ichor + ICHOR.meltPerPip * melt.pips;
     const out: [SpoilsChoice, PlanState][] = [];

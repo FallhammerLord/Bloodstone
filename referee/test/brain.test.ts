@@ -77,3 +77,16 @@ test('attribute shards stack in drafting; a Technique never duplicates', async (
   assert.ok(canAdd([{ name: 'Coiled Sinew' }, { name: 'Coiled Sinew' }], sinew));
   assert.ok(!canAdd([{ name: 'Snapping Jaw' }], jaw));
 });
+
+test('a spoils pick follows what its counterpick trials learned', async () => {
+  const { chooseSpoils } = await import('../src/brain/hatchery.ts');
+  const { findShard } = await import('../src/shards.ts');
+  const { hatch } = await import('../src/hatch.ts');
+  const { seededRandom } = await import('../src/random.ts');
+  const offer = [findShard('Coiled Sinew'), findShard('Weathered Hide')];
+  const sp = { offer, seated: [], room: 3, ichor: 0, reach: 0.5, likely: [] };
+  const pickWith = (favored: string) => chooseSpoils('counterpuncher', 'master', hatch('wyvern', 'air'), sp, seededRandom(3), (s) => (s.name === favored ? 3 : 0));
+  const a = pickWith('Coiled Sinew'), b = pickWith('Weathered Hide');
+  assert.ok(a?.kind === 'seat' && a.shard.name === 'Coiled Sinew');
+  assert.ok(b?.kind === 'seat' && b.shard.name === 'Weathered Hide');
+});
