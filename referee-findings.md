@@ -13,7 +13,68 @@
 
 | Round | What changed |
 |---|---|
+| [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 2: stacking shards, Ravener payoff, free hits and pursuit
+
+**Rules:** attribute shards stack as far as the array's shape permits; Techniques never duplicate. The design doc's build philosophy now reads: the base design avoids single-attribute dependence (every derived stat draws on two attributes), shard allocation is free, and min-maxing is allowed.
+
+**Brains:**
+- **Three new features.**
+  - *Payoff:* a lunging Bite or pouncing Claw that lands.
+  - *Free:* a hit in a slot where it took nothing back.
+  - *Pursuit:* keeping its reach when the opponent backs off.
+- **Ravener.** An open window stays tempo, and with it open a Drake imagines Bites more often. A Drake now values a safe slot-3 Approach over a Bite from beyond reach (tested).
+- **Counterpuncher** weighs free hits and forced misses; Scales is no longer favored over footwork.
+- **Slugger** weighs pursuit and big hits; forced misses barely count.
+- **Drafting** allows chip repeats and values each stack at its measured row. The old repeat discount is gone.
+- **Gambits** (attacks started beyond reach) are counted per archetype.
+
+**The Drake** (120 adept bouts against random archetypes): wins 52 → 59 of 120, lunges 54 → 65 (Ravener windows cashed 27% → 38%). Bites from beyond reach: 34, one landed.
+
+**Tournaments** (1,392 bouts each; adept 90 s, master 230 s):
+- **The floor:** 89% against the crude brain at both skills.
+- **Overall at master** (±10): counterpuncher 59, out-boxer 56, swarmer 50, slugger 45, boxer-puncher 40. At adept the boxer-puncher led (65). Ranks move between runs inside the margins.
+- **Triangle:** out-boxer over slugger holds at both skills (63%); the other two legs don't.
+- **Morphs** with both sides thinking (master, ±5): Wyvern 62, True Dragon 51, Wyrm 48, Drake 39.
+- **Gambits:** 6–12% of every archetype's slots, landing 7–12%. Mostly noise for now. The out-boxer and counterpuncher take the most (11–12%).
+- **Habits:** the new goals barely moved them. The slugger still reads like the swarmer (Bite 25%, Approach 11%, Melee 32%). The counterpuncher strafes 8%, against the boxer-puncher's 7%.
+
+**The table, refreshed with stack rows** (adept, 48 pairs, 24,480 bouts, 28 min in five chunks). Sheets (±5):
+
+| Morph | Water | Earth | Fire | Air | Mean |
+|---|---|---|---|---|---|
+| True Dragon | 42 | 33 | 48 | **61** | 46 |
+| Wyvern | 49 | 47 | 54 | 59 | 52 |
+| Wyrm | 41 | 33 | 39 | 45 | 39 |
+| Drake | 34 | 35 | 35 | 50 | 38 |
+
+Chip stacks (pooled change in win rate for one, two and three copies; margins ±6–9):
+
+| Chip | ×1 | ×2 | ×3 |
+|---|---|---|---|
+| Coiled Sinew (Evasion) | −1 | −1 | **+9** |
+| Pebblescale (Hardness) | +3 | +7 | +5 |
+| Whetted Nail (Claw) | +1 | 0 | +8 |
+| Heartgrit (Wounds) | +6 | +2 | +4 |
+| Slit Pupil (Accuracy) | +3 | −2 | +5 |
+| Milk Fang (Bite) | −1 | 0 | +5 |
+| Smolder Sac (Breath) | +2 | +4 | +3 |
+| Weathered Hide (Affinity) | −3 | −2 | −3 |
+
+Techniques span −3 to +8 (±7–8): Snapping Jaw, Bounding Haunches and Riposte Talons +8.
+
+**What it shows:**
+- **Coiled Sinew ×3 jumps to +9** while one or two copies do nothing. That's the shape the threshold idea predicts (the third Evasion point is the one that crosses Accuracy), but it sits inside a ±8 margin. Treat it as a lean.
+- **The table's shard margins are wide** (±7–8) with five archetypes. Calls on single shards need targeted runs (`--only`, more pairs).
+- **The archetype reshape is weak in habits.** The goals changed what they value, but what gets imagined still comes mostly from probed attack worth. The slugger and counterpuncher need their priors to carry their goals more strongly, or a habit-level signature check.
+- **The Drake improved but still trails** (38% in the table, 39% with both sides thinking).
+
+**Open:**
+- Sharper archetype priors for the slugger (chase) and counterpuncher (juke).
+- The Drake: sheet or Aspect, now that the brains cash Ravener more often.
+- Steps 6–8: tamer memory and counterpicks, season carry with match history, the gauntlet.
 
 ## Round 1: the edition 1 brains
 
