@@ -1,5 +1,5 @@
 // What each attack is worth from each band, asked of the Referee itself: one probe slot per attack and band, against
-// a target that holds. Every rule (Hardness, Affinity, the element wheel, pierce, Surge, Techniques) is in the answer,
+// a target that holds. Every rule (Scales, Affinity, the element wheel, pierce, Surge, Techniques) is in the answer,
 // so the brains never carry a copy of the damage math.
 
 import type { ActionName, ActionSpec } from '../actions.ts';

@@ -59,7 +59,7 @@ export interface Plan {
   thornsUsed: boolean;
   /** Bellows Chest (mobile): a Breath charge carried on a move; a landed hit breaks it */
   mobileCharge: boolean;
-  /** the charging slot of a charge: it guards like Scales and attacks nothing */
+  /** the charging slot of a charge: it guards like a Guard and attacks nothing */
   charging: boolean;
   /** a crunch: two attacks of 15 ticks each */
   halves: [number, number, number][] | null;
@@ -69,10 +69,10 @@ export interface Plan {
   quaked: boolean;
 }
 
-export const category = (p: Plan) => (p.charging ? 'guard' : ACTIONS[p.spec.name].category);
+export const category = (p: Plan) => (p.charging ? 'defend' : ACTIONS[p.spec.name].category);
 
-/** Guarding like Scales: Scales itself, or the charging slot of a charge [Proposed]. */
-export const guarding = (p: Plan, t: number) => (p.spec.name === 'scales' || p.charging) && phase(p, t) === 'active';
+/** Guarding: a Guard itself, or the charging slot of a charge [Proposed]. */
+export const guarding = (p: Plan, t: number) => (p.spec.name === 'guard' || p.charging) && phase(p, t) === 'active';
 
 /** The last active tick of the window t falls in (a crunch has one per half). */
 export function lastActiveTick(p: Plan, t: number): number {
@@ -280,7 +280,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   if (spec.name === 'claw' && ratchetC >= W && rules.TECH_RATCHET_CLAWS === 'escalate' && (ratchetC < A || f.marks.ratchet === 0)) rShift += 3;
   // Thornscale (window): a thorned guard's window closes 3 ticks early (2 from Adult).
   const thornT = tech(f, 'thornscale');
-  if (spec.name === 'scales' && thornT >= W && rules.TECH_THORNSCALE === 'window') rShift += thornT >= A ? 2 : 3;
+  if (spec.name === 'guard' && thornT >= W && rules.TECH_THORNSCALE === 'window') rShift += thornT >= A ? 2 : 3;
   const ham = tech(f, 'hamstring-hooks');
   if (spec.name === 'claw' && ham >= W) rShift += ham >= A ? 3 : 5;
   const bound = tech(f, 'bounding-haunches');

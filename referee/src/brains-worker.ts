@@ -43,7 +43,7 @@ export interface Result {
   winner: Side;
   exchanges: number;
   ending: 'ko' | 'pulse' | 'timeout' | 'yield';
-  /** breaths aimed, breaths landed, breath damage, all damage, Scales chosen, slots played, charges, crunches */
+  /** breaths aimed, breaths landed, breath damage, all damage, Guard chosen, slots played, charges, crunches */
   stats: [number, number, number, number, number, number, number, number];
   /** damage dealt by each side */
   dealt: Record<Side, number>;
@@ -219,7 +219,7 @@ for (const job of mine) {
   }
   for (const r of bout.record) for (const s of ['A', 'B'] as const) {
     stats[5]++;
-    if (r.actions[s] === 'scales') stats[4]++;
+    if (r.actions[s] === 'guard') stats[4]++;
   }
   results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, sideActions, sideBands, gambits, outcomes, travel, bands });
 }

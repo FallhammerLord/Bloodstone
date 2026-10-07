@@ -33,15 +33,15 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
     if (hh >= V) def.pending.grounded = true;
     note(def.side, `Hamstring Hooks: Staggered next slot${hh >= E ? ', and slowed' : ''}${hh >= V ? ', and can\'t Leap' : ''}.`);
   }
-  // Thornscale: attackers landing into Scales take 3 (Wyrmling: Claw only; Juvenile: Claw and Bite). Under window,
+  // Thornscale: attackers landing into Guard take 3 (Wyrmling: Claw only; Juvenile: Claw and Bite). Under window,
   // Claw or Bite at every grade: a Wyrmling's thorns strike the first into each guard, a Juvenile's every one.
   const th = tech(def, 'thornscale');
-  const intoScales = guarding(defPlan, t);
+  const intoGuard = guarding(defPlan, t);
   const windowed = bout.rules.TECH_THORNSCALE === 'window';
   const thornHits = windowed
     ? (p.spec.name === 'claw' || p.spec.name === 'bite') && (th >= J || !defPlan.thornsUsed)
     : p.spec.name === 'claw' || (th >= J && p.spec.name === 'bite');
-  if (th >= W && intoScales && thornHits) {
+  if (th >= W && intoGuard && thornHits) {
     defPlan.thornsUsed = true;
     thorns(bout, s, th, t, ev);
   }
@@ -81,8 +81,8 @@ export function riposte(bout: Bout, s: Side, attackPlan: Plan, dodgePlan: Plan, 
   const parts: string[] = [];
   let v = bout.rules.TECHNIQUE_POINTS;
   if (rip >= V) {
-    v = Math.max(bout.rules.DAMAGE_FLOOR, eff(f, 'claw', {}).value - eff(target, 'hardness', {}).value);
-    parts.push(`Riposte Talons: Claw Sharpness against Hardness, ${v}`);
+    v = Math.max(bout.rules.DAMAGE_FLOOR, eff(f, 'claw', {}).value - eff(target, 'scales', {}).value);
+    parts.push(`Riposte Talons: Claw Sharpness against Scales, ${v}`);
   } else parts.push(`Riposte Talons: ${v}`);
   if (rip >= E) {
     v += bout.rules.PUNISH_BONUS;

@@ -33,7 +33,7 @@ test('Talons: from the air, a stoop descends and carries at most a band forward,
   bout.fighters.A.pos = { ...bout.fighters.A.pos, z: 3 * R.PACE };
   const ev = run(bout, ['claw:left'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 12 - 6 + Math.floor(3 / R.DEFAULT_RULES.STOOP_PACES_PER_POINT), 'Claw 12, Hardness 6, +1 for a 3-pace fall');
+  assert.equal(hits(ev)[0].damage, 12 - 6 + Math.floor(3 / R.DEFAULT_RULES.STOOP_PACES_PER_POINT), 'Claw 12, Scales 6, +1 for a 3-pace fall');
   assert.equal(hits(ev)[0].tick, 6 + 3 * R.DEFAULT_RULES.STOOP_TICKS_PER_PACE, 'the descent takes 2 ticks a pace');
   assert.ok(hits(ev)[0].tags.includes('stoop'));
   assert.equal(bout.fighters.A.pos.z, 0, 'lands on the ground');
@@ -220,7 +220,7 @@ test('each charging slot adds an exchange to the fire; each dragon keeps at most
 });
 test('Earth corrodes on the hit: +Potency ÷ 4 from every hit while it lasts, and each such hit fills the attacker\'s meter', () => {
   // Wyrm + Earth (Potency 12) breathes on a True Dragon + Earth (Affinity 6, so the verb holds), then bites: Bite 15,
-  // Hardness 6 pierced to 3, +3 corroded.
+  // Scales 6 pierced to 3, +3 corroded.
   const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, { name: 'Clod', morph: 'true-dragon', stone: 'earth' }, 4);
   const ev = run(bout, ['breath', 'bite'], ['hold', 'hold']);
   assert.deepEqual(hits(ev).map((h) => h.action), ['breath', 'bite']);
@@ -366,13 +366,13 @@ test('the wheel shapes a burn as it shapes the Breath: Earth smothers Fire, Fire
   assert.equal(burn('earth'), 1);
   assert.equal(burn('air'), 7);
   assert.equal(burn('water'), 4);
-});test('Scales adds its Affinity to the contest', () => {
-  // True Dragon + Water's jet (Potency 18) against a True Dragon + Fire (Affinity 15): lands bare; under Scales it's 18 against 18, and a tie goes to the higher Acumen.
+});test('Guard adds its Affinity to the contest', () => {
+  // True Dragon + Water's jet (Potency 18) against a True Dragon + Fire (Affinity 15): lands bare; under Guard it's 18 against 18, and a tie goes to the higher Acumen.
   const bare = newBout(TD_WATER, { name: 'F', morph: 'true-dragon', stone: 'fire' }, 5);
   assert.ok(run(bare, ['breath'], ['hold']).some((e) => e.kind === 'note' && e.text.startsWith('The jet pushes it back')));
   const guarded = newBout(TD_WATER, { name: 'F', morph: 'true-dragon', stone: 'fire' }, 5);
   guarded.fighters.B.sheet.acumen = 11;
-  assert.ok(run(guarded, ['breath'], ['scales']).some((e) => e.kind === 'note' && e.text.includes('holds against Potency 18')));
+  assert.ok(run(guarded, ['breath'], ['guard']).some((e) => e.kind === 'note' && e.text.includes('holds against Potency 18')));
 });
 
 test('zones contest Affinity too: a burning zone can\'t take hold of high Affinity', () => {
@@ -391,8 +391,8 @@ test('Surge starts at Acumen: 10 × age category, +3 for a Water-preferring drag
   assert.equal(bout.fighters.B.meter, 13, 'Wyrm + Water, preferred: Acumen 13');
 });
 
-test('Scales, Dodge and a Breath charge held to the end each fill Affinity + the base fill', () => {
-  for (const action of ['scales', 'dodge', 'charge:breath']) {
+test('Guard, Dodge and a Breath charge held to the end each fill Affinity + the base fill', () => {
+  for (const action of ['guard', 'dodge', 'charge:breath']) {
     const bout = newBout(TD_WATER, TD_WATER, 6);
     const m0 = bout.fighters.A.meter;
     simulateSlot(bout, { A: parseAction(action), B: parseAction('hold') });
@@ -418,7 +418,7 @@ test('a full meter makes the next landed hit true damage, then empties; a miss s
   const whiff = run(bout, ['stomp'], ['hold']);
   assert.ok(hits(whiff).length === 1 && bout.fighters.A.meter === R.METER_MAX, 'a Stomp never spends it');
   const ev = run(bout, ['claw:left'], ['hold']);
-  assert.equal(hits(ev)[0].damage, 9 + Math.floor(12 / R.DEFAULT_RULES.METER_STEROID_DIVISOR), 'Claw 9 straight through Hardness 9, +4 for Affinity 12 ÷ 3');
+  assert.equal(hits(ev)[0].damage, 9 + Math.floor(12 / R.DEFAULT_RULES.METER_STEROID_DIVISOR), 'Claw 9 straight through Scales 9, +4 for Affinity 12 ÷ 3');
   assert.ok(hits(ev)[0].parts.includes('true damage (full Surge)'));
   assert.equal(bout.fighters.A.meter, 0);
 });
@@ -454,10 +454,10 @@ test('a Wyvern can\'t Leap and stoop in the same exchange', () => {
   assert.ok(next.some((e) => e.kind === 'note' && e.text.startsWith('Stoops from')), 'aloft since the exchange began: it stoops');
 });
 
-test('Stomp deals 3 + Hardness ÷ 3, and its quake shatters boulders inside its radius', () => {
+test('Stomp deals 3 + Scales ÷ 3, and its quake shatters boulders inside its radius', () => {
   const bout = newBout({ name: 'C', morph: 'wyrm', stone: 'earth' }, TD_WATER, 1.5, 'B', { obstacles: [{ size: 'small', x: -1.5, y: -1.5 }] });
   const ev = run(bout, ['stomp'], ['hold']);
-  assert.equal(hits(ev)[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(9 / R.DEFAULT_RULES.STOMP_HARDNESS_DIVISOR.wyrmling), 'a Wyrm\'s Hardness 9 adds 3');
+  assert.equal(hits(ev)[0].damage, R.DEFAULT_RULES.STOMP_DAMAGE + Math.floor(9 / R.DEFAULT_RULES.STOMP_SCALES_DIVISOR.wyrmling), 'a Wyrm\'s Scales 9 adds 3');
   assert.ok(ev.some((e) => e.kind === 'note' && e.text.startsWith('The quake shatters')));
   assert.equal(bout.arena.obstacles.filter((o) => o.kind === 'boulder').length, 0);
 });
@@ -524,7 +524,7 @@ test('at Melee a Breath trading with a Bite is lost; a charged release holds thr
 });
 
 test('a guard with a full Surge turns the blow back on its owner\'s own hide, Breath included, and spends the meter', () => {
-  for (const [attack, guard] of [['bite', 'scales'], ['breath', 'scales'], ['bite', 'dodge']] as const) {
+  for (const [attack, guard] of [['bite', 'guard'], ['breath', 'guard'], ['bite', 'dodge']] as const) {
     const bout = newBout(TD_WATER, { name: 'W', morph: 'wyrm', stone: 'earth' }, 4);
     bout.fighters.B.meter = R.METER_MAX;
     const ev = run(bout, [attack], [guard]);
@@ -533,7 +533,7 @@ test('a guard with a full Surge turns the blow back on its owner\'s own hide, Br
     assert.equal(h[0].attacker, 'B', `${attack} into ${guard}`);
     assert.ok(h[0].tags.includes('reflected'));
     assert.equal(bout.fighters.A.wounds, bout.fighters.A.sheet.wounds - h[0].damage);
-    assert.ok(bout.fighters.B.meter < R.METER_MAX, 'spent (a Scales slot held to the end then refills a little)');
+    assert.ok(bout.fighters.B.meter < R.METER_MAX, 'spent (a Guard slot held to the end then refills a little)');
   }
 });
 
@@ -565,7 +565,7 @@ const DRAKE: FighterSetup = { name: 'D', morph: 'drake', stone: 'earth' };
 
 test('the Drake: wingless and four-legged, peak Evasion, valley Wounds; it prefers Earth', () => {
   const d = newBout(DRAKE, TD_WATER, 6).fighters.A.sheet;
-  assert.deepEqual([d.wounds, d.evasion, d.hardness, d.flies, d.aspect, d.preference], [30, 9, 6, false, 'ravener', 'preferred']);
+  assert.deepEqual([d.wounds, d.evasion, d.scales, d.flies, d.aspect, d.preference], [30, 9, 6, false, 'ravener', 'preferred']);
   assert.equal(d.accuracy, 3 + 3, 'Claw 9 − Evasion 9 floors at 3; preferred Earth adds 3');
 });
 

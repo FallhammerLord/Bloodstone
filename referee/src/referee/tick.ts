@@ -203,7 +203,7 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
     // A guard with a full Surge turns the blow back on the attacker and empties the meter [Doc].
     const d = other(r.s);
     const dp = plans[d];
-    if ((dp.spec.name === 'scales' || dp.spec.name === 'dodge') && phase(dp, t) === 'active' && F[d].meter >= R.METER_MAX) {
+    if ((dp.spec.name === 'guard' || dp.spec.name === 'dodge') && phase(dp, t) === 'active' && F[d].meter >= R.METER_MAX) {
       reflected.add(r.s);
       plans[r.s].resolved = true;
       F[d].meter = 0;
@@ -212,7 +212,7 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
       F[r.s].wounds -= back.total;
       // Thornscale (window, Elder): a guard reversal also deals the thorns.
       const thR = tech(F[d], 'thornscale');
-      if (bout.rules.TECH_THORNSCALE === 'window' && thR >= E && dp.spec.name === 'scales' && (plans[r.s].spec.name === 'claw' || plans[r.s].spec.name === 'bite')) thorns(bout, r.s, thR, t, ev);
+      if (bout.rules.TECH_THORNSCALE === 'window' && thR >= E && dp.spec.name === 'guard' && (plans[r.s].spec.name === 'claw' || plans[r.s].spec.name === 'bite')) thorns(bout, r.s, thR, t, ev);
       ev.push({ kind: 'note', tick: t, side: d, tag: 'reflected', text: `The full Surge turns the ${plans[r.s].spec.name} back on its owner.` });
       ev.push({ kind: 'hit', tick: t, attacker: d, action: plans[r.s].spec.name, damage: back.total, parts: ['reflected by a full Surge:', ...back.parts], tags: ['reflected'], interrupt: false, trade: false, woundsLeft: F[r.s].wounds });
       continue;

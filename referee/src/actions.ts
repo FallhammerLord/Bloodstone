@@ -3,11 +3,11 @@
 export type ActionName =
   | 'bite' | 'claw' | 'breath' | 'stomp'
   | 'approach' | 'retreat' | 'strafe' | 'leap' | 'dive'
-  | 'dodge' | 'scales'
+  | 'dodge' | 'guard'
   | 'intimidate'
   | 'hold';
 
-export type Category = 'attack' | 'move' | 'guard' | 'intimidate' | 'hold';
+export type Category = 'attack' | 'move' | 'defend' | 'intimidate' | 'hold';
 
 export interface ActionDef {
   category: Category;
@@ -27,8 +27,8 @@ export const ACTIONS: Record<ActionName, ActionDef> = {
   strafe: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Strafe' }, // [Assumed]
   leap: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Leap' }, // [Assumed]
   dive: { category: 'move', profile: [3, 24, 3], cooldown: 0, label: 'Dive' }, // [Assumed]
-  dodge: { category: 'guard', profile: [6, 12, 12], cooldown: 1, label: 'Dodge' }, // [Assumed]: active 6-17 covers a Bite's window; cooldown [Proposed]
-  scales: { category: 'guard', profile: [3, 24, 3], cooldown: 0, label: 'Scales' }, // [Assumed]
+  dodge: { category: 'defend', profile: [6, 12, 12], cooldown: 1, label: 'Dodge' }, // [Assumed]: active 6-17 covers a Bite's window; cooldown [Proposed]
+  guard: { category: 'defend', profile: [3, 24, 3], cooldown: 0, label: 'Guard' }, // [Assumed]
   intimidate: { category: 'intimidate', profile: [9, 12, 9], cooldown: 0, label: 'Intimidate' }, // [Assumed]
   hold: { category: 'hold', profile: [0, 30, 0], cooldown: 0, label: 'Hold' }, // the timeout default [Doc]
 };
@@ -87,8 +87,10 @@ export function parseAction(text: string): ActionSpec {
     if (detail === 'claw') return { name: 'claw', sweep: extra === 'right' ? 'right' : 'left', crunch: true };
     throw new Error(`Crunch a Claw or a Bite: "crunch:claw" or "crunch:bite".`);
   }
-  if (!(raw in ACTIONS)) throw new Error(`Unknown action "${text}".`);
-  const name = raw as ActionName;
+  // "scales" is the Guard action's old name; saved scripts still carry it.
+  const key = raw === 'scales' ? 'guard' : raw;
+  if (!(key in ACTIONS)) throw new Error(`Unknown action "${text}".`);
+  const name = key as ActionName;
   if (name === 'strafe') {
     if (detail !== 'cw' && detail !== 'ccw') throw new Error(`Strafe needs a direction: "strafe:cw" or "strafe:ccw".`);
     // "strafe:cw", "strafe:cw:long", "strafe:cw:in", "strafe:cw:in:short": a shift (Sidewinder Spine) and a landing depth.

@@ -19,6 +19,6 @@
     ]
   },
   "exchanges": [
-    { "A": ["bite", "bite", "bite"], "B": ["scales", "hold", "claw:left"] }
+    { "A": ["bite", "bite", "bite"], "B": ["guard", "hold", "claw:left"] }
   ]
 }

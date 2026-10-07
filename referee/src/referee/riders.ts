@@ -7,7 +7,7 @@ import type { Fighter } from './state.ts';
 
 export interface RiderContext {
   opp?: Fighter;
-  scales?: boolean;
+  guarded?: boolean;
   link?: number;
   sep?: number;
 }
@@ -16,7 +16,7 @@ export function riderHolds(c: Condition, f: Fighter, ctx: RiderContext): boolean
   switch (c) {
     case 'halfWounds': return f.wounds * 2 <= f.sheet.wounds;
     case 'aloft': return f.pos.z > 0;
-    case 'scales': return ctx.scales === true;
+    case 'guard': return ctx.guarded === true;
     case 'altitudeDiff': return ctx.opp !== undefined && ctx.opp.pos.z !== f.pos.z;
     case 'chainFinal': return ctx.link === 3;
     case 'crunchedDifferent': return false; // crunch isn't built yet

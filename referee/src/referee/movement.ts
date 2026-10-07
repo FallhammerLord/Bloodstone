@@ -151,7 +151,7 @@ export function beginLunge(rules: Rules, att: Fighter, p: Plan, ev: Event[]) {
 
 /**
  * Pounce [Proposed]: a Claw right after a Strafe advances up to one band along its locked line during
- * the active window, sweeping its arc as it goes, and pierces 3 Hardness. It stops at the stoop's landing
+ * the active window, sweeping its arc as it goes, and pierces 3 Scales. It stops at the stoop's landing
  * distance from where the target stood; a grounded Wyvern's short Claw pounces too. An airborne Wyvern
  * that strafes into a stoop gets the pierce on the stoop instead.
  */

@@ -13,7 +13,7 @@ import { A, type Bout, E, type Fighter, J, type Side, V, W, other, tech } from '
 import { techniqueOnHit } from './techniques.ts';
 
 /**
- * What a landed hit deals: the attack's base against Hardness (or Affinity, for Breath), then every modifier.
+ * What a landed hit deals: the attack's base against Scales (or Affinity, for Breath), then every modifier.
  * A full Surge makes a Bite, Claw or Breath true damage [Proposed]. Never less than the floor.
  */
 export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: Plan, t: number): { total: number; parts: string[]; tags: HitTag[]; bypass: boolean } {
@@ -24,15 +24,15 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
   const parts: string[] = [];
   const tags: HitTag[] = [];
   const bypass = att.meter >= R.METER_MAX && (p.spec.name === 'bite' || p.spec.name === 'claw' || p.spec.name === 'breath') && p.landedHalves === 0;
-  const scales = guarding(defPlan, t);
-  const { hardness, label } = hardnessFelt(rules, att, def, p, t, scales, bypass);
+  const guarded = guarding(defPlan, t);
+  const { scales, label } = scalesFelt(rules, att, def, p, t, guarded, bypass);
   if (bypass) {
     parts.push('true damage (full Surge)');
     tags.push('true-damage');
   }
   // Bellows Chest (mobile, Adult): a moving charge keeps the guard's +3 Affinity against Breath.
   const mobileGuard = defPlan.mobileCharge && tech(def, 'bellows-chest') >= A;
-  let v = baseDamage(rules, att, def, p, hardness, label, scales || mobileGuard, bypass, parts, tags);
+  let v = baseDamage(rules, att, def, p, scales, label, guarded || mobileGuard, bypass, parts, tags);
   v += modifiers(rules, att, def, p, defPlan, t, bypass, parts, tags);
   if (v < rules.DAMAGE_FLOOR) {
     v = rules.DAMAGE_FLOOR;
@@ -41,15 +41,15 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
   return { total: v, parts, tags, bypass };
 }
 
-/** The Hardness a hit meets: Scales, corrosion and guard techniques; none at all for a true-damage hit. */
-function hardnessFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: number, scales: boolean, bypass: boolean): { hardness: number; label: string } {
+/** The Scales a hit meets: Guard, corrosion and guard techniques; none at all for a true-damage hit. */
+function scalesFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: number, guarded: boolean, bypass: boolean): { scales: number; label: string } {
   const corroded = def.status.corroded;
   const crunched = p.halves !== null;
-  // Guard techniques change Hardness while guarding with Scales.
+  // Guard techniques change Scales while Guarding.
   let guardShift = 0;
   const guardNotes: string[] = [];
-  if (scales) {
-    // Thornscale (window) costs the guard's last ticks instead of its Hardness.
+  if (guarded) {
+    // Thornscale (window) costs the guard's last ticks instead of its Scales.
     const thorn = tech(def, 'thornscale');
     if (thorn >= W && rules.TECH_THORNSCALE === 'base' && (thorn < A || p.spec.name === 'bite')) {
       guardShift -= 3;
@@ -66,29 +66,29 @@ function hardnessFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: numb
       guardNotes.push('Mantle Wings');
     }
   }
-  const hard = eff(def, 'hardness', { scales });
-  // Gnashing Teeth Elder: the second bite of a crunch pierces 3 Hardness.
+  const hard = eff(def, 'scales', { guarded });
+  // Gnashing Teeth Elder: the second bite of a crunch pierces 3 Scales.
   if (crunched && p.spec.name === 'bite' && t >= R.HALF && tech(att, 'gnashing-teeth') >= E) {
     guardShift -= 3;
     guardNotes.push('Gnashing Teeth');
   }
-  const hardness = bypass ? 0 : Math.max(0, hard.value + (scales ? rules.SCALES_HARDNESS : 0) - (corroded ? rules.CORRODE_HARDNESS : 0) + guardShift);
-  const label = `Hardness ${hardness}${scales ? ' (Scales)' : ''}${corroded ? ' (corroded)' : ''}${guardNotes.length ? ` (−3 ${guardNotes.join(', ')})` : ''}${hard.note}`;
-  return { hardness, label };
+  const scales = bypass ? 0 : Math.max(0, hard.value + (guarded ? rules.GUARD_SCALES : 0) - (corroded ? rules.CORRODE_SCALES : 0) + guardShift);
+  const label = `Scales ${scales}${guarded ? ' (Guard)' : ''}${corroded ? ' (corroded)' : ''}${guardNotes.length ? ` (−3 ${guardNotes.join(', ')})` : ''}${hard.note}`;
+  return { scales, label };
 }
 
 /** Each attack's own damage against what it meets, with its own riders (pierce, chain escalation, charge, matchup). */
-function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness: number, hardLabel: string, scales: boolean, bypass: boolean, parts: string[], tags: HitTag[]): number {
+function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, scales: number, scalesLabel: string, guarded: boolean, bypass: boolean, parts: string[], tags: HitTag[]): number {
   const crunched = p.halves !== null;
   const sep = dist(att.pos, def.pos);
   let v = 0;
   switch (p.spec.name) {
     case 'bite': {
-      // Bite is piercing [Doc]: it ignores some Hardness.
+      // Bite is piercing [Doc]: it ignores some Scales.
       const bite = eff(att, 'bite', {});
-      const pierced = Math.max(0, hardness - rules.BITE_PIERCE);
+      const pierced = Math.max(0, scales - rules.BITE_PIERCE);
       v = bite.value - pierced;
-      parts.push(`Bite Force ${bite.value}${bite.note}`, `−${hardLabel}${hardness ? ` pierced to ${pierced}` : ''}`);
+      parts.push(`Bite Force ${bite.value}${bite.note}`, `−${scalesLabel}${scales ? ` pierced to ${pierced}` : ''}`);
       if (p.spec.released && p.spec.full) {
         v += rules.CHARGE_BONUS;
         parts.push(`+${rules.CHARGE_BONUS} charged`);
@@ -99,13 +99,13 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
     case 'claw': {
       const claw = eff(att, 'claw', { link: p.spec.revised ? 0 : p.link });
       // A pounce out of a strafe pierces like a Bite [Proposed].
-      const felt = p.pounces ? Math.max(0, hardness - rules.POUNCE_PIERCE) : hardness;
+      const felt = p.pounces ? Math.max(0, scales - rules.POUNCE_PIERCE) : scales;
       const rat = tech(att, 'ratchet-claws');
-      // Ratchet Claws (escalate, Venerable): a Claw ratcheted to +3 or more pierces 3 Hardness.
+      // Ratchet Claws (escalate, Venerable): a Claw ratcheted to +3 or more pierces 3 Scales.
       const ratchetPierce = rules.TECH_RATCHET_CLAWS === 'escalate' && rat >= V && att.marks.ratchet >= 3 ? 3 : 0;
       const shown = Math.max(0, felt - ratchetPierce);
       v = claw.value - shown;
-      parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${hardLabel}${p.pounces && hardness ? ` pierced to ${felt} (pounce)` : ''}${ratchetPierce && felt ? ` pierced to ${shown} (Ratchet Claws)` : ''}`);
+      parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${scalesLabel}${p.pounces && scales ? ` pierced to ${felt} (pounce)` : ''}${ratchetPierce && felt ? ` pierced to ${shown} (Ratchet Claws)` : ''}`);
       if (p.pounces) tags.push('pounce');
       // Ratchet Claws (escalate): each consecutive landed Claw link adds +1 to the next Claw, up to +3 (+6 from Juvenile).
       if (rules.TECH_RATCHET_CLAWS === 'escalate' && rat >= W && att.marks.ratchet > 0) {
@@ -125,11 +125,11 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
     case 'breath': {
       const m = matchup(att.sheet.stone, def.sheet.stone) * rules.MATCHUP;
       const breath = eff(att, 'breath', { sep });
-      const against = affinityAgainst(rules, att, def, scales, sep);
-      const { aff, scalesAff, mantleAff, pierce } = against;
+      const against = affinityAgainst(rules, att, def, guarded, sep);
+      const { aff, guardAff, mantleAff, pierce } = against;
       const affinity = bypass ? 0 : against.affinity;
       v = breath.value - affinity + m;
-      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${scalesAff ? ' (Scales)' : ''}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
+      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${guardAff ? ' (Guard)' : ''}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
       const elem = rules.ELEMENT_BREATH_MOD[att.sheet.stone];
       if (elem) {
         v += elem;
@@ -156,11 +156,11 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, hardness:
       break;
     }
     case 'stomp': {
-      // Stomp grows with Hardness [Proposed]: 3 + Hardness ÷ 3, true damage.
-      const divisor = rules.STOMP_HARDNESS_DIVISOR[att.sheet.age];
-      const heft = Math.floor(Math.max(0, eff(att, 'hardness', {}).value) / divisor);
+      // Stomp grows with Scales [Proposed]: 3 + Scales ÷ 3, true damage.
+      const divisor = rules.STOMP_SCALES_DIVISOR[att.sheet.age];
+      const heft = Math.floor(Math.max(0, eff(att, 'scales', {}).value) / divisor);
       v = rules.STOMP_DAMAGE + heft;
-      parts.push(`Stomp ${rules.STOMP_DAMAGE} + ${heft} (Hardness ÷ ${divisor}) true damage`);
+      parts.push(`Stomp ${rules.STOMP_DAMAGE} + ${heft} (Scales ÷ ${divisor}) true damage`);
       break;
     }
   }
@@ -308,7 +308,7 @@ export function carriesVerb(rules: Rules, att: Fighter): boolean {
   return true;
 }
 
-/** Mantle Wings (verbguard): Scales against a Breath at Melee or Close (any range from Juvenile) blocks its verb. */
+/** Mantle Wings (verbguard): Guard against a Breath at Melee or Close (any range from Juvenile) blocks its verb. */
 export function verbGuarded(rules: Rules, att: Fighter, def: Fighter, defPlan: Plan, t: number): boolean {
   const mantle = tech(def, 'mantle-wings');
   return rules.TECH_MANTLE_WINGS === 'verbguard' && mantle >= W && guarding(defPlan, t) && (mantle >= J || dist(att.pos, def.pos) <= R.CLOSE_EDGE);

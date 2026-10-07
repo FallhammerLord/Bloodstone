@@ -43,7 +43,7 @@ export function rosterLines(bout: Bout, controllers?: Record<Side, Controller>):
     const h = f.sheet;
     const who = controllers ? `, played by ${controllers[s].name}` : '';
     lines.push(`${s}  ${f.name}: ${MORPH_NAMES[h.morph]} + ${cap(h.stone)} stone (${h.preference}, ${h.flies ? 'flies' : 'grounded'}, Aspect: ${ASPECT_NAMES[h.aspect]})${who}`);
-    lines.push(`   Wounds ${h.wounds}  Evasion ${h.evasion}  Hardness ${h.hardness}  Accuracy ${h.accuracy}`);
+    lines.push(`   Wounds ${h.wounds}  Evasion ${h.evasion}  Scales ${h.scales}  Accuracy ${h.accuracy}`);
     lines.push(`   Claw ${h.claw}  Bite ${h.bite}  Breath ${h.breath}  Affinity ${h.affinity}  Acumen ${h.acumen}`);
     const L = f.loadout;
     if (L.names.length) lines.push(`   Shards: ${L.names.join(', ')}${L.seating.length ? `. Seating: ${L.seating.join(' ')}` : ''}`);
@@ -132,7 +132,7 @@ export function report(bout: Bout, events: Event[]): string[] {
         say(e.zone === 'burning'
           ? `  🔥 ${label(e.side)} ends the slot in a burning zone: ${e.damage} damage → ${Math.max(0, e.woundsLeft)}.`
           : e.zone === 'corrosive'
-            ? `  ☣ ${label(e.side)} ends the slot in a corrosive pool: Hardness −${bout.rules.CORRODE_HARDNESS} next slot.`
+            ? `  ☣ ${label(e.side)} ends the slot in a corrosive pool: Scales −${bout.rules.CORRODE_SCALES} next slot.`
             : `  ♨ ${label(e.side)} ends the slot in a smoldering area: ${e.damage} damage and the breath's verb → ${Math.max(0, e.woundsLeft)}.`);
         break;
       case 'revision':

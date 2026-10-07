@@ -17,7 +17,7 @@ export interface Statuses {
   staggered: boolean;
   rattled: boolean;
   blinded: boolean;
-  /** Hardness lowered after ending a slot in a corrosive pool [Assumed] */
+  /** Scales lowered after ending a slot in a corrosive pool [Assumed] */
   corroded: boolean;
   /** Hamstring Hooks Elder: moves complete 3 ticks later */
   slowed: boolean;
@@ -80,14 +80,14 @@ export interface Chain {
   links: number;
   /** a hit landed this exchange (any attack) */
   hitThisExchange: boolean;
-  /** guarded with Scales this exchange (a Wyrmling Ratchet Claws needs it) */
-  scalesThisExchange: boolean;
+  /** Guarded this exchange (a Wyrmling Ratchet Claws needs it) */
+  guardedThisExchange: boolean;
   /** times Ratchet Claws carried this chain through a hitless exchange */
   saves: number;
   /** the next Claw resumes a saved chain (Ratchet Claws Elder: winds up faster) */
   resumed: boolean;
 }
-export const noChain = (): Chain => ({ action: null, links: 0, hitThisExchange: false, scalesThisExchange: false, saves: 0, resumed: false });
+export const noChain = (): Chain => ({ action: null, links: 0, hitThisExchange: false, guardedThisExchange: false, saves: 0, resumed: false });
 
 // Grade ranks, for reading technique terms.
 export const W = 0, J = 1, A = 2, E = 3, V = 4;

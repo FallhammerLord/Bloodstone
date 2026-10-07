@@ -12,7 +12,7 @@ import { type Plan, guarding } from './plan.ts';
 import { eff } from './riders.ts';
 import { A, type Bout, E, type Fighter, J, SIDES, type Side, V, W, other, tech } from './state.ts';
 
-/** Raw force of an attack against an obstacle: no Hardness, no modifiers. */
+/** Raw force of an attack against an obstacle: no Scales, no modifiers. */
 export function obstacleDamage(rules: Rules, att: Fighter, action: ActionName): number {
   switch (action) {
     case 'bite': return att.sheet.bite;
@@ -122,12 +122,12 @@ export function breathVerb(bout: Bout, s: Side, p: Plan, aim: Vec, t: number, ev
   }
 }
 
-/** The Affinity a Breath meets: the stone's, plus Scales and Mantle Wings when guarding, less Lance Throat's pierce. */
-export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, scales: boolean, sep: number) {
+/** The Affinity a Breath meets: the stone's, plus Guard and Mantle Wings when guarding, less Lance Throat's pierce. */
+export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, guarded: boolean, sep: number) {
   const aff = eff(def, 'affinity', { opp: att });
-  // Scales presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
-  const scalesAff = scales ? rules.SCALES_AFFINITY : 0;
-  const mantle = scales ? tech(def, 'mantle-wings') : -1;
+  // Guard presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
+  const guardAff = guarded ? rules.GUARD_AFFINITY : 0;
+  const mantle = guarded ? tech(def, 'mantle-wings') : -1;
   // Mantle Wings (verbguard) blocks the verb instead; only a Venerable's guard rises to +6 against Breath.
   const mantleAff = rules.TECH_MANTLE_WINGS === 'verbguard'
     ? (mantle >= V ? 3 : 0)
@@ -136,7 +136,7 @@ export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, scales
   const lance = tech(att, 'lance-throat');
   const far = sep > R.CLOSE_EDGE;
   const pierce = lance >= V && far ? 6 : lance >= J ? 3 : lance === W && far && rules.TECH_LANCE_THROAT === 'pierce' ? 3 : 0;
-  return { aff, scalesAff, mantleAff, pierce, affinity: Math.max(0, aff.value + scalesAff + mantleAff - pierce) };
+  return { aff, guardAff, mantleAff, pierce, affinity: Math.max(0, aff.value + guardAff + mantleAff - pierce) };
 }
 
 /**
@@ -144,11 +144,11 @@ export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, scales
  * tug) lands only if the breather's Potency beats the target's Affinity; a tie goes to the higher Acumen.
  * Returns a note when the target holds, or null when the element takes hold.
  */
-export function elementHolds(rules: Rules, att: Fighter, def: Fighter, scales: boolean): string | null {
+export function elementHolds(rules: Rules, att: Fighter, def: Fighter, guarded: boolean): string | null {
   const potency = eff(att, 'breath', { sep: dist(att.pos, def.pos) }).value;
   // The element wheel holds in the contest too [Proposed]: a stone that beats the breather's resists it, and the reverse.
   const wheel = rules.ELEMENT_MATCHUP_CONTEST ? -matchup(att.sheet.stone, def.sheet.stone) * rules.MATCHUP : 0;
-  const affinity = affinityAgainst(rules, att, def, scales, dist(att.pos, def.pos)).affinity + wheel;
+  const affinity = affinityAgainst(rules, att, def, guarded, dist(att.pos, def.pos)).affinity + wheel;
   const holds = affinity > potency || (affinity === potency && def.sheet.acumen > att.sheet.acumen);
   return holds ? `Affinity ${affinity} holds against Potency ${potency}` : null;
 }
@@ -237,11 +237,11 @@ export function zonesAtSlotEnd(bout: Bout, plans: Record<Side, Plan>, g: number,
       }
       const mantleW = tech(f, 'mantle-wings');
       const mantleGround = bout.rules.TECH_MANTLE_WINGS === 'verbguard' ? mantleW >= A : mantleW >= E;
-      if (plans[s].spec.name === 'scales' && mantleGround) continue;
+      if (plans[s].spec.name === 'guard' && mantleGround) continue;
       // Stalwart: a True Dragon's own zones never harm it [Proposed].
       if (z.owner === s && f.sheet.aspect === 'stalwart' && bout.rules.STALWART_OWN_ZONES) continue;
       // The zone's element contests the dragon's Affinity, as the breath did [Proposed].
-      const held = elementHolds(bout.rules, bout.fighters[z.owner], f, plans[s].spec.name === 'scales');
+      const held = elementHolds(bout.rules, bout.fighters[z.owner], f, plans[s].spec.name === 'guard');
       if (held && z.kind !== 'smolder') {
         ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'zone-held', text: `${held}: the ${z.kind === 'burning' ? 'flames' : 'pool'} can't take hold.` });
         continue;

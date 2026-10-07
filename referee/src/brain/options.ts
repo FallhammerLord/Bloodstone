@@ -29,7 +29,7 @@ export function legalActions(s: Situation, rng: () => number): ActionSpec[] {
   const depth = (): 'short' | 'long' | undefined => { const r = rng(); return r < 0.34 ? undefined : r < 0.67 ? 'short' : 'long'; };
   const out: ActionSpec[] = [
     ...(s.clampedSlot === s.globalSlot ? [] : [{ name: 'bite' as const }]), { name: 'claw', sweep: side() }, { name: 'approach', depth: depth() }, { name: 'retreat', depth: depth() },
-    { name: 'strafe', dir: turn(), depth: depth() }, { name: 'scales' }, { name: 'intimidate' },
+    { name: 'strafe', dir: turn(), depth: depth() }, { name: 'guard' }, { name: 'intimidate' },
   ];
   if (ready('breath')) out.push({ name: 'breath' });
   if (ready('stomp') && s.z === 0) out.push({ name: 'stomp' });

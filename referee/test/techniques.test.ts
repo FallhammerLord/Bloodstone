@@ -58,7 +58,7 @@ test('Scything Forelimbs: the claw arc widens', () => {
 });
 
 test('Ratchet Claws: each landed Claw link adds +1 to the next; the final link\'s bonus pays for it', () => {
-  // True Dragon + Air claws 9 against Hardness 3: 6 a hit. Links: 6, 6 + 1, 6 + 2 + (3 − 3).
+  // True Dragon + Air claws 9 against Scales 3: 6 a hit. Links: 6, 6 + 1, 6 + 2 + (3 − 3).
   const air: FighterSetup = { name: 'Ash', morph: 'true-dragon', stone: 'air' };
   const ev = run(v02(withTech(air, 'Ratchet Claws', 'juvenile'), TD_WATER, 2), ['claw:left', 'claw:left', 'claw:left'], ['hold', 'hold', 'hold']);
   assert.deepEqual(hits(ev).map((h) => h.damage), [6, 7, 8]);
@@ -122,9 +122,9 @@ test('Bounding Haunches: an Approach carries twice as far', () => {
   assert.equal(bound.fighters.A.pos.x - plain.fighters.A.pos.x, R.DEFAULT_RULES.BAND_MOVE);
 });
 
-test('Thornscale: attackers landing into Scales take 3', () => {
+test('Thornscale: attackers landing into Guard take 3', () => {
   const bout = newBout(TD_WATER, withTech(TD_WATER, 'Thornscale', 'juvenile'), 2);
-  run(bout, ['claw:left'], ['scales']);
+  run(bout, ['claw:left'], ['guard']);
   assert.equal(bout.fighters.A.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });
 
@@ -136,11 +136,11 @@ test('Riposte Talons: a successful Dodge earns a free claw', () => {
   assert.equal(bout.fighters.A.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });
 
-test('Mantle Wings: Scales adds Affinity against breath', () => {
-  // Fire into a Wyrm + Fire (Affinity 9): 18 − (9 + 3 Scales) − 2 Fire = 4, and Mantle Wings takes 3 more.
+test('Mantle Wings: Guard adds Affinity against breath', () => {
+  // Fire into a Wyrm + Fire (Affinity 9): 18 − (9 + 3 Guard) − 2 Fire = 4, and Mantle Wings takes 3 more.
   const wyrm: FighterSetup = { name: 'F', morph: 'wyrm', stone: 'fire' };
-  const plain = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, wyrm, 5), ['breath'], ['scales']))[0].damage;
-  const mantle = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, withTech(wyrm, 'Mantle Wings', 'juvenile'), 5), ['breath'], ['scales']))[0].damage;
+  const plain = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, wyrm, 5), ['breath'], ['guard']))[0].damage;
+  const mantle = hits(run(v02({ name: 'E', morph: 'true-dragon', stone: 'fire' }, withTech(wyrm, 'Mantle Wings', 'juvenile'), 5), ['breath'], ['guard']))[0].damage;
   assert.equal(plain - mantle, 3);
 });
 

@@ -7,7 +7,7 @@
   "exchanges": [
     {
       "A": { "slots": ["bite", "bite", "bite"], "revise": { "at": 1, "if": "separation <= 3", "to": "claw:left" } },
-      "B": { "slots": ["approach", "claw:right", "bite"], "revise": { "at": 2, "if": "opponent revised", "to": "scales" } }
+      "B": { "slots": ["approach", "claw:right", "bite"], "revise": { "at": 2, "if": "opponent revised", "to": "guard" } }
     }
   ]
 }

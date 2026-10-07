@@ -5,6 +5,6 @@
   "A": { "name": "Brine", "morph": "true-dragon", "stone": "water", "shards": [{ "shard": "Lockjaw", "grade": "juvenile", "pips": [0] }, { "shard": "Crushing Molars", "pips": [1] }] },
   "B": { "name": "Coil", "morph": "wyrm", "stone": "water", "shards": [{ "shard": "Thornscale", "grade": "juvenile", "pips": [0] }, { "shard": "Shalecoat", "pips": [1] }] },
   "exchanges": [
-    { "A": ["bite", "claw:left", "hold"], "B": ["hold", "scales", "retreat"] }
+    { "A": ["bite", "claw:left", "hold"], "B": ["hold", "guard", "retreat"] }
   ]
 }

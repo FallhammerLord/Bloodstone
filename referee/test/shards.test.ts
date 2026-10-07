@@ -66,23 +66,23 @@ test('shards add to attributes but tertiaries don\'t re-derive', () => {
 
 // ---- Riders in play ----
 
-test('Bastion Plates: +3 Hardness while guarding with Scales', () => {
+test('Bastion Plates: +3 Scales while Guarding', () => {
   const bout = newBout(TD_WATER, { ...TD_WATER, shards: [{ shard: 'Bastion Plates', pips: [0, 1] }] }, 4);
-  const ev = runExchange(bout, { A: ['bite', 'bite'].map(parseAction), B: ['scales', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 3], 'scales: Hardness 15 pierced to 12, so 9 − 12 floors at 1; then 9 − (9 pierced to 6)');
+  const ev = runExchange(bout, { A: ['bite', 'bite'].map(parseAction), B: ['guard', 'hold'].map(parseAction) });
+  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 3], 'scales: Scales 15 pierced to 12, so 9 − 12 floors at 1; then 9 − (9 pierced to 6)');
 });
 
-test('Ironheart: +3 Hardness at half Wounds or below', () => {
+test('Ironheart: +3 Scales at half Wounds or below', () => {
   const bout = newBout(TD_WATER, { ...TD_WATER, shards: [{ shard: 'Ironheart', pips: [0, 1] }] }, 4);
   bout.fighters.B.wounds = 18;
   const ev = runExchange(bout, { A: ['bite'].map(parseAction), B: ['hold'].map(parseAction) });
-  assert.equal(hits(ev)[0].damage, 9 - (6 + 3 - 3), 'Hardness 6, +3 from the rider, pierced by 3');
+  assert.equal(hits(ev)[0].damage, 9 - (6 + 3 - 3), 'Scales 6, +3 from the rider, pierced by 3');
 });
 
 test('Reaver Hooks: +3 Claw Sharpness on a chain\'s final link', () => {
   const bout = newBout({ ...TD_WATER, shards: [{ shard: 'Reaver Hooks', pips: [0, 1] }] }, TD_WATER, 2);
   const ev = runExchange(bout, { A: ['claw:left', 'claw:left', 'claw:left'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 12], 'Claw 12 against Hardness 6: 6, 6, then 12 + 3 rider + 3 chain − 6');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 12], 'Claw 12 against Scales 6: 6, 6, then 12 + 3 rider + 3 chain − 6');
 });
 
 test('Cauldron Gullet: +3 Breath Potency against targets at Far', () => {

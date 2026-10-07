@@ -45,7 +45,7 @@ export function runExchange(bout: Bout, scripts: Record<Side, ActionSpec[]>, opt
   for (const s of SIDES) {
     const f = bout.fighters[s];
     f.chain.hitThisExchange = false;
-    f.chain.scalesThisExchange = false;
+    f.chain.guardedThisExchange = false;
     f.marks.eye = null;
     bout.startWounds[s] = f.wounds;
     if (f.marks.revisionLockedFor === bout.exchange) ev.push({ kind: 'note', tick: 0, side: s, tag: 'technique', text: "Ash Gland: can't revise this exchange." });
@@ -123,7 +123,7 @@ export function gravity(bout: Bout, s: Side, ev: Event[]) {
 
 /**
  * A chain lapses only when a whole exchange passes without a landed hit. Ratchet Claws carries a Claw
- * chain through one such exchange (Wyrmling: only if it guarded with Scales; Venerable: two).
+ * chain through one such exchange (Wyrmling: only if it Guarded; Venerable: two).
  */
 export function chainAtExchangeEnd(f: Fighter, ev: Event[]) {
   const c = f.chain;
@@ -202,7 +202,7 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
     const p = plans[s];
     const f = F[s];
     if (p.landed) f.chain.hitThisExchange = true;
-    if (p.spec.name === 'scales') f.chain.scalesThisExchange = true;
+    if (p.spec.name === 'guard') f.chain.guardedThisExchange = true;
     // Ratchet Claws (escalate): each consecutive landed Claw link ratchets the next Claw up; a different chain resets it.
     if (bout.rules.TECH_RATCHET_CLAWS === 'escalate' && category(p) === 'attack' && ACTIONS[p.spec.name].cooldown === 0) {
       const rat = tech(f, 'ratchet-claws');
@@ -213,12 +213,12 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
       const c = f.chain;
       if (c.action !== p.spec.name) {
         // A different attack starts a new chain.
-        f.chain = { ...noChain(), hitThisExchange: c.hitThisExchange, scalesThisExchange: c.scalesThisExchange, action: p.spec.name, links: p.landed ? 1 : 0 };
+        f.chain = { ...noChain(), hitThisExchange: c.hitThisExchange, guardedThisExchange: c.guardedThisExchange, action: p.spec.name, links: p.landed ? 1 : 0 };
       } else if (p.landed) {
         c.links = p.link;
         c.resumed = false;
         // A third link completes the chain; the next repeat starts a fresh one.
-        if (c.links >= 3) f.chain = { ...noChain(), hitThisExchange: true, scalesThisExchange: c.scalesThisExchange };
+        if (c.links >= 3) f.chain = { ...noChain(), hitThisExchange: true, guardedThisExchange: c.guardedThisExchange };
       }
     }
     // Riposte Talons Adult: the Dodge cooldown penalty applies only after a failed dodge.
@@ -233,7 +233,7 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
       ev.push({ kind: 'note', tick: R.TICKS_PER_SLOT - 1, side: s, tag: 'technique', text: 'Stooping Pinions: +3 to the next attack.' });
     }
     // Guarding to the end, or drawing a Breath, fills Surge [Proposed]. A broken charge fills nothing.
-    if ((p.spec.name === 'scales' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(bout.rules, f, p.spec.name === 'scales' ? 'Scales' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);
+    if ((p.spec.name === 'guard' || p.spec.name === 'dodge') && p.interruptedAt === null) fillMeter(bout.rules, f, p.spec.name === 'guard' ? 'Guard' : 'Dodge', R.TICKS_PER_SLOT - 1, ev);
     if (p.charging && p.spec.name === 'breath' && f.marks.charge?.action === 'breath') fillMeter(bout.rules, f, 'drawing Breath', R.TICKS_PER_SLOT - 1, ev);
     // Corrosion wears off after its last slot.
     if (f.marks.corrosion && f.marks.corrosion.until <= g) f.marks.corrosion = null;

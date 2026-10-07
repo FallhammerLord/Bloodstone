@@ -20,7 +20,7 @@ export interface StatSheet {
   aspect: 'stalwart' | 'talons' | 'serpentine' | 'ravener';
   wounds: number;
   evasion: number;
-  hardness: number;
+  scales: number;
   claw: number;
   bite: number;
   breath: number;
@@ -29,13 +29,13 @@ export interface StatSheet {
   acumen: number;
 }
 
-// [Proposed] §2 Starting Attributes (the wyrmling regrid). Baseline Wounds 36, Evasion 6, Hardness 6; each morph takes
+// [Proposed] §2 Starting Attributes (the wyrmling regrid). Baseline Wounds 36, Evasion 6, Scales 6; each morph takes
 // one peak and one valley off it (Wounds in 6s, on its doubled scale).
-const MORPHS: Record<Morph, { wounds: number; evasion: number; hardness: number }> = {
-  'true-dragon': { wounds: 42, evasion: 3, hardness: 6 }, // peak Wounds, valley Evasion
-  wyvern: { wounds: 36, evasion: 9, hardness: 3 }, // peak Evasion, valley Hardness
-  wyrm: { wounds: 30, evasion: 6, hardness: 9 }, // peak Hardness, valley Wounds
-  drake: { wounds: 30, evasion: 9, hardness: 6 }, // peak Evasion, valley Wounds: wingless, four-legged
+const MORPHS: Record<Morph, { wounds: number; evasion: number; scales: number }> = {
+  'true-dragon': { wounds: 42, evasion: 3, scales: 6 }, // peak Wounds, valley Evasion
+  wyvern: { wounds: 36, evasion: 9, scales: 3 }, // peak Evasion, valley Scales
+  wyrm: { wounds: 30, evasion: 6, scales: 9 }, // peak Scales, valley Wounds
+  drake: { wounds: 30, evasion: 9, scales: 6 }, // peak Evasion, valley Wounds: wingless, four-legged
 };
 
 type Derived = 'accuracy' | 'affinity' | 'acumen';
@@ -70,7 +70,7 @@ export function preference(morph: Morph, stone: CoreStone): Preference {
 
 /**
  * Egg + stone → stat sheet. The base adds come first (morph, stone, and a disliked stone's −6 Wounds); then the
- * tertiaries derive from them: Accuracy = Claw − Evasion, Affinity = Breath − Hardness (each at least 3), Acumen = 10 ×
+ * tertiaries derive from them: Accuracy = Claw − Evasion, Affinity = Breath − Scales (each at least 3), Acumen = 10 ×
  * age category; a preferred stone adds +3 to its own derived stat.
  */
 export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): StatSheet {
@@ -82,10 +82,10 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
   const perk = (d: Derived) => (pref === 'preferred' && s.perk === d ? 3 : 0);
   return {
     morph, stone, age, preference: pref, flies: FLIERS.includes(morph), aspect: ASPECTS[morph],
-    wounds: m.wounds - (pref === 'disliked' ? DISLIKED_WOUNDS : 0), evasion: m.evasion, hardness: m.hardness,
+    wounds: m.wounds - (pref === 'disliked' ? DISLIKED_WOUNDS : 0), evasion: m.evasion, scales: m.scales,
     claw: s.claw, bite: s.bite, breath: s.breath,
     accuracy: Math.max(DERIVED_FLOOR, s.claw - m.evasion) + perk('accuracy'),
-    affinity: Math.max(DERIVED_FLOOR, s.breath - m.hardness) + perk('affinity'),
+    affinity: Math.max(DERIVED_FLOOR, s.breath - m.scales) + perk('affinity'),
     acumen: 10 * AGE_CATEGORY[age] + perk('acumen'),
   };
 }

@@ -8,13 +8,13 @@ export type Grade = 'wyrmling' | 'juvenile' | 'adult' | 'elder' | 'venerable';
 export const GRADES: readonly Grade[] = ['wyrmling', 'juvenile', 'adult', 'elder', 'venerable'];
 export const gradeRank = (g: Grade) => GRADES.indexOf(g);
 
-export type Attr = 'wounds' | 'evasion' | 'hardness' | 'accuracy' | 'claw' | 'bite' | 'breath' | 'affinity';
+export type Attr = 'wounds' | 'evasion' | 'scales' | 'accuracy' | 'claw' | 'bite' | 'breath' | 'affinity';
 
 /** When a conditional rider applies. The Referee checks these at the moment the attribute is used. */
 export type Condition =
   | 'halfWounds' // at half Wounds or below
   | 'aloft' // while aloft
-  | 'scales' // while guarding with Scales
+  | 'guard' // while Guarding
   | 'altitudeDiff' // against a target at a different altitude
   | 'chainFinal' // on a chain's final link
   | 'crunchedDifferent' // when crunched with a different action (crunch isn't built yet: never true)
@@ -38,11 +38,11 @@ interface AttrLine {
 }
 
 const ATTR_LINES: AttrLine[] = [
-  { family: 'body', attr: 'wounds', rider: { condition: 'halfWounds', attr: 'hardness' }, related: 'hardness',
+  { family: 'body', attr: 'wounds', rider: { condition: 'halfWounds', attr: 'scales' }, related: 'scales',
     names: { wyrmling: 'Heartgrit', juvenile: 'Thickblood', adult: 'Deep Keel', elder: 'Ironheart', venerable: 'Second Heart' } },
   { family: 'body', attr: 'evasion', rider: { condition: 'aloft', attr: 'evasion' }, related: 'accuracy',
     names: { wyrmling: 'Coiled Sinew', juvenile: 'Spring Haunch', adult: 'Swept Pinions', elder: 'Galewing', venerable: 'Skyvane' } },
-  { family: 'body', attr: 'hardness', rider: { condition: 'scales', attr: 'hardness' }, related: 'wounds',
+  { family: 'body', attr: 'scales', rider: { condition: 'guard', attr: 'scales' }, related: 'wounds',
     names: { wyrmling: 'Pebblescale', juvenile: 'Hornhide', adult: 'Shalecoat', elder: 'Bastion Plates', venerable: 'Mountainback' } },
   { family: 'body', attr: 'accuracy', rider: { condition: 'altitudeDiff', attr: 'accuracy' }, related: 'evasion',
     names: { wyrmling: 'Slit Pupil', juvenile: "Hunter's Eye", adult: 'Nictitating Lens', elder: 'Ranging Eyes', venerable: 'Farseer Eyes' } },

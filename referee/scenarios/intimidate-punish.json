@@ -5,6 +5,6 @@
   "A": { "name": "Ash", "morph": "true-dragon", "stone": "fire" },
   "B": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
   "exchanges": [
-    { "A": ["intimidate", "bite", "intimidate"], "B": ["scales", "hold", "bite"] }
+    { "A": ["intimidate", "bite", "intimidate"], "B": ["guard", "hold", "bite"] }
   ]
 }

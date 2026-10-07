@@ -30,7 +30,7 @@ export function crudeController(seed = 1): Controller {
         const attacks = legal.filter((a) => (mine.attack[band][a.name] ?? 0) > 0);
         const best = attacks.sort((a, b) => (mine.attack[band][b.name] ?? 0) - (mine.attack[band][a.name] ?? 0))[0];
         let a: ActionSpec;
-        if (theirs.best[band] > mine.best[band] && rng() < 0.3) a = { name: 'scales' };
+        if (theirs.best[band] > mine.best[band] && rng() < 0.3) a = { name: 'guard' };
         else if (best && rng() < 0.85) a = best;
         else if (band !== home) a = { name: sep > (home === 'melee' ? R.MELEE_EDGE : home === 'close' ? R.CLOSE_EDGE : R.FAR_EDGE) ? 'approach' : 'retreat' };
         else a = legal[Math.floor(rng() * legal.length)];

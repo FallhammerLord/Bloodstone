@@ -58,7 +58,7 @@ export const DEFAULT_RULES = {
   MATCHUP: 3,
   DAMAGE_FLOOR: 1,
   STOMP_DAMAGE: 3,
-  BITE_PIERCE: 3, // [Doc] Bite is piercing; [Assumed] it ignores 3 Hardness
+  BITE_PIERCE: 3, // [Doc] Bite is piercing; [Assumed] it ignores 3 Scales
   // The True Dragon's Aspect, Stalwart [Proposed]: its own zones never harm it, and each charging slot widens its
   // released Breath by ½ pace. (A 3-tick faster Breath was tried and overshot.)
   STALWART_WIDEN: Math.floor(PACE / 2),
@@ -77,17 +77,17 @@ export const DEFAULT_RULES = {
   // strike, never less than 1 tick and never longer than the wind-up. Movement after that is what a shape must cover.
   AIM_SETTLE_BASE: 12,
   // ---- Guards ----
-  SCALES_HARDNESS: 3, // [Assumed] Hardness bonus while guarding with Scales
-  SCALES_AFFINITY: 3, // [Assumed] Affinity bonus while guarding with Scales: presenting the hide to the elements
+  GUARD_SCALES: 3, // [Assumed] Scales bonus while Guarding
+  GUARD_AFFINITY: 3, // [Assumed] Affinity bonus while Guarding: presenting the hide to the elements
   DODGE_BONUS: 3, // [Assumed] Evasion bonus while dodging
   // ---- Acumen ---- [Proposed] §4 Surge
   // The Surge [Proposed]: Affinity fuels it. It starts at age bracket × 10 + 3 × Affinity, and each trigger
-  // (a near miss, a Scales or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 9.
-  // Full, the next landed Bite, Claw or Breath deals true damage (no Hardness or Affinity) and drains it. A miss spends nothing.
+  // (a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 9.
+  // Full, the next landed Bite, Claw or Breath deals true damage (no Scales or Affinity) and drains it. A miss spends nothing.
   METER_BASE_FILL: 9, // [Proposed] raised from 3 so low-Affinity stones still fill
   GRAVITY_DROP: BAND, // [Proposed] a flier that doesn't Leap during an exchange drops a band at its end
   DEMORALIZE: 3, // [Proposed] an Intimidate that reaches also takes 3 off the target's next Bite or Claw
-  STOMP_HARDNESS_DIVISOR: { wyrmling: 3, adult: 3, venerable: 2 }, // Stomp deals 3 + Hardness ÷ 3 (a Venerable's ÷ 2), and shatters boulders inside its radius
+  STOMP_SCALES_DIVISOR: { wyrmling: 3, adult: 3, venerable: 2 }, // Stomp deals 3 + Scales ÷ 3 (a Venerable's ÷ 2), and shatters boulders inside its radius
   METER_STEROID_DIVISOR: 3, // a full meter's hit also adds Affinity ÷ 3 [Proposed]
   AGE_BRACKET: { wyrmling: 1, adult: 3, venerable: 5 } as const, // of five: wyrmling, juvenile, adult, elder, venerable
   BOULDERS_PER_ARENA: { dice: 4, plus: 2 }, // [Proposed] standard arenas throw 1d4+2 boulders: never an open floor
@@ -121,11 +121,11 @@ export const DEFAULT_RULES = {
   ZONE_MATCHUP: 1, // [Proposed] a burn adds the matchup (±3) like the Breath that laid it, never below the damage floor; 0: off
   // Earth corrodes [Proposed]: a landed Earth Breath corrodes the target directly (no pool) for Potency ÷ 6 slots plus an
   // exchange per charging slot; a corroded dragon takes +Potency ÷ 4 from every hit, and each hit on it is an Acumen trigger.
-  EARTH_CORRODES: 1, // [Proposed] 1: the debuff on the hit; 0: the old pool that lowers Hardness
+  EARTH_CORRODES: 1, // [Proposed] 1: the debuff on the hit; 0: the old pool that lowers Scales
   CORRODE_DIVISOR: 4, // [Proposed] a corroded dragon takes +Potency ÷ this from each hit (12 → 3)
   CORRODE_METER: 1, // [Proposed] 1: landing a hit on a corroded dragon fills the attacker's Surge
   BURN_BLINDS: 0, // [Proposed] 1: a burn also Blinds for the next slot (−3 Accuracy). Off: a toggle for A:B runs
-  CORRODE_HARDNESS: 3, // Hardness lost next slot by a grounded dragon in a corrosive pool at slot's end
+  CORRODE_SCALES: 3, // Scales lost next slot by a grounded dragon in a corrosive pool at slot's end
   EARTH_OBSTACLE_MULTIPLIER: 2, // Earth's slurry eats obstacles
   // ---- Aspects ---- [Doc] §2; numbers [Assumed]
   STOOP_RANGE: FAR_EDGE, // Wyvern Talons: a Claw from the air against a grounded target within Far is a stoop
@@ -150,9 +150,9 @@ export const DEFAULT_RULES = {
   TECH_SNAPPING_JAW: 'borrow_dmg' as 'base' | 'borrow' | 'borrow_dmg', // borrow: the snap's ticks come out of your next slot
   TECH_LOCKJAW: 'clamp' as 'base' | 'clamp' | 'recovery', // clamp: a Pin keeps the jaw shut; your next slot can't Bite
   TECH_RATCHET_CLAWS: 'escalate' as 'base' | 'escalate', // escalate: each landed Claw link adds +1 to the next Claw
-  TECH_THORNSCALE: 'window' as 'base' | 'window', // window: thorns cost the guard's last ticks, not its Hardness
+  TECH_THORNSCALE: 'window' as 'base' | 'window', // window: thorns cost the guard's last ticks, not its Scales
   TECH_BELLOWS_CHEST: 'mobile' as 'base' | 'mobile', // mobile: a Breath charge on the move
-  TECH_MANTLE_WINGS: 'verbguard' as 'base' | 'verbguard', // verbguard: Scales also blocks a Breath's verb
+  TECH_MANTLE_WINGS: 'verbguard' as 'base' | 'verbguard', // verbguard: Guard also blocks a Breath's verb
   TECH_SAPPING_BELLOW: 'base' as 'base' | 'gland', // gland: the bellow rides the Breath (provisional reading: a landed Breath demoralizes)
   TECH_LANCE_THROAT: 'pierce' as 'base' | 'pierce', // pierce: a verbless line that pierces Affinity
   TECH_SMOLDERING_MAW: 'linger' as 'base' | 'linger', // linger: ground lingers longer; a groundless breath lays its verb as ground

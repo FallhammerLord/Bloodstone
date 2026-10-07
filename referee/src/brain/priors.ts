@@ -45,7 +45,7 @@ export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, 
   else if (a.name === 'retreat') w = move(farther[band]) * Math.max(0.2, 1 - 0.3 * g.pursuit);
   else if (a.name === 'strafe') w = 0.4 + 0.5 * g.misses + 0.4 * g.free;
   else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken + 0.5 * g.misses + 0.4 * g.free;
-  else if (a.name === 'scales') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken;
+  else if (a.name === 'guard') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken;
   else if (a.name === 'intimidate') w = 0.2 + 0.15 * (g.punish + g.big);
   else if (a.name === 'leap' || a.name === 'dive') w = s.f.sheet.flies ? 0.6 : 0.2;
   else w = 0.3;

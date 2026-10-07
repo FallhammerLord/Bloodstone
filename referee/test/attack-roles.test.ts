@@ -87,7 +87,7 @@ test('pounce: a Claw right after a Strafe reaches from Close, and pierces', () =
   simulateSlot(bout, { A: parseAction('strafe:cw'), B: parseAction('hold') });
   const ev = simulateSlot(bout, { A: parseAction('claw:left'), B: parseAction('hold') });
   assert.equal(hits(ev).length, 1);
-  assert.equal(hits(ev)[0].damage, 9 - (6 - R.DEFAULT_RULES.POUNCE_PIERCE), 'Claw 9 against the Wyrm\'s Hardness 6, pierced to 3');
+  assert.equal(hits(ev)[0].damage, 9 - (6 - R.DEFAULT_RULES.POUNCE_PIERCE), 'Claw 9 against the Wyrm\'s Scales 6, pierced to 3');
 });
 
 test('pounce: only the Claw right after the Strafe', () => {

@@ -29,7 +29,7 @@ test('probed worth carries the element wheel: Water breathes harder on Earth tha
   assert.ok(on('earth') > on('fire'), `${on('earth')} vs ${on('fire')}`);
 });
 
-test('probed worth carries Hardness: a Claw does less to a Wyrm (Hardness 9) than to a Wyvern (3)', () => {
+test('probed worth carries Scales: a Claw does less to a Wyrm (Scales 9) than to a Wyvern (3)', () => {
   const on = (morph: 'wyrm' | 'wyvern') => worth(newBout(TD_WATER, { name: 'T', morph, stone: 'water' }, 6), 'A').attack.melee.claw ?? 0;
   assert.ok(on('wyvern') > on('wyrm'));
 });

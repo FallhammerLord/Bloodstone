@@ -33,10 +33,10 @@ test('Snapping Jaw (borrow): a snapped Bite in slot 3 delays the next exchange\'
   const b = bout(withTech(TD_WATER, 'Snapping Jaw', 'wyrmling'), TD_WATER, 4, r);
   const first = slotPlans(run(b, ['hold', 'hold', 'bite'], ['hold', 'hold', 'hold']));
   assert.deepEqual([first[2].A.windup, first[2].A.recovery], [9, 15], 'wind-up −3, recovery +3: the active window keeps its length');
-  const next = slotPlans(run(b, ['scales', 'hold', 'hold'], ['hold', 'hold', 'hold']));
-  assert.equal(next[0].A.windup, 3 + 3, 'the next slot\'s Scales winds up 3 later');
+  const next = slotPlans(run(b, ['guard', 'hold', 'hold'], ['hold', 'hold', 'hold']));
+  assert.equal(next[0].A.windup, 3 + 3, 'the next slot\'s Guard winds up 3 later');
   const held = bout(withTech(TD_WATER, 'Snapping Jaw', 'wyrmling'), TD_WATER, 4, r);
-  const ev = slotPlans(run(held, ['bite', 'hold', 'scales'], ['hold', 'hold', 'hold']));
+  const ev = slotPlans(run(held, ['bite', 'hold', 'guard'], ['hold', 'hold', 'hold']));
   assert.equal(ev[2].A.windup, 3, 'a Hold between settles the debt');
 });
 
@@ -71,18 +71,18 @@ test('Ratchet Claws (escalate): three landed Claws deal +0, +1, +2 from the ratc
 test('Thornscale (window): a Bite into a thorned guard takes 3; the guard closes 3 ticks early', () => {
   const r = rules({ TECH_THORNSCALE: 'window' });
   const b = bout(TD_WATER, withTech(TD_WATER, 'Thornscale', 'wyrmling'), 4, r);
-  const ev = run(b, ['bite'], ['scales']);
+  const ev = run(b, ['bite'], ['guard']);
   assert.ok(notes(ev).some((n) => n.startsWith('Thornscale: takes 3')));
   assert.equal(b.fighters.A.wounds, b.fighters.A.sheet.wounds - 3);
-  const plans = slotPlans(run(bout(TD_WATER, withTech(TD_WATER, 'Thornscale', 'wyrmling'), 4, r), ['hold'], ['scales']));
-  const base = slotPlans(run(bout(TD_WATER, TD_WATER, 4, r), ['hold'], ['scales']));
+  const plans = slotPlans(run(bout(TD_WATER, withTech(TD_WATER, 'Thornscale', 'wyrmling'), 4, r), ['hold'], ['guard']));
+  const base = slotPlans(run(bout(TD_WATER, TD_WATER, 4, r), ['hold'], ['guard']));
   assert.equal(base[0].B.active - plans[0].B.active, 3);
 });
 
 test('Mantle Wings (verbguard): a guarded Water jet deals its damage and pushes nothing', () => {
   const r = rules({ TECH_MANTLE_WINGS: 'verbguard' });
   const b = bout(TD_WATER, withTech(TD_WATER, 'Mantle Wings', 'wyrmling'), 4, r);
-  const ev = run(b, ['breath'], ['scales']);
+  const ev = run(b, ['breath'], ['guard']);
   assert.equal(hits(ev).length, 1, 'the jet lands');
   assert.ok(!ev.some((e) => e.kind === 'note' && e.tag === 'push'), 'and pushes nothing');
 });
@@ -96,7 +96,7 @@ test('Bellows Chest (mobile): a Retreat-charge carries a band and releases with 
   const broken = bout(withTech(TD_FIRE, 'Bellows Chest', 'wyrmling'), TD_WATER, 2, r);
   const bev = run(broken, ['charge:breath:retreat'], ['bite']);
   assert.ok(notes(bev).includes('The hit breaks the charge.'));
-  assert.ok(!hits(bev)[0].parts.join(' ').includes('Scales'), 'a moving charge doesn\'t guard');
+  assert.ok(!hits(bev)[0].parts.join(' ').includes('Guard'), 'a moving charge doesn\'t guard');
 });
 
 test('Lance Throat (pierce): at Far it pierces 3 Affinity; a Water lance pushes nothing', () => {

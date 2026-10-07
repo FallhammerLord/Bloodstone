@@ -6,6 +6,6 @@
   "B": { "name": "Gale", "morph": "wyvern", "stone": "water" },
   "exchanges": [
     { "A": ["bite", "stomp", "leap"], "B": ["leap", "hold", "breath"] },
-    { "A": ["bite", "scales", "bite"], "B": ["dive", "claw:left", "leap"] }
+    { "A": ["bite", "guard", "bite"], "B": ["dive", "claw:left", "leap"] }
   ]
 }

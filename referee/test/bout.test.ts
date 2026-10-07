@@ -36,7 +36,7 @@ test('a side sees that the opponent revised, never what to', () => {
 test('one revision per exchange', () => {
   const bout = newBout(TD_WATER, TD_WATER, 4);
   const ev = runExchange(bout, { A: ['hold', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) }, {
-    revise: { A: () => parseAction('scales') },
+    revise: { A: () => parseAction('guard') },
   });
   assert.equal(ev.filter((e) => e.kind === 'revision').length, 1);
 });
@@ -47,7 +47,7 @@ test('same-moment revisions are simultaneous: neither sees the other\'s flash', 
   const reviser = (_b: unknown, _s: unknown, m: number, opp: boolean): ActionSpec | null => {
     if (m !== 2) return null;
     saw.push(opp);
-    return parseAction('scales');
+    return parseAction('guard');
   };
   runExchange(bout, { A: ['hold', 'hold', 'hold'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) }, { revise: { A: reviser, B: reviser } });
   assert.deepEqual(saw, [false, false]);
@@ -58,7 +58,7 @@ test('a revised slot 3 gets no chain bonus', () => {
   const ev = runExchange(bout, { A: ['bite', 'bite', 'claw:left'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) }, {
     revise: { A: (_b, _s, m) => (m === 2 ? parseAction('bite') : null) },
   });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 6]); // Bite 9 against Hardness 6 pierced to 3; no chain bonus on the revision
+  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 6]); // Bite 9 against Scales 6 pierced to 3; no chain bonus on the revision
 });
 
 // ---- Late pressure (§5) ----
