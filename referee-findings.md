@@ -13,9 +13,44 @@
 
 | Round | What changed |
 |---|---|
+| [4](#round-4-season-1-a-true-dragon--air-monoculture) | Season 1: a TD+Air monoculture; no Evasion counter formed |
 | [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 4: Season 1, a True Dragon + Air monoculture
+
+Run locally by Ken (60 rounds, 8 workers). Cards in `referee/seasons/cards-season1.md`.
+
+**Champions** (343 seats):
+- **By build:** TD+Air 235 (69%), Wyvern+Fire 55, Wyvern+Air 29, Wyvern+Water 11, Wyrm+Air 5, Wyvern+Earth 4, other TD 4. **No Drake champions.**
+- **By archetype:** slugger 94, boxer-puncher 75, out-boxer 66, swarmer 57, counterpuncher 51.
+- **Shards:** Heartgrit 222, Whetted Nail 146, Snapping Jaw 116, Riposte Talons 92, Bounding Haunches 88, Pebblescale 71, Coiled Sinew 69.
+- **Stacks:** only ×2, plus Whetted Nail ×3 twice. **No Coiled Sinew ×3.**
+
+**Win rates:**
+- **Archetypes:** 46–52%, all even.
+- **Builds:** TD+Air 56% (3,635–2,835), Wyvern+Fire 53%, Wyvern+Air 42%, TD+Fire 42%; Wyrm builds 25–44%; Drake builds 15–37%.
+
+**The meta** (8,000 remembered opponents, rounds 21–60):
+- TD+Air share of the field rose from 57% to 63%.
+- Coiled Sinew on faced dragons fell from 182 to 132.
+- Trials: 3,681. Top trial winners were Heartgrit 704, Whetted Nail 694, Riposte 457.
+
+**What it shows:** the Evasion counter didn't form. The field converged on TD+Air, and Wyvern+Fire emerged as the only standing counter.
+
+**Likely causes:**
+- **Supply:** Coiled Sinew drops only from Wyvern and Drake victims. A TD+Air field mostly drops Heartgrit and Whetted Nail.
+- **Shape:** a ×3 stack fills the whole 3-pip wyrmling array.
+- **Greedy drafting:** the measured ×1 and ×2 rows are about −1, so marginal scoring never climbs toward the ×3 jump (+9).
+- **Trials:** novice-skill, gated to close calls, two candidates. They can confirm a pick but rarely discover a plan.
+
+**Card bugs:** stacks print as a repeated name; "as a adept"; trial lines name a "best" even at 1–5.
+
+**Open, for Ken:**
+- Brain fix: plan stacks toward thresholds (value the full ×3 row when choosing the first copy); let freezes target a threshold.
+- Rule or economy question: should spoils supply match the field (Sinew drops only from Evasion morphs)?
+- The Drake still has no champion.
 
 ## Round 3: reined-in gambits, chase and juke priors, meta memory
 
