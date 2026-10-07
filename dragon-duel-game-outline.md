@@ -125,8 +125,8 @@ The screen where the game is actually played. It needs to be fast at 30 seconds 
 
 ### 4.2 Filling a Slot
 Four short steps, each a small menu:
-1. **Category:** Attack, Move, Guard, Intimidate.
-2. **Action:** Bite, Claw, Breath, Stomp; Approach, Retreat, Strafe, Leap, Dive; Dodge, Scales; Intimidate.
+1. **Category:** Attack, Move, Defend, Intimidate.
+2. **Action:** Bite, Claw, Breath, Stomp; Approach, Retreat, Strafe, Leap, Dive; Dodge, Guard; Intimidate.
 3. **Detail:** direction (clockwise or counterclockwise around the opponent), claw sweep side, crunch partner, and so on. Only options that exist appear.
 4. **Confirm.**
 

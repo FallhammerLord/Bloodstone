@@ -1,5 +1,5 @@
-# Dragonshards: Technique Suite v0.2
-Technique shards change how an action behaves. Every Technique is a sidegrade: each grade keeps a cost.
+# Dragonshards: Technique Suite v0.4
+Technique shards change how an action behaves. Most Techniques are sidegrades: each grade keeps a cost. **[Proposed] Suite v0.4** frees four: Thornscale, Elemental Mantle and Ashbreath carry no drawback, and the Intimidate Techniques keep the Intimidate's +3. Their pip is their price. `--rule SUITE_V03=on` restores suite v0.3.
 
 ## Rules
 
@@ -34,7 +34,7 @@ Technique shards change how an action behaves. Every Technique is a sidegrade: e
 - Reach extends only to its band's outer edge.
 - Crunching comes only from shards (and the Chimera's Aspect). Crunches carry no cooldown debt and no damage modifier; the price lives in the granting shard.
 - Claw is a single hit with a short wind-up, long active window, and short recovery: the natural strafe punish.
-- Intimidate takes effect only within Far. Intimidate techniques at Adult: punishes against you deal 3 less.
+- Intimidate takes effect only within Far. **[Proposed, v0.4]** Intimidate Techniques keep the Intimidate's +3. At Adult, punishes against you deal 3 less.
 - Converted dodges (from blocked moves) never trigger dodge techniques.
 
 ---
@@ -64,8 +64,12 @@ Bite can crunch with itself: two bites in one slot. Recovery after a crunched pa
 - **Wyrmling:** only after a landed Bite in the previous slot
 - **Juvenile:** in any slot
 - **Adult:** recovery +3 ticks
-- **Elder:** as Adult; the second bite pierces 3 Hardness
+- **Elder:** as Adult; the second bite pierces 3 Scales
 - **Venerable:** as Elder; if both land, the target is Rattled
+
+### Elemental Jaws · Damage
+**[Proposed, suite v0.4]** The Bite carries the stone. A Bite deals + Affinity ÷ 3, and a landed Bite readies your Breath for the next slot. Breath's cooldown runs one action longer.
+- **All grades:** as written. **[Open]** a grade ladder.
 
 ---
 
@@ -88,12 +92,12 @@ The claw arc widens by 1 pace, catching strafes. Claw tests Accuracy at −3.
 - **Venerable:** as Elder; the arc also reaches 1 pace higher
 
 ### Ratchet Claws · Chain
-An escalating chain: each landed Claw link adds +1 to the next. The final link's chain bonus pays for it: −3. *(Repurposed for the chain rule.)* **[Proposed]** grade terms:
-- **Wyrmling:** only the third link escalates (+1)
-- **Juvenile:** every link escalates: +1 on the second, +2 on the third
-- **Adult:** the final-link cost drops to −1
-- **Elder:** as Adult; the escalating chain holds through one hitless exchange
-- **Venerable:** as Elder; each landed link adds +2
+**[Proposed, suite v0.4]** Each landed Claw link adds +1 to the next Claw. Claw recovery +3 ticks. A different attack, or a chain that lapses, drops the ratchet.
+- **Wyrmling:** the ratchet climbs to +3
+- **Juvenile:** the ratchet climbs to +6
+- **Adult:** the recovery cost applies only to an unratcheted Claw
+- **Elder:** as Adult; the ratcheting chain holds through one hitless exchange
+- **Venerable:** as Elder; a Claw ratcheted to +3 or more pierces 3 Scales
 
 ### Raking Talons · Crunch
 Claw can crunch with itself: two claws in one slot. Recovery after a crunched pair +6 ticks. **[Proposed]** One crunch per exchange; a crunch never lunges, pounces or stoops.
@@ -108,9 +112,9 @@ Claw can crunch with itself: two claws in one slot. Recovery after a crunched pa
 ## Breath
 
 ### Lance Throat · Coverage · 2 pips
-Breath narrows to a line and reaches Far's outer edge. Strafes slip it easily.
-- **Wyrmling:** line and reach only
-- **Juvenile:** also pierces 3 Affinity
+Breath narrows to a verbless line and reaches Far's outer edge. **[Proposed, v0.4]** It pierces 3 Affinity at every grade and range. Strafes slip it easily.
+- **Wyrmling:** line, reach and the pierce
+- **Juvenile:** as Wyrmling
 - **Adult:** punches through one obstacle
 - **Elder:** as Adult; the line widens slightly at its end
 - **Venerable:** as Elder; pierces 6 Affinity at Far
@@ -124,21 +128,18 @@ Breath's area lingers through the next slot; any dragon inside at slot's end tak
 - **Venerable:** as Elder; overlapping lingering areas stack
 
 ### Bellows Chest · Charge · 2 pips
-Breath charges across two slots, with the charge slot's Scales-guard defense. The charge shows a visible tell; an interrupt burns the breath and triggers its cooldown.
+Breath charges across two slots, with the charge slot's Guard defense. The charge shows a visible tell; an interrupt burns the breath and triggers its cooldown.
 - **Wyrmling:** +3 Potency
 - **Juvenile:** +6 Potency
 - **Adult:** double Potency
 - **Elder:** as Adult; the breath's area grows one step
 - **Venerable:** as Elder; you may Move during the charge slot
 
-### Ash Gland · Information
-**[Proposed, suite v0.3]** The ash cloud. A landed Breath's ash clings to the target: it is Blinded through the rest of the exchange, wherever it moves. At the exchange's end the ash falls off where the target stands and hangs there as a cloud for the rest of the bout. A dragon ending a slot inside is Blinded next slot. One cloud per dragon: a new one replaces the old. A True Dragon's own cloud never blinds it.
-- **Wyrmling:** the cloud reaches 1 pace from its center
-- **Juvenile:** a Breath that misses still clouds where it strikes, blinding whoever is inside as it forms
-- **Adult:** as Juvenile **[Open]**: its old perk (full Breath damage) is now every grade's; it needs a new one
-- **Elder:** as Adult; the cloud reaches 1.5 paces
-- **Venerable:** as Elder; the ash and the cloud also Rattle
+### Ashbreath · Information
+*Was Ash Gland.* **[Proposed, suite v0.4]** A landed Breath deals full damage and Blinds the target (Accuracy −3) for the breather's Affinity ÷ 3 slots, at least 1. No drawback.
+- **All grades:** as written. **[Open]** a grade ladder.
 
+*Suite v0.3 (the cloud):* the ash clung to the target, Blinding it through the exchange, then fell as a cloud that Blinded whoever ended a slot inside. `--rule TECH_ASH_GLAND=cloud`.
 *Suite v0.2 (pulled):* Breath dealt no damage and locked the opponent's slot-3 revision next exchange.
 
 ---
@@ -171,14 +172,14 @@ Approach can carry up to two bands. You arrive with recovery +6 ticks.
 
 ---
 
-## Guard
+## Defend
 
-### Thornscale · Scales
-Attackers landing into Scales take 3 points. Hardness −3 while guarding.
-- **Wyrmling:** Claw only
-- **Juvenile:** Claw and Bite
-- **Adult:** the Hardness penalty applies only against Bite
-- **Elder:** as Adult; chained or crunched attackers take 3 per landed hit
+### Thornscale · Guard
+**[Proposed, suite v0.4]** Attackers landing a Claw or Bite into a Guard take 3 points. The Guard is unaffected: no Scales penalty, no shortened window.
+- **Wyrmling:** the first attacker into each Guard
+- **Juvenile:** every Claw or Bite into the Guard
+- **Adult:** as Juvenile **[Open]**: its old perk lightened a cost that's gone
+- **Elder:** as Adult; a Guard reversal also deals the thorns
 - **Venerable:** as Elder; struck attackers are Rattled
 
 ### Riposte Talons · Dodge
@@ -189,20 +190,20 @@ A successful dodge grants a free claw for 3 points. Dodge cooldown +1.
 - **Elder:** as Adult; the riposte counts as a punish, scaled by Acumen
 - **Venerable:** as Elder; the riposte uses your full Claw Sharpness
 
-### Mantle Wings · Scales vs Breath
-Guarding with Scales grants +3 more Affinity against breath, on top of Scales' own +3. Hardness −3 against Bite and Claw.
-- **Wyrmling:** only against breath at Melee or Close
+### Elemental Mantle · Guard vs Breath
+*Was Mantle Wings.* **[Proposed, suite v0.4]** Guarding grants +3 more Affinity against Breath, on top of the Guard's own +3. No tradeoff.
+- **Wyrmling:** only against Breath at Melee or Close
 - **Juvenile:** at any range
-- **Adult:** the Hardness penalty applies only against Claw
-- **Elder:** as Adult; your guard blocks lingering areas
-- **Venerable:** as Elder; the Hardness penalty lifts while aloft
+- **Adult:** as Juvenile **[Open]**: its old perk lightened a cost that's gone
+- **Elder:** as Adult; your Guard blocks lingering areas
+- **Venerable:** as Elder **[Open]**
 
 ---
 
 ## Intimidate
 
 ### Sapping Bellow · Debuff
-Intimidate strips the opponent's next chain bonus instead of granting your +3. You remain open.
+**[Proposed, suite v0.4]** Intimidate resets the opponent's chain. The Intimidate's +3 holds; you remain open.
 - **Wyrmling:** Claw chains only
 - **Juvenile:** any chain
 - **Adult:** punishes against you deal 3 less
@@ -210,8 +211,7 @@ Intimidate strips the opponent's next chain bonus instead of granting your +3. Y
 - **Venerable:** as Elder; the target is Rattled
 
 ### Baleful Eye · Information
-**[Cut]** Out of the suite and the shard pool (technique parity pass 1). Kept here for the record.
-Intimidating in slot 1 or 2 reveals the opponent's scripted slot 3 during the revision window. No +3; you remain open.
+**[Proposed, suite v0.4]** Back in the pool (cut in parity pass 1). Intimidating in slot 1 or 2 reveals the opponent's scripted slot 3 during the revision window. The Intimidate's +3 holds; you remain open.
 - **Wyrmling:** reveals only whether it's an attack
 - **Juvenile:** reveals its category
 - **Adult:** punishes against you deal 3 less
@@ -219,7 +219,7 @@ Intimidating in slot 1 or 2 reveals the opponent's scripted slot 3 during the re
 - **Venerable:** as Elder; also reveals its direction (strafe side or claw sweep)
 
 ### Goading Roar · Anti-turtle
-If the opponent scripts a Retreat next slot, it takes 3 points, even when the leash converts that Retreat into a roar. No +3; you remain open.
+If the opponent scripts a Retreat next slot, it takes 3 points, even when the leash converts that Retreat into a roar. **[Proposed, v0.4]** The Intimidate's +3 holds; you remain open.
 - **Wyrmling:** only at Close or nearer
 - **Juvenile:** anywhere within Far
 - **Adult:** punishes against you deal 3 less
@@ -229,6 +229,7 @@ If the opponent scripts a Retreat next slot, it takes 3 points, even when the le
 ---
 
 ## Refactor Notes
+- **v0.4:** attribute renames (Hardness is Scales; the Scales guard is Guard, under Defend); Thornscale, Elemental Mantle and Ashbreath freed; Lance Throat pierces at every grade; Sapping Bellow resets chains; Intimidate Techniques keep the +3; Baleful Eye returns; Elemental Jaws added.
 - Cooldown debt removed; Gnashing Teeth now pays in recovery ticks.
 - Timing in ticks; distances in paces; values in points.
 - Lance Throat respects Breath's Far limit; Smoldering Maw carries each element's verb rather than fire alone; Ash Gland no longer hides revisions, which always flash.

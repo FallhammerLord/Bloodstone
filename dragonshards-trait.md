@@ -18,14 +18,14 @@ Traits bend rules. They're rare, heavy, and always carry a price.
 ## Combat
 
 ### Unrelenting
-Chains never break on Guard.
-- **Elder:** you can't Dodge; blocked moves become a Scales brace instead.
+Chains never break on a Defend action (Guard or Dodge).
+- **Elder:** you can't Dodge; blocked moves become a Guard instead.
 - **Venerable:** Dodge cooldown +2.
 
 ### Bloodrage
 Below half Wounds, all attacks +3.
-- **Elder:** you can't Guard below half Wounds.
-- **Venerable:** you can't use Scales below half Wounds.
+- **Elder:** you can't Defend (Guard or Dodge) below half Wounds.
+- **Venerable:** you can't Guard below half Wounds.
 
 ## Information
 
@@ -98,8 +98,8 @@ Bite and Claw can alternate within one chain.
 - **Venerable:** the penalty applies only to mixed chains.
 
 ### Gallowsbarb · Wyvern
-Dive attacks inject venom: the target loses 3 Hardness next exchange.
-- **Elder:** Hardness −3 while grounded.
+Dive attacks inject venom: the target loses 3 Scales next exchange.
+- **Elder:** Scales −3 while grounded.
 - **Venerable:** the penalty applies only on the slot you land.
 
 ### Crushing Coils · Wyrm
@@ -124,7 +124,7 @@ Regain 3 points at the end of any exchange where you took no damage.
 
 ### Sky Coil · Feathered Serpent
 While aloft, Evasion tests +3 and strafes can shift altitude.
-- **Elder:** Hardness −3 while aloft.
+- **Elder:** Scales −3 while aloft.
 - **Venerable:** the penalty applies only above 6 paces.
 
 **[Open]** Signature Traits for the newer morphs: Tarasque, Drake, Druk, Lung, Vouivre, Zilant, Mordiford Wyvern, Cockatrice, Gargouille, Lindworm, Zmey, Leviathan, Amphisbaena, and the tier-3 morphs.

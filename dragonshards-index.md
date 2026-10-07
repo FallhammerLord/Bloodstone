@@ -1,23 +1,23 @@
 # Dragonshards: Full Index
 *Every shard, one row each, for a manual refactor pass. Built from the suites at the repo root and the engine's in-force rules (`referee/src/shards.ts`, `referee/src/rules.ts`). Where the two differ, the engine column says what the ladder actually runs.*
 
-**Count:** 20 Body, 20 Bloodstone, 20 Technique (1 cut), 6 Support, 19 Trait (12 general, 7 morph signatures).
+**Suite v0.4** (2026-10-07). **Count:** 20 Body, 20 Bloodstone, 21 Technique, 6 Support, 19 Trait (12 general, 7 morph signatures).
 
-**In the ladder today:** the 40 attribute shards and 19 Techniques. Support and Trait shards are design-only so far, since everything measured is wyrmling.
+**In the ladder today:** the 40 attribute shards and all 21 Techniques. Support and Trait shards are design-only so far, since everything measured is wyrmling.
 
 ---
 
 ## Body · Common · magnitude
-Grades: Wyrmling +1, Juvenile +2, Adult +3 (1 pip each); Elder +3 and a rider (2 pips); Venerable adds +1 of a related attribute. Chips stack.
+Grades (v0.4): Wyrmling +2, Juvenile +3, Adult +4 (1 pip each); Elder +4 and a +3 rider (2 pips); Venerable adds +1 of a related attribute. Chips stack.
 
 | Attribute | Wyrmling | Juvenile | Adult | Elder (rider) | Venerable (+1 related) |
 |---|---|---|---|---|---|
-| Wounds | Heartgrit | Thickblood | Deep Keel | Ironheart (+3 Hardness at half Wounds or below) | Second Heart (+1 Hardness) |
+| Wounds | Heartgrit | Thickblood | Deep Keel | Ironheart (+3 Scales at half Wounds or below) | Second Heart (+1 Scales) |
 | Evasion | Coiled Sinew | Spring Haunch | Swept Pinions | Galewing (+3 more while aloft) | Skyvane (+1 Accuracy) |
-| Hardness | Pebblescale | Hornhide | Shalecoat | Bastion Plates (+3 more while guarding with Scales) | Mountainback (+1 Wounds) |
+| Scales | Pebblescale | Hornhide | Shalecoat | Bastion Plates (+3 more while Guarding) | Mountainback (+1 Wounds) |
 | Accuracy | Slit Pupil | Hunter's Eye | Nictitating Lens | Ranging Eyes (+3 more vs a different altitude) | Farseer Eyes (+1 Evasion) |
 
-Generated drop: True Dragon Wounds, Wyvern and Drake Evasion, Wyrm Hardness.
+Generated drop: True Dragon Wounds, Wyvern and Drake Evasion, Wyrm Scales.
 
 ## Bloodstone · Common · magnitude
 Same grade ladder as Body.
@@ -34,30 +34,31 @@ Generated drop: Water Affinity, Earth Bite Force, Fire Breath Potency, Air Claw 
 ---
 
 ## Technique · Uncommon · terms
-1 pip unless noted; Elder and Venerable add 1 pip for the rider. One of each per dragon. The engine runs suite v0.3 (the locked parity pass); the suite doc still shows v0.2 text for most of these.
+1 pip unless noted; Elder and Venerable add 1 pip for the rider. One of each per dragon. **Free** marks the v0.4 Techniques whose only price is the pip.
 
-| Shard | Action | Suite text (effect · cost) | Engine variant in force |
+| Shard | Action | Effect | Cost |
 |---|---|---|---|
-| Snapping Jaw | Bite | Bite strikes 3/5 ticks sooner · recovery +3/+5, next slot winds up later by the debt, −3 damage | `borrow_dmg`: matches the doc's v0.3 text |
-| Lockjaw | Bite | Landed Bite Pins · **[Open]** price | `clamp`: a jaw shut on a Pin can't Bite next slot; at Adult it may, but can't re-Pin |
-| Gnashing Teeth | Bite | Bite crunches with itself · recovery +6 (+3 Adult); one crunch per exchange | as written |
-| Hamstring Hooks | Claw | Landed Claw Staggers · Claw recovery +5 (+3 Adult) | as written |
-| Scything Forelimbs | Claw | Claw arc +1 pace · Claw tests Accuracy at −3 | as written |
-| Ratchet Claws | Claw | Each landed Claw link adds +1 to the next · final-link bonus −3 | `escalate`; also Claw recovery +3 |
-| Raking Talons | Claw | Claw crunches with itself · recovery +6 (+3 Adult); one crunch per exchange | as written |
-| Lance Throat · 2 pips | Breath | Line to Far's edge, pierces Affinity · strafes slip it | `pierce`: verbless line; Wyrmling pierces 3 at Far |
-| Smoldering Maw | Breath | Area lingers: 3 points and the verb · initial hit −3 | `linger`: ground lasts longer; a groundless breath lays its verb as ground |
-| Bellows Chest · 2 pips | Breath | Two-slot charge, +3/+6/double Potency · visible tell, interrupt burns it | `mobile`: the charge rides a Move (Retreat, then Strafe, then any) |
-| Ash Gland | Breath | Landed Breath clings ash: Blinded, then a lasting cloud · full damage; Adult perk **[Open]** | `cloud`: matches the doc's v0.3 text |
-| Stooping Pinions | Move | Dive from 3+ paces: +3 to an attack · next slot can't Leap | `nostack`: the +3 never adds to a stoop or hard landing |
-| Sidewinder Spine | Move | Strafe also shifts along the line · strafe −1 pace | as written |
-| Bounding Haunches | Move | Approach carries two bands · arrive with recovery +6 (+3 Adult) | as written |
-| Thornscale | Guard | Attackers into Scales take 3 · Hardness −3 while guarding | `window`: the guard closes 3 ticks early (2 Adult) instead of losing Hardness |
-| Riposte Talons | Guard | Successful dodge grants a 3-point claw · Dodge cooldown +1 | as written |
-| Mantle Wings | Guard | +3 Affinity vs breath while guarding · Hardness −3 vs Bite and Claw | `verbguard`: Scales blocks the Breath's verb; −3 against Claw only |
-| Sapping Bellow | Intimidate | Strips opponent's next chain bonus · no +3, you stay open | as written (`gland` variant has no text yet) |
-| Goading Roar | Intimidate | Opponent retreating next slot takes 3 · no +3, you stay open | as written |
-| Baleful Eye | Intimidate | Reveals opponent's slot 3 · no +3, you stay open | **cut** |
+| Snapping Jaw | Bite | Bite strikes 3/5 ticks sooner | Recovery +3/+5; next slot winds up later by the debt; −3 damage |
+| Lockjaw | Bite | Landed Bite Pins | Jaw clamps: no Bite next slot (Adult: that Bite can't Pin) |
+| Gnashing Teeth | Bite | Bite crunches with itself | Recovery +6 after the pair (+3 Adult); one crunch per exchange |
+| Elemental Jaws *(new)* | Bite | Bite + Affinity ÷ 3; a landed Bite readies Breath | Breath cooldown +1 |
+| Hamstring Hooks | Claw | Landed Claw Staggers | Claw recovery +5 (+3 Adult) |
+| Scything Forelimbs | Claw | Claw arc +1 pace | Claw tests Accuracy at −3 |
+| Ratchet Claws | Claw | Each landed Claw link adds +1 to the next | Claw recovery +3 |
+| Raking Talons | Claw | Claw crunches with itself | Recovery +6 after the pair (+3 Adult); one crunch per exchange |
+| Lance Throat · 2 pips | Breath | Verbless line to Far's edge; pierces 3 Affinity at every grade | Strafes slip it easily |
+| Smoldering Maw | Breath | Breath's ground lingers; a groundless breath lays its verb as ground | Initial hit −3 |
+| Bellows Chest · 2 pips | Breath | Two-slot charge, +3/+6/double Potency, carried on a Move | Visible tell; interrupt burns it |
+| Ashbreath *(was Ash Gland)* | Breath | Landed Breath Blinds for Affinity ÷ 3 slots, full damage | **Free** |
+| Stooping Pinions | Move | Dive from 3+ paces: +3 to an attack | Next slot can't Leap; never stacks with a stoop |
+| Sidewinder Spine | Move | Strafe also shifts along the line | Strafe −1 pace |
+| Bounding Haunches | Move | Approach carries two bands | Arrive with recovery +6 (+3 Adult) |
+| Thornscale | Defend (Guard) | Claw or Bite into a Guard takes 3 | **Free** |
+| Riposte Talons | Defend (Dodge) | Successful dodge grants a 3-point claw | Dodge cooldown +1 |
+| Elemental Mantle *(was Mantle Wings)* | Defend (Guard) | +3 Affinity against Breath while Guarding | **Free** |
+| Sapping Bellow | Intimidate | Resets the opponent's chain | **Free** (keeps the +3); you stay open |
+| Baleful Eye *(back)* | Intimidate | Reveals the opponent's slot 3 | **Free** (keeps the +3); you stay open |
+| Goading Roar | Intimidate | Opponent retreating next slot takes 3 | **Free** (keeps the +3); you stay open |
 
 ---
 
@@ -80,8 +81,8 @@ Elder and Venerable only; 2 pips (Twin-Blooded 3). Venerable lightens the price.
 
 | Shard | Group | Bend | Elder price | Venerable price |
 |---|---|---|---|---|
-| Unrelenting | Combat | Chains never break on Guard | Can't Dodge; blocked moves brace | Dodge cooldown +2 |
-| Bloodrage | Combat | Below half Wounds, attacks +3 | Can't Guard below half | Can't use Scales below half |
+| Unrelenting | Combat | Chains never break on Defend | Can't Dodge; blocked moves become a Guard | Dodge cooldown +2 |
+| Bloodrage | Combat | Below half Wounds, attacks +3 | Can't Defend below half | Can't Guard below half |
 | Cold Reader | Information | Revision may target slot 2 | Revised slot 2 winds up +3 ticks | Only when revising into an attack |
 | Iron Will | Information | Unrevised chain-completing slot 3 gets +3 | Can't revise | May revise, forfeiting the bonus |
 | Patient Hunter | Timing | Punishes +3 | Attacks never interrupt | Interrupts cancel but deal 0 |
@@ -93,11 +94,11 @@ Elder and Venerable only; 2 pips (Twin-Blooded 3). Venerable lightens the price.
 | Moltborn | Economy | Overwritten pips salvage double Ichor | Your shards can't be Anchored | Only covered shards lose Anchor |
 | Twin-Blooded · 3 pips | Elemental | Breath may use a second element | Affinity −3 vs anything beating either | Only vs what beats the second |
 | Sovereign Bearing | True Dragon | Bite and Claw alternate within a chain | Final-link bonus −3 | Only on mixed chains |
-| Gallowsbarb | Wyvern | Dive attacks: target −3 Hardness next exchange | Hardness −3 while grounded | Only on the landing slot |
+| Gallowsbarb | Wyvern | Dive attacks: target −3 Scales next exchange | Scales −3 while grounded | Only on the landing slot |
 | Crushing Coils | Wyrm | Landed Bite Pins and holds | You're Pinned while holding | May Bite again while holding |
 | Three Minds | Chimera | Triple crunch, 10 ticks each | Recovery +6 after | Recovery +3 |
 | Spine Volley | Manticore | Spine breath Staggers | Breath cooldown +1 | Lifts when the volley lands |
 | Regrowth | Hydra | Regain 3 after an undamaged exchange | Max Wounds −3 | Also after a graze-only exchange |
-| Sky Coil | Feathered Serpent | Aloft: Evasion +3, strafes shift altitude | Hardness −3 aloft | Only above 6 paces |
+| Sky Coil | Feathered Serpent | Aloft: Evasion +3, strafes shift altitude | Scales −3 aloft | Only above 6 paces |
 
 **[Open]** No signature Trait yet for the Drake (Ravener) or the other newer morphs.

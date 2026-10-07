@@ -13,10 +13,45 @@
 
 | Round | What changed |
 |---|---|
+| [5](#round-5-season-2-and-suite-v04) | Season 2: the monoculture holds; suite v0.4 and the Scales/Guard/Defend rename |
 | [4](#round-4-season-1-a-true-dragon--air-monoculture) | Season 1: a TD+Air monoculture; no Evasion counter formed |
 | [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 5: Season 2, and suite v0.4
+
+Season 2 run locally by Ken (seed 2026, 200 tamers, 60 rounds, carried from season 1). Cards in `referee/seasons/cards-season2.md`. Numbers below are parsed from the season's tamer histories: 5,908 season-2 bouts, each counted once from the loser's line.
+
+**Builds** (share of dragons fought, win rate):
+- TD+Air 62%, 54.5% overall and 62% outside the mirror. Mirrors are 39% of all bouts.
+- Wyvern+Fire 15.5%, 50%; Wyvern+Air 12%, 41%. Everything else is under 2% of the field.
+- Head to head: Wyvern+Fire beats TD+Air 600–574 (51%), the only even counter. TD+Fire 46–89, Wyvern+Air 240–615, TD+Water 21–89. Wyrm+Air 47–45 on a thin sample, untested by the field.
+- TD+Air's share: 46% (season 1, rounds 1–30), 63% (season 1, rounds 31–60), 60% then 65% (season 2).
+
+**Champions:** 374; TD+Air 284 (76%), Wyvern+Fire 51, Wyvern+Air 23. No Drake.
+
+**Fights are short:** KOs land mostly in exchange 3 (2,675 of 5,654). TD+Air winners average exchange 3.6; Wyvern+Fire 4.2; Wyvern+Air 5.0. 138 deaths came from rim pulses (exchanges 7–8).
+
+**Shards, within TD+Air:** Scything Forelimbs 75% (n 105), Pebblescale 66%, Milk Fang 66%, Heartgrit 55%, Snapping Jaw 42% (n 633, the third most common shard). 61% of dragons fought shardless.
+
+**Styles:** 47–52%, tighter than season 1's 45–56%.
+
+**Reading:** TD+Air is the only sheet with Accuracy 9 (Claw 12 − Evasion 3). The derivation pays most to a Claw peak on an Evasion valley, and only that pairing has both. Air on other eggs and the True Dragon on other stones both underperform. A hypothesis until `diag:pairing` measures it.
+
+**Suite v0.4** (Ken's notes, 2026-10-07; see the README and `dragonshards-technique.md`):
+- **Renames:** Hardness is Scales; the brace action is Guard; Guard and Dodge are the Defend category. No rule change: every golden bout kept its winner, length and Wounds.
+- **Attribute shards:** +1 at every grade (Wyrmling +2).
+- **Freed:** Thornscale, Elemental Mantle (was Mantle Wings) and Ashbreath (was Ash Gland) carry no drawback; the Intimidate Techniques keep the +3, and Baleful Eye returns.
+- **Changed:** Lance Throat pierces 3 at every grade; Sapping Bellow resets the opponent's chain; Ashbreath Blinds for Affinity ÷ 3 slots.
+- **New:** Elemental Jaws (Bite + Affinity ÷ 3; a landed Bite readies Breath; Breath cooldown +1).
+- `--rule SUITE_V03=on` restores v0.3.
+
+**Open, for Ken:**
+- **Rebuild the measured table** before the next season: its rows predate v0.4, and Elemental Jaws and Baleful Eye have none.
+- **Grade ladders** for Elemental Jaws and Ashbreath, and new Adult perks for Thornscale and Elemental Mantle (their old perks lightened costs that are gone).
+- **The pip budget** rule ("1 pip per unit at Adult efficiency") no longer holds with +4 Adult chips.
+- **The Technique doc** still shows v0.2 text for Lockjaw, Bellows Chest, Smoldering Maw and Stooping Pinions; the engine runs their v0.3 variants.
 
 ## Round 4: Season 1, a True Dragon + Air monoculture
 

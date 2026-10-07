@@ -38,7 +38,7 @@ Seamed shards can't be overwritten: no shard can seat over them.
 - **Venerable rider:** anchored shards are also shielded from the victor's picks.
 
 ### Bloodstone Artery · Infuse
-Bite and Claw Techniques on seamed pips become elemental: their attacks test against Affinity instead of Hardness and carry matchups (±3).
+Bite and Claw Techniques on seamed pips become elemental: their attacks test against Affinity instead of Scales and carry matchups (±3).
 - **Venerable rider:** infused hits apply the stone's breath verb at its wyrmling strength.
 
 ### Ganglion · Quicken
