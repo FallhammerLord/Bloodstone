@@ -39,6 +39,11 @@ function tempo(b: Bout, f: Fighter, sep: number): number {
   return t + f.chain.links / 3;
 }
 
+/** Its cooldown attacks ready for the next exchange: Breath counts 1, Stomp ½. */
+function ready(b: Bout, f: Fighter): number {
+  return ((f.readyAt.breath ?? 0) <= b.globalSlot ? 1 : 0) + ((f.readyAt.stomp ?? 0) <= b.globalSlot ? 0.5 : 0);
+}
+
 /** Lasting harms waiting on a dragon next slot: statuses, debts and clinging ash. */
 function burdens(f: Fighter): number {
   const p = f.pending;
@@ -115,6 +120,7 @@ export function features(o: Outcome, ctx: Context): Goals {
     pursuit: pursuit(o, ctx),
     tempo: tempo(o.after, me1, sep) - tempo(o.after, op1, sep),
     payoff: slots.payoff,
+    ready: ready(o.after, me1) - ready(o.after, op1),
     surge: (me1.meter - op1.meter) / R.METER_MAX + full(me1) - full(op1),
     status: burdens(op1) - burdens(me1),
     ground: exposed(o.after, op1) - exposed(o.after, me1),

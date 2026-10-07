@@ -8,7 +8,7 @@ export type Archetype = 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' |
 export const ARCHETYPES: readonly Archetype[] = ['swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher'];
 
 /** What an imagined exchange produces, each on its own scale (see features.ts). */
-export const FEATURES = ['dealt', 'taken', 'reach', 'exposure', 'misses', 'punish', 'big', 'free', 'pursuit', 'tempo', 'payoff', 'surge', 'status', 'ground', 'perch'] as const;
+export const FEATURES = ['dealt', 'taken', 'reach', 'exposure', 'misses', 'punish', 'big', 'free', 'pursuit', 'tempo', 'payoff', 'ready', 'surge', 'status', 'ground', 'perch'] as const;
 export type Feature = (typeof FEATURES)[number];
 export type Goals = Record<Feature, number>;
 
@@ -28,6 +28,7 @@ export const SCALE: Goals = {
   pursuit: 0.05, // the opponent backed off and it kept (or improved) its reach; lost it, the same against
   tempo: 0.03, // per open setup, held Intimidate or chain link, net of the opponent's
   payoff: 0.05, // per setup cashed: a lunging Bite or a pouncing Claw that lands
+  ready: 0.03, // its Breath (1) and Stomp (½) off cooldown when the exchange ends, net of the opponent's: a wasted swing costs
   surge: 0.1, // Surge lead, as a fraction of a full meter (a full one counts half again)
   status: 0.03, // per lasting status or debt on the opponent, net of its own
   ground: 0.05, // standing clear of the opponent's zones and, late, the rim; net of the opponent
@@ -43,11 +44,11 @@ export const SCALE: Goals = {
  *   boxer-puncher   even on everything: the baseline
  */
 export const GOALS: Record<Archetype, Goals> = {
-  swarmer: { dealt: 1, taken: 0.7, reach: 1.4, exposure: 0.3, misses: 0.3, punish: 0.6, big: 0.6, free: 0.6, pursuit: 0.8, tempo: 1.6, payoff: 1.3, surge: 0.8, status: 1, ground: 1, perch: 1 },
-  'out-boxer': { dealt: 0.9, taken: 1.4, reach: 0.7, exposure: 1.6, misses: 1.6, punish: 0.8, big: 0.4, free: 1.2, pursuit: 0, tempo: 0.5, payoff: 0.8, surge: 1, status: 1, ground: 1.2, perch: 1 },
-  slugger: { dealt: 1.2, taken: 0.7, reach: 1.2, exposure: 0.4, misses: 0.1, punish: 1.3, big: 2, free: 0.5, pursuit: 2.2, tempo: 0.6, payoff: 1, surge: 1, status: 1, ground: 0.8, perch: 1 },
-  counterpuncher: { dealt: 0.9, taken: 1, reach: 0.8, exposure: 0.9, misses: 2, punish: 1.6, big: 0.6, free: 2.2, pursuit: 0.2, tempo: 0.6, payoff: 0.8, surge: 1.2, status: 1, ground: 1, perch: 1 },
-  'boxer-puncher': { dealt: 1, taken: 1, reach: 1, exposure: 1, misses: 1, punish: 1, big: 1, free: 1, pursuit: 1, tempo: 1, payoff: 1, surge: 1, status: 1, ground: 1, perch: 1 },
+  swarmer: { dealt: 1, taken: 0.7, reach: 1.4, exposure: 0.3, misses: 0.3, punish: 0.6, big: 0.6, free: 0.6, pursuit: 0.8, tempo: 1.6, payoff: 1.3, ready: 1, surge: 0.8, status: 1, ground: 1, perch: 1 },
+  'out-boxer': { dealt: 0.9, taken: 1.4, reach: 0.7, exposure: 1.6, misses: 1.6, punish: 0.8, big: 0.4, free: 1.2, pursuit: 0, tempo: 0.5, payoff: 0.8, ready: 1, surge: 1, status: 1, ground: 1.2, perch: 1 },
+  slugger: { dealt: 1.2, taken: 0.7, reach: 1.2, exposure: 0.4, misses: 0.1, punish: 1.3, big: 2, free: 0.5, pursuit: 2.2, tempo: 0.6, payoff: 1, ready: 1, surge: 1, status: 1, ground: 0.8, perch: 1 },
+  counterpuncher: { dealt: 0.9, taken: 1, reach: 0.8, exposure: 0.9, misses: 2, punish: 1.6, big: 0.6, free: 2.2, pursuit: 0.2, tempo: 0.6, payoff: 0.8, ready: 1, surge: 1.2, status: 1, ground: 1, perch: 1 },
+  'boxer-puncher': { dealt: 1, taken: 1, reach: 1, exposure: 1, misses: 1, punish: 1, big: 1, free: 1, pursuit: 1, tempo: 1, payoff: 1, ready: 1, surge: 1, status: 1, ground: 1, perch: 1 },
 };
 
 /** The aerial overlay: on a winged dragon every archetype values the high ground in full; grounded, only the threat. */

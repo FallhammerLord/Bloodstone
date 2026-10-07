@@ -15,21 +15,36 @@ export function bandScore(style: Archetype, ctx: Context, band: Band): number {
   return g.reach * ctx.mine.best[band] - g.exposure * ctx.theirs.best[band];
 }
 
-/** How readily an archetype imagines an action from a band. */
-export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, a: ActionSpec, primed = false): number {
+/** What the script so far says about this slot: a Drake's open Ravener window, and the action just before. */
+export interface ScriptContext {
+  primed: boolean;
+  prev: ActionSpec['name'] | null;
+}
+const EVASIVE = new Set(['strafe', 'dodge', 'retreat']);
+
+/**
+ * How readily an archetype imagines an action from a band. An attack that can't reach from here is barely imagined
+ * (a gambit on an opponent stepping in rarely pays). Goals shape the rest: pursuit chases and won't back off; free
+ * hits juke first and strike after.
+ */
+export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, a: ActionSpec, sc: ScriptContext = { primed: false, prev: null }): number {
   const g = GOALS[style];
   const here = bandScore(style, ctx, band);
   const move = (to: Band) => Math.max(0.15, 1 + 8 * (bandScore(style, ctx, to) - here));
   let w: number;
-  if (a.setup) w = (prior(style, ctx, band, s, { name: a.setup }) + prior(style, ctx, band === 'veryFar' ? 'far' : band, s, { name: a.name })) / 2;
+  if (a.setup) w = (prior(style, ctx, band, s, { name: a.setup }, sc) + prior(style, ctx, band === 'veryFar' ? 'far' : band, s, { name: a.name }, { ...sc, prev: a.setup })) / 2;
   else if (ACTIONS[a.name].category === 'attack' && a.name !== 'intimidate') {
-    w = 0.1 + 10 * (ctx.mine.attack[band][a.name] ?? 0) * (g.dealt + 0.3 * g.big);
+    const reach = ctx.mine.attack[band][a.name] ?? 0;
+    w = reach > 0 ? 0.1 + 10 * reach * (g.dealt + 0.3 * g.big) : 0.02;
     // A Drake's open Ravener window: its next Bite lunges and tracks, so it reaches for the Bite.
-    if (primed && a.name === 'bite') w = 2 * w + 0.3 * g.payoff;
-  } else if (a.name === 'approach' || (a.name === 'leap' && s.f.sheet.aspect === 'ravener')) w = move(closer[band]) * (1 + 0.25 * g.pursuit);
-  else if (a.name === 'retreat') w = move(farther[band]);
-  else if (a.name === 'strafe') w = 0.4 + 0.3 * g.misses + 0.2 * g.free;
-  else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken + 0.3 * g.misses + 0.2 * g.free;
+    if (sc.primed && a.name === 'bite') w = 2 * w + 0.3 * g.payoff;
+    // The strike after a juke (free hits), or after running the opponent down (pursuit).
+    if (reach > 0 && sc.prev && EVASIVE.has(sc.prev)) w *= 1 + 0.4 * g.free;
+    if (reach > 0 && sc.prev === 'approach') w *= 1 + 0.3 * g.pursuit;
+  } else if (a.name === 'approach' || (a.name === 'leap' && s.f.sheet.aspect === 'ravener')) w = move(closer[band]) * (1 + 0.6 * g.pursuit);
+  else if (a.name === 'retreat') w = move(farther[band]) * Math.max(0.2, 1 - 0.3 * g.pursuit);
+  else if (a.name === 'strafe') w = 0.4 + 0.5 * g.misses + 0.4 * g.free;
+  else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken + 0.5 * g.misses + 0.4 * g.free;
   else if (a.name === 'scales') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken;
   else if (a.name === 'intimidate') w = 0.2 + 0.15 * (g.punish + g.big);
   else if (a.name === 'leap' || a.name === 'dive') w = s.f.sheet.flies ? 0.6 : 0.2;
@@ -50,9 +65,13 @@ export function sampleScript(style: Archetype, ctx: Context, s: Situation, sep: 
   // A Drake's Ravener window: open now, or opened by an Approach or hop earlier in this script; a Bite closes it.
   const drake = s.f.sheet.aspect === 'ravener';
   let primed = drake && s.f.marks.ravener > 0;
+  let prev: ActionSpec['name'] | null = null;
   while (out.length < R.SLOTS_PER_EXCHANGE) {
     const legal = legalActions(s, rng);
-    const a = pick(legal, legal.map((x) => (styled ? prior(style, ctx, band(sep), s, x, primed) : 1)), rng);
+    // Exploring scripts still mostly skip attacks that can't reach from here.
+    const explore = (x: ActionSpec) => (ACTIONS[x.name].category === 'attack' && x.name !== 'intimidate' && !(ctx.mine.attack[band(sep)][x.name] ?? 0) ? 0.1 : 1);
+    const a = pick(legal, legal.map((x) => (styled ? prior(style, ctx, band(sep), s, x, { primed, prev }) : explore(x))), rng);
+    prev = a.name;
     // An Approach-then-Bite setup opens the window and spends it at once.
     if (a.name === 'bite') primed = false;
     else if (drake && (a.name === 'approach' || a.name === 'leap')) primed = true;
