@@ -4,7 +4,8 @@ import { inZone } from '../arena.ts';
 import { flatLen } from '../geometry.ts';
 import { other, type Bout, type Event, type Fighter, type Side } from '../referee.ts';
 import * as R from '../rules.ts';
-import { FEATURES, GOALS, PERCH_GROUNDED, SCALE, type Archetype, type Feature, type Goals } from './archetypes.ts';
+import type { ActionName } from '../actions.ts';
+import { FEATURES, GOALS, PERCH_GROUNDED, SCALE, woundsRisk, type Archetype, type Feature, type Goals } from './archetypes.ts';
 import { bandOf, type Worth } from './probe.ts';
 
 export interface Outcome {
@@ -14,10 +15,14 @@ export interface Outcome {
   me: Side;
 }
 
-/** What a brain knows going in: both dragons' attack worth from each band, measured on the Referee. */
+/**
+ * What a brain knows going in: both dragons' attack worth from each band, measured on the Referee, and how much of
+ * each of its attacks has been getting through the opponent's defenses (discover.ts; 1 where it has seen nothing).
+ */
 export interface Context {
   mine: Worth;
   theirs: Worth;
+  punch?: Partial<Record<ActionName, number>>;
 }
 
 const sepOf = (b: Bout) => {
@@ -125,6 +130,7 @@ export function features(o: Outcome, ctx: Context): Goals {
     status: burdens(op1) - burdens(me1),
     ground: exposed(o.after, op1) - exposed(o.after, me1),
     perch: perched(o.after, me1, op1) - perched(o.after, op1, me1),
+    heavy: mineHits.reduce((n, h) => n + Math.min(4, (h.damage / (op0.sheet.wounds / 5)) ** 2), 0),
   };
 }
 
@@ -137,9 +143,13 @@ export function value(style: Archetype, o: Outcome, ctx: Context): number {
   const late = o.after.exchange >= o.after.rules.EXCHANGE_LIMIT - 2;
   const challenger = o.after.challenged !== o.me;
   const urgency: Partial<Goals> = late ? (challenger ? { dealt: 1.5 } : { taken: 1.5 }) : {};
+  // Its own Wounds on a curve: damage coming in weighs more the less of its pool is left going in.
+  const me0 = o.before.fighters[o.me];
+  const risk = woundsRisk(me0.wounds / me0.sheet.wounds);
   let v = 0;
   for (const k of FEATURES) {
-    const w = (k === 'perch' && !me.sheet.flies ? PERCH_GROUNDED : 1) * goals[k] * (urgency[k as Feature] ?? 1);
+    const curve = k === 'taken' || k === 'exposure' ? risk : 1;
+    const w = (k === 'perch' && !me.sheet.flies ? PERCH_GROUNDED : 1) * goals[k] * (urgency[k as Feature] ?? 1) * curve;
     v += w * SCALE[k] * f[k];
   }
   if (o.after.over) v += o.after.winner === o.me ? 2 : -2;

@@ -17,8 +17,8 @@
   "name": "brains.json",
   "winner": "B",
   "exchanges": 4,
-  "wounds": "-6/27",
-  "hash": "f1d0af4975a1bf63"
+  "wounds": "-6/21",
+  "hash": "fe0171d0365a0fcc"
  },
  {
   "name": "breath-effects.json",
@@ -108,8 +108,8 @@
   "name": "serpentine.json",
   "winner": "-",
   "exchanges": 1,
-  "wounds": "42/30",
-  "hash": "a2b48dbd60a314cf"
+  "wounds": "42/29",
+  "hash": "29bafccc584c5486"
  },
  {
   "name": "shards.json",
@@ -136,7 +136,7 @@
   "name": "wyvern-strafe.json",
   "winner": "-",
   "exchanges": 1,
-  "wounds": "42/36",
-  "hash": "e7403af4ccfc8651"
+  "wounds": "42/30",
+  "hash": "07f4106827f5a240"
  }
 ]

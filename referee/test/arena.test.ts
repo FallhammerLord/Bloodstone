@@ -103,8 +103,10 @@ test('Talons: no stoop beyond Far, and none against an airborne opponent', () =>
 });
 
 test('Serpentine: a strafing Wyrm evades like a dodge; a retreating one does not', () => {
-  // Wyrm + Earth (Acumen 10): a Wyrm + Water's preferred +3 Acumen would win the Evasion tie against the retreat too.
-  const ev = run(newBout(TD_WATER, { name: 'C', morph: 'wyrm', stone: 'earth' }, 2), ['claw:left', 'claw:left'], ['strafe:cw', 'retreat']);
+  // Under the comparison (HIT_DICE 0): the strafe tests Evasion 6 + 3 against Accuracy 6 and slips; the retreat ties at
+  // 6, and Wyrm + Earth's Acumen 10 doesn't win the tie. Wyrm + Water's preferred +3 Acumen would win it too.
+  const bout = newBout(TD_WATER, { name: 'C', morph: 'wyrm', stone: 'earth' }, 2, 'B', {}, R.rulesWith({ HIT_DICE: 0 }));
+  const ev = run(bout, ['claw:left', 'claw:left'], ['strafe:cw', 'retreat']);
   assert.ok(ev.some((e) => e.kind === 'evade' && e.text.includes('Serpentine')));
   assert.equal(hits(ev).length, 1);
 });
@@ -486,10 +488,10 @@ test('aim follows through the wind-up and settles 12 − Accuracy ticks out: rad
 
 // ---- Serpentine against Breath, and Stomp catching movers [Proposed] ----
 
-test('Serpentine: a strafing Wyrm slips a Breath (Evasion 6 + 3 against Accuracy 6); a held one takes it', () => {
+test('Serpentine: a strafing Wyrm slips a Breath (Evasion 6 + 3 against Accuracy 6, HIT_DICE 0); a held one takes it', () => {
   // Earth's cone is wide enough at 5 paces that a short strafe stays inside it: geometry first, then the Evasion test.
   const breathOn = (move: string) => {
-    const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5);
+    const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5, 'B', {}, R.rulesWith({ HIT_DICE: 0 }));
     return run(bout, ['breath'], [move]);
   };
   const strafing = breathOn('strafe:cw:short');

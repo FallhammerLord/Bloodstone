@@ -80,6 +80,12 @@ export const DEFAULT_RULES = {
   GUARD_SCALES: 3, // [Assumed] Scales bonus while Guarding
   GUARD_AFFINITY: 3, // [Assumed] Affinity bonus while Guarding: presenting the hide to the elements
   DODGE_BONUS: 3, // [Assumed] Evasion bonus while dodging
+  // ---- The Evasion test ---- [Proposed] pair-off dice
+  // 1: a Bite or Claw against a moving or dodging target rolls its attack stat ÷ 3 in d6 against Evasion ÷ 3, pairs the
+  // pools off high to low, and the first difference decides; an unbroken chain goes to the side with dice left, and
+  // equal pools matched all the way down are the defender's, as a near miss. 0: Accuracy against Evasion, ties to Acumen.
+  HIT_DICE: 1,
+  DICE_UNIT: 3, // [Proposed] points per die, on both sides
   // ---- Acumen ---- [Proposed] §4 Surge
   // The Surge [Proposed]: Affinity fuels it. It starts at Acumen (10 × age category, +3 for a Water-preferring dragon), and
   // each trigger (a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds

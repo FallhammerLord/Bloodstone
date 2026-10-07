@@ -8,6 +8,7 @@ import { applyHit, damage } from './damage.ts';
 import { breathVerbs, leaveZone, strikeObstacles } from './elements.ts';
 import type { Event } from './events.ts';
 import { checkKO } from './exchange.ts';
+import { poolOf, rollEvasion } from './dice.ts';
 import { fillMeter } from './meter.ts';
 import { beginLunge, beginPounce, beginStoop, carryStep, moveStep, stoopStep } from './movement.ts';
 import { type Plan, category, evasionState, lastActiveTick, phase } from './plan.ts';
@@ -118,7 +119,8 @@ function aim(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: Even
 
 /**
  * Whether an active attack connects this tick: 'hit', the obstacle in its way, or null (out of the shape, evaded,
- * or not attacking). Geometry decides first, then Accuracy against Evasion for a Bite or Claw, then Acumen.
+ * or not attacking). Geometry decides first, then, for a Bite or Claw on a moving or dodging target, the Evasion test:
+ * pair-off dice (HIT_DICE), or Accuracy against Evasion with ties to Acumen.
  * A target just outside the shape, within Accuracy's phantom band, is a near miss.
  */
 function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: Event[]): 'hit' | Obstacle | null {
@@ -164,11 +166,30 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
       if (scy >= E && defPlan.spec.name === 'strafe') evasion -= 3; // Scything Elder: caught strafers
       const sw = tech(def, 'sidewinder-spine');
       if (sw >= V && defPlan.spec.name === 'strafe' && bout.history[def.side].at(-1) === 'strafe') evasion += 3; // chained Sidewinders
-      const escaped = evasion > accuracy || (evasion === accuracy && def.sheet.acumen > att.sheet.acumen);
-      if (escaped) {
+      const how = serpentine ? 'strafing (Serpentine)' : evading;
+      if (bout.rules.HIT_DICE) {
+        // Pair-off dice [Proposed]: the attack's own stat against Evasion, a die per DICE_UNIT. Blindness and Scything's
+        // wider arc cost the attack what they cost Accuracy.
+        const stat = p.spec.name === 'bite' ? 'bite' : p.spec.name === 'claw' ? 'claw' : 'breath';
+        const strike = eff(att, stat, { opp: def }).value - (att.status.blinded ? bout.rules.BLINDED_ACCURACY : 0) - scythePenalty;
+        const roll = rollEvasion(bout.dice, poolOf(strike, bout.rules.DICE_UNIT), poolOf(evasion, bout.rules.DICE_UNIT));
+        if (roll.result !== 'hit') {
+          p.resolved = true;
+          defPlan.evaded = true;
+          const shown = roll.attack.length || roll.evasion.length ? ` (${roll.attack.join(' ') || 'no dice'} against ${roll.evasion.join(' ') || 'no dice'})` : '';
+          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${how} with Evasion ${evasion} slips ${stat} ${strike}${shown}${roll.result === 'nearMiss' ? ': a matched chain, a near miss' : ''}` });
+          riposte(bout, other(s), p, defPlan, t, ev);
+          // A matched chain is the defender's, but it was close: the attacker's Surge fills as for any near miss.
+          if (roll.result === 'nearMiss') {
+            fillMeter(bout.rules, att, 'near miss', t, ev);
+            ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: att.meter });
+          }
+          return null;
+        }
+      } else if (evasion > accuracy || (evasion === accuracy && def.sheet.acumen > att.sheet.acumen)) {
         p.resolved = true;
         defPlan.evaded = true;
-        ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${serpentine ? 'strafing (Serpentine)' : evading} with Evasion ${evasion} beats Accuracy ${accuracy}` });
+        ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${how} with Evasion ${evasion} beats Accuracy ${accuracy}` });
         riposte(bout, other(s), p, defPlan, t, ev);
         return null;
       }
