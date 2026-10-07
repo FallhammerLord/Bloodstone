@@ -107,7 +107,12 @@ interface Tamer {
 }
 const skillOf = (t: Tamer) => skillAt(t.best);
 const buildOf = (s: FighterSetup) => `${s.morph} + ${s.stone}`;
-const shardsOf = (s: FighterSetup) => (s.shards ?? []).map((x) => x.shard);
+/** Its shards by name, a stack shown once with its count ("Whetted Nail ×2"). */
+const shardsOf = (s: FighterSetup) => {
+  const n = new Map<string, number>();
+  for (const x of s.shards ?? []) n.set(x.shard, (n.get(x.shard) ?? 0) + 1);
+  return [...n].map(([name, c]) => (c > 1 ? `${name} ×${c}` : name));
+};
 const kit = (s: FighterSetup) => `${buildOf(s)}${s.shards?.length ? `, ${shardsOf(s).join(', ')}` : ''}`;
 
 /** What a tamer carries between seasons. Their dragons don't: every season hatches fresh. */
@@ -206,7 +211,7 @@ function hatchFor(t: Tamer, round: number) {
   t.dragon = { name: setup.name, setup, build: buildOf(setup), pips: 0, streak: 0, wins: 0, losses: 0, born: round, nth: t.hatched };
   count(hatches, t.dragon.build);
   count(hatchesByThird[Math.min(2, Math.floor((3 * round) / ROUNDS))], t.dragon.build);
-  t.history.push(`${at(round)} · hatches #${t.hatched} ${setup.name} (${t.dragon.build}) as a ${skillOf(t)}`);
+  t.history.push(`${at(round)} · hatches #${t.hatched} ${setup.name} (${t.dragon.build}) ${/^[aeiou]/.test(skillOf(t)) ? 'as an' : 'as a'} ${skillOf(t)}`);
 }
 
 const pref = (t: Tamer, b: string) => {
@@ -473,8 +478,11 @@ for (let round = 1; round <= ROUNDS; round++) {
       const mean = rates.reduce((a, b) => a + b, 0) / rates.length;
       const weight = MEMORY_WEIGHT[skillOf(p.t)] * TRIAL.scale;
       bias = (s) => { const c = m.get(s.name); return c ? weight * (c.w / c.n - mean) : 0; };
-      const best = [...m].sort((a, b) => b[1].w / b[1].n - a[1].w / a[1].n)[0];
-      p.t.history.push(`${at(round)} · ⚖ ${p.t.name} tries ${[...m.keys()].join(', ')} against ${Math.round(m.values().next().value!.n / 2)} remembered dragons; ${best[0]} fares best (${best[1].w}–${best[1].n - best[1].w}).`);
+      const ranked = [...m].sort((a, b) => b[1].w / b[1].n - a[1].w / a[1].n);
+      const records = ranked.map(([name, c]) => `${name} ${c.w}–${c.n - c.w}`).join(', ');
+      const top = ranked[0][1].w / ranked[0][1].n, next = ranked.length > 1 ? ranked[1][1].w / ranked[1][1].n : -1;
+      const lean = top > next ? `; it leans ${ranked[0][0]}` : '; no lean';
+      p.t.history.push(`${at(round)} · ⚖ ${p.t.name} tries ${records} against ${Math.round(m.values().next().value!.n / 2)} remembered dragons${lean}.`);
     }
     spoilsPick(p.t, p.d, p.spoils, round, bias);
   }
@@ -574,8 +582,8 @@ if (saveFile) {
 }
 const chosen = tamers[0];
 const decorated = [...tamers].sort((a, b) => b.champions.length - a.champions.length || b.wins - a.wins)[0];
-console.log(`\nChosen tamer: ${chosen.name} (${chosen.style}), ${chosen.wins}–${chosen.losses}, ${chosen.hatched} dragons, ${chosen.champions.length} champions.`);
-console.log(`Most decorated: ${decorated.name} (${decorated.style}), ${decorated.wins}–${decorated.losses}, ${decorated.hatched} dragons, ${decorated.champions.length} champions.`);
+console.log(`\nChosen tamer: ${chosen.name} (${chosen.style}), ${chosen.wins}–${chosen.losses}, ${chosen.hatched} dragons, ${chosen.champions.length} champion${chosen.champions.length === 1 ? '' : 's'}.`);
+console.log(`Most decorated: ${decorated.name} (${decorated.style}), ${decorated.wins}–${decorated.losses}, ${decorated.hatched} dragons, ${decorated.champions.length} champion${decorated.champions.length === 1 ? '' : 's'}.`);
 if (cardsFile) {
   writeFileSync(cardsFile, `# Living ladder: tamer cards\n\nSeed ${seed}, ${TAMERS} tamers, ${ROUNDS} rounds.\n\n## The chosen tamer\n\n${card(chosen)}\n## The most decorated tamer\n\n${decorated === chosen ? 'The chosen tamer.\n' : card(decorated)}`);
   console.log(`Wrote ${cardsFile}.`);

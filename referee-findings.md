@@ -20,7 +20,7 @@
 
 ## Round 4: Season 1, a True Dragon + Air monoculture
 
-Run locally by Ken (60 rounds, 8 workers). Cards in `referee/seasons/cards-season1.md`.
+Run locally by Ken (60 rounds, 8 workers). Seasons and tournaments run locally from here on. Cards in `referee/seasons/cards-season1.md`.
 
 **Champions** (343 seats):
 - **By build:** TD+Air 235 (69%), Wyvern+Fire 55, Wyvern+Air 29, Wyvern+Water 11, Wyrm+Air 5, Wyvern+Earth 4, other TD 4. **No Drake champions.**
@@ -40,16 +40,15 @@ Run locally by Ken (60 rounds, 8 workers). Cards in `referee/seasons/cards-seaso
 **What it shows:** the Evasion counter didn't form. The field converged on TD+Air, and Wyvern+Fire emerged as the only standing counter.
 
 **Likely causes:**
-- **Supply:** Coiled Sinew drops only from Wyvern and Drake victims. A TD+Air field mostly drops Heartgrit and Whetted Nail.
+- **Not supply.** Ichor freezes any shard at 2:1, and tamers used it: 1,718 freezes against 1,705 banks. Only 14 froze Coiled Sinew. The top freezes were Techniques: Snapping Jaw 456, Bounding Haunches 243, Riposte Talons 242, Pebblescale 146.
 - **Shape:** a ×3 stack fills the whole 3-pip wyrmling array.
 - **Greedy drafting:** the measured ×1 and ×2 rows are about −1, so marginal scoring never climbs toward the ×3 jump (+9).
 - **Trials:** novice-skill, gated to close calls, two candidates. They can confirm a pick but rarely discover a plan.
 
-**Card bugs:** stacks print as a repeated name; "as a adept"; trial lines name a "best" even at 1–5.
+**Card fixes** (after the season): a stack prints once with its count ("Whetted Nail ×2"); "as an adept"; a trial line lists every candidate's record and names a lean only when one led.
 
 **Open, for Ken:**
 - Brain fix: plan stacks toward thresholds (value the full ×3 row when choosing the first copy); let freezes target a threshold.
-- Rule or economy question: should spoils supply match the field (Sinew drops only from Evasion morphs)?
 - The Drake still has no champion.
 
 ## Round 3: reined-in gambits, chase and juke priors, meta memory
