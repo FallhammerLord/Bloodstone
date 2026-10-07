@@ -24,10 +24,11 @@ test('grades: +1, +2, +3 chips; Elder and Venerable are 2-pip with a rider; Vene
   assert.ok(ven.kind.family === 'bloodstone' && ven.kind.related?.attr === 'affinity' && ven.kind.related.points === 1);
 });
 
-test('three Wyrmling chips make one full unit', () => {
+test('suite v0.4 adds +1 to every attribute shard: three Wyrmling chips make two full units (one under v0.3)', () => {
   const a = emptyArray();
   for (const p of [0, 1, 2]) seat(a, findShard('Milk Fang'), [p]);
-  assert.equal(compile(hatch('true-dragon', 'water'), a).sheet.bite, 9 + 3);
+  assert.equal(compile(hatch('true-dragon', 'water'), a).sheet.bite, 9 + 6);
+  assert.equal(compile(hatch('true-dragon', 'water'), a, 0).sheet.bite, 9 + 3);
 });
 
 test('Techniques need a grade', () => {
@@ -51,7 +52,7 @@ test('overlap: one covered pip strips the rider (and a Venerable\'s related poin
   const notes = seat(a, findShard('Deep Keel'), [1]);
   assert.ok(notes[0].includes('rider'));
   const { sheet, loadout } = compile(hatch('true-dragon', 'water'), a);
-  assert.equal(sheet.claw, 9 + 3 + 3, 'Sundering keeps its value; Razor Talons adds 3');
+  assert.equal(sheet.claw, 9 + 4 + 4, 'Sundering keeps its value; Razor Talons adds 4 (3 + the v0.4 point)');
   assert.equal(sheet.affinity, 12, 'the related point is gone');
   assert.equal(loadout.riders.length, 0);
   seat(a, findShard('Heartgrit'), [2]);
@@ -61,7 +62,7 @@ test('overlap: one covered pip strips the rider (and a Venerable\'s related poin
 test('shards add to attributes but tertiaries don\'t re-derive', () => {
   // More Breath Potency doesn't raise Affinity; more Evasion doesn't raise Accuracy [Doc].
   const { sheet } = buildSheet({ ...TD_WATER, shards: [{ shard: 'Furnace Gland', pips: [0] }, { shard: 'Swept Pinions', pips: [1] }] });
-  assert.deepEqual([sheet.breath, sheet.affinity, sheet.evasion, sheet.accuracy], [21, 12, 6, 6]);
+  assert.deepEqual([sheet.breath, sheet.affinity, sheet.evasion, sheet.accuracy], [22, 12, 7, 6]);
 });
 
 // ---- Riders in play ----
@@ -69,7 +70,7 @@ test('shards add to attributes but tertiaries don\'t re-derive', () => {
 test('Bastion Plates: +3 Scales while Guarding', () => {
   const bout = newBout(TD_WATER, { ...TD_WATER, shards: [{ shard: 'Bastion Plates', pips: [0, 1] }] }, 4);
   const ev = runExchange(bout, { A: ['bite', 'bite'].map(parseAction), B: ['guard', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 3], 'scales: Scales 15 pierced to 12, so 9 − 12 floors at 1; then 9 − (9 pierced to 6)');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [1, 2], 'Guarding: Scales 6 + 4 + 3 Guard + 3 rider = 16 pierced to 13, so 9 − 13 floors at 1; then 9 − (10 pierced to 7)');
 });
 
 test('Ironheart: +3 Scales at half Wounds or below', () => {
@@ -82,7 +83,7 @@ test('Ironheart: +3 Scales at half Wounds or below', () => {
 test('Reaver Hooks: +3 Claw Sharpness on a chain\'s final link', () => {
   const bout = newBout({ ...TD_WATER, shards: [{ shard: 'Reaver Hooks', pips: [0, 1] }] }, TD_WATER, 2);
   const ev = runExchange(bout, { A: ['claw:left', 'claw:left', 'claw:left'].map(parseAction), B: ['hold', 'hold', 'hold'].map(parseAction) });
-  assert.deepEqual(hits(ev).map((h) => h.damage), [6, 6, 12], 'Claw 12 against Scales 6: 6, 6, then 12 + 3 rider + 3 chain − 6');
+  assert.deepEqual(hits(ev).map((h) => h.damage), [7, 7, 13], 'Claw 13 (9 + 4) against Scales 6: 7, 7, then 13 + 3 rider + 3 chain − 6');
 });
 
 test('Cauldron Gullet: +3 Breath Potency against targets at Far', () => {
@@ -103,7 +104,8 @@ test('Wardskin: +3 Affinity against elements that beat your stone', () => {
 
 test('Galewing: +3 Evasion, and +3 more while aloft, lets a flyer land a long Leap higher', () => {
   const lift = (shards: FighterSetup['shards']) => {
-    const bout = newBout({ name: 'G', morph: 'true-dragon', stone: 'water', shards }, TD_WATER, 6);
+    // The shard's own +3 and rider, without the v0.4 point.
+    const bout = newBout({ name: 'G', morph: 'true-dragon', stone: 'water', shards }, TD_WATER, 6, 'B', {}, R.rulesWith({ ATTR_SHARD_BONUS: 0 }));
     bout.fighters.A.pos = { ...bout.fighters.A.pos, z: R.PACE };
     runExchange(bout, { A: ['leap:long'].map(parseAction), B: ['hold'].map(parseAction) });
     return bout.fighters.A.pos.z;

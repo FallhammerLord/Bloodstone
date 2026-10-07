@@ -57,8 +57,8 @@ function scalesFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: number
     }
     const mantle = tech(def, 'mantle-wings');
     const mantleBase = rules.TECH_MANTLE_WINGS === 'base';
-    // Mantle Wings (verbguard): −3 against Claw only; from Elder, lifted while aloft.
-    const mantleHit = mantleBase
+    // Mantle Wings (verbguard): −3 against Claw only; from Elder, lifted while aloft. Elemental Mantle [v0.4]: no cost.
+    const mantleHit = rules.TECH_MANTLE_WINGS === 'mantle' ? false : mantleBase
       ? (p.spec.name === 'claw' || (p.spec.name === 'bite' && mantle < A)) && !(mantle >= V && def.pos.z > 0)
       : p.spec.name === 'claw' && !(mantle >= E && def.pos.z > 0);
     if (mantle >= W && mantleHit) {
@@ -129,7 +129,7 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, scales: n
       const { aff, guardAff, mantleAff, pierce } = against;
       const affinity = bypass ? 0 : against.affinity;
       v = breath.value - affinity + m;
-      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${guardAff ? ' (Guard)' : ''}${aff.note}${mantleAff ? ' (Mantle Wings +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
+      parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${guardAff ? ' (Guard)' : ''}${aff.note}${mantleAff ? ' (Elemental Mantle +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
       const elem = rules.ELEMENT_BREATH_MOD[att.sheet.stone];
       if (elem) {
         v += elem;
@@ -242,6 +242,14 @@ function modifiers(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPlan: P
     v -= 3;
     parts.push('−3 snapped (Snapping Jaw)');
   }
+  // Elemental Jaws [v0.4]: a Bite carries a third of the biter's Affinity.
+  if (p.spec.name === 'bite' && tech(att, 'elemental-jaws') >= W) {
+    const jaws = Math.floor(Math.max(0, eff(att, 'affinity', {}).value) / 3);
+    if (jaws) {
+      v += jaws;
+      parts.push(`+${jaws} Elemental Jaws (Affinity ÷ 3)`);
+    }
+  }
   if (p.spec.name === 'bite' && defPhase === 'windup' && tech(att, 'snapping-jaw') >= E) {
     v += 3;
     parts.push('+3 Snapping Jaw interrupt');
@@ -304,7 +312,7 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
 /** Whether a breath carries its element's verb: not under a pulled Ash Gland, nor a piercing Lance Throat. */
 export function carriesVerb(rules: Rules, att: Fighter): boolean {
   if (rules.TECH_ASH_GLAND === 'pulled' && tech(att, 'ash-gland') >= W) return false;
-  if (rules.TECH_LANCE_THROAT === 'pierce' && tech(att, 'lance-throat') >= W) return false;
+  if (rules.TECH_LANCE_THROAT !== 'base' && tech(att, 'lance-throat') >= W) return false;
   return true;
 }
 

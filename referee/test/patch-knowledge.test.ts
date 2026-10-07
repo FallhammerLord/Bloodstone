@@ -151,3 +151,12 @@ test('Ravener: a Drake values revising slot 3 into a safe Approach over a Bite f
   };
   assert.ok(slot3('approach') > slot3('bite'), `${slot3('approach')} vs ${slot3('bite')}`);
 });
+
+test('suite v0.4: a long Ashbreath blinding counts as status, and Elemental Jaws cools a Breath one action longer', async () => {
+  assert.ok(outcome((b) => (b.fighters.B.marks.blindExtra = 3)).status > 0, 'a long blinding on the opponent');
+  const { advance } = await import('../src/brain/options.ts');
+  const jaws = newBout({ ...TD_WATER, shards: [{ shard: 'Elemental Jaws', grade: 'wyrmling', pips: [0] }] }, TD_WATER, 6);
+  const plain = newBout(TD_WATER, TD_WATER, 6);
+  const after = (b: ReturnType<typeof newBout>) => advance(situation(b.fighters.A, 0, R.DEFAULT_RULES), { name: 'breath' }).readyAt.breath ?? 0;
+  assert.equal(after(jaws) - after(plain), 1);
+});

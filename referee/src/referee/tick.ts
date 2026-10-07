@@ -210,9 +210,9 @@ function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev
       // The blow lands on its owner, against its owner's own hide.
       const back = damage(bout.rules, F[r.s], F[r.s], plans[r.s], plans[r.s], t);
       F[r.s].wounds -= back.total;
-      // Thornscale (window, Elder): a guard reversal also deals the thorns.
+      // Thornscale (window or free, Elder): a guard reversal also deals the thorns.
       const thR = tech(F[d], 'thornscale');
-      if (bout.rules.TECH_THORNSCALE === 'window' && thR >= E && dp.spec.name === 'guard' && (plans[r.s].spec.name === 'claw' || plans[r.s].spec.name === 'bite')) thorns(bout, r.s, thR, t, ev);
+      if (bout.rules.TECH_THORNSCALE !== 'base' && thR >= E && dp.spec.name === 'guard' && (plans[r.s].spec.name === 'claw' || plans[r.s].spec.name === 'bite')) thorns(bout, r.s, thR, t, ev);
       ev.push({ kind: 'note', tick: t, side: d, tag: 'reflected', text: `The full Surge turns the ${plans[r.s].spec.name} back on its owner.` });
       ev.push({ kind: 'hit', tick: t, attacker: d, action: plans[r.s].spec.name, damage: back.total, parts: ['reflected by a full Surge:', ...back.parts], tags: ['reflected'], interrupt: false, trade: false, woundsLeft: F[r.s].wounds });
       continue;

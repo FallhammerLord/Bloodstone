@@ -191,11 +191,13 @@ test('Sapping Bellow (gland, provisional): a landed Breath demoralizes', () => {
   assert.ok(b.fighters.B.marks.demoralized);
 });
 
-test('Baleful Eye is cut, and Ash Gland returns only as the cloud', async () => {
+test('the pool: v0.4 seats Baleful Eye, Ashbreath and Elemental Jaws; v0.3 cuts the Eye and the Jaws; v0.2 pulls the ash', async () => {
   const { shardPool, setPoolRules } = await import('../src/shards.ts');
-  assert.ok(!shardPool('wyrmling').some((s) => s.name === 'Baleful Eye'));
-  assert.ok(shardPool('wyrmling').some((s) => s.name === 'Ash Gland'), 'suite v0.3 seats the cloud');
+  const has = (name: string) => shardPool('wyrmling').some((s) => s.name === name);
+  assert.ok(has('Baleful Eye') && has('Ashbreath') && has('Elemental Jaws') && has('Elemental Mantle'));
+  setPoolRules(R.rulesWith({ ...R.SUITE_V03 }));
+  assert.ok(!has('Baleful Eye') && !has('Elemental Jaws') && has('Ashbreath'), 'suite v0.3 seats the cloud');
   setPoolRules(rules({}));
-  assert.ok(!shardPool('wyrmling').some((s) => s.name === 'Ash Gland'), 'pulled under v0.2');
+  assert.ok(!has('Ashbreath'), 'pulled under v0.2');
   setPoolRules(R.DEFAULT_RULES);
 });

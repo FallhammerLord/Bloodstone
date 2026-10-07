@@ -71,8 +71,10 @@ export interface Marks {
   ashStuck: { owner: Side; exchange: number; rattles: boolean } | null;
   /** Ravener (Drake): slots left in the lunge window an Approach or hop opened */
   ravener: number;
+  /** Ashbreath [v0.4]: Blinded for this many slots more after the next */
+  blindExtra: number;
 }
-export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null, staggerExtra: 0, snapDebt: 0, clamped: false, noPinNext: false, ratchet: 0, ashStuck: null, ravener: 0 });
+export const noMarks = (): Marks => ({ lockjawFollow: false, sapped: null, goaded: null, diveBonus: false, noLeap: false, quick: null, revisionLockedFor: 0, eye: null, charge: null, advanced: false, strafed: false, aloftAtStart: false, demoralized: false, crunchedIn: -1, corrosion: null, staggerExtra: 0, snapDebt: 0, clamped: false, noPinNext: false, ratchet: 0, ashStuck: null, ravener: 0, blindExtra: 0 });
 
 export interface Chain {
   action: ActionName | null;
@@ -174,11 +176,11 @@ export interface FighterSetup {
 }
 
 /** Hatches the dragon and seats its shards. */
-export function buildSheet(setup: FighterSetup): { sheet: StatSheet; loadout: Loadout; notes: string[] } {
+export function buildSheet(setup: FighterSetup, rules: Rules = DEFAULT_RULES): { sheet: StatSheet; loadout: Loadout; notes: string[] } {
   const array = emptyArray();
   const notes: string[] = [];
   for (const s of setup.shards ?? []) notes.push(...seat(array, findShard(s.shard, s.grade), s.pips));
-  const { sheet, loadout } = compile(hatch(setup.morph, setup.stone), array);
+  const { sheet, loadout } = compile(hatch(setup.morph, setup.stone), array, rules.ATTR_SHARD_BONUS);
   loadout.seating = notes;
   return { sheet, loadout, notes };
 }
@@ -187,7 +189,7 @@ export function buildSheet(setup: FighterSetup): { sheet: StatSheet; loadout: Lo
 export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: number, challenged: Side = 'B', arena: ArenaSetup = {}, rules: Rules = DEFAULT_RULES): Bout {
   const half = Math.round((separationPaces * R.PACE) / 2);
   const make = (side: Side, setup: FighterSetup, x: number): Fighter => {
-    const { sheet, loadout } = buildSheet(setup);
+    const { sheet, loadout } = buildSheet(setup, rules);
     return {
       side, name: setup.name, sheet, loadout, pos: vec(x, 0),
       wounds: sheet.wounds, meter: Math.min(R.METER_MAX, sheet.acumen), readyAt: {},

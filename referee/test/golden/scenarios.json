@@ -115,8 +115,8 @@
   "name": "shards.json",
   "winner": "-",
   "exchanges": 1,
-  "wounds": "39/9",
-  "hash": "fb66fd0cae716a3c"
+  "wounds": "40/6",
+  "hash": "9c4cf7691725c4b6"
  },
  {
   "name": "talons.json",
@@ -130,7 +130,7 @@
   "winner": "-",
   "exchanges": 1,
   "wounds": "42/27",
-  "hash": "2b9c1ea6fc39e9c4"
+  "hash": "f43b700b653b17f1"
  },
  {
   "name": "wyvern-strafe.json",

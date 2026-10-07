@@ -57,6 +57,7 @@ const ATTR_LINES: AttrLine[] = [
 ];
 
 // [Doc] grades: Wyrmling +1, Juvenile +2, Adult +3 (chips, 1 pip); Elder +3 and a +3 rider; Venerable adds 1 related point (2 pips).
+// Suite v0.4 adds ATTR_SHARD_BONUS to every grade's base points when a sheet compiles (Wyrmling +2 ... Adult and up +4).
 const GRADE_POINTS: Record<Grade, number> = { wyrmling: 1, juvenile: 2, adult: 3, elder: 3, venerable: 3 };
 const RIDER_POINTS = 3;
 const RELATED_POINTS = 1;
@@ -69,7 +70,8 @@ export type TechniqueId =
   | 'lance-throat' | 'smoldering-maw' | 'bellows-chest' | 'ash-gland'
   | 'stooping-pinions' | 'sidewinder-spine' | 'bounding-haunches'
   | 'thornscale' | 'riposte-talons' | 'mantle-wings'
-  | 'sapping-bellow' | 'baleful-eye' | 'goading-roar';
+  | 'sapping-bellow' | 'baleful-eye' | 'goading-roar'
+  | 'elemental-jaws';
 
 interface TechniqueDef {
   id: TechniqueId;
@@ -93,16 +95,17 @@ const TECHNIQUES: TechniqueDef[] = [
   { id: 'lance-throat', name: 'Lance Throat', pips: 2, built: true },
   { id: 'smoldering-maw', name: 'Smoldering Maw', pips: 1, built: true },
   { id: 'bellows-chest', name: 'Bellows Chest', pips: 2, built: true },
-  { id: 'ash-gland', name: 'Ash Gland', pips: 1, built: true, pulled: true }, // pulled for redesign: it removes the opponent's revision rather than pricing it
+  { id: 'ash-gland', name: 'Ashbreath', pips: 1, built: true, pulled: true }, // was Ash Gland; in the pool under cloud or ashbreath
   { id: 'stooping-pinions', name: 'Stooping Pinions', pips: 1, built: true },
   { id: 'sidewinder-spine', name: 'Sidewinder Spine', pips: 1, built: true },
   { id: 'bounding-haunches', name: 'Bounding Haunches', pips: 1, built: true },
   { id: 'thornscale', name: 'Thornscale', pips: 1, built: true },
   { id: 'riposte-talons', name: 'Riposte Talons', pips: 1, built: true },
-  { id: 'mantle-wings', name: 'Mantle Wings', pips: 1, built: true },
+  { id: 'mantle-wings', name: 'Elemental Mantle', pips: 1, built: true }, // was Mantle Wings
   { id: 'sapping-bellow', name: 'Sapping Bellow', pips: 1, built: true },
-  { id: 'baleful-eye', name: 'Baleful Eye', pips: 1, built: true, pulled: true }, // cut (technique parity pass 1)
+  { id: 'baleful-eye', name: 'Baleful Eye', pips: 1, built: true, pulled: true }, // cut in parity pass 1; back under TECH_BALEFUL_EYE=back
   { id: 'goading-roar', name: 'Goading Roar', pips: 1, built: true },
+  { id: 'elemental-jaws', name: 'Elemental Jaws', pips: 1, built: true, pulled: true }, // new in v0.4; in the pool under TECH_ELEMENTAL_JAWS=on
 ];
 
 // ---- Shards ----
@@ -125,7 +128,7 @@ const norm = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
  * Techniques keep one name across grades, so they need a grade ("Snapping Jaw", "adult").
  */
 /** Old names that saved seasons and cards still carry. */
-const LEGACY_NAMES: Record<string, string> = { hollowbones: 'Coiled Sinew' };
+const LEGACY_NAMES: Record<string, string> = { hollowbones: 'Coiled Sinew', ashgland: 'Ashbreath', mantlewings: 'Elemental Mantle' };
 
 export function findShard(name: string, grade?: Grade): Shard {
   const n = norm(LEGACY_NAMES[norm(name)] ?? name);
@@ -219,8 +222,11 @@ export interface Loadout {
   seating: string[];
 }
 
-/** Adds seated shards to a hatched sheet. Affinity and Accuracy were derived at hatching and don't re-derive [Doc]. */
-export function compile(base: StatSheet, array: DragonArray): { sheet: StatSheet; loadout: Loadout } {
+/**
+ * Adds seated shards to a hatched sheet. Affinity and Accuracy were derived at hatching and don't re-derive [Doc].
+ * `bonus` adds to each attribute shard's base points (suite v0.4's ATTR_SHARD_BONUS); riders and related points keep theirs.
+ */
+export function compile(base: StatSheet, array: DragonArray, bonus = DEFAULT_RULES.ATTR_SHARD_BONUS): { sheet: StatSheet; loadout: Loadout } {
   const sheet = { ...base };
   const loadout: Loadout = { riders: [], techniques: [], names: [], seating: [] };
   for (const s of array.seated) {
@@ -232,7 +238,7 @@ export function compile(base: StatSheet, array: DragonArray): { sheet: StatSheet
       continue;
     }
     // Overlap strips perks first: one covered pip takes the rider (and a Venerable's related point with it).
-    sheet[k.attr] += k.points;
+    sheet[k.attr] += k.points + bonus;
     if (s.covered === 0) {
       if (k.rider) loadout.riders.push(k.rider);
       if (k.related) sheet[k.related.attr] += k.related.points;
@@ -249,8 +255,13 @@ export function setPoolRules(rules: Rules) {
 }
 
 export function shardPool(grade: Grade | null = 'wyrmling'): Shard[] {
-  // Ash Gland returns as the blinding breath when the run's rules say so.
-  const inPool = (t: TechniqueDef) => !t.pulled || (t.id === 'ash-gland' && poolRules.TECH_ASH_GLAND === 'cloud');
+  // Pulled Techniques come back when the run's rules say so: Ashbreath (cloud or ashbreath), Baleful Eye, Elemental Jaws.
+  const back: Partial<Record<TechniqueId, boolean>> = {
+    'ash-gland': poolRules.TECH_ASH_GLAND !== 'pulled',
+    'baleful-eye': poolRules.TECH_BALEFUL_EYE === 'back',
+    'elemental-jaws': poolRules.TECH_ELEMENTAL_JAWS === 'on',
+  };
+  const inPool = (t: TechniqueDef) => !t.pulled || back[t.id] === true;
   const all = [...allAttrShards(), ...builtTechniques().filter(inPool).flatMap((t) => GRADES.map((g) => findShard(t.name, g)))];
   return grade ? all.filter((s) => s.grade === grade) : all;
 }

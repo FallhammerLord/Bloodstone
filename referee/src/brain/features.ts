@@ -48,7 +48,7 @@ function ready(b: Bout, f: Fighter): number {
 function burdens(f: Fighter): number {
   const p = f.pending;
   let n = [p.staggered, p.pinned, p.rattled, p.blinded, p.corroded, p.slowed, p.grounded].filter(Boolean).length;
-  n += f.marks.staggerExtra + (f.marks.demoralized ? 1 : 0) + (f.marks.clamped ? 1 : 0) + (f.marks.snapDebt > 0 ? 1 : 0);
+  n += f.marks.staggerExtra + f.marks.blindExtra + (f.marks.demoralized ? 1 : 0) + (f.marks.clamped ? 1 : 0) + (f.marks.snapDebt > 0 ? 1 : 0);
   n += (f.marks.ashStuck ? 1 : 0) + (f.marks.corrosion ? 1 : 0);
   return n;
 }

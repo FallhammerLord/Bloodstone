@@ -37,7 +37,8 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
   // Claw or Bite at every grade: a Wyrmling's thorns strike the first into each guard, a Juvenile's every one.
   const th = tech(def, 'thornscale');
   const intoGuard = guarding(defPlan, t);
-  const windowed = bout.rules.TECH_THORNSCALE === 'window';
+  // Under free [v0.4] the thorns trigger as under window, with no cost to the guard.
+  const windowed = bout.rules.TECH_THORNSCALE !== 'base';
   const thornHits = windowed
     ? (p.spec.name === 'claw' || p.spec.name === 'bite') && (th >= J || !defPlan.thornsUsed)
     : p.spec.name === 'claw' || (th >= J && p.spec.name === 'bite');
@@ -53,6 +54,18 @@ export function techniqueOnHit(bout: Bout, s: Side, p: Plan, defPlan: Plan, t: n
     def.pending.blinded = true;
     if (ash >= V) def.pending.rattled = true;
     note(def.side, `Ash Gland: the ash clings, Blinding it through the exchange${ash >= V ? ' and Rattling it' : ''}; then it falls as a cloud.`);
+  }
+  // Ashbreath [v0.4]: a landed Breath Blinds the target for the breather's Affinity ÷ 3 slots (at least 1), at full damage.
+  if (ash >= W && bout.rules.TECH_ASH_GLAND === 'ashbreath') {
+    const slots = Math.max(1, Math.floor(Math.max(0, eff(att, 'affinity', {}).value) / 3));
+    def.pending.blinded = true;
+    def.marks.blindExtra = Math.max(def.marks.blindExtra, slots - 1);
+    note(def.side, `Ashbreath: Blinded for the next ${slots === 1 ? 'slot' : `${slots} slots`}.`);
+  }
+  // Elemental Jaws [v0.4]: a landed Bite readies the biter's Breath for the next slot.
+  if (p.spec.name === 'bite' && tech(att, 'elemental-jaws') >= W && (att.readyAt.breath ?? 0) > bout.globalSlot) {
+    att.readyAt.breath = bout.globalSlot;
+    note(s, 'Elemental Jaws: the bite readies its Breath.');
   }
   // Sapping Bellow (gland) [provisional reading]: the bellow rides the Breath. A landed Breath demoralizes (its next Bite
   // or Claw loses 3); from Juvenile it also strips the next chain bonus; Elder its pending Intimidate; Venerable Rattles.
@@ -106,24 +119,43 @@ export function intimidateLands(bout: Bout, s: Side, t: number, ev: Event[]) {
   const sap = bout.rules.TECH_SAPPING_BELLOW === 'gland' ? -1 : tech(f, 'sapping-bellow');
   const eye = tech(f, 'baleful-eye');
   const goad = tech(f, 'goading-roar');
+  // Suite v0.4: Intimidate Techniques keep the +3 (INTIMIDATE_TECH_BONUS); before, each traded it away.
+  const keeps = bout.rules.INTIMIDATE_TECH_BONUS === 1;
+  const lands = (text: string) => {
+    if (!keeps) return note(text);
+    f.intimidateBonus = true;
+    note(`${text} The Intimidate's +3 holds.`);
+  };
   if (sap >= W) {
+    if (bout.rules.TECH_SAPPING_BELLOW === 'reset') {
+      // Sapping Bellow (reset) [v0.4]: the opponent's chain resets (Wyrmling: only a Claw chain).
+      const c = opp.chain;
+      const resets = c.action !== null && (sap >= J || c.action === 'claw');
+      if (resets) {
+        opp.chain = { ...c, action: null, links: 0, saves: 0, resumed: false };
+        opp.marks.ratchet = 0;
+      }
+      if (sap >= E) opp.intimidateBonus = false;
+      if (sap >= V) opp.pending.rattled = true;
+      return lands(`Sapping Bellow: ${resets ? "resets the opponent's chain" : 'no chain to reset'}${sap >= E ? ' and strips its pending Intimidate' : ''}${sap >= V ? '; Rattled' : ''}.`);
+    }
     opp.marks.sapped = sap >= J ? 'any' : 'claw';
     if (sap >= E) opp.intimidateBonus = false;
     if (sap >= V) opp.pending.rattled = true;
-    return note(`Sapping Bellow: strips the opponent's next ${sap >= J ? '' : 'Claw '}chain bonus${sap >= E ? ' and its pending Intimidate' : ''}${sap >= V ? '; Rattled' : ''}.`);
+    return lands(`Sapping Bellow: strips the opponent's next ${sap >= J ? '' : 'Claw '}chain bonus${sap >= E ? ' and its pending Intimidate' : ''}${sap >= V ? '; Rattled' : ''}.`);
   }
   if (eye >= W) {
     const slot = (bout.globalSlot - 1) % R.SLOTS_PER_EXCHANGE;
     if (slot < 2) {
       f.marks.eye = eye;
-      return note("Baleful Eye: it will see the opponent's slot 3 during the revision window.");
+      return lands("Baleful Eye: it will see the opponent's slot 3 during the revision window.");
     }
-    return note('Baleful Eye in slot 3 sees nothing to reveal.');
+    return lands('Baleful Eye in slot 3 sees nothing to reveal.');
   }
   if (goad >= W) {
-    if (goad === W && sep > R.CLOSE_EDGE) return note('Goading Roar falls short: a Wyrmling roar needs Close or nearer.');
+    if (goad === W && sep > R.CLOSE_EDGE) return lands('Goading Roar falls short: a Wyrmling roar needs Close or nearer.');
     opp.marks.goaded = goad;
-    return note(`Goading Roar: a Retreat${goad >= E ? ' or Dodge' : ''} next slot will sting.`);
+    return lands(`Goading Roar: a Retreat${goad >= E ? ' or Dodge' : ''} next slot will sting.`);
   }
   f.intimidateBonus = true;
   note('Intimidate lands: +3 to the next attack.', 'intimidate-lands');
@@ -138,7 +170,7 @@ export function smolder(bout: Bout, s: Side, origin: Vec, aim: Vec, t: number, e
   // Under linger, a breath that leaves ground (Fire's lane, an Earth pool) only lingers longer; one that leaves none lays
   // its verb as ground. A verbless lance lays nothing.
   if (linger && (f.sheet.stone === 'fire' || (f.sheet.stone === 'earth' && !bout.rules.EARTH_CORRODES))) return;
-  if (linger && bout.rules.TECH_LANCE_THROAT === 'pierce' && tech(f, 'lance-throat') >= W) return;
+  if (linger && bout.rules.TECH_LANCE_THROAT !== 'base' && tech(f, 'lance-throat') >= W) return;
   const reach = tech(f, 'lance-throat') >= W ? R.FAR_EDGE : f.sheet.stone === 'water' ? bout.rules.BREATH.line.reach : f.sheet.stone === 'earth' ? bout.rules.BREATH.narrowCone.reach : f.sheet.stone === 'air' ? bout.rules.BREATH.vortex.maxCenter : bout.rules.BREATH.blast.maxCenter;
   // The area is centered where the breath reaches its target, or its full reach.
   const center = add(origin, scaleTo(aim, Math.min(len(aim), reach)));

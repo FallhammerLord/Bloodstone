@@ -125,17 +125,19 @@ export function breathVerb(bout: Bout, s: Side, p: Plan, aim: Vec, t: number, ev
 /** The Affinity a Breath meets: the stone's, plus Guard and Mantle Wings when guarding, less Lance Throat's pierce. */
 export function affinityAgainst(rules: Rules, att: Fighter, def: Fighter, guarded: boolean, sep: number) {
   const aff = eff(def, 'affinity', { opp: att });
-  // Guard presents the hide to the elements: +3 Affinity. Mantle Wings adds 3 more (Wyrmling: only at Melee or Close).
+  // Guard presents the hide to the elements: +3 Affinity. Elemental Mantle adds 3 more (Wyrmling: only at Melee or Close).
   const guardAff = guarded ? rules.GUARD_AFFINITY : 0;
   const mantle = guarded ? tech(def, 'mantle-wings') : -1;
   // Mantle Wings (verbguard) blocks the verb instead; only a Venerable's guard rises to +6 against Breath.
   const mantleAff = rules.TECH_MANTLE_WINGS === 'verbguard'
     ? (mantle >= V ? 3 : 0)
     : mantle >= J || (mantle === W && sep <= R.CLOSE_EDGE) ? 3 : 0;
-  // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable. Under pierce, a Wyrmling's pierces 3 at Far.
+  // Lance Throat pierces Affinity: 3 from Juvenile, 6 at Far for a Venerable. Under pierce, a Wyrmling's pierces 3 at Far;
+  // under pierce3 [v0.4], 3 at every grade and range.
   const lance = tech(att, 'lance-throat');
   const far = sep > R.CLOSE_EDGE;
-  const pierce = lance >= V && far ? 6 : lance >= J ? 3 : lance === W && far && rules.TECH_LANCE_THROAT === 'pierce' ? 3 : 0;
+  const pierce3 = rules.TECH_LANCE_THROAT === 'pierce3';
+  const pierce = lance >= V && far ? 6 : lance >= J || (lance === W && pierce3) ? 3 : lance === W && far && rules.TECH_LANCE_THROAT === 'pierce' ? 3 : 0;
   return { aff, guardAff, mantleAff, pierce, affinity: Math.max(0, aff.value + guardAff + mantleAff - pierce) };
 }
 

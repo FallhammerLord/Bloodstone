@@ -176,6 +176,11 @@ export function runSlot(bout: Bout, slot: number, specs: Record<Side, ActionSpec
       F[s].status.staggered = true;
       F[s].marks.staggerExtra--;
     }
+    // Ashbreath [v0.4]: a long blinding runs on the same way.
+    if (!F[s].status.blinded && F[s].marks.blindExtra > 0) {
+      F[s].status.blinded = true;
+      F[s].marks.blindExtra--;
+    }
   }
   const startSep = dist(F.A.pos, F.B.pos);
   const startZ = { A: F.A.pos.z, B: F.B.pos.z };

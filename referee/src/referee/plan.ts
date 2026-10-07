@@ -245,7 +245,9 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   }
   const def = ACTIONS[spec.name];
   const rip = tech(f, 'riposte-talons');
-  const cooldown = def.cooldown + (spec.name === 'dodge' && rip >= W && rip < A ? 1 : 0);
+  // Elemental Jaws [v0.4]: Breath's cooldown runs one action longer.
+  const jaws = spec.name === 'breath' && tech(f, 'elemental-jaws') >= W ? 1 : 0;
+  const cooldown = def.cooldown + (spec.name === 'dodge' && rip >= W && rip < A ? 1 : 0) + jaws;
   // A charging breath's cooldown starts when it releases.
   if (cooldown > 0 && !spec.charge) f.readyAt[spec.name] = g + cooldown + 1;
 

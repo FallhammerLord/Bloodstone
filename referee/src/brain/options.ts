@@ -2,6 +2,7 @@
 
 import { ACTIONS, type ActionName, type ActionSpec } from '../actions.ts';
 import type { Fighter } from '../referee.ts';
+import { tech } from '../referee/state.ts';
 import type { Rules } from '../rules.ts';
 import * as R from '../rules.ts';
 
@@ -109,7 +110,8 @@ export function playable(script: ActionSpec[], s: Situation): boolean {
 /** Advances the imagined situation past one action: cooldowns and altitude. */
 export function advance(s: Situation, a: ActionSpec): Situation {
   const readyAt = { ...s.readyAt };
-  const cd = ACTIONS[a.name].cooldown;
+  // Elemental Jaws [v0.4]: Breath cools one action longer.
+  const cd = ACTIONS[a.name].cooldown + (a.name === 'breath' && tech(s.f, 'elemental-jaws') >= 0 ? 1 : 0);
   if (cd > 0) readyAt[a.name] = s.globalSlot + cd + 1;
   const step = s.rules.BAND_MOVE; // a Leap or Dive carries a band; a Wyvern's Leap climbs two
   const climb = s.f.sheet.aspect === 'talons' ? s.rules.TALONS_LEAP_BANDS * step : step;

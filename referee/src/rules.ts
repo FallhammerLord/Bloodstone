@@ -145,19 +145,23 @@ export const DEFAULT_RULES = {
   SMOLDER_RADIUS: { center: PACE, full: 2 * PACE }, // Smoldering Maw: the area's center, then all of it
   LANCE_WIDEN: PACE / 2, // Lance Throat Elder: the line's half-width grows this much by its end
   STOOPING_HEIGHT: { wyrmling: 6 * PACE, rest: 3 * PACE }, // Stooping Pinions: how high a dive must start
-  // ---- Technique parity pass 1 ---- (technique-parity-pass-1.md). Suite v0.3 locks the pass: each default is its
-  // locked variant, with Snapping Jaw at borrow_dmg; Sapping Bellow stays at base until its text is written. 'base' is v0.2.
+  // ---- Technique suite ---- Suite v0.3 locked the parity pass (technique-parity-pass-1.md); suite v0.4 (Ken's
+  // 2026-10-07 notes) is the default now. 'base' is v0.2; SUITE_V03 and SUITE_V02 restore the older suites.
   TECH_SNAPPING_JAW: 'borrow_dmg' as 'base' | 'borrow' | 'borrow_dmg', // borrow: the snap's ticks come out of your next slot
   TECH_LOCKJAW: 'clamp' as 'base' | 'clamp' | 'recovery', // clamp: a Pin keeps the jaw shut; your next slot can't Bite
   TECH_RATCHET_CLAWS: 'escalate' as 'base' | 'escalate', // escalate: each landed Claw link adds +1 to the next Claw
-  TECH_THORNSCALE: 'window' as 'base' | 'window', // window: thorns cost the guard's last ticks, not its Scales
+  TECH_THORNSCALE: 'free' as 'base' | 'window' | 'free', // window: thorns cost the guard's last ticks; free (v0.4): no cost
   TECH_BELLOWS_CHEST: 'mobile' as 'base' | 'mobile', // mobile: a Breath charge on the move
-  TECH_MANTLE_WINGS: 'verbguard' as 'base' | 'verbguard', // verbguard: Guard also blocks a Breath's verb
-  TECH_SAPPING_BELLOW: 'base' as 'base' | 'gland', // gland: the bellow rides the Breath (provisional reading: a landed Breath demoralizes)
-  TECH_LANCE_THROAT: 'pierce' as 'base' | 'pierce', // pierce: a verbless line that pierces Affinity
+  TECH_MANTLE_WINGS: 'mantle' as 'base' | 'verbguard' | 'mantle', // verbguard: Guard also blocks a Breath's verb; mantle (v0.4): Elemental Mantle, +3 Affinity while Guarding, no cost
+  TECH_SAPPING_BELLOW: 'reset' as 'base' | 'gland' | 'reset', // gland: the bellow rides the Breath; reset (v0.4): the Intimidate resets the opponent's chain
+  TECH_LANCE_THROAT: 'pierce3' as 'base' | 'pierce' | 'pierce3', // pierce: a verbless line that pierces Affinity; pierce3 (v0.4): 3 at every grade and range
   TECH_SMOLDERING_MAW: 'linger' as 'base' | 'linger', // linger: ground lingers longer; a groundless breath lays its verb as ground
   TECH_STOOPING_PINIONS: 'nostack' as 'base' | 'nostack', // nostack: the dive's +3 never adds to a stoop or a hard landing
-  TECH_ASH_GLAND: 'cloud' as 'pulled' | 'cloud', // cloud: the blinding breath, back in the pool
+  TECH_ASH_GLAND: 'ashbreath' as 'pulled' | 'cloud' | 'ashbreath', // cloud: the blinding ash cloud; ashbreath (v0.4): a landed Breath Blinds for Affinity ÷ 3 slots
+  TECH_BALEFUL_EYE: 'back' as 'pulled' | 'back', // pulled: cut in parity pass 1; back (v0.4): in the pool, keeping the Intimidate's +3
+  TECH_ELEMENTAL_JAWS: 'on' as 'pulled' | 'on', // Elemental Jaws (v0.4): Bite + Affinity ÷ 3; a landed Bite readies Breath; Breath cooldown +1
+  INTIMIDATE_TECH_BONUS: 1, // (v0.4) 1: Intimidate Techniques keep the Intimidate's +3; 0: they trade it away
+  ATTR_SHARD_BONUS: 1, // (v0.4) every Body and Bloodstone shard's base points +1 (Wyrmling +2, Juvenile +3, Adult and up +4)
   ASH_CLOUD_RADIUS: PACE, // Ash Gland's Wyrmling cloud radius, a measuring dial
   ASH_CLOUD_EXCHANGES: 0, // [Proposed] how many exchanges an ash cloud hangs once it falls; 0: the rest of the bout
   // ---- Attack shapes ----
@@ -190,13 +194,23 @@ export const TECH_PASS_1: Partial<Rules> = {
   TECH_SNAPPING_JAW: 'borrow', TECH_LOCKJAW: 'clamp', TECH_RATCHET_CLAWS: 'escalate', TECH_THORNSCALE: 'window',
   TECH_BELLOWS_CHEST: 'mobile', TECH_MANTLE_WINGS: 'verbguard', TECH_SAPPING_BELLOW: 'gland', TECH_LANCE_THROAT: 'pierce',
   TECH_SMOLDERING_MAW: 'linger', TECH_STOOPING_PINIONS: 'nostack', TECH_ASH_GLAND: 'cloud',
+  TECH_BALEFUL_EYE: 'pulled', TECH_ELEMENTAL_JAWS: 'pulled', INTIMIDATE_TECH_BONUS: 0, ATTR_SHARD_BONUS: 0,
 };
 
-/** Suite v0.2: every TECH_ key at its pre-lock rule (suite v0.3 locked the parity pass). `--rule SUITE_V02=on` applies it. */
+/** Suite v0.3: the locked parity pass, before the v0.4 notes. `--rule SUITE_V03=on` applies it. */
+export const SUITE_V03: Partial<Rules> = {
+  TECH_SNAPPING_JAW: 'borrow_dmg', TECH_LOCKJAW: 'clamp', TECH_RATCHET_CLAWS: 'escalate', TECH_THORNSCALE: 'window',
+  TECH_BELLOWS_CHEST: 'mobile', TECH_MANTLE_WINGS: 'verbguard', TECH_SAPPING_BELLOW: 'base', TECH_LANCE_THROAT: 'pierce',
+  TECH_SMOLDERING_MAW: 'linger', TECH_STOOPING_PINIONS: 'nostack', TECH_ASH_GLAND: 'cloud',
+  TECH_BALEFUL_EYE: 'pulled', TECH_ELEMENTAL_JAWS: 'pulled', INTIMIDATE_TECH_BONUS: 0, ATTR_SHARD_BONUS: 0,
+};
+
+/** Suite v0.2: every TECH_ key at its pre-lock rule. `--rule SUITE_V02=on` applies it. */
 export const SUITE_V02: Partial<Rules> = {
   TECH_SNAPPING_JAW: 'base', TECH_LOCKJAW: 'base', TECH_RATCHET_CLAWS: 'base', TECH_THORNSCALE: 'base',
   TECH_BELLOWS_CHEST: 'base', TECH_MANTLE_WINGS: 'base', TECH_SAPPING_BELLOW: 'base', TECH_LANCE_THROAT: 'base',
   TECH_SMOLDERING_MAW: 'base', TECH_STOOPING_PINIONS: 'base', TECH_ASH_GLAND: 'pulled',
+  TECH_BALEFUL_EYE: 'pulled', TECH_ELEMENTAL_JAWS: 'pulled', INTIMIDATE_TECH_BONUS: 0, ATTR_SHARD_BONUS: 0,
 };
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
