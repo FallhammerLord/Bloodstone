@@ -13,8 +13,35 @@
 
 | Round | What changed |
 |---|---|
+| [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 3: reined-in gambits, chase and juke priors, meta memory
+
+**Gambits reined in.**
+- **What they were:** a breakdown of 60 adept bouts showed out-of-reach attacks were mostly Stomps (38, none landed) and Breaths (33, 3 landed) thrown from beyond reach, plus Bites from Very Far.
+- **Two fixes:**
+  - an attack that can't reach is barely imagined, by archetypes and by exploring scripts alike;
+  - a new **ready** feature makes a wasted cooldown cost something (Breath and Stomp off cooldown at the exchange's end, net of the opponent's).
+- **Result** (adept): gambits fell from 6–12% of slots to 5–9%, and now land 12–16% (was 7–12%).
+
+**Priors carry the goals.**
+- *Pursuit* chases: Approach up, Retreat down, the strike after an Approach up.
+- *Free hits* juke: Strafe and Dodge up, the strike after an evasive move up.
+
+**Adept tournament after both** (1,392 bouts, 106 s):
+- **The floor:** 90%.
+- **Overall** (±10): out-boxer 57, boxer-puncher 57, counterpuncher 49, slugger 44, swarmer 43.
+- **Triangle:** out-boxer over slugger (67) and slugger over swarmer (58) hold; swarmer over out-boxer doesn't (38).
+- **Morphs:** Wyvern 58, True Dragon 52, Drake 46 (was 39–40), Wyrm 45.
+- **Habits:** the slugger's overall mix still resembles the swarmer's. Its chase should show in pursuit situations, which the overall mix doesn't isolate.
+
+**Meta memory** (gauntlet):
+- Tamers remember the last 40 dragons they faced.
+- At a close spoils pick, where the table's top two are within about 8 points, adept and master tamers try both candidates against three remembered dragons, and the result leans the pick.
+- Seasons carry each champion tamer's full match history and memory.
+- **Cost:** a 40-tamer, 12-round smoke season ran 247 bouts and 1,388 trials in 162 s, so a full season is about 60–70 minutes. Season 1 is held.
 
 ## Round 2: stacking shards, Ravener payoff, free hits and pursuit
 
