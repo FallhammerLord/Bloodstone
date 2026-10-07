@@ -21,7 +21,7 @@
 - The arena is the market: everything worth taking is visible on a rival.
 - Each morph bends one rule.
 - Morph sets how you play; element sets who you're strong against; combat decides who wins.
-- Players control anything that affects power. Randomness lives only in flavor.
+- Players control anything that affects power. Randomness lives only in flavor. **[Proposed]** One exception: the Evasion test rolls pair-off dice, and players control the pools and can read the odds.
 - Turtling is legal and boring, and it loses for whoever needs to win.
 - A steep learning cliff with a high plateau is acceptable. A new player may lose a dozen wyrmlings before one reaches juvenile.
 
@@ -257,10 +257,10 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Surge** (was the Acumen meter): visible to both players. **[Proposed]** Affinity fuels it, so Water dragons fill it best. **[Proposed]** It starts at Acumen (10 × age category, so 10 for a wyrmling, 13 for a Water-preferring one). Each trigger adds Affinity + 9, +3 more for an Air-preferring dragon: a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath (the breather's meter). Full at 100, the next landed Bite, Claw or Breath deals true damage, ignoring Scales and Affinity (and so any verb contest), plus a steroid of Affinity ÷ 3, and drains it to 0. A miss spends nothing; a Stomp or a Technique's side-hit never spends it. Acumen itself still breaks ties. Deterministic and streak-free.
 
 **Evasive resolution**
-- **Strafe:** pure geometry. A dragon out of coverage is untouched; one still inside during the active window tests Evasion against Accuracy.
-- **Dodge:** no invulnerability. Tests Evasion against Accuracy with a dodge bonus; Acumen tips close contests. Holds position.
+- **Strafe:** pure geometry. A dragon out of coverage is untouched; one still inside during the active window takes the Evasion test.
+- **Dodge:** no invulnerability. Takes the Evasion test with a dodge bonus (+3 Evasion, one die). Holds position.
 - **Breath and Stomp ignore Evasion** inside their active area. Claw doesn't; it catches evasive dragons through timing and coverage.
-- **[Proposed]** Tests are deterministic comparisons.
+- **[Proposed] The Evasion test rolls pair-off dice.** The attacker rolls its attack stat ÷ 3 in d6 (Bite or Claw; Breath against a Serpentine strafe); the defender rolls Evasion ÷ 3. Both pools sort high to low and pair off; the first pair that differs decides, and the higher die wins. An unbroken chain goes to the side with dice left; equal pools matched all the way down go to the defender as a near miss, which fills the attacker's Surge. Equal pools land near even; each extra die moves the odds about a column (exact table: `dice-hit-odds.tsv`). Accuracy still sets aim tracking and the phantom band. The old rule, Evasion against Accuracy with Acumen breaking ties, stays behind `HIT_DICE = 0`.
 - Strafe is the hedge: clean escapes ignore attributes, and position carries forward. Dodge is the commitment: its bonus answers wide coverage, and it holds range and altitude.
 
 ### Damage [Proposed]

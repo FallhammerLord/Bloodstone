@@ -13,7 +13,7 @@ Run this for every rule change, before the tournament. The first list is the des
 | The arena is the market. | Can a player see it on a rival's dragon? |
 | Each morph bends one rule. | Does it blur a morph's one bend, or give a morph a second? |
 | Morph sets how you play; element sets who you're strong against; combat decides who wins. | Does it let a morph or a stone decide a fight before combat does? Check the pairing spread. |
-| Players control anything that affects power. Randomness lives only in flavor. | Is it deterministic from the scripts? (The Referee rolls no dice.) |
+| Players control anything that affects power. Randomness lives only in flavor. | Is it deterministic from the scripts? The one exception [Proposed]: the Evasion test's pair-off dice, whose pools players control and whose odds they can read. |
 | Turtling is legal and boring, and it loses for whoever needs to win. | Does it make turtling win? Check timeouts and the counterpuncher. |
 | A steep learning cliff with a high plateau is acceptable. | Can a brain at master skill find the depth? Does a novice still play a fight? |
 

@@ -1,6 +1,6 @@
 # The Referee
 
-The Dragon Duel rules engine. It takes two dragons and their scripts and works out exactly what happens, tick by tick. It draws nothing and rolls no dice: the same scripts always produce the same fight.
+The Dragon Duel rules engine. It takes two dragons and their scripts and works out exactly what happens, tick by tick. It draws nothing, and rolls dice in one place, the Evasion test [Proposed], from a stream seeded with the arena: the same scripts and seed always produce the same fight.
 
 Also here: `PRINCIPLES.md` (the checklist for every rule change), `DIALS.md` (every [Proposed] and [Assumed] number, from `npm run dials`), and `ROADMAP.md` (the cleanup plan).
 
@@ -151,13 +151,15 @@ Brains are AI tamers. Give a side `"ai"` with an archetype and optionally `"skil
 | counterpuncher | makes the opponent miss, then punishes | forced misses, punishes, damage taken |
 | boxer-puncher | even on everything: the baseline | — |
 
-The features, on one scale: damage dealt and taken; reach (its best hit from where it ends up) and exposure (the opponent's); forced misses; punishes; big hits; tempo (open setups, a held Intimidate, chain links); Surge; lasting statuses and debts; ground (the opponent's zones, the rim late); and the perch. **The aerial overlay:** on a winged dragon every archetype values the perch in full; grounded, only the threat of one.
+The features, on one scale: damage dealt and taken; reach (its best hit from where it ends up) and exposure (the opponent's); forced misses; punishes; big hits; heavy hits (each landed hit by (damage ÷ a fifth of the pool)², the slugger's alone); tempo (open setups, a held Intimidate, chain links); Surge; lasting statuses and debts; ground (the opponent's zones, the rim late); and the perch. **The aerial overlay:** on a winged dragon every archetype values the perch in full; grounded, only the threat of one.
+
+**Its own Wounds on a curve:** damage taken and exposure weigh 1 + 2 × (1 − left)² (`WOUNDS_CURVE`; ×1 at full, ×1.5 at half, ×2.3 at a fifth), in valuing outcomes and in how readily it imagines a Guard or Dodge. **Discovery** (`src/brain/discover.ts`): from the public record it learns what share of each attack's clean-hit worth has been getting through the opponent's defenses (a raised Guard, an Affinity that held). **The slugger** weighs each attack it imagines by that share against the heaviest attack from here, squared, and counts heavy hits: it leans hard on whatever gets through.
 
 How a brain decides, each exchange:
 1. **Probe.** It asks the Referee what each attack is worth from each band, for both dragons: one probe slot per attack and band against a target that holds (`src/brain/probe.ts`). Scales, Affinity, the element wheel, pierce, Surge and Techniques are all in the answer; no damage math is copied into a brain.
 2. **Read.** It guesses the opponent from what the opponent's own attacks are worth from here, plus what it has done at this range before (`src/brain/read.ts`).
 3. **Imagine.** It draws candidate scripts, weighted by its goals and the probed worth (`src/brain/priors.ts`), plus last exchange's script, its own plan, and (adept and master) best answers to its likeliest guesses.
-4. **Play out and value.** Every candidate is played against every guess in the Referee and valued by its goals (`src/brain/features.ts`). Late in a bout the challenger weighs damage dealt more and the challenged damage taken (the challenged wins a timeout).
+4. **Play out and value.** Every candidate is played against every guess in the Referee and valued by its goals (`src/brain/features.ts`). A brain can't see the bout's dice, so each guess is imagined at its own luck quantile ((i + ½) ÷ n of n guesses): an Evasion test lands when its exact chance beats the quantile, and the average over guesses weighs each test by its true odds. Late in a bout the challenger weighs damage dealt more and the challenged damage taken (the challenged wins a timeout).
 5. **Look ahead.** Adept and master brains play their best few forward one or two more exchanges.
 6. **Choose and revise.** It picks among the best with weighted chance, and at the end of slot 2 revises slot 3 for a clear gain.
 
@@ -181,7 +183,7 @@ Most rules reach the brains through the Referee itself, in probes and imagined e
 
 ## Attack roles
 
-Hits resolve in layers: geometry first (is the target in the shape?), then Accuracy against Evasion for a moving or dodging target, then Acumen on a tie. A swift dragon that reaches safe geometry before the active window is meant to escape.
+Hits resolve in layers: geometry first (is the target in the shape?), then the Evasion test for a moving or dodging target. **The Evasion test** [Proposed] rolls pair-off dice (`HIT_DICE`, `src/referee/dice.ts`): the attack stat ÷ 3 in d6 against Evasion ÷ 3 (`DICE_UNIT`), both sorted high to low and paired off until a pair differs, the higher die winning. An unbroken chain goes to the side with dice left; equal pools matched all the way down go to the defender as a near miss, filling the attacker's Surge. Blindness and Scything's −3 come off the attack stat. The evade event shows both rolls. `--rule HIT_DICE=0` restores Accuracy against Evasion with Acumen breaking ties. A swift dragon that reaches safe geometry before the active window is meant to escape.
 
 Three [Proposed] rules give each attack a role. They began as switches and are now part of the rules everywhere: tests, scenarios and tournaments play the same game.
 - **Charge:** a one-slot charge releases with no bonus. Scripting the same charge again holds it a second slot (Bite or Breath, slots 1–2), and that release earns +3. Bellows Chest restores the +3 on any Breath charge, then adds its own.
@@ -237,12 +239,12 @@ Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps
 | `src/shapes.ts` | Attack shapes and the phantom band |
 | `src/geometry.ts` | Whole-number vector math, in 3D |
 | `src/arena.ts` | Pillars, boulders, lingering zones |
-| `src/random.ts` | Seeded random numbers for AI and map layout |
+| `src/random.ts` | Seeded random numbers for AI, map layout and the Evasion test's dice |
 | `src/referee.ts` | The resolver's public face |
-| `src/referee/` | The resolver: `state` (fighters, bouts), `events`, `plan` (an action's timing and bends), `exchange` (slots, revisions), `tick` (the resolution order), `movement`, `damage`, `elements`, `meter`, `riders`, `techniques` |
+| `src/referee/` | The resolver: `state` (fighters, bouts), `events`, `plan` (an action's timing and bends), `exchange` (slots, revisions), `tick` (the resolution order), `movement`, `damage`, `elements`, `meter`, `riders`, `techniques`, `dice` (the Evasion test) |
 | `src/bout.ts` | Exchanges to a KO, rim pulses, timeouts; what each side can see |
 | `src/brain.ts` | The brains' public face |
-| `src/brain/` | `archetypes` (goals, skill), `probe` (attack worth, asked of the Referee), `features` (outcome features, value), `priors` (what gets imagined), `read`, `options` (legal scripts), `controller` (the archetype brain), `crude` (the floor), `hatchery` (drafting) |
+| `src/brain/` | `archetypes` (goals, skill, the Wounds curve), `probe` (attack worth, asked of the Referee), `discover` (what gets through), `features` (outcome features, value), `priors` (what gets imagined), `read`, `options` (legal scripts), `controller` (the archetype brain), `crude` (the floor), `hatchery` (drafting) |
 | `src/brains.ts`, `src/brains-worker.ts` | The brain tournament, in parallel |
 | `src/scenario.ts` | Scenario files, scripted revisions |
 | `src/shards.ts` | Shard catalog, the array, seating and overlap, compiling a loadout |

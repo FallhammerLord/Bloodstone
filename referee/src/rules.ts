@@ -84,7 +84,7 @@ export const DEFAULT_RULES = {
   // 1: a Bite or Claw against a moving or dodging target rolls its attack stat ÷ 3 in d6 against Evasion ÷ 3, pairs the
   // pools off high to low, and the first difference decides; an unbroken chain goes to the side with dice left, and
   // equal pools matched all the way down are the defender's, as a near miss. 0: Accuracy against Evasion, ties to Acumen.
-  HIT_DICE: 1,
+  HIT_DICE: 1, // [Proposed] pair-off dice for the Evasion test (0: Accuracy against Evasion, ties to Acumen)
   DICE_UNIT: 3, // [Proposed] points per die, on both sides
   // ---- Acumen ---- [Proposed] §4 Surge
   // The Surge [Proposed]: Affinity fuels it. It starts at Acumen (10 × age category, +3 for a Water-preferring dragon), and
