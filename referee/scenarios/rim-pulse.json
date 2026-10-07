@@ -1,0 +1,13 @@
+{
+  "title": "Late pressure: the rim pulses",
+  "note": "Design doc §5: at the end of each of the final three exchanges, the rim pillars deal a third of maximum Wounds to dragons on the outer rim. Pulse 1 can't kill. Here the bout is cut to four exchanges, so pulses fall on exchanges 2, 3 and 4.",
+  "bout": true,
+  "exchangeLimit": 4,
+  "separation": 6.5,
+  "A": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "B": { "name": "Ember", "morph": "wyvern", "stone": "fire" },
+  "exchanges": [
+    { "A": ["retreat", "retreat", "retreat"], "B": ["approach", "hold", "hold"] },
+    { "A": ["retreat", "retreat", "retreat"] }
+  ]
+}

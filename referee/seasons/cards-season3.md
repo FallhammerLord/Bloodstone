@@ -1,0 +1,928 @@
+# Living ladder: tamer cards
+
+Seed 2026, 200 tamers, 60 rounds.
+
+## The chosen tamer
+
+### Yramor Ash
+
+| | |
+|---|---|
+| Tamer ID | DT-0000 |
+| Style | out-boxer |
+| Skill | master (best rung 3) |
+| Record | 87–93 |
+| Ichor | 1 |
+| Dragons hatched | 88, lost 93 |
+| Champions | Stormspine (wyvern + fire, Bounding Haunches, Smoldering Maw, Heartgrit), 5–3, season 1 round 16; Thornclaw (true-dragon + air, Bounding Haunches, Heartgrit, Pebblescale), 7–1, season 1 round 30; Emberhorn (true-dragon + air, Pebblescale, Heartgrit, Sidewinder Spine), 4–0, season 2 round 58; Hollowwing (wyvern + fire, Riposte Talons, Heartgrit, Sidewinder Spine), 3–0, season 3 round 44; Slateclaw (wyvern + air, Slit Pupil, Lockjaw, Sidewinder Spine), 3–0, season 3 round 53 |
+| Current dragon | Vanefang (wyvern + air), rung 0, streak 0, 1–0 |
+| Favored builds | true-dragon + fire (3 wins, 3 deaths); drake + air (2 wins, 3 deaths); wyvern + earth (1 wins, 3 deaths) |
+
+**Match history**
+
+- S1 R1 · hatches #1 Galewing (wyvern + fire) as a novice
+- S1 R1 · ✓ Galewing slays Corost Quen's Vanetail (wyrm + air; counterpuncher, novice), KO in exchange 6. Streak 1.
+- S1 R1 · ◆ Galewing takes Pebblescale from the spoils (of Pebblescale, Whetted Nail).
+- S1 R1 · Yramor Ash is now adept.
+- S1 R2 · ✓ Galewing slays Sulost Tor's Brinecrest (wyrm + water, Milk Fang; boxer-puncher, adept), KO in exchange 4. Streak 1.
+- S1 R2 · ⚖ Yramor Ash tries Pebblescale, Milk Fang against 2 remembered dragons; Pebblescale fares best (4–0).
+- S1 R2 · ♨ Galewing melts Milk Fang from the spoils (of Pebblescale, Weathered Hide, Milk Fang) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 1.
+- S1 R3 · ✓ Galewing beats Thiost Ven's Hollowcrest (wyvern + fire, Raking Talons; out-boxer, adept) (timeout in exchange 8), paid 2 Ichor. Streak 1.
+- S1 R4 · ⚑ Galewing (wyvern + fire, Pebblescale) yields to Karen Ash's Galeeye (wyvern + earth, Whetted Nail; counterpuncher, adept) (yield in exchange 2) and lives; Yramor Ash pays 2 Ichor (1 left).
+- S1 R5 · ✓ Galewing slays Galcor Ila's Duskwing (wyrm + air, Pebblescale; swarmer, adept), KO in exchange 3. Streak 1.
+- S1 R5 · ⚖ Yramor Ash tries Bounding Haunches, Heartgrit against 3 remembered dragons; Heartgrit fares best (4–2).
+- S1 R5 · ♨ Galewing melts Pebblescale from the spoils (of Pebblescale, Whetted Nail) and banks it: Yramor Ash holds 2 Ichor. It stays on rung 1.
+- S1 R6 · ✓ Galewing slays Dravel Mor's Thornspine (wyvern + air, Coiled Sinew; boxer-puncher, adept), KO in exchange 7. Streak 1.
+- S1 R6 · ⚖ Yramor Ash tries Bounding Haunches, Heartgrit against 3 remembered dragons; Bounding Haunches fares best (4–2).
+- S1 R6 · ❄ Galewing melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail) and freezes Smoldering Maw from Yramor Ash's Ichor (1 left).
+- S1 R6 · Yramor Ash is now master.
+- S1 R7 · ✓ Galewing beats Yraila Thi's Dusktail (wyvern + air, Smoldering Maw, Coiled Sinew; boxer-puncher, master) (timeout in exchange 8), paid 3 Ichor. Streak 1.
+- S1 R8 · ✗ Galewing (wyvern + fire, Pebblescale, Smoldering Maw) falls to Brynost Thi's Ironeye (true-dragon + air, Smolder Sac, Weathered Hide; counterpuncher, master), KO in exchange 4. Record 6–2.
+- S1 R9 · hatches #2 Stormspine (wyvern + fire) as a master
+- S1 R9 · ✓ Stormspine slays Ashquen Ila's Ashheart (true-dragon + air; counterpuncher, adept), KO in exchange 2. Streak 1.
+- S1 R9 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Pebblescale fares best (5–1).
+- S1 R9 · ❄ Stormspine melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Bounding Haunches from Yramor Ash's Ichor (3 left).
+- S1 R10 · ⚑ Stormspine (wyvern + fire, Bounding Haunches) yields to Dravel Mor's Brineeye (wyvern + air, Weathered Hide; boxer-puncher, adept) (yield in exchange 1) and lives; Yramor Ash pays 2 Ichor (1 left).
+- S1 R11 · ✓ Stormspine beats Yrayra Ash's Ashcrest (true-dragon + air, Snapping Jaw; counterpuncher, master) (yield in exchange 3), paid 2 Ichor. Streak 1.
+- S1 R12 · ✓ Stormspine slays Ostsul Cor's Vanespine (true-dragon + air, Heartgrit; slugger, master), KO in exchange 3. Streak 2.
+- S1 R12 · ⚖ Yramor Ash tries Pebblescale, Heartgrit against 3 remembered dragons; Pebblescale fares best (4–2).
+- S1 R12 · ❄ Stormspine melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Smoldering Maw from Yramor Ash's Ichor (2 left).
+- S1 R13 · ⚑ Stormspine (wyvern + fire, Bounding Haunches, Smoldering Maw) loses on the clock to Dramor Zar's Ashspine (wyvern + fire, Lockjaw, Sidewinder Spine; out-boxer, master) (timeout in exchange 8) and lives; Yramor Ash pays 2 Ichor (0 left).
+- S1 R14 · ✓ Stormspine beats Thiven Cor's Brinehorn (true-dragon + earth, Snapping Jaw, Smolder Sac; counterpuncher, master) (yield in exchange 5), paid 3 Ichor. Streak 1.
+- S1 R15 · ⚑ Stormspine (wyvern + fire, Bounding Haunches, Smoldering Maw) yields to Draren Ush's Brineclaw (wyvern + fire, Pebblescale, Goading Roar; out-boxer, master) (yield in exchange 4) and lives; Yramor Ash pays 3 Ichor (0 left).
+- S1 R16 · ✓ Stormspine slays Linush Ka's Slateeye (wyvern + fire, Heartgrit, Bounding Haunches; swarmer, master), KO in exchange 7. Streak 1.
+- S1 R16 · ⚖ Yramor Ash tries Heartgrit, Smolder Sac against 3 remembered dragons; Heartgrit fares best (5–1).
+- S1 R16 · ◆ Stormspine takes Heartgrit from the spoils (of Coiled Sinew, Smolder Sac, Heartgrit, Bounding Haunches).
+- S1 R16 · ★ Stormspine becomes a wyrmling champion and retires.
+- S1 R17 · hatches #3 Duskheart (wyvern + air) as a master
+- S1 R17 · ✓ Duskheart slays Ilaren Dra's Vanewing (wyvern + water; swarmer, master), KO in exchange 8. Streak 1.
+- S1 R17 · ⚖ Yramor Ash tries Weathered Hide, Coiled Sinew against 3 remembered dragons; Weathered Hide fares best (3–3).
+- S1 R17 · ♨ Duskheart melts Coiled Sinew from the spoils (of Coiled Sinew, Weathered Hide) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S1 R18 · ✗ Duskheart (wyvern + air) falls to Torost Bryn's Ironclaw (true-dragon + air; swarmer, master), KO in exchange 7. Record 1–1.
+- S1 R19 · hatches #4 Slateclaw (true-dragon + fire) as a master
+- S1 R19 · ✓ Slateclaw slays Morash Ash's Stormheart (true-dragon + air; counterpuncher, master), KO in exchange 7. Streak 1.
+- S1 R19 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Pebblescale fares best (2–4).
+- S1 R19 · ❄ Slateclaw melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Pebblescale from Yramor Ash's Ichor (0 left).
+- S1 R20 · ✓ Slateclaw beats Ilazar Sul's Slatecrest (true-dragon + air, Heartgrit; slugger, master) (yield in exchange 3), paid 2 Ichor. Streak 1.
+- S1 R21 · ✓ Slateclaw slays Torgal Gal's Thornheart (true-dragon + air, Heartgrit; slugger, adept), KO in exchange 7. Streak 2.
+- S1 R21 · ⚖ Yramor Ash tries Bounding Haunches, Heartgrit against 3 remembered dragons; Heartgrit fares best (2–4).
+- S1 R21 · ❄ Slateclaw melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Bounding Haunches from Yramor Ash's Ichor (1 left).
+- S1 R22 · ✗ Slateclaw (true-dragon + fire, Pebblescale, Bounding Haunches) falls to Ilaka Gal's Thornmaw (wyvern + air, Sidewinder Spine, Heartgrit; slugger, master), KO in exchange 6. Record 3–1.
+- S1 R23 · hatches #5 Thornclaw (true-dragon + air) as a master
+- S1 R23 · ✓ Thornclaw slays Torost Bryn's Thorntail (wyvern + air; swarmer, master), KO in exchange 5. Streak 1.
+- S1 R23 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Bounding Haunches fares best (4–2).
+- S1 R23 · ❄ Thornclaw melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail) and freezes Bounding Haunches from Yramor Ash's Ichor (0 left).
+- S1 R24 · ✓ Thornclaw slays Ushcor Lin's Ironmaw (true-dragon + air, Ratchet Claws; boxer-puncher, adept), KO in exchange 3. Streak 1.
+- S1 R24 · ♨ Thornclaw melts Ratchet Claws from the spoils (of Heartgrit, Whetted Nail, Ratchet Claws) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 1.
+- S1 R25 · ✓ Thornclaw beats Brynlin Thi's Ironcrest (wyvern + fire, Heartgrit; out-boxer, master) (yield in exchange 1), paid 2 Ichor. Streak 1.
+- S1 R26 · ⚑ Thornclaw (true-dragon + air, Bounding Haunches) yields to Ushtor Quen's Vanecrest (true-dragon + water, Heartgrit; slugger, master) (yield in exchange 1) and lives; Yramor Ash pays 2 Ichor (1 left).
+- S1 R27 · ✓ Thornclaw slays Galcor Ila's Hollowclaw (wyvern + fire, Heartgrit; swarmer, master), KO in exchange 3. Streak 1.
+- S1 R27 · ⚖ Yramor Ash tries Pebblescale, Heartgrit against 3 remembered dragons; Heartgrit fares best (4–2).
+- S1 R27 · ◆ Thornclaw takes Heartgrit from the spoils (of Coiled Sinew, Smolder Sac, Heartgrit).
+- S1 R28 · ✓ Thornclaw slays Galven Ka's Embereye (true-dragon + water, Bounding Haunches, Heartgrit; slugger, master), KO in exchange 4. Streak 1.
+- S1 R28 · ⚖ Yramor Ash tries Pebblescale, Slit Pupil against 3 remembered dragons; Pebblescale fares best (6–0).
+- S1 R28 · ♨ Thornclaw melts Heartgrit from the spoils (of Heartgrit, Weathered Hide, Bounding Haunches) and banks it: Yramor Ash holds 2 Ichor. It stays on rung 2.
+- S1 R29 · ✓ Thornclaw slays Rentor Ka's Mirewing (true-dragon + air, Heartgrit, Smolder Sac; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R29 · ⚖ Yramor Ash tries Pebblescale, Slit Pupil against 3 remembered dragons; Pebblescale fares best (4–2).
+- S1 R29 · ♨ Thornclaw melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Smolder Sac) and banks it: Yramor Ash holds 3 Ichor. It stays on rung 2.
+- S1 R30 · ✓ Thornclaw slays Lintor Quen's Emberhorn (true-dragon + air, Coiled Sinew, Riposte Talons; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S1 R30 · ⚖ Yramor Ash tries Pebblescale, Slit Pupil against 3 remembered dragons; Pebblescale fares best (5–1).
+- S1 R30 · ❄ Thornclaw melts Coiled Sinew from the spoils (of Heartgrit, Whetted Nail, Coiled Sinew, Riposte Talons) and freezes Pebblescale from Yramor Ash's Ichor (2 left).
+- S1 R30 · ★ Thornclaw becomes a wyrmling champion and retires.
+- S1 R31 · hatches #6 Galehorn (true-dragon + air) as a master
+- S1 R31 · ✓ Galehorn slays an unclaimed swarmer's Hollowtail (drake + air; swarmer, novice), KO in exchange 3. Streak 1.
+- S1 R31 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Bounding Haunches fares best (5–1).
+- S1 R31 · ❄ Galehorn melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail) and freezes Slit Pupil from Yramor Ash's Ichor (1 left).
+- S1 R32 · ✗ Galehorn (true-dragon + air, Slit Pupil) falls to Quenvel Mor's Stormtail (true-dragon + air, Ratchet Claws; boxer-puncher, master), KO in exchange 3. Record 1–1.
+- S1 R33 · hatches #7 Brinetail (wyvern + water) as a master
+- S1 R33 · ✓ Brinetail beats Venzar Ost's Ashwing (wyvern + air; swarmer, master) (yield in exchange 1), paid 1 Ichor. Streak 1.
+- S1 R34 · ✓ Brinetail slays Galka Ost's Rimeeye (wyvern + fire; boxer-puncher, master), KO in exchange 6. Streak 2.
+- S1 R34 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Bounding Haunches fares best (5–1).
+- S1 R34 · ❄ Brinetail melts Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac) and freezes Heartgrit from Yramor Ash's Ichor (1 left).
+- S1 R35 · ✗ Brinetail (wyvern + water, Heartgrit) falls to Kaost Vel's Miremaw (true-dragon + air, Whetted Nail; slugger, master), KO in exchange 6. Record 2–1.
+- S1 R36 · hatches #8 Galemaw (true-dragon + fire) as a master
+- S1 R36 · ✗ Galemaw (true-dragon + fire) falls to Torcor Ost's Ironhorn (true-dragon + air; counterpuncher, master), KO in exchange 7. Record 0–1.
+- S1 R37 · hatches #9 Embermaw (wyvern + fire) as a master
+- S1 R37 · ✗ Embermaw (wyvern + fire) falls to Galka Ost's Emberfang (true-dragon + air; boxer-puncher, master), KO in exchange 6. Record 0–1.
+- S1 R38 · hatches #10 Rimeheart (true-dragon + air) as a master
+- S1 R38 · ✓ Rimeheart slays Yrabryn Gal's Rimewing (true-dragon + air; swarmer, master), KO in exchange 4. Streak 1.
+- S1 R38 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Bounding Haunches fares best (5–1).
+- S1 R38 · ♨ Rimeheart melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 2 Ichor. It stays on rung 0.
+- S1 R39 · ✗ Rimeheart (true-dragon + air) falls to Zarquen Ka's Rimecrest (wyvern + fire; out-boxer, master), KO in exchange 4. Record 1–1.
+- S1 R40 · hatches #11 Galehorn (true-dragon + air) as a master
+- S1 R40 · ✓ Galehorn slays Thiven Zar's Vanemaw (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R40 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Bounding Haunches fares best (5–1).
+- S1 R40 · ❄ Galehorn melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Bounding Haunches from Yramor Ash's Ichor (1 left).
+- S1 R41 · ✗ Galehorn (true-dragon + air, Bounding Haunches) falls to Venost Gal's Cindercrest (true-dragon + air, Heartgrit; swarmer, master), KO in exchange 3. Record 1–1.
+- S1 R42 · hatches #12 Brinefang (true-dragon + air) as a master
+- S1 R42 · ✓ Brinefang slays Sulush Dra's Ironeye (true-dragon + fire; out-boxer, master), KO in exchange 7. Streak 1.
+- S1 R42 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Bounding Haunches fares best (3–3).
+- S1 R42 · ◆ Brinefang takes Heartgrit from the spoils (of Heartgrit, Smolder Sac).
+- S1 R43 · ✓ Brinefang slays Ilalin Ost's Hollowmaw (true-dragon + air, Heartgrit; slugger, master), KO in exchange 3. Streak 1.
+- S1 R43 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Bounding Haunches fares best (5–1).
+- S1 R43 · ♨ Brinefang melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 2 Ichor. It stays on rung 1.
+- S1 R44 · ✗ Brinefang (true-dragon + air, Heartgrit) falls to Yraush Quen's Hollowtail (true-dragon + air, Heartgrit; boxer-puncher, master), KO in exchange 3. Record 2–1.
+- S1 R45 · hatches #13 Mirecrest (true-dragon + air) as a master
+- S1 R45 · ✗ Mirecrest (true-dragon + air) falls to Drabryn Ven's Slatewing (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S1 R46 · hatches #14 Stormtail (wyvern + fire) as a master
+- S1 R46 · ✗ Stormtail (wyvern + fire) falls to Linmor Mor's Embertail (true-dragon + air; counterpuncher, master), KO in exchange 5. Record 0–1.
+- S1 R47 · hatches #15 Ashtail (wyvern + air) as a master
+- S1 R47 · ✓ Ashtail slays Quenash Bryn's Hollowtail (wyvern + air; counterpuncher, master), KO in exchange 6. Streak 1.
+- S1 R47 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Pebblescale fares best (3–3).
+- S1 R47 · ❄ Ashtail melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail) and freezes Pebblescale from Yramor Ash's Ichor (1 left).
+- S1 R48 · ✗ Ashtail (wyvern + air, Pebblescale) falls to Yrabryn Gal's Rimewing (wyvern + fire, Heartgrit; swarmer, master), KO in exchange 4. Record 1–1.
+- S1 R49 · hatches #16 Galetail (true-dragon + air) as a master
+- S1 R49 · ✗ Galetail (true-dragon + air) falls to Morlin Sul's Miretail (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S1 R50 · hatches #17 Slateheart (true-dragon + air) as a master
+- S1 R50 · ✗ Slateheart (true-dragon + air) falls to Thiven Zar's Rimeclaw (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S1 R51 · hatches #18 Hollowtail (wyvern + fire) as a master
+- S1 R51 · ✓ Hollowtail slays Thisul Ren's Embercrest (true-dragon + air; swarmer, master), KO in exchange 3. Streak 1.
+- S1 R51 · ⚖ Yramor Ash tries Bounding Haunches, Pebblescale against 3 remembered dragons; Pebblescale fares best (5–1).
+- S1 R51 · ❄ Hollowtail melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Smolder Sac from Yramor Ash's Ichor (0 left).
+- S1 R52 · ⚑ Hollowtail (wyvern + fire, Smolder Sac) loses on the clock to Ilaila Vel's Stormtail (wyvern + fire, Heartgrit; out-boxer, master) (timeout in exchange 8) and lives; Yramor Ash pays 0 Ichor (0 left).
+- S1 R53 · ✓ Hollowtail slays Zargal Quen's Ashspine (true-dragon + air, Bounding Haunches; slugger, master), KO in exchange 4. Streak 1.
+- S1 R53 · ⚖ Yramor Ash tries Bounding Haunches, Heartgrit against 3 remembered dragons; Bounding Haunches fares best (2–4).
+- S1 R53 · ◆ Hollowtail takes Bounding Haunches from the spoils (of Heartgrit, Whetted Nail, Bounding Haunches).
+- S1 R54 · ✗ Hollowtail (wyvern + fire, Smolder Sac, Bounding Haunches) falls to Veldra Ush's Holloweye (true-dragon + air, Snapping Jaw, Smoldering Maw; boxer-puncher, master), KO in exchange 8. Record 2–2.
+- S1 R55 · hatches #19 Embercrest (wyvern + fire) as a master
+- S1 R55 · ✗ Embercrest (wyvern + fire) falls to Ostquen Ren's Mirespine (true-dragon + air; counterpuncher, master), KO in exchange 6. Record 0–1.
+- S1 R56 · hatches #20 Vanewing (wyvern + fire) as a master
+- S1 R56 · ✗ Vanewing (wyvern + fire) falls to Kathi Ash's Ashwing (true-dragon + air; counterpuncher, master), KO in exchange 8. Record 0–1.
+- S1 R57 · hatches #21 Slateclaw (true-dragon + air) as a master
+- S1 R57 · ✓ Slateclaw slays Corush Lin's Mireheart (true-dragon + air; counterpuncher, master), KO in exchange 5. Streak 1.
+- S1 R57 · ◆ Slateclaw takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S1 R58 · ✗ Slateclaw (true-dragon + air, Heartgrit) falls to Renthi Ush's Vaneclaw (true-dragon + air, Coiled Sinew; boxer-puncher, master), KO in exchange 3. Record 1–1.
+- S1 R59 · hatches #22 Mireclaw (true-dragon + air) as a master
+- S1 R59 · ✗ Mireclaw (true-dragon + air) falls to Rendra Dra's Galeclaw (true-dragon + air; boxer-puncher, master), KO in exchange 2. Record 0–1.
+- S1 R60 · hatches #23 Flintheart (true-dragon + air) as a master
+- S1 R60 · ✓ Flintheart beats Renlin Ren's Rimemaw (wyvern + air; boxer-puncher, master) (timeout in exchange 8), paid 1 Ichor. Streak 1.
+- Season 2 · returns as a veteran: 34–26, 23 dragons, 2 champions, 1 Ichor, 40 dragons remembered.
+- S2 R1 · hatches #24 Stormhorn (wyvern + fire) as a master
+- S2 R1 · ✗ Stormhorn (wyvern + fire) falls to Zartor Quen's Thornheart (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S2 R2 · hatches #25 Vanecrest (wyvern + fire) as a master
+- S2 R2 · ✗ Vanecrest (wyvern + fire) falls to Zartor Quen's Thornheart (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S2 R3 · hatches #26 Dusktail (true-dragon + air) as a master
+- S2 R3 · ✓ Dusktail slays Venmor Zar's Hollowfang (wyvern + air; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S2 R3 · ⚖ Yramor Ash tries Pebblescale 5–1, Bounding Haunches 3–3 against 3 remembered dragons; it leans Pebblescale.
+- S2 R3 · ❄ Dusktail melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail) and freezes Pebblescale from Yramor Ash's Ichor (0 left).
+- S2 R4 · ✓ Dusktail slays Thiila Quen's Hollowcrest (wyvern + air, Riposte Talons; swarmer, master), KO in exchange 5. Streak 1.
+- S2 R4 · ⚖ Yramor Ash tries Riposte Talons 5–1, Whetted Nail 3–3 against 3 remembered dragons; it leans Riposte Talons.
+- S2 R4 · ♨ Dusktail melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail, Riposte Talons) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 1.
+- S2 R5 · ✓ Dusktail slays Venthi Ila's Mirespine (true-dragon + air, Pebblescale; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R5 · ⚖ Yramor Ash tries Bounding Haunches 3–3, Heartgrit 3–3 against 3 remembered dragons; no lean.
+- S2 R5 · ◆ Dusktail takes Pebblescale from the spoils (of Heartgrit, Whetted Nail, Pebblescale).
+- S2 R6 · ✗ Dusktail (true-dragon + air, Pebblescale ×2) falls to Galka Ost's Ashcrest (wyvern + air, Riposte Talons, Ratchet Claws; boxer-puncher, master), KO in exchange 4. Record 3–1.
+- S2 R7 · hatches #27 Galespine (true-dragon + air) as a master
+- S2 R7 · ✗ Galespine (true-dragon + air) falls to Quendra Dra's Mireeye (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S2 R8 · hatches #28 Slatemaw (true-dragon + air) as a master
+- S2 R8 · ⚑ Slatemaw (true-dragon + air) loses on the clock to Cortor Tor's Miremaw (wyvern + fire; out-boxer, master) (timeout in exchange 8) and lives; Yramor Ash pays 1 Ichor (0 left).
+- S2 R9 · ✗ Slatemaw (true-dragon + air) falls to Quenash Sul's Galefang (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–2.
+- S2 R10 · hatches #29 Ironmaw (wyvern + fire) as a master
+- S2 R10 · ✗ Ironmaw (wyvern + fire) falls to Galbryn Vel's Brineeye (wyvern + fire; out-boxer, master), KO in exchange 6. Record 0–1.
+- S2 R11 · hatches #30 Hollowtail (drake + air) as a master
+- S2 R11 · ✗ Hollowtail (drake + air) falls to Thiila Quen's Hollowclaw (wyvern + air; swarmer, master), KO in exchange 4. Record 0–1.
+- S2 R12 · hatches #31 Mirefang (true-dragon + air) as a master
+- S2 R12 · ✓ Mirefang slays Ostquen Ren's Cindercrest (wyvern + air; counterpuncher, master), KO in exchange 4. Streak 1.
+- S2 R12 · ♨ Mirefang melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S2 R13 · ✓ Mirefang slays Dracor Zar's Ashmaw (wyrm + air; swarmer, master), KO in exchange 4. Streak 1.
+- S2 R13 · ⚖ Yramor Ash tries Bounding Haunches 4–2, Pebblescale 4–2 against 3 remembered dragons; no lean.
+- S2 R13 · ◆ Mirefang takes Pebblescale from the spoils (of Pebblescale, Whetted Nail).
+- S2 R14 · ✓ Mirefang slays Quendra Vel's Cinderheart (true-dragon + air, Whetted Nail; slugger, master), KO in exchange 3. Streak 1.
+- S2 R14 · ⚖ Yramor Ash tries Heartgrit 3–3, Bounding Haunches 2–4 against 3 remembered dragons; it leans Heartgrit.
+- S2 R14 · ◆ Mirefang takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S2 R15 · ✗ Mirefang (true-dragon + air, Pebblescale, Heartgrit) falls to Quengal Ren's Hollowfang (wyvern + fire, Heartgrit, Whetted Nail; out-boxer, master), KO in exchange 4. Record 3–1.
+- S2 R16 · hatches #32 Ashfang (wyvern + earth) as a master
+- S2 R16 · ✓ Ashfang slays Dramor Ush's Ashclaw (wyvern + fire; swarmer, master), KO in exchange 7. Streak 1.
+- S2 R16 · ⚖ Yramor Ash tries Bounding Haunches 3–3, Pebblescale 3–3 against 3 remembered dragons; no lean.
+- S2 R16 · ❄ Ashfang melts Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac) and freezes Pebblescale from Yramor Ash's Ichor (0 left).
+- S2 R17 · ✗ Ashfang (wyvern + earth, Pebblescale) falls to Lintor Quen's Cindermaw (true-dragon + air, Bounding Haunches; slugger, master), KO in exchange 5. Record 1–1.
+- S2 R18 · hatches #33 Brinespine (wyvern + fire) as a master
+- S2 R18 · ✗ Brinespine (wyvern + fire) falls to Brynka Bryn's Rimecrest (true-dragon + air; boxer-puncher, master), KO in exchange 7. Record 0–1.
+- S2 R19 · hatches #34 Thorneye (wyvern + air) as a master
+- S2 R19 · ✗ Thorneye (wyvern + air) falls to Ostquen Ren's Brineclaw (true-dragon + air; counterpuncher, master), rim pulse in exchange 8. Record 0–1.
+- S2 R20 · hatches #35 Thorncrest (wyvern + fire) as a master
+- S2 R20 · ✗ Thorncrest (wyvern + fire) falls to Zarcor Ash's Brinecrest (wyvern + air; slugger, adept), KO in exchange 6. Record 0–1.
+- S2 R21 · hatches #36 Brineheart (true-dragon + air) as a master
+- S2 R21 · ✗ Brineheart (true-dragon + air) falls to Ilaila Vel's Thornmaw (wyvern + fire; out-boxer, master), KO in exchange 4. Record 0–1.
+- S2 R22 · hatches #37 Flintheart (wyvern + fire) as a master
+- S2 R22 · ✓ Flintheart slays Ilamor Gal's Slateeye (true-dragon + air; slugger, master), KO in exchange 2. Streak 1.
+- S2 R22 · ◆ Flintheart takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S2 R23 · ✓ Flintheart beats Velcor Bryn's Flintcrest (true-dragon + water, Riposte Talons; swarmer, master) (yield in exchange 3), paid 2 Ichor. Streak 1.
+- S2 R24 · ⚑ Flintheart (wyvern + fire, Heartgrit) yields to Moryra Lin's Flintspine (wyvern + fire, Pebblescale; out-boxer, master) (yield in exchange 6) and lives; Yramor Ash pays 2 Ichor (0 left).
+- S2 R25 · ✗ Flintheart (wyvern + fire, Heartgrit) falls to Ostquen Ren's Brineclaw (true-dragon + air, Snapping Jaw; counterpuncher, master), KO in exchange 6. Record 2–2.
+- S2 R26 · hatches #38 Emberclaw (wyvern + fire) as a master
+- S2 R26 · ✗ Emberclaw (wyvern + fire) falls to Ostka Ash's Ironfang (true-dragon + air; out-boxer, master), KO in exchange 3. Record 0–1.
+- S2 R27 · hatches #39 Thornwing (true-dragon + air) as a master
+- S2 R27 · ✓ Thornwing slays Draren Tor's Mirehorn (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S2 R27 · ◆ Thornwing takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S2 R28 · ✓ Thornwing beats Kalin Ush's Stormtail (wyvern + fire, Pebblescale; out-boxer, master) (yield in exchange 3), paid 2 Ichor. Streak 1.
+- S2 R29 · ⚑ Thornwing (true-dragon + air, Heartgrit) yields to Vellin Lin's Mireheart (wyrm + air, Coiled Sinew; swarmer, master) (yield in exchange 3) and lives; Yramor Ash pays 2 Ichor (0 left).
+- S2 R30 · ✗ Thornwing (true-dragon + air, Heartgrit) falls to Linush Ka's Slateheart (true-dragon + air, Riposte Talons; swarmer, master), KO in exchange 4. Record 2–2.
+- S2 R31 · hatches #40 Hollowspine (wyvern + earth) as a master
+- S2 R31 · ✗ Hollowspine (wyvern + earth) falls to an unclaimed slugger's Hollowhorn (true-dragon + air; slugger, novice), KO in exchange 3. Record 0–1.
+- S2 R32 · hatches #41 Ironcrest (wyvern + air) as a master
+- S2 R32 · ✓ Ironcrest slays Ushtor Quen's Mirespine (true-dragon + air; slugger, master), KO in exchange 8. Streak 1.
+- S2 R32 · ♨ Ironcrest melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S2 R33 · ✗ Ironcrest (wyvern + air) falls to Ostquen Ren's Brinetail (true-dragon + air; counterpuncher, master), KO in exchange 4. Record 1–1.
+- S2 R34 · hatches #42 Thornfang (drake + air) as a master
+- S2 R34 · ✓ Thornfang slays Ilazar Quen's Brinespine (true-dragon + air; swarmer, master), KO in exchange 7. Streak 1.
+- S2 R34 · ⚖ Yramor Ash tries Pebblescale 2–4, Bounding Haunches 1–5 against 3 remembered dragons; it leans Pebblescale.
+- S2 R34 · ◆ Thornfang takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S2 R35 · ✗ Thornfang (drake + air, Heartgrit) falls to Coryra Sul's Vanespine (true-dragon + air, Sapping Bellow; counterpuncher, master), KO in exchange 3. Record 1–1.
+- S2 R36 · hatches #43 Cindermaw (true-dragon + air) as a master
+- S2 R36 · ✗ Cindermaw (true-dragon + air) falls to Velzar Gal's Duskclaw (wyvern + air; out-boxer, master), KO in exchange 8. Record 0–1.
+- S2 R37 · hatches #44 Ironwing (wyvern + fire) as a master
+- S2 R37 · ✓ Ironwing slays Zarmor Zar's Holloweye (true-dragon + air; swarmer, master), KO in exchange 3. Streak 1.
+- S2 R37 · ⚖ Yramor Ash tries Pebblescale 4–2, Bounding Haunches 2–4 against 3 remembered dragons; it leans Pebblescale.
+- S2 R37 · ❄ Ironwing melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Pebblescale from Yramor Ash's Ichor (0 left).
+- S2 R38 · ✓ Ironwing slays Ushven Ost's Duskwing (wyvern + fire, Heartgrit; out-boxer, master), KO in exchange 7. Streak 1.
+- S2 R38 · ⚖ Yramor Ash tries Smolder Sac 3–3, Heartgrit 2–4 against 3 remembered dragons; it leans Smolder Sac.
+- S2 R38 · ◆ Ironwing takes Heartgrit from the spoils (of Coiled Sinew, Smolder Sac, Heartgrit).
+- S2 R39 · ✓ Ironwing slays Renlin Ren's Ironclaw (true-dragon + air, Ratchet Claws, Whetted Nail; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S2 R39 · ⚖ Yramor Ash tries Whetted Nail 5–1, Ratchet Claws 1–5 against 3 remembered dragons; it leans Whetted Nail.
+- S2 R39 · ♨ Ironwing melts Ratchet Claws from the spoils (of Heartgrit, Whetted Nail, Ratchet Claws) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 2.
+- S2 R40 · ✗ Ironwing (wyvern + fire, Pebblescale, Heartgrit) falls to Zarash Ila's Thornhorn (true-dragon + air, Bounding Haunches, Heartgrit; out-boxer, master), KO in exchange 4. Record 3–1.
+- S2 R41 · hatches #45 Brinemaw (true-dragon + air) as a master
+- S2 R41 · ✗ Brinemaw (true-dragon + air) falls to Ilaka Gal's Ironhorn (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S2 R42 · hatches #46 Galeheart (true-dragon + air) as a master
+- S2 R42 · ✓ Galeheart slays Yramor Ash's Mireclaw (wyvern + fire; boxer-puncher, master), KO in exchange 7. Streak 1.
+- S2 R42 · ⚖ Yramor Ash tries Bounding Haunches 4–2, Pebblescale 3–3 against 3 remembered dragons; it leans Bounding Haunches.
+- S2 R42 · ◆ Galeheart takes Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac).
+- S2 R43 · ✗ Galeheart (true-dragon + air, Smolder Sac) falls to Ostquen Ren's Ironeye (true-dragon + air, Smolder Sac; counterpuncher, master), KO in exchange 3. Record 1–1.
+- S2 R44 · hatches #47 Vaneeye (wyvern + earth) as a master
+- S2 R44 · ✗ Vaneeye (wyvern + earth) falls to Ilathi Ush's Duskheart (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S2 R45 · hatches #48 Galeheart (wyvern + fire) as a master
+- S2 R45 · ✗ Galeheart (wyvern + fire) falls to Zartor Quen's Thorncrest (true-dragon + air; swarmer, master), KO in exchange 5. Record 0–1.
+- S2 R46 · hatches #49 Cindereye (true-dragon + air) as a master
+- S2 R46 · ✗ Cindereye (true-dragon + air) falls to Zarmor Zar's Brineheart (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S2 R47 · hatches #50 Thornhorn (wyvern + air) as a master
+- S2 R47 · ✗ Thornhorn (wyvern + air) falls to Ushzar Lin's Cindertail (true-dragon + air; boxer-puncher, master), KO in exchange 3. Record 0–1.
+- S2 R48 · hatches #51 Thorntail (true-dragon + fire) as a master
+- S2 R48 · ✗ Thorntail (true-dragon + fire) falls to Yraila Thi's Flintfang (true-dragon + air; boxer-puncher, master), KO in exchange 7. Record 0–1.
+- S2 R49 · hatches #52 Vanetail (wyvern + fire) as a master
+- S2 R49 · ✗ Vanetail (wyvern + fire) falls to Renbryn Bryn's Duskeye (wyvern + air; swarmer, master), KO in exchange 5. Record 0–1.
+- S2 R50 · hatches #53 Thornfang (wyvern + fire) as a master
+- S2 R50 · ✓ Thornfang slays Zarven Ka's Stormfang (true-dragon + air; boxer-puncher, master), KO in exchange 4. Streak 1.
+- S2 R50 · ⚖ Yramor Ash tries Bounding Haunches 2–4, Pebblescale 2–4 against 3 remembered dragons; no lean.
+- S2 R50 · ❄ Thornfang melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Bounding Haunches from Yramor Ash's Ichor (0 left).
+- S2 R51 · ✓ Thornfang slays Linush Ka's Cinderhorn (true-dragon + air, Sidewinder Spine; swarmer, master), KO in exchange 4. Streak 1.
+- S2 R51 · ◆ Thornfang takes Heartgrit from the spoils (of Heartgrit, Whetted Nail, Sidewinder Spine).
+- S2 R52 · ✓ Thornfang slays Quenbryn Ost's Galefang (true-dragon + air, Smolder Sac, Heartgrit; swarmer, master), KO in exchange 3. Streak 1.
+- S2 R52 · ⚖ Yramor Ash tries Smolder Sac 3–3, Whetted Nail 2–4 against 3 remembered dragons; it leans Smolder Sac.
+- S2 R52 · ♨ Thornfang melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Smolder Sac) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 2.
+- S2 R53 · ✗ Thornfang (wyvern + fire, Bounding Haunches, Heartgrit) falls to Zargal Quen's Rimewing (true-dragon + air, Whetted Nail, Heartgrit; slugger, master), KO in exchange 5. Record 3–1.
+- S2 R54 · hatches #54 Rimewing (true-dragon + air) as a master
+- S2 R54 · ✗ Rimewing (true-dragon + air) falls to Galcor Ila's Galewing (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S2 R55 · hatches #55 Emberhorn (true-dragon + air) as a master
+- S2 R55 · ✓ Emberhorn slays Corlin Ost's Vaneheart (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S2 R55 · ⚖ Yramor Ash tries Pebblescale 4–2, Bounding Haunches 3–3 against 3 remembered dragons; it leans Pebblescale.
+- S2 R55 · ❄ Emberhorn melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Pebblescale from Yramor Ash's Ichor (0 left).
+- S2 R56 · ✓ Emberhorn slays Ostka Ash's Cinderfang (true-dragon + air, Heartgrit; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S2 R56 · ♨ Emberhorn melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 1.
+- S2 R57 · ✓ Emberhorn slays Ushtor Quen's Galetail (true-dragon + air, Heartgrit; slugger, master), KO in exchange 3. Streak 1.
+- S2 R57 · ⚖ Yramor Ash tries Heartgrit 6–0, Bounding Haunches 4–2 against 3 remembered dragons; it leans Heartgrit.
+- S2 R57 · ◆ Emberhorn takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S2 R58 · ✓ Emberhorn slays Thidra Dra's Vanehorn (true-dragon + air, Heartgrit, Whetted Nail; slugger, master), KO in exchange 3. Streak 1.
+- S2 R58 · ⚖ Yramor Ash tries Slit Pupil 3–3, Bounding Haunches 2–4 against 3 remembered dragons; it leans Slit Pupil.
+- S2 R58 · ❄ Emberhorn melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Sidewinder Spine from Yramor Ash's Ichor (0 left).
+- S2 R58 · ★ Emberhorn becomes a wyrmling champion and retires.
+- S2 R59 · hatches #56 Duskheart (drake + air) as a master
+- S2 R59 · ✓ Duskheart slays Renbryn Bryn's Ashheart (true-dragon + air; swarmer, master), KO in exchange 3. Streak 1.
+- S2 R59 · ◆ Duskheart takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S2 R60 · ✗ Duskheart (drake + air, Heartgrit) falls to Thimor Tor's Rimewing (true-dragon + air, Heartgrit; swarmer, master), KO in exchange 5. Record 1–1.
+- Season 3 · returns as a veteran: 59–61, 56 dragons, 3 champions, 0 Ichor, 40 dragons remembered.
+- S3 R1 · hatches #57 Embereye (wyvern + air) as a master
+- S3 R1 · ✗ Embereye (wyvern + air) falls to Kathi Ash's Ashcrest (true-dragon + air; counterpuncher, master), KO in exchange 4. Record 0–1.
+- S3 R2 · hatches #58 Brinewing (wyvern + air) as a master
+- S3 R2 · ✓ Brinewing slays Galka Ost's Emberhorn (true-dragon + air; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R2 · ♨ Brinewing melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S3 R3 · ✓ Brinewing slays Tordra Tor's Ironhorn (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S3 R3 · ⚖ Yramor Ash tries Sidewinder Spine 1–5, Thornscale 1–5 against 3 remembered dragons; no lean.
+- S3 R3 · ♨ Brinewing melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 2 Ichor. It stays on rung 0.
+- S3 R4 · ✗ Brinewing (wyvern + air) falls to Dravel Mor's Thornhorn (true-dragon + air; boxer-puncher, master), KO in exchange 4. Record 2–1.
+- S3 R5 · hatches #59 Stormwing (wyvern + water) as a master
+- S3 R5 · ✓ Stormwing slays Quenzar Gal's Mireheart (true-dragon + water; counterpuncher, novice), KO in exchange 5. Streak 1.
+- S3 R5 · ⚖ Yramor Ash tries Thornscale 3–3, Sidewinder Spine 2–4 against 3 remembered dragons; it leans Thornscale.
+- S3 R5 · ❄ Stormwing melts Weathered Hide from the spoils (of Heartgrit, Weathered Hide) and freezes Slit Pupil from Yramor Ash's Ichor (1 left).
+- S3 R6 · ✗ Stormwing (wyvern + water, Slit Pupil) falls to Zaryra Ush's Flintcrest (true-dragon + air, Whetted Nail; boxer-puncher, master), KO in exchange 7. Record 1–1.
+- S3 R7 · hatches #60 Duskclaw (wyvern + air) as a master
+- S3 R7 · ✗ Duskclaw (wyvern + air) falls to Vellin Lin's Flintwing (true-dragon + air; swarmer, master), KO in exchange 7. Record 0–1.
+- S3 R8 · hatches #61 Cindereye (true-dragon + air) as a master
+- S3 R8 · ✗ Cindereye (true-dragon + air) falls to Renbryn Bryn's Hollowclaw (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S3 R9 · hatches #62 Ashfang (wyvern + air) as a master
+- S3 R9 · ✗ Ashfang (wyvern + air) falls to Kalin Ush's Cinderheart (true-dragon + air; counterpuncher, adept), KO in exchange 4. Record 0–1.
+- S3 R10 · hatches #63 Ironeye (wyvern + water) as a master
+- S3 R10 · ✓ Ironeye slays Cortor Tor's Thornwing (wyvern + air; out-boxer, master), KO in exchange 5. Streak 1.
+- S3 R10 · ⚖ Yramor Ash tries Sidewinder Spine 2–4, Thornscale 2–4 against 3 remembered dragons; no lean.
+- S3 R10 · ❄ Ironeye melts Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail) and freezes Lockjaw from Yramor Ash's Ichor (0 left).
+- S3 R11 · ✗ Ironeye (wyvern + water, Lockjaw) falls to Iladra Lin's Brinespine (true-dragon + air, Sidewinder Spine; swarmer, master), KO in exchange 8. Record 1–1.
+- S3 R12 · hatches #64 Mireheart (wyvern + air) as a master
+- S3 R12 · ✓ Mireheart slays Zaryra Ush's Ashtail (true-dragon + air; boxer-puncher, master), KO in exchange 7. Streak 1.
+- S3 R12 · ◆ Mireheart takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S3 R13 · ✓ Mireheart slays Ilalin Zar's Slatewing (true-dragon + air, Whetted Nail; slugger, master), KO in exchange 6. Streak 1.
+- S3 R13 · ⚖ Yramor Ash tries Heartgrit 2–4, Whetted Nail 1–5 against 3 remembered dragons; it leans Heartgrit.
+- S3 R13 · ♨ Mireheart melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 1.
+- S3 R14 · ✓ Mireheart slays Morren Sul's Thornfang (wyvern + fire, Sidewinder Spine; counterpuncher, adept), KO in exchange 6. Streak 1.
+- S3 R14 · ⚖ Yramor Ash tries Thornscale 2–4, Sidewinder Spine 1–5 against 3 remembered dragons; it leans Thornscale.
+- S3 R14 · ♨ Mireheart melts Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac, Sidewinder Spine) and banks it: Yramor Ash holds 2 Ichor. It stays on rung 1.
+- S3 R15 · ✗ Mireheart (wyvern + air, Heartgrit) falls to Kalin Ush's Rimeeye (wyvern + fire, Heartgrit; out-boxer, master), KO in exchange 6. Record 3–1.
+- S3 R16 · hatches #65 Mirecrest (wyvern + fire) as a master
+- S3 R16 · ✓ Mirecrest slays Galven Ka's Duskhorn (true-dragon + air; slugger, master), KO in exchange 2. Streak 1.
+- S3 R16 · ⚖ Yramor Ash tries Thornscale 5–1, Sidewinder Spine 4–2 against 3 remembered dragons; it leans Thornscale.
+- S3 R16 · ❄ Mirecrest melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Ratchet Claws from Yramor Ash's Ichor (1 left).
+- S3 R17 · ✗ Mirecrest (wyvern + fire, Ratchet Claws) falls to Vellin Lin's Embertail (true-dragon + air, Sidewinder Spine; swarmer, master), KO in exchange 6. Record 1–1.
+- S3 R18 · hatches #66 Stormeye (wyvern + air) as a master
+- S3 R18 · ✓ Stormeye slays Draren Ost's Thornclaw (true-dragon + air; counterpuncher, master), KO in exchange 6. Streak 1.
+- S3 R18 · ⚖ Yramor Ash tries Sidewinder Spine 2–4, Thornscale 1–5 against 3 remembered dragons; it leans Sidewinder Spine.
+- S3 R18 · ❄ Stormeye melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Riposte Talons from Yramor Ash's Ichor (0 left).
+- S3 R19 · ✓ Stormeye slays Morren Zar's Embermaw (true-dragon + air, Sidewinder Spine; swarmer, master), KO in exchange 7. Streak 1.
+- S3 R19 · ⚖ Yramor Ash tries Heartgrit 1–5, Sidewinder Spine 0–6 against 3 remembered dragons; it leans Heartgrit.
+- S3 R19 · ◆ Stormeye takes Sidewinder Spine from the spoils (of Heartgrit, Whetted Nail, Sidewinder Spine).
+- S3 R20 · ✗ Stormeye (wyvern + air, Riposte Talons, Sidewinder Spine) falls to Galcor Ila's Flinttail (true-dragon + air, Sidewinder Spine, Whetted Nail; swarmer, master), KO in exchange 7. Record 2–1.
+- S3 R21 · hatches #67 Cindereye (true-dragon + air) as a master
+- S3 R21 · ✓ Cindereye slays Quenzar Gal's Ironspine (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S3 R21 · ♨ Cindereye melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S3 R22 · ✗ Cindereye (true-dragon + air) falls to Linren Ka's Slateheart (true-dragon + air; boxer-puncher, master), KO in exchange 3. Record 1–1.
+- S3 R23 · hatches #68 Emberspine (wyvern + air) as a master
+- S3 R23 · ✗ Emberspine (wyvern + air) falls to Ashgal Lin's Embermaw (true-dragon + air; swarmer, master), KO in exchange 4. Record 0–1.
+- S3 R24 · hatches #69 Galehorn (wyvern + air) as a master
+- S3 R24 · ✓ Galehorn slays Lintor Quen's Flinthorn (true-dragon + air; slugger, master), KO in exchange 7. Streak 1.
+- S3 R24 · ⚖ Yramor Ash tries Sidewinder Spine 3–3, Thornscale 2–4 against 3 remembered dragons; it leans Sidewinder Spine.
+- S3 R24 · ❄ Galehorn melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Sidewinder Spine from Yramor Ash's Ichor (0 left).
+- S3 R25 · ✗ Galehorn (wyvern + air, Sidewinder Spine) falls to Thisul Ren's Stormfang (true-dragon + air, Whetted Nail; swarmer, master), KO in exchange 6. Record 1–1.
+- S3 R26 · hatches #70 Slatecrest (wyvern + water) as a master
+- S3 R26 · ✗ Slatecrest (wyvern + water) falls to Linquen Quen's Emberwing (true-dragon + air; boxer-puncher, master), KO in exchange 5. Record 0–1.
+- S3 R27 · hatches #71 Cinderclaw (wyvern + air) as a master
+- S3 R27 · ⚑ Cinderclaw (wyvern + air) loses on the clock to Brynka Bryn's Ironwing (true-dragon + air; boxer-puncher, master) (timeout in exchange 8) and lives; Yramor Ash pays 0 Ichor (0 left).
+- S3 R28 · ✗ Cinderclaw (wyvern + air) falls to Torost Bryn's Embereye (true-dragon + air; swarmer, master), KO in exchange 6. Record 0–2.
+- S3 R29 · hatches #72 Thornfang (wyvern + air) as a master
+- S3 R29 · ✗ Thornfang (wyvern + air) falls to Morila Lin's Cinderspine (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R30 · hatches #73 Vanespine (true-dragon + air) as a master
+- S3 R30 · ✓ Vanespine slays Quenvel Mor's Thornspine (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S3 R30 · ♨ Vanespine melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S3 R31 · ✗ Vanespine (true-dragon + air) falls to Zarven Ka's Stormcrest (true-dragon + air; boxer-puncher, master), KO in exchange 3. Record 1–1.
+- S3 R32 · hatches #74 Ironwing (wyvern + fire) as a master
+- S3 R32 · ✓ Ironwing beats Quenbryn Ost's Hollowheart (wyvern + air; swarmer, master) (timeout in exchange 8), paid 1 Ichor. Streak 1.
+- S3 R33 · ✓ Ironwing slays Ilathi Ush's Stormcrest (true-dragon + air; swarmer, master), KO in exchange 3. Streak 2.
+- S3 R33 · ⚖ Yramor Ash tries Thornscale 4–2, Sidewinder Spine 2–4 against 3 remembered dragons; it leans Thornscale.
+- S3 R33 · ❄ Ironwing melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Smoldering Maw from Yramor Ash's Ichor (1 left).
+- S3 R34 · ✗ Ironwing (wyvern + fire, Smoldering Maw) falls to Galdra Ush's Ashmaw (true-dragon + air, Smolder Sac; boxer-puncher, master), KO in exchange 5. Record 2–1.
+- S3 R35 · hatches #75 Vanespine (wyvern + fire) as a master
+- S3 R35 · ✗ Vanespine (wyvern + fire) falls to Cortor Sul's Holloweye (wyvern + fire; out-boxer, master), KO in exchange 7. Record 0–1.
+- S3 R36 · hatches #76 Duskspine (wyvern + air) as a master
+- S3 R36 · ⚑ Duskspine (wyvern + air) loses on the clock to Corquen Dra's Galehorn (wyvern + air; out-boxer, master) (timeout in exchange 8) and lives; Yramor Ash pays 1 Ichor (0 left).
+- S3 R37 · ✗ Duskspine (wyvern + air) falls to Ilamor Ven's Embertail (true-dragon + air; slugger, master), KO in exchange 8. Record 0–2.
+- S3 R38 · hatches #77 Rimewing (wyvern + air) as a master
+- S3 R38 · ✓ Rimewing slays Rendra Dra's Slatecrest (true-dragon + air; boxer-puncher, master), KO in exchange 5. Streak 1.
+- S3 R38 · ◆ Rimewing takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S3 R39 · ✓ Rimewing slays Torven Zar's Vaneclaw (wyrm + air, Weathered Hide; slugger, adept), KO in exchange 4. Streak 1.
+- S3 R39 · ⚖ Yramor Ash tries Pebblescale 2–4, Weathered Hide 2–4 against 3 remembered dragons; no lean.
+- S3 R39 · ♨ Rimewing melts Whetted Nail from the spoils (of Pebblescale, Whetted Nail, Weathered Hide) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 1.
+- S3 R40 · ✗ Rimewing (wyvern + air, Heartgrit) falls to Ushila Yra's Ironheart (true-dragon + air, Sapping Bellow; slugger, master), KO in exchange 4. Record 2–1.
+- S3 R41 · hatches #78 Vanewing (wyvern + fire) as a master
+- S3 R41 · ✗ Vanewing (wyvern + fire) falls to Brynost Ush's Flinteye (wyvern + air; out-boxer, master), KO in exchange 7. Record 0–1.
+- S3 R42 · hatches #79 Hollowwing (wyvern + fire) as a master
+- S3 R42 · ✓ Hollowwing slays Linmor Mor's Flinteye (true-dragon + air; counterpuncher, master), KO in exchange 5. Streak 1.
+- S3 R42 · ⚖ Yramor Ash tries Thornscale 4–2, Sidewinder Spine 3–3 against 3 remembered dragons; it leans Thornscale.
+- S3 R42 · ❄ Hollowwing melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Riposte Talons from Yramor Ash's Ichor (0 left).
+- S3 R43 · ✓ Hollowwing slays Morash Lin's Thornwing (true-dragon + air, Lockjaw; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R43 · ⚖ Yramor Ash tries Heartgrit 5–1, Lockjaw 2–4 against 3 remembered dragons; it leans Heartgrit.
+- S3 R43 · ◆ Hollowwing takes Heartgrit from the spoils (of Heartgrit, Whetted Nail, Lockjaw).
+- S3 R44 · ✓ Hollowwing slays Draren Tor's Vanespine (true-dragon + air, Mantle Wings, Sidewinder Spine; slugger, master), KO in exchange 2. Streak 1.
+- S3 R44 · ◆ Hollowwing takes Sidewinder Spine from the spoils (of Heartgrit, Whetted Nail, Mantle Wings, Sidewinder Spine).
+- S3 R44 · ★ Hollowwing becomes a wyrmling champion and retires.
+- S3 R45 · hatches #80 Ashheart (true-dragon + air) as a master
+- S3 R45 · ✗ Ashheart (true-dragon + air) falls to Zarlin Sul's Slatewing (wyrm + air; swarmer, master), KO in exchange 4. Record 0–1.
+- S3 R46 · hatches #81 Stormwing (wyvern + air) as a master
+- S3 R46 · ✓ Stormwing slays Linmor Mor's Rimefang (wyvern + air; out-boxer, master), KO in exchange 5. Streak 1.
+- S3 R46 · ♨ Stormwing melts Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S3 R47 · ✗ Stormwing (wyvern + air) falls to Ilazar Sul's Thornclaw (true-dragon + air; slugger, master), KO in exchange 6. Record 1–1.
+- S3 R48 · hatches #82 Stormcrest (wyvern + air) as a master
+- S3 R48 · ✓ Stormcrest beats Zarcor Ash's Mirehorn (true-dragon + air; boxer-puncher, master) (timeout in exchange 8), paid 1 Ichor. Streak 1.
+- S3 R49 · ✗ Stormcrest (wyvern + air) falls to Lintor Quen's Mirewing (true-dragon + air; slugger, master), KO in exchange 6. Record 1–1.
+- S3 R50 · hatches #83 Duskcrest (wyvern + air) as a master
+- S3 R50 · ✗ Duskcrest (wyvern + air) falls to Yramor Ash's Slatefang (wyvern + fire; out-boxer, master), KO in exchange 7. Record 0–1.
+- S3 R51 · hatches #84 Slateclaw (wyvern + air) as a master
+- S3 R51 · ✓ Slateclaw slays Linush Ka's Vanemaw (true-dragon + air; swarmer, master), KO in exchange 5. Streak 1.
+- S3 R51 · ⚖ Yramor Ash tries Thornscale 4–2, Sidewinder Spine 1–5 against 3 remembered dragons; it leans Thornscale.
+- S3 R51 · ❄ Slateclaw melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Slit Pupil from Yramor Ash's Ichor (1 left).
+- S3 R52 · ✓ Slateclaw slays Yraila Thi's Mireclaw (true-dragon + air, Whetted Nail; boxer-puncher, master), KO in exchange 7. Streak 1.
+- S3 R52 · ⚖ Yramor Ash tries Thornscale 3–3, Sidewinder Spine 0–6 against 3 remembered dragons; it leans Thornscale.
+- S3 R52 · ❄ Slateclaw melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and freezes Lockjaw from Yramor Ash's Ichor (0 left).
+- S3 R53 · ✓ Slateclaw slays Sulila Gal's Vanehorn (true-dragon + air, Sidewinder Spine, Ratchet Claws; swarmer, master), KO in exchange 5. Streak 1.
+- S3 R53 · ⚖ Yramor Ash tries Sidewinder Spine 2–4, Ratchet Claws 2–4 against 3 remembered dragons; no lean.
+- S3 R53 · ◆ Slateclaw takes Sidewinder Spine from the spoils (of Heartgrit, Whetted Nail, Sidewinder Spine, Ratchet Claws).
+- S3 R53 · ★ Slateclaw becomes a wyrmling champion and retires.
+- S3 R54 · hatches #85 Emberfang (wyvern + air) as a master
+- S3 R54 · ✓ Emberfang slays Dravel Mor's Cinderheart (true-dragon + air; boxer-puncher, master), KO in exchange 7. Streak 1.
+- S3 R54 · ♨ Emberfang melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+- S3 R55 · ⚑ Emberfang (wyvern + air) loses on the clock to Ushzar Thi's Vaneheart (true-dragon + air; boxer-puncher, master) (timeout in exchange 8) and lives; Yramor Ash pays 1 Ichor (0 left).
+- S3 R56 · ✗ Emberfang (wyvern + air) falls to Velost Vel's Ashhorn (true-dragon + air; slugger, master), KO in exchange 5. Record 1–2.
+- S3 R57 · hatches #86 Stormspine (wyvern + air) as a master
+- S3 R57 · ✗ Stormspine (wyvern + air) falls to Venthi Dra's Brinewing (true-dragon + air; boxer-puncher, master), KO in exchange 6. Record 0–1.
+- S3 R58 · hatches #87 Ironspine (wyvern + air) as a master
+- S3 R58 · ✓ Ironspine slays Thivel Thi's Flintcrest (true-dragon + air; swarmer, master), KO in exchange 5. Streak 1.
+- S3 R58 · ◆ Ironspine takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S3 R59 · ✗ Ironspine (wyvern + air, Heartgrit) falls to Renbryn Bryn's Brinewing (true-dragon + air, Sidewinder Spine; swarmer, master), KO in exchange 5. Record 1–1.
+- S3 R60 · hatches #88 Vanefang (wyvern + air) as a master
+- S3 R60 · ✓ Vanefang slays Quenash Sul's Rimetail (true-dragon + air; counterpuncher, master), KO in exchange 7. Streak 1.
+- S3 R60 · ♨ Vanefang melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Yramor Ash holds 1 Ichor. It stays on rung 0.
+
+## The most decorated tamer
+
+### Veldra Ush
+
+| | |
+|---|---|
+| Tamer ID | DT-0076 |
+| Style | boxer-puncher |
+| Skill | master (best rung 3) |
+| Record | 106–74 |
+| Ichor | 0 |
+| Dragons hatched | 87, lost 74 |
+| Champions | Embereye (wyvern + fire, Milk Fang, Weathered Hide, Heartgrit), 3–0, season 1 round 11; Dusktail (true-dragon + air, Riposte Talons, Ratchet Claws, Snapping Jaw), 4–0, season 1 round 38; Holloweye (true-dragon + air, Snapping Jaw, Smoldering Maw, Riposte Talons), 5–0, season 1 round 55; Asheye (wyvern + fire, Riposte Talons, Ratchet Claws, Snapping Jaw), 3–0, season 1 round 59; Ashwing (wyvern + fire, Pebblescale, Coiled Sinew, Riposte Talons), 4–0, season 2 round 14; Embereye (true-dragon + air, Slit Pupil, Ash Gland, Milk Fang), 6–0, season 2 round 20; Hollowcrest (true-dragon + air, Riposte Talons, Smolder Sac, Heartgrit), 3–0, season 2 round 23; Dusktail (true-dragon + air, Ratchet Claws, Heartgrit, Riposte Talons), 5–0, season 2 round 53; Slatefang (true-dragon + air, Scything Forelimbs, Whetted Nail, Sidewinder Spine), 4–0, season 3 round 18; Ironclaw (true-dragon + air, Heartgrit ×2, Whetted Nail), 3–0, season 3 round 40; Stormcrest (true-dragon + air, Whetted Nail, Heartgrit, Sidewinder Spine), 3–0, season 3 round 47; Irontail (true-dragon + air, Whetted Nail, Lance Throat), 2–0, season 3 round 58 |
+| Current dragon | Ashspine (true-dragon + air, Riposte Talons), rung 1, streak 0, 2–0 |
+| Favored builds | wyvern + earth (0 wins, 1 deaths); wyvern + water (0 wins, 1 deaths); drake + air (0 wins, 1 deaths) |
+
+**Match history**
+
+- S1 R1 · hatches #1 Ironeye (wyvern + earth) as a novice
+- S1 R1 · ✗ Ironeye (wyvern + earth) falls to Coryra Thi's Thornspine (true-dragon + water; slugger, novice), KO in exchange 6. Record 0–1.
+- S1 R2 · hatches #2 Cindereye (true-dragon + air) as a novice
+- S1 R2 · ✓ Cindereye slays Ashquen Ila's Stormmaw (true-dragon + air; counterpuncher, novice), KO in exchange 4. Streak 1.
+- S1 R2 · ◆ Cindereye takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail).
+- S1 R2 · Veldra Ush is now adept.
+- S1 R3 · ✗ Cindereye (true-dragon + air, Whetted Nail) falls to Ushila Yra's Flinthorn (wyvern + fire, Whetted Nail; slugger, adept), KO in exchange 3. Record 1–1.
+- S1 R4 · hatches #3 Mireclaw (true-dragon + air) as a adept
+- S1 R4 · ✓ Mireclaw slays Venzar Ost's Rimeeye (true-dragon + water; swarmer, novice), KO in exchange 3. Streak 1.
+- S1 R4 · ⚖ Veldra Ush tries Heartgrit, Weathered Hide against 3 remembered dragons; Heartgrit fares best (6–0).
+- S1 R4 · ♨ Mireclaw melts Weathered Hide from the spoils (of Heartgrit, Weathered Hide) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S1 R5 · ✓ Mireclaw slays Zaryra Ush's Galemaw (drake + air; out-boxer, adept), KO in exchange 3. Streak 1.
+- S1 R5 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Ratchet Claws fares best (6–0).
+- S1 R5 · ❄ Mireclaw melts Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S1 R6 · ✗ Mireclaw (true-dragon + air, Riposte Talons) falls to Quendra Dra's Cinderclaw (true-dragon + air, Lockjaw; slugger, adept), KO in exchange 3. Record 2–1.
+- S1 R7 · hatches #4 Mirefang (wyvern + air) as a adept
+- S1 R7 · ✗ Mirefang (wyvern + air) falls to Linmor Mor's Embertail (true-dragon + air; counterpuncher, master), KO in exchange 5. Record 0–1.
+- S1 R8 · hatches #5 Ironclaw (wyvern + air) as a adept
+- S1 R8 · ✗ Ironclaw (wyvern + air) falls to Morsul Sul's Galecrest (true-dragon + air; slugger, adept), KO in exchange 7. Record 0–1.
+- S1 R9 · hatches #6 Embereye (wyvern + fire) as a adept
+- S1 R9 · ✓ Embereye slays Thivel Thi's Vanespine (wyvern + earth; swarmer, adept), KO in exchange 6. Streak 1.
+- S1 R9 · ⚖ Veldra Ush tries Milk Fang, Coiled Sinew against 3 remembered dragons; Coiled Sinew fares best (3–3).
+- S1 R9 · ◆ Embereye takes Milk Fang from the spoils (of Coiled Sinew, Milk Fang).
+- S1 R10 · ✓ Embereye slays Ilaven Thi's Duskeye (true-dragon + water, Whetted Nail; slugger, adept), KO in exchange 3. Streak 1.
+- S1 R10 · ⚖ Veldra Ush tries Whetted Nail, Heartgrit against 3 remembered dragons; Whetted Nail fares best (5–1).
+- S1 R10 · ◆ Embereye takes Weathered Hide from the spoils (of Heartgrit, Weathered Hide, Whetted Nail).
+- S1 R10 · Veldra Ush is now master.
+- S1 R11 · ✓ Embereye slays Ilamor Gal's Cindereye (true-dragon + air, Heartgrit, Whetted Nail; slugger, master), KO in exchange 6. Streak 1.
+- S1 R11 · ⚖ Veldra Ush tries Whetted Nail, Heartgrit against 3 remembered dragons; Heartgrit fares best (4–2).
+- S1 R11 · ◆ Embereye takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S1 R11 · ★ Embereye becomes a wyrmling champion and retires.
+- S1 R12 · hatches #7 Stormwing (wyvern + fire) as a master
+- S1 R12 · ✓ Stormwing slays Galdra Ush's Rimeheart (wyvern + air; boxer-puncher, adept), KO in exchange 6. Streak 1.
+- S1 R12 · ⚖ Veldra Ush tries Coiled Sinew, Whetted Nail against 3 remembered dragons; Coiled Sinew fares best (3–3).
+- S1 R12 · ◆ Stormwing takes Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail).
+- S1 R13 · ✗ Stormwing (wyvern + fire, Whetted Nail) falls to Thiven Thi's Cinderwing (wyvern + air, Gnashing Teeth; boxer-puncher, adept), KO in exchange 4. Record 1–1.
+- S1 R14 · hatches #8 Vanespine (wyvern + water) as a master
+- S1 R14 · ✗ Vanespine (wyvern + water) falls to Sulmor Ash's Stormhorn (true-dragon + air; out-boxer, adept), KO in exchange 4. Record 0–1.
+- S1 R15 · hatches #9 Slatefang (wyvern + fire) as a master
+- S1 R15 · ✓ Slatefang slays Galvel Ila's Rimemaw (wyvern + air; swarmer, adept), KO in exchange 5. Streak 1.
+- S1 R15 · ⚖ Veldra Ush tries Coiled Sinew, Whetted Nail against 3 remembered dragons; Coiled Sinew fares best (5–1).
+- S1 R15 · ◆ Slatefang takes Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail).
+- S1 R16 · ✓ Slatefang slays Zarvel Cor's Ironclaw (wyrm + water, Whetted Nail; swarmer, adept), KO in exchange 4. Streak 1.
+- S1 R16 · ⚖ Veldra Ush tries Whetted Nail, Weathered Hide against 3 remembered dragons; Whetted Nail fares best (3–3).
+- S1 R16 · ♨ Slatefang melts Weathered Hide from the spoils (of Pebblescale, Weathered Hide, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 1.
+- S1 R17 · ✗ Slatefang (wyvern + fire, Coiled Sinew) falls to Draila Ren's Brinewing (true-dragon + air, Heartgrit; slugger, adept), KO in exchange 3. Record 2–1.
+- S1 R18 · hatches #10 Brineeye (wyvern + fire) as a master
+- S1 R18 · ✗ Brineeye (wyvern + fire) falls to Ilamor Ven's Miremaw (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S1 R19 · hatches #11 Ironspine (true-dragon + air) as a master
+- S1 R19 · ✗ Ironspine (true-dragon + air) falls to Linush Bryn's Miremaw (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S1 R20 · hatches #12 Rimecrest (true-dragon + air) as a master
+- S1 R20 · ✓ Rimecrest slays an unclaimed swarmer's Vanetail (wyvern + air; swarmer, novice), KO in exchange 3. Streak 1.
+- S1 R20 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Ratchet Claws fares best (3–3).
+- S1 R20 · ❄ Rimecrest melts Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail) and freezes Snapping Jaw from Veldra Ush's Ichor (0 left).
+- S1 R21 · ✓ Rimecrest slays Yraila Thi's Ashhorn (true-dragon + air, Ratchet Claws; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S1 R21 · ⚖ Veldra Ush tries Ratchet Claws, Whetted Nail against 3 remembered dragons; Whetted Nail fares best (4–2).
+- S1 R21 · ◆ Rimecrest takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail, Ratchet Claws).
+- S1 R22 · ✗ Rimecrest (true-dragon + air, Snapping Jaw, Whetted Nail) falls to Rendra Dra's Flintmaw (true-dragon + air, Riposte Talons, Whetted Nail; boxer-puncher, master), KO in exchange 3. Record 2–1.
+- S1 R23 · hatches #13 Flintclaw (wyvern + fire) as a master
+- S1 R23 · ✓ Flintclaw slays Velvel Ka's Ironwing (wyvern + fire; out-boxer, master), rim pulse in exchange 7. Streak 1.
+- S1 R23 · ♨ Flintclaw melts Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S1 R24 · ✗ Flintclaw (wyvern + fire) falls to Dracor Zar's Emberclaw (true-dragon + air; swarmer, master), KO in exchange 2. Record 1–1.
+- S1 R25 · hatches #14 Flintheart (drake + air) as a master
+- S1 R25 · ✗ Flintheart (drake + air) falls to Zarquen Ka's Duskclaw (wyvern + fire; out-boxer, master), KO in exchange 3. Record 0–1.
+- S1 R26 · hatches #15 Ironwing (wyvern + fire) as a master
+- S1 R26 · ✗ Ironwing (wyvern + fire) falls to Coryra Thi's Slateclaw (wyvern + air; slugger, master), KO in exchange 5. Record 0–1.
+- S1 R27 · hatches #16 Ashmaw (wyrm + air) as a master
+- S1 R27 · ✓ Ashmaw slays Brynush Quen's Ashmaw (true-dragon + air; swarmer, master), KO in exchange 5. Streak 1.
+- S1 R27 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Riposte Talons fares best (4–2).
+- S1 R27 · ❄ Ashmaw melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S1 R28 · ✗ Ashmaw (wyrm + air, Riposte Talons) falls to Draila Sul's Rimefang (true-dragon + air, Heartgrit; swarmer, master), KO in exchange 4. Record 1–1.
+- S1 R29 · hatches #17 Cinderclaw (true-dragon + air) as a master
+- S1 R29 · ✓ Cinderclaw slays Thisul Ren's Duskwing (wyrm + air; swarmer, master), KO in exchange 4. Streak 1.
+- S1 R29 · ⚖ Veldra Ush tries Whetted Nail, Pebblescale against 3 remembered dragons; Pebblescale fares best (6–0).
+- S1 R29 · ◆ Cinderclaw takes Pebblescale from the spoils (of Pebblescale, Whetted Nail).
+- S1 R30 · ✗ Cinderclaw (true-dragon + air, Pebblescale) falls to Thicor Thi's Brineclaw (true-dragon + air, Heartgrit; slugger, master), KO in exchange 3. Record 1–1.
+- S1 R31 · hatches #18 Thorneye (true-dragon + air) as a master
+- S1 R31 · ✓ Thorneye slays Torka Sul's Hollowfang (true-dragon + air; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S1 R31 · ⚖ Veldra Ush tries Whetted Nail, Heartgrit against 3 remembered dragons; Heartgrit fares best (5–1).
+- S1 R31 · ◆ Thorneye takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S1 R32 · ✓ Thorneye slays Thiost Ven's Stormwing (true-dragon + air, Heartgrit; out-boxer, master), KO in exchange 5. Streak 1.
+- S1 R32 · ⚖ Veldra Ush tries Whetted Nail, Heartgrit against 3 remembered dragons; Whetted Nail fares best (4–2).
+- S1 R32 · ♨ Thorneye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 1.
+- S1 R33 · ✗ Thorneye (true-dragon + air, Heartgrit) falls to Brynost Thi's Vaneclaw (true-dragon + air, Gnashing Teeth; counterpuncher, master), KO in exchange 3. Record 2–1.
+- S1 R34 · hatches #19 Mirecrest (true-dragon + air) as a master
+- S1 R34 · ✗ Mirecrest (true-dragon + air) falls to Ilathi Ush's Cindertail (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S1 R35 · hatches #20 Dusktail (true-dragon + air) as a master
+- S1 R35 · ✓ Dusktail slays Kalin Ush's Duskwing (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R35 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Riposte Talons fares best (5–1).
+- S1 R35 · ♨ Dusktail melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 2 Ichor. It stays on rung 0.
+- S1 R36 · ✓ Dusktail slays Venost Gal's Stormeye (wyvern + air; swarmer, master), KO in exchange 5. Streak 1.
+- S1 R36 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Riposte Talons fares best (4–2).
+- S1 R36 · ❄ Dusktail melts Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail) and freezes Riposte Talons from Veldra Ush's Ichor (1 left).
+- S1 R37 · ✓ Dusktail slays Zarvel Mor's Mireclaw (true-dragon + air, Bounding Haunches; out-boxer, master), KO in exchange 5. Streak 1.
+- S1 R37 · ⚖ Veldra Ush tries Ratchet Claws, Snapping Jaw against 3 remembered dragons; Ratchet Claws fares best (4–2).
+- S1 R37 · ❄ Dusktail melts Bounding Haunches from the spoils (of Heartgrit, Whetted Nail, Bounding Haunches) and freezes Ratchet Claws from Veldra Ush's Ichor (0 left).
+- S1 R38 · ✓ Dusktail slays Thiven Cor's Rimespine (true-dragon + air, Snapping Jaw, Heartgrit; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R38 · ⚖ Veldra Ush tries Snapping Jaw, Whetted Nail against 3 remembered dragons; Snapping Jaw fares best (5–1).
+- S1 R38 · ◆ Dusktail takes Snapping Jaw from the spoils (of Heartgrit, Whetted Nail, Snapping Jaw).
+- S1 R38 · ★ Dusktail becomes a wyrmling champion and retires.
+- S1 R39 · hatches #21 Galeheart (true-dragon + air) as a master
+- S1 R39 · ✓ Galeheart slays Quengal Ren's Miremaw (wyvern + fire; out-boxer, master), KO in exchange 3. Streak 1.
+- S1 R39 · ♨ Galeheart melts Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S1 R40 · ✗ Galeheart (true-dragon + air) falls to Sulgal Cor's Embertail (true-dragon + air; counterpuncher, adept), KO in exchange 3. Record 1–1.
+- S1 R41 · hatches #22 Ashheart (true-dragon + air) as a master
+- S1 R41 · ✓ Ashheart slays Sulmor Ash's Brinecrest (wyvern + fire; out-boxer, master), KO in exchange 6. Streak 1.
+- S1 R41 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Riposte Talons fares best (4–2).
+- S1 R41 · ❄ Ashheart melts Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S1 R42 · ✗ Ashheart (true-dragon + air, Riposte Talons) falls to Zarlin Sul's Galeheart (wyrm + air, Heartgrit; swarmer, master), KO in exchange 4. Record 1–1.
+- S1 R43 · hatches #23 Vanecrest (true-dragon + air) as a master
+- S1 R43 · ✗ Vanecrest (true-dragon + air) falls to Morash Lin's Brinehorn (true-dragon + air; boxer-puncher, master), KO in exchange 3. Record 0–1.
+- S1 R44 · hatches #24 Thorncrest (true-dragon + air) as a master
+- S1 R44 · ✓ Thorncrest slays Linush Bryn's Thornspine (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R44 · ⚖ Veldra Ush tries Whetted Nail, Heartgrit against 3 remembered dragons; Whetted Nail fares best (6–0).
+- S1 R44 · ♨ Thorncrest melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S1 R45 · ✓ Thorncrest slays Rencor Quen's Hollowwing (wyvern + fire; out-boxer, master), KO in exchange 3. Streak 1.
+- S1 R45 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Ratchet Claws fares best (5–1).
+- S1 R45 · ❄ Thorncrest melts Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S1 R46 · ✗ Thorncrest (true-dragon + air, Riposte Talons) falls to Ushzar Thi's Stormtail (wyvern + fire, Ratchet Claws; boxer-puncher, master), KO in exchange 3. Record 2–1.
+- S1 R47 · hatches #25 Rimeclaw (wyvern + fire) as a master
+- S1 R47 · ✗ Rimeclaw (wyvern + fire) falls to Torzar Zar's Ironheart (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S1 R48 · hatches #26 Galefang (true-dragon + air) as a master
+- S1 R48 · ✓ Galefang slays Karen Yra's Brinetail (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R48 · ⚖ Veldra Ush tries Whetted Nail, Heartgrit against 3 remembered dragons; Whetted Nail fares best (3–3).
+- S1 R48 · ◆ Galefang takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail).
+- S1 R49 · ✓ Galefang slays Ashquen Ila's Emberspine (true-dragon + air, Snapping Jaw; counterpuncher, master), KO in exchange 4. Streak 1.
+- S1 R49 · ⚖ Veldra Ush tries Snapping Jaw, Whetted Nail against 3 remembered dragons; Snapping Jaw fares best (3–3).
+- S1 R49 · ♨ Galefang melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Snapping Jaw) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 1.
+- S1 R50 · ✗ Galefang (true-dragon + air, Whetted Nail) falls to Galdra Ush's Duskclaw (wyvern + fire, Heartgrit; boxer-puncher, master), KO in exchange 4. Record 2–1.
+- S1 R51 · hatches #27 Holloweye (true-dragon + air) as a master
+- S1 R51 · ✓ Holloweye slays Draren Ush's Vanetail (wyvern + air; out-boxer, master), KO in exchange 6. Streak 1.
+- S1 R51 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Ratchet Claws fares best (6–0).
+- S1 R51 · ♨ Holloweye melts Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail) and banks it: Veldra Ush holds 2 Ichor. It stays on rung 0.
+- S1 R52 · ✓ Holloweye slays Drabryn Ven's Ashheart (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R52 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Riposte Talons fares best (2–4).
+- S1 R52 · ❄ Holloweye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Snapping Jaw from Veldra Ush's Ichor (1 left).
+- S1 R53 · ✓ Holloweye slays Ashgal Lin's Flintcrest (true-dragon + air, Smoldering Maw; swarmer, master), KO in exchange 3. Streak 1.
+- S1 R53 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Riposte Talons fares best (4–2).
+- S1 R53 · ◆ Holloweye takes Smoldering Maw from the spoils (of Heartgrit, Whetted Nail, Smoldering Maw).
+- S1 R54 · ✓ Holloweye slays Yramor Ash's Hollowtail (wyvern + fire, Smolder Sac, Bounding Haunches; out-boxer, master), KO in exchange 8. Streak 1.
+- S1 R54 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Ratchet Claws fares best (5–1).
+- S1 R54 · ♨ Holloweye melts Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac, Bounding Haunches) and banks it: Veldra Ush holds 2 Ichor. It stays on rung 2.
+- S1 R55 · ✓ Holloweye slays Galcor Ila's Ironeye (true-dragon + air, Riposte Talons, Snapping Jaw; swarmer, master), KO in exchange 5. Streak 1.
+- S1 R55 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Riposte Talons fares best (3–3).
+- S1 R55 · ◆ Holloweye takes Riposte Talons from the spoils (of Heartgrit, Whetted Nail, Riposte Talons, Snapping Jaw).
+- S1 R55 · ★ Holloweye becomes a wyrmling champion and retires.
+- S1 R56 · hatches #28 Mirecrest (true-dragon + air) as a master
+- S1 R56 · ✗ Mirecrest (true-dragon + air) falls to Drabryn Ven's Rimecrest (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S1 R57 · hatches #29 Asheye (wyvern + fire) as a master
+- S1 R57 · ✓ Asheye slays Kalin Ush's Ashtail (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S1 R57 · ⚖ Veldra Ush tries Riposte Talons, Ratchet Claws against 3 remembered dragons; Ratchet Claws fares best (3–3).
+- S1 R57 · ❄ Asheye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Riposte Talons from Veldra Ush's Ichor (1 left).
+- S1 R58 · ✓ Asheye slays Rensul Tor's Mirewing (wyvern + fire, Bounding Haunches; out-boxer, master), KO in exchange 4. Streak 1.
+- S1 R58 · ⚖ Veldra Ush tries Ratchet Claws, Snapping Jaw against 3 remembered dragons; Snapping Jaw fares best (2–4).
+- S1 R58 · ❄ Asheye melts Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac, Bounding Haunches) and freezes Ratchet Claws from Veldra Ush's Ichor (0 left).
+- S1 R59 · ✓ Asheye slays Ilathi Ush's Duskspine (true-dragon + air, Pebblescale, Snapping Jaw; swarmer, master), KO in exchange 4. Streak 1.
+- S1 R59 · ⚖ Veldra Ush tries Snapping Jaw, Whetted Nail against 3 remembered dragons; Snapping Jaw fares best (4–2).
+- S1 R59 · ◆ Asheye takes Snapping Jaw from the spoils (of Heartgrit, Whetted Nail, Pebblescale, Snapping Jaw).
+- S1 R59 · ★ Asheye becomes a wyrmling champion and retires.
+- S1 R60 · hatches #30 Galefang (true-dragon + air) as a master
+- S1 R60 · ⚑ Galefang (true-dragon + air) loses on the clock to Zarash Ila's Slatefang (wyvern + fire; out-boxer, master) (timeout in exchange 8) and lives; Veldra Ush pays 0 Ichor (0 left).
+- Season 2 · returns as a veteran: 34–26, 30 dragons, 4 champions, 0 Ichor, 40 dragons remembered.
+- S2 R1 · hatches #31 Brinemaw (true-dragon + air) as a master
+- S2 R1 · ✓ Brinemaw slays Yrabryn Zar's Embertail (true-dragon + air; out-boxer, master), KO in exchange 3. Streak 1.
+- S2 R1 · ⚖ Veldra Ush tries Whetted Nail 2–4, Heartgrit 2–4 against 3 remembered dragons; no lean.
+- S2 R1 · ♨ Brinemaw melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S2 R2 · ✗ Brinemaw (true-dragon + air) falls to Ushlin Ush's Stormeye (true-dragon + air; boxer-puncher, master), KO in exchange 3. Record 1–1.
+- S2 R3 · hatches #32 Embercrest (wyvern + fire) as a master
+- S2 R3 · ✗ Embercrest (wyvern + fire) falls to Ostquen Ren's Rimeheart (wyvern + air; counterpuncher, master), KO in exchange 5. Record 0–1.
+- S2 R4 · hatches #33 Thorncrest (true-dragon + air) as a master
+- S2 R4 · ✗ Thorncrest (true-dragon + air) falls to Cortor Sul's Duskclaw (true-dragon + air; boxer-puncher, adept), KO in exchange 3. Record 0–1.
+- S2 R5 · hatches #34 Ironmaw (true-dragon + air) as a master
+- S2 R5 · ✓ Ironmaw slays Zaryra Ush's Hollowheart (true-dragon + air; out-boxer, master), KO in exchange 4. Streak 1.
+- S2 R5 · ⚖ Veldra Ush tries Ratchet Claws 3–3, Riposte Talons 1–5 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R5 · ❄ Ironmaw melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Ratchet Claws from Veldra Ush's Ichor (0 left).
+- S2 R6 · ✓ Ironmaw slays Lintor Quen's Slatehorn (wyvern + air, Heartgrit; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S2 R6 · ⚖ Veldra Ush tries Coiled Sinew 4–2, Whetted Nail 3–3 against 3 remembered dragons; it leans Coiled Sinew.
+- S2 R6 · ◆ Ironmaw takes Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail, Heartgrit).
+- S2 R7 · ✗ Ironmaw (true-dragon + air, Ratchet Claws, Coiled Sinew) falls to Yraila Thi's Vanehorn (true-dragon + air, Riposte Talons, Whetted Nail; boxer-puncher, master), KO in exchange 3. Record 2–1.
+- S2 R8 · hatches #35 Vanespine (wyvern + air) as a master
+- S2 R8 · ✓ Vanespine slays Galcor Ila's Stormtail (wyvern + air; counterpuncher, adept), KO in exchange 3. Streak 1.
+- S2 R8 · ⚖ Veldra Ush tries Coiled Sinew 5–1, Whetted Nail 1–5 against 3 remembered dragons; it leans Coiled Sinew.
+- S2 R8 · ◆ Vanespine takes Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail).
+- S2 R9 · ✗ Vanespine (wyvern + air, Coiled Sinew) falls to Kathi Ash's Embermaw (true-dragon + air, Bounding Haunches; counterpuncher, master), KO in exchange 3. Record 1–1.
+- S2 R10 · hatches #36 Rimemaw (wyvern + fire) as a master
+- S2 R10 · ✗ Rimemaw (wyvern + fire) falls to Quenquen Lin's Cindermaw (wyvern + fire; out-boxer, master), KO in exchange 8. Record 0–1.
+- S2 R11 · hatches #37 Ashwing (wyvern + fire) as a master
+- S2 R11 · ✓ Ashwing slays Quenzar Gal's Emberclaw (wyrm + water; out-boxer, novice), KO in exchange 5. Streak 1.
+- S2 R11 · ⚖ Veldra Ush tries Pebblescale 4–2, Weathered Hide 0–6 against 3 remembered dragons; it leans Pebblescale.
+- S2 R11 · ◆ Ashwing takes Pebblescale from the spoils (of Pebblescale, Weathered Hide).
+- S2 R12 · ✓ Ashwing beats Thizar Ven's Slateeye (true-dragon + air, Riposte Talons; slugger, master) (yield in exchange 1), paid 2 Ichor. Streak 1.
+- S2 R13 · ✓ Ashwing slays Dramor Ush's Galecrest (wyvern + fire, Snapping Jaw; swarmer, master), KO in exchange 4. Streak 2.
+- S2 R13 · ⚖ Veldra Ush tries Riposte Talons 2–4, Ratchet Claws 2–4 against 3 remembered dragons; no lean.
+- S2 R13 · ◆ Ashwing takes Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac, Snapping Jaw).
+- S2 R14 · ✓ Ashwing slays Zarlin Sul's Brinewing (wyvern + water, Lockjaw, Heartgrit; counterpuncher, master), KO in exchange 5. Streak 1.
+- S2 R14 · ⚖ Veldra Ush tries Riposte Talons 4–2, Ratchet Claws 3–3 against 3 remembered dragons; it leans Riposte Talons.
+- S2 R14 · ❄ Ashwing melts Weathered Hide from the spoils (of Coiled Sinew, Weathered Hide, Lockjaw, Heartgrit) and freezes Riposte Talons from Veldra Ush's Ichor (1 left).
+- S2 R14 · ★ Ashwing becomes a wyrmling champion and retires.
+- S2 R15 · hatches #38 Embereye (true-dragon + air) as a master
+- S2 R15 · ✓ Embereye slays Yragal Mor's Ashcrest (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R15 · ⚖ Veldra Ush tries Riposte Talons 3–3, Ratchet Claws 3–3 against 3 remembered dragons; no lean.
+- S2 R15 · ♨ Embereye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 2 Ichor. It stays on rung 0.
+- S2 R16 · ✓ Embereye slays Zarvel Cor's Vanewing (wyvern + earth; swarmer, master), KO in exchange 2. Streak 1.
+- S2 R16 · ⚖ Veldra Ush tries Ratchet Claws 5–1, Riposte Talons 3–3 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R16 · ❄ Embereye melts Coiled Sinew from the spoils (of Coiled Sinew, Milk Fang) and freezes Slit Pupil from Veldra Ush's Ichor (1 left).
+- S2 R17 · ✓ Embereye slays Corost Quen's Stormclaw (true-dragon + air, Snapping Jaw; counterpuncher, master), KO in exchange 4. Streak 1.
+- S2 R17 · ⚖ Veldra Ush tries Ratchet Claws 3–3, Riposte Talons 1–5 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R17 · ❄ Embereye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Snapping Jaw) and freezes Ash Gland from Veldra Ush's Ichor (0 left).
+- S2 R18 · ✓ Embereye slays Galcor Ila's Slatewing (true-dragon + air, Heartgrit, Riposte Talons; swarmer, master), KO in exchange 3. Streak 1.
+- S2 R18 · ♨ Embereye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Riposte Talons) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 2.
+- S2 R19 · ✓ Embereye slays Iladra Lin's Brinetail (true-dragon + air, Riposte Talons, Snapping Jaw; swarmer, master), KO in exchange 3. Streak 1.
+- S2 R19 · ⚖ Veldra Ush tries Riposte Talons 4–2, Ratchet Claws 4–2 against 3 remembered dragons; no lean.
+- S2 R19 · ♨ Embereye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Riposte Talons, Snapping Jaw) and banks it: Veldra Ush holds 2 Ichor. It stays on rung 2.
+- S2 R20 · ✓ Embereye slays Yrayra Ash's Vaneclaw (true-dragon + air, Heartgrit, Smolder Sac; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R20 · ⚖ Veldra Ush tries Riposte Talons 5–1, Ratchet Claws 5–1 against 3 remembered dragons; no lean.
+- S2 R20 · ❄ Embereye melts Smolder Sac from the spoils (of Heartgrit, Whetted Nail, Smolder Sac) and freezes Milk Fang from Veldra Ush's Ichor (1 left).
+- S2 R20 · ★ Embereye becomes a wyrmling champion and retires.
+- S2 R21 · hatches #39 Hollowcrest (true-dragon + air) as a master
+- S2 R21 · ✓ Hollowcrest slays Quendra Dra's Ashmaw (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S2 R21 · ⚖ Veldra Ush tries Riposte Talons 4–2, Ratchet Claws 4–2 against 3 remembered dragons; no lean.
+- S2 R21 · ❄ Hollowcrest melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S2 R22 · ✓ Hollowcrest slays Zaryra Ush's Vanehorn (wyrm + fire, Riposte Talons; boxer-puncher, adept), KO in exchange 5. Streak 1.
+- S2 R22 · ⚖ Veldra Ush tries Pebblescale 6–0, Smolder Sac 6–0 against 3 remembered dragons; no lean.
+- S2 R22 · ◆ Hollowcrest takes Smolder Sac from the spoils (of Pebblescale, Smolder Sac, Riposte Talons).
+- S2 R23 · ✓ Hollowcrest slays Sulost Tor's Vanetail (true-dragon + water, Whetted Nail, Heartgrit; slugger, master), KO in exchange 4. Streak 1.
+- S2 R23 · ⚖ Veldra Ush tries Heartgrit 5–1, Whetted Nail 2–4 against 3 remembered dragons; it leans Heartgrit.
+- S2 R23 · ◆ Hollowcrest takes Heartgrit from the spoils (of Heartgrit, Weathered Hide, Whetted Nail).
+- S2 R23 · ★ Hollowcrest becomes a wyrmling champion and retires.
+- S2 R24 · hatches #40 Embertail (true-dragon + air) as a master
+- S2 R24 · ✓ Embertail slays Draren Ost's Mirecrest (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R24 · ⚖ Veldra Ush tries Whetted Nail 5–1, Heartgrit 3–3 against 3 remembered dragons; it leans Whetted Nail.
+- S2 R24 · ◆ Embertail takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail).
+- S2 R25 · ✗ Embertail (true-dragon + air, Whetted Nail) falls to Yraila Thi's Thornwing (true-dragon + air, Riposte Talons; boxer-puncher, master), KO in exchange 3. Record 1–1.
+- S2 R26 · hatches #41 Brinetail (true-dragon + air) as a master
+- S2 R26 · ✗ Brinetail (true-dragon + air) falls to Tordra Tor's Duskspine (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S2 R27 · hatches #42 Emberfang (true-dragon + air) as a master
+- S2 R27 · ✗ Emberfang (true-dragon + air) falls to Morren Sul's Mirewing (true-dragon + air; out-boxer, adept), KO in exchange 3. Record 0–1.
+- S2 R28 · hatches #43 Ashclaw (true-dragon + air) as a master
+- S2 R28 · ✗ Ashclaw (true-dragon + air) falls to Ostquen Ren's Ironclaw (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S2 R29 · hatches #44 Flintclaw (wyvern + fire) as a master
+- S2 R29 · ✗ Flintclaw (wyvern + fire) falls to Sulmor Ash's Brineheart (wyvern + air; out-boxer, master), KO in exchange 6. Record 0–1.
+- S2 R30 · hatches #45 Flintspine (wyvern + fire) as a master
+- S2 R30 · ✗ Flintspine (wyvern + fire) falls to Linmor Mor's Ironeye (true-dragon + air; out-boxer, master), KO in exchange 4. Record 0–1.
+- S2 R31 · hatches #46 Ironheart (true-dragon + air) as a master
+- S2 R31 · ✓ Ironheart slays Sulost Tor's Duskclaw (wyvern + air; slugger, master), KO in exchange 4. Streak 1.
+- S2 R31 · ⚖ Veldra Ush tries Whetted Nail 4–2, Coiled Sinew 3–3 against 3 remembered dragons; it leans Whetted Nail.
+- S2 R31 · ◆ Ironheart takes Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail).
+- S2 R32 · ✓ Ironheart slays Venthi Ila's Slatehorn (true-dragon + air, Snapping Jaw; counterpuncher, master), KO in exchange 4. Streak 1.
+- S2 R32 · ⚖ Veldra Ush tries Snapping Jaw 3–3, Whetted Nail 3–3 against 3 remembered dragons; no lean.
+- S2 R32 · ◆ Ironheart takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail, Snapping Jaw).
+- S2 R33 · ✗ Ironheart (true-dragon + air, Whetted Nail ×2) falls to Yraila Thi's Hollowmaw (true-dragon + air, Whetted Nail, Riposte Talons; boxer-puncher, master), KO in exchange 3. Record 2–1.
+- S2 R34 · hatches #47 Vanemaw (true-dragon + air) as a master
+- S2 R34 · ✓ Vanemaw slays Ostmor Mor's Ashfang (true-dragon + air; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S2 R34 · ⚖ Veldra Ush tries Heartgrit 4–2, Whetted Nail 3–3 against 3 remembered dragons; it leans Heartgrit.
+- S2 R34 · ♨ Vanemaw melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S2 R35 · ✓ Vanemaw slays Coryra Thi's Flintheart (wyvern + air; slugger, master), KO in exchange 3. Streak 1.
+- S2 R35 · ⚖ Veldra Ush tries Riposte Talons 3–3, Ratchet Claws 3–3 against 3 remembered dragons; no lean.
+- S2 R35 · ❄ Vanemaw melts Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail) and freezes Goading Roar from Veldra Ush's Ichor (0 left).
+- S2 R36 · ✗ Vanemaw (true-dragon + air, Goading Roar) falls to Zarvel Mor's Flinthorn (wyvern + fire, Pebblescale; out-boxer, master), KO in exchange 4. Record 2–1.
+- S2 R37 · hatches #48 Vaneeye (wyrm + air) as a master
+- S2 R37 · ✗ Vaneeye (wyrm + air) falls to Cortor Sul's Vanemaw (wyvern + fire; out-boxer, master), KO in exchange 6. Record 0–1.
+- S2 R38 · hatches #49 Emberfang (true-dragon + air) as a master
+- S2 R38 · ✓ Emberfang slays Quenvel Mor's Thorntail (true-dragon + air; slugger, master), KO in exchange 2. Streak 1.
+- S2 R38 · ⚖ Veldra Ush tries Heartgrit 5–1, Whetted Nail 4–2 against 3 remembered dragons; it leans Heartgrit.
+- S2 R38 · ♨ Emberfang melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S2 R39 · ✓ Emberfang slays Dragal Thi's Hollowhorn (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S2 R39 · ⚖ Veldra Ush tries Ratchet Claws 5–1, Riposte Talons 3–3 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R39 · ♨ Emberfang melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 2 Ichor. It stays on rung 0.
+- S2 R40 · ✓ Emberfang slays Yraquen Ka's Duskfang (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S2 R40 · ⚖ Veldra Ush tries Ratchet Claws 5–1, Riposte Talons 4–2 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R40 · ❄ Emberfang melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Snapping Jaw from Veldra Ush's Ichor (1 left).
+- S2 R41 · ✓ Emberfang slays Yrabryn Zar's Duskhorn (wyvern + air, Heartgrit; out-boxer, master), KO in exchange 5. Streak 1.
+- S2 R41 · ⚖ Veldra Ush tries Ratchet Claws 5–1, Riposte Talons 2–4 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R41 · ❄ Emberfang melts Heartgrit from the spoils (of Coiled Sinew, Whetted Nail, Heartgrit) and freezes Sidewinder Spine from Veldra Ush's Ichor (0 left).
+- S2 R42 · ✗ Emberfang (true-dragon + air, Snapping Jaw, Sidewinder Spine) falls to Galka Ost's Cinderspine (true-dragon + air, Whetted Nail, Heartgrit; boxer-puncher, master), KO in exchange 4. Record 4–1.
+- S2 R43 · hatches #50 Rimespine (true-dragon + air) as a master
+- S2 R43 · ⚑ Rimespine (true-dragon + air) loses on the clock to Yrayra Ash's Slatehorn (wyvern + fire; out-boxer, master) (timeout in exchange 8) and lives; Veldra Ush pays 0 Ichor (0 left).
+- S2 R44 · ✗ Rimespine (true-dragon + air) falls to Velila Dra's Duskfang (true-dragon + fire; counterpuncher, master), KO in exchange 6. Record 0–2.
+- S2 R45 · hatches #51 Mireeye (true-dragon + air) as a master
+- S2 R45 · ✗ Mireeye (true-dragon + air) falls to Thisul Ren's Hollowheart (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S2 R46 · hatches #52 Duskspine (true-dragon + air) as a master
+- S2 R46 · ✓ Duskspine slays Kalin Ush's Mireeye (true-dragon + air; out-boxer, master), KO in exchange 4. Streak 1.
+- S2 R46 · ⚖ Veldra Ush tries Whetted Nail 4–2, Heartgrit 2–4 against 3 remembered dragons; it leans Whetted Nail.
+- S2 R46 · ♨ Duskspine melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S2 R47 · ✓ Duskspine slays Thiven Zar's Vanefang (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R47 · ⚖ Veldra Ush tries Ratchet Claws 5–1, Riposte Talons 4–2 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R47 · ❄ Duskspine melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Snapping Jaw from Veldra Ush's Ichor (0 left).
+- S2 R48 · ✗ Duskspine (true-dragon + air, Snapping Jaw) falls to Morzar Yra's Galewing (true-dragon + air, Coiled Sinew; slugger, master), KO in exchange 4. Record 2–1.
+- S2 R49 · hatches #53 Dusktail (true-dragon + air) as a master
+- S2 R49 · ✓ Dusktail slays Sulka Dra's Slatefang (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R49 · ⚖ Veldra Ush tries Heartgrit 3–3, Whetted Nail 2–4 against 3 remembered dragons; it leans Heartgrit.
+- S2 R49 · ♨ Dusktail melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S2 R50 · ✓ Dusktail slays Ushven Ost's Ashcrest (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R50 · ⚖ Veldra Ush tries Ratchet Claws 3–3, Riposte Talons 2–4 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R50 · ❄ Dusktail melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Ratchet Claws from Veldra Ush's Ichor (0 left).
+- S2 R51 · ✓ Dusktail slays Ostka Ash's Cindercrest (true-dragon + air, Whetted Nail; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S2 R51 · ⚖ Veldra Ush tries Heartgrit 5–1, Whetted Nail 3–3 against 3 remembered dragons; it leans Heartgrit.
+- S2 R51 · ◆ Dusktail takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S2 R52 · ✓ Dusktail slays Moryra Lin's Galeheart (true-dragon + air, Heartgrit, Smolder Sac; out-boxer, master), KO in exchange 3. Streak 1.
+- S2 R52 · ⚖ Veldra Ush tries Whetted Nail 2–4, Heartgrit 2–4 against 3 remembered dragons; no lean.
+- S2 R52 · ♨ Dusktail melts Smolder Sac from the spoils (of Heartgrit, Whetted Nail, Smolder Sac) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 2.
+- S2 R53 · ✓ Dusktail slays Velka Dra's Rimefang (true-dragon + air, Sapping Bellow, Heartgrit; slugger, master), KO in exchange 3. Streak 1.
+- S2 R53 · ⚖ Veldra Ush tries Riposte Talons 5–1, Snapping Jaw 5–1 against 3 remembered dragons; no lean.
+- S2 R53 · ❄ Dusktail melts Sapping Bellow from the spoils (of Heartgrit, Whetted Nail, Sapping Bellow) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S2 R53 · ★ Dusktail becomes a wyrmling champion and retires.
+- S2 R54 · hatches #54 Galespine (wyvern + fire) as a master
+- S2 R54 · ✓ Galespine slays Quenquen Lin's Vanehorn (true-dragon + air; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S2 R54 · ⚖ Veldra Ush tries Heartgrit 2–4, Whetted Nail 1–5 against 3 remembered dragons; it leans Heartgrit.
+- S2 R54 · ♨ Galespine melts Whetted Nail from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S2 R55 · ✗ Galespine (wyvern + fire) falls to Dragal Thi's Emberspine (true-dragon + air; slugger, master), KO in exchange 4. Record 1–1.
+- S2 R56 · hatches #55 Stormclaw (true-dragon + air) as a master
+- S2 R56 · ✓ Stormclaw slays Galcor Tor's Thornwing (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S2 R56 · ⚖ Veldra Ush tries Ratchet Claws 4–2, Riposte Talons 1–5 against 3 remembered dragons; it leans Ratchet Claws.
+- S2 R56 · ❄ Stormclaw melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Ratchet Claws from Veldra Ush's Ichor (0 left).
+- S2 R57 · ✗ Stormclaw (true-dragon + air, Ratchet Claws) falls to Galvel Ila's Stormheart (true-dragon + air, Smolder Sac; swarmer, master), KO in exchange 3. Record 1–1.
+- S2 R58 · hatches #56 Thorneye (true-dragon + air) as a master
+- S2 R58 · ✗ Thorneye (true-dragon + air) falls to Ostmor Mor's Embermaw (true-dragon + air; boxer-puncher, master), KO in exchange 3. Record 0–1.
+- S2 R59 · hatches #57 Slatefang (true-dragon + air) as a master
+- S2 R59 · ✓ Slatefang slays Yrayra Ash's Hollowclaw (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S2 R59 · ⚖ Veldra Ush tries Whetted Nail 3–3, Heartgrit 3–3 against 3 remembered dragons; no lean.
+- S2 R59 · ◆ Slatefang takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail).
+- S2 R60 · ✓ Slatefang slays an unclaimed counterpuncher's Duskeye (wyvern + fire, Scything Forelimbs; counterpuncher, adept), KO in exchange 4. Streak 1.
+- S2 R60 · ◆ Slatefang takes Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac, Scything Forelimbs).
+- Season 3 · returns as a veteran: 71–49, 57 dragons, 8 champions, 0 Ichor, 40 dragons remembered.
+- S3 R1 · hatches #58 Slateeye (true-dragon + air) as a master
+- S3 R1 · ✓ Slateeye slays Zarlin Sul's Embercrest (true-dragon + air; swarmer, novice), KO in exchange 3. Streak 1.
+- S3 R1 · ♨ Slateeye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S3 R2 · ✓ Slateeye slays Galcor Ila's Hollowfang (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S3 R2 · ⚖ Veldra Ush tries Whetted Nail 3–3, Riposte Talons 1–5 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R2 · ❄ Slateeye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S3 R3 · ✓ Slateeye slays Quenquen Lin's Ironeye (true-dragon + air, Riposte Talons; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R3 · ♨ Slateeye melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Riposte Talons) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 1.
+- S3 R4 · ✓ Slateeye slays Zarven Ka's Galespine (wyvern + fire, Pebblescale; boxer-puncher, adept), KO in exchange 6. Streak 1.
+- S3 R4 · ⚖ Veldra Ush tries Whetted Nail 6–0, Snapping Jaw 2–4 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R4 · ❄ Slateeye melts Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac, Pebblescale) and freezes Whetted Nail from Veldra Ush's Ichor (0 left).
+- S3 R5 · ✗ Slateeye (true-dragon + air, Riposte Talons, Whetted Nail) falls to Linush Ka's Hollowspine (true-dragon + air, Pebblescale, Sidewinder Spine; swarmer, master), KO in exchange 3. Record 4–1.
+- S3 R6 · hatches #59 Hollowclaw (true-dragon + air) as a master
+- S3 R6 · ✗ Hollowclaw (true-dragon + air) falls to Quenvel Mor's Vaneeye (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R7 · hatches #60 Cinderheart (true-dragon + air) as a master
+- S3 R7 · ✗ Cinderheart (true-dragon + air) falls to Quendra Vel's Thornfang (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R8 · hatches #61 Hollowclaw (true-dragon + air) as a master
+- S3 R8 · ✗ Hollowclaw (true-dragon + air) falls to Ilamor Gal's Cinderwing (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R9 · hatches #62 Mireheart (true-dragon + air) as a master
+- S3 R9 · ✗ Mireheart (true-dragon + air) falls to Torcor Ost's Stormheart (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S3 R10 · hatches #63 Cinderspine (true-dragon + air) as a master
+- S3 R10 · ✗ Cinderspine (true-dragon + air) falls to Tordra Tor's Galeheart (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R11 · hatches #64 Mirewing (true-dragon + air) as a master
+- S3 R11 · ✓ Mirewing slays Kalin Ush's Slatecrest (wyvern + water; counterpuncher, adept), KO in exchange 6. Streak 1.
+- S3 R11 · ⚖ Veldra Ush tries Coiled Sinew 5–1, Weathered Hide 2–4 against 3 remembered dragons; it leans Coiled Sinew.
+- S3 R11 · ◆ Mirewing takes Coiled Sinew from the spoils (of Coiled Sinew, Weathered Hide).
+- S3 R12 · ✓ Mirewing slays Iladra Lin's Duskhorn (wyvern + air, Smolder Sac; swarmer, adept), KO in exchange 4. Streak 1.
+- S3 R12 · ⚖ Veldra Ush tries Whetted Nail 3–3, Smolder Sac 3–3 against 3 remembered dragons; no lean.
+- S3 R12 · ♨ Mirewing melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail, Smolder Sac) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 1.
+- S3 R13 · ✗ Mirewing (true-dragon + air, Coiled Sinew) falls to Ushzar Lin's Cindereye (true-dragon + air, Smolder Sac; boxer-puncher, master), KO in exchange 3. Record 2–1.
+- S3 R14 · hatches #65 Asheye (true-dragon + air) as a master
+- S3 R14 · ✗ Asheye (true-dragon + air) falls to Torzar Zar's Ironhorn (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S3 R15 · hatches #66 Slatefang (true-dragon + air) as a master
+- S3 R15 · ✓ Slatefang slays Venthi Dra's Stormtail (true-dragon + air; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R15 · ⚖ Veldra Ush tries Whetted Nail 5–1, Riposte Talons 3–3 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R15 · ❄ Slatefang melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Scything Forelimbs from Veldra Ush's Ichor (0 left).
+- S3 R16 · ✓ Slatefang slays Thiush Ka's Slateclaw (true-dragon + air, Sidewinder Spine; swarmer, master), KO in exchange 3. Streak 1.
+- S3 R16 · ⚖ Veldra Ush tries Whetted Nail 6–0, Sidewinder Spine 5–1 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R16 · ◆ Slatefang takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail, Sidewinder Spine).
+- S3 R17 · ✓ Slatefang slays Quenvel Mor's Vanemaw (true-dragon + air, Whetted Nail ×2; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R17 · ⚖ Veldra Ush tries Whetted Nail 5–1, Heartgrit 4–2 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R17 · ♨ Slatefang melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 2.
+- S3 R18 · ✓ Slatefang slays Venthi Ila's Thorntail (true-dragon + air, Coiled Sinew, Sidewinder Spine; counterpuncher, master), KO in exchange 3. Streak 1.
+- S3 R18 · ⚖ Veldra Ush tries Sidewinder Spine 4–2, Riposte Talons 3–3 against 3 remembered dragons; it leans Sidewinder Spine.
+- S3 R18 · ◆ Slatefang takes Sidewinder Spine from the spoils (of Heartgrit, Whetted Nail, Coiled Sinew, Sidewinder Spine).
+- S3 R18 · ★ Slatefang becomes a wyrmling champion and retires.
+- S3 R19 · hatches #67 Slatemaw (true-dragon + air) as a master
+- S3 R19 · ✓ Slatemaw slays Ilaven Thi's Hollowcrest (true-dragon + air; slugger, master), KO in exchange 3. Streak 1.
+- S3 R19 · ⚖ Veldra Ush tries Riposte Talons 4–2, Whetted Nail 1–5 against 3 remembered dragons; it leans Riposte Talons.
+- S3 R19 · ❄ Slatemaw melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).
+- S3 R20 · ✗ Slatemaw (true-dragon + air, Riposte Talons) falls to Linren Ka's Mirewing (wyvern + air, Pebblescale; out-boxer, master), KO in exchange 4. Record 1–1.
+- S3 R21 · hatches #68 Cinderclaw (true-dragon + air) as a master
+- S3 R21 · ✓ Cinderclaw slays Ushven Ost's Galespine (wyvern + air; out-boxer, master), KO in exchange 3. Streak 1.
+- S3 R21 · ⚖ Veldra Ush tries Whetted Nail 5–1, Coiled Sinew 1–5 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R21 · ◆ Cinderclaw takes Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail).
+- S3 R22 · ✗ Cinderclaw (true-dragon + air, Whetted Nail) falls to Quendra Dra's Cindereye (true-dragon + air, Heartgrit; counterpuncher, master), KO in exchange 3. Record 1–1.
+- S3 R23 · hatches #69 Duskclaw (true-dragon + air) as a master
+- S3 R23 · ✓ Duskclaw slays Zarlin Sul's Cinderheart (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S3 R23 · ♨ Duskclaw melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S3 R24 · ✓ Duskclaw beats Cortor Sul's Mirecrest (wyvern + fire; out-boxer, master) (yield in exchange 3), paid 1 Ichor. Streak 1.
+- S3 R25 · ✓ Duskclaw slays Linren Ka's Brineclaw (wyvern + fire; out-boxer, adept), KO in exchange 3. Streak 2.
+- S3 R25 · ⚖ Veldra Ush tries Whetted Nail 4–2, Riposte Talons 3–3 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R25 · ❄ Duskclaw melts Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac) and freezes Lockjaw from Veldra Ush's Ichor (1 left).
+- S3 R26 · ✓ Duskclaw slays Zarmor Zar's Vaneheart (wyvern + air, Whetted Nail; swarmer, adept), KO in exchange 3. Streak 1.
+- S3 R26 · ⚖ Veldra Ush tries Whetted Nail 3–3, Riposte Talons 1–5 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R26 · ❄ Duskclaw melts Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail) and freezes Hamstring Hooks from Veldra Ush's Ichor (0 left).
+- S3 R27 · ✗ Duskclaw (true-dragon + air, Lockjaw, Hamstring Hooks) falls to Corlin Ost's Hollowspine (true-dragon + air, Scything Forelimbs, Snapping Jaw; slugger, master), KO in exchange 3. Record 4–1.
+- S3 R28 · hatches #70 Holloweye (true-dragon + air) as a master
+- S3 R28 · ✗ Holloweye (true-dragon + air) falls to Zaryra Ush's Thorncrest (wyvern + water; out-boxer, master), KO in exchange 5. Record 0–1.
+- S3 R29 · hatches #71 Slatecrest (true-dragon + air) as a master
+- S3 R29 · ✓ Slatecrest slays Galcor Ila's Galewing (wyvern + air; swarmer, master), KO in exchange 4. Streak 1.
+- S3 R29 · ⚖ Veldra Ush tries Coiled Sinew 5–1, Whetted Nail 2–4 against 3 remembered dragons; it leans Coiled Sinew.
+- S3 R29 · ◆ Slatecrest takes Coiled Sinew from the spoils (of Coiled Sinew, Whetted Nail).
+- S3 R30 · ✗ Slatecrest (true-dragon + air, Coiled Sinew) falls to Linquen Quen's Brinefang (true-dragon + air, Whetted Nail; boxer-puncher, master), KO in exchange 4. Record 1–1.
+- S3 R31 · hatches #72 Cinderfang (true-dragon + air) as a master
+- S3 R31 · ✗ Cinderfang (true-dragon + air) falls to Dragal Thi's Emberclaw (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R32 · hatches #73 Cindercrest (true-dragon + air) as a master
+- S3 R32 · ✗ Cindercrest (true-dragon + air) falls to Ostsul Cor's Flintmaw (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R33 · hatches #74 Mirefang (true-dragon + air) as a master
+- S3 R33 · ✗ Mirefang (true-dragon + air) falls to Tordra Tor's Slatespine (true-dragon + air; slugger, master), KO in exchange 3. Record 0–1.
+- S3 R34 · hatches #75 Stormheart (true-dragon + air) as a master
+- S3 R34 · ✗ Stormheart (true-dragon + air) falls to Zarlin Sul's Cindermaw (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S3 R35 · hatches #76 Embertail (true-dragon + air) as a master
+- S3 R35 · ✓ Embertail slays Quenbryn Ost's Brinemaw (true-dragon + air; swarmer, master), KO in exchange 3. Streak 1.
+- S3 R35 · ♨ Embertail melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S3 R36 · ✓ Embertail slays Zarcor Ash's Cinderhorn (true-dragon + air; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R36 · ⚖ Veldra Ush tries Riposte Talons 4–2, Whetted Nail 4–2 against 3 remembered dragons; no lean.
+- S3 R36 · ❄ Embertail melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Ratchet Claws from Veldra Ush's Ichor (0 left).
+- S3 R37 · ✗ Embertail (true-dragon + air, Ratchet Claws) falls to Quenvel Mor's Thornheart (true-dragon + air, Riposte Talons; boxer-puncher, master), KO in exchange 3. Record 2–1.
+- S3 R38 · hatches #77 Ironclaw (true-dragon + air) as a master
+- S3 R38 · ✓ Ironclaw slays Thivel Thi's Thornheart (true-dragon + air; swarmer, master), KO in exchange 3. Streak 1.
+- S3 R38 · ◆ Ironclaw takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S3 R39 · ✓ Ironclaw slays Draila Dra's Duskwing (true-dragon + air, Whetted Nail; boxer-puncher, master), KO in exchange 2. Streak 1.
+- S3 R39 · ⚖ Veldra Ush tries Heartgrit 4–2, Whetted Nail 4–2 against 3 remembered dragons; no lean.
+- S3 R39 · ◆ Ironclaw takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S3 R40 · ✓ Ironclaw slays Dramor Ush's Flinttail (true-dragon + air, Sidewinder Spine, Ratchet Claws; swarmer, master), KO in exchange 2. Streak 1.
+- S3 R40 · ⚖ Veldra Ush tries Whetted Nail 5–1, Heartgrit 2–4 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R40 · ◆ Ironclaw takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail, Sidewinder Spine, Ratchet Claws).
+- S3 R40 · ★ Ironclaw becomes a wyrmling champion and retires.
+- S3 R41 · hatches #78 Cinderhorn (true-dragon + air) as a master
+- S3 R41 · ✗ Cinderhorn (true-dragon + air) falls to Galvel Ila's Ashclaw (true-dragon + air; swarmer, master), KO in exchange 3. Record 0–1.
+- S3 R42 · hatches #79 Flintmaw (true-dragon + air) as a master
+- S3 R42 · ✗ Flintmaw (true-dragon + air) falls to Yrathi Ost's Ashtail (wyvern + fire; out-boxer, master), KO in exchange 3. Record 0–1.
+- S3 R43 · hatches #80 Slatecrest (true-dragon + air) as a master
+- S3 R43 · ✓ Slatecrest slays Corlin Ost's Slatespine (wyvern + air; swarmer, master), KO in exchange 7. Streak 1.
+- S3 R43 · ⚖ Veldra Ush tries Whetted Nail 5–1, Coiled Sinew 3–3 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R43 · ◆ Slatecrest takes Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail).
+- S3 R44 · ✗ Slatecrest (true-dragon + air, Whetted Nail) falls to Corlin Ost's Emberfang (true-dragon + air, Milk Fang; slugger, master), KO in exchange 3. Record 1–1.
+- S3 R45 · hatches #81 Stormcrest (true-dragon + air) as a master
+- S3 R45 · ✓ Stormcrest slays Iladra Lin's Thorncrest (true-dragon + air; counterpuncher, master), KO in exchange 3. Streak 1.
+- S3 R45 · ◆ Stormcrest takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail).
+- S3 R46 · ✓ Stormcrest slays Zarcor Ash's Flintfang (true-dragon + air, Whetted Nail; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R46 · ⚖ Veldra Ush tries Heartgrit 4–2, Whetted Nail 1–5 against 3 remembered dragons; it leans Heartgrit.
+- S3 R46 · ◆ Stormcrest takes Heartgrit from the spoils (of Heartgrit, Whetted Nail).
+- S3 R47 · ✓ Stormcrest slays Rentor Ka's Flintmaw (true-dragon + air, Sidewinder Spine, Heartgrit; counterpuncher, master), KO in exchange 3. Streak 1.
+- S3 R47 · ⚖ Veldra Ush tries Sidewinder Spine 5–1, Heartgrit 4–2 against 3 remembered dragons; it leans Sidewinder Spine.
+- S3 R47 · ◆ Stormcrest takes Sidewinder Spine from the spoils (of Heartgrit, Whetted Nail, Sidewinder Spine).
+- S3 R47 · ★ Stormcrest becomes a wyrmling champion and retires.
+- S3 R48 · hatches #82 Galewing (true-dragon + air) as a master
+- S3 R48 · ✗ Galewing (true-dragon + air) falls to Morash Lin's Cinderspine (true-dragon + air; boxer-puncher, master), KO in exchange 3. Record 0–1.
+- S3 R49 · hatches #83 Duskcrest (true-dragon + air) as a master
+- S3 R49 · ✗ Duskcrest (true-dragon + air) falls to Yrayra Ash's Mirehorn (true-dragon + air; counterpuncher, master), KO in exchange 3. Record 0–1.
+- S3 R50 · hatches #84 Ironheart (true-dragon + air) as a master
+- S3 R50 · ✓ Ironheart slays Linren Ka's Ironhorn (wyvern + air; out-boxer, master), KO in exchange 4. Streak 1.
+- S3 R50 · ⚖ Veldra Ush tries Whetted Nail 4–2, Coiled Sinew 4–2 against 3 remembered dragons; no lean.
+- S3 R50 · ◆ Ironheart takes Whetted Nail from the spoils (of Coiled Sinew, Whetted Nail).
+- S3 R51 · ✓ Ironheart slays Quenquen Lin's Brineclaw (wyrm + air, Thornscale; out-boxer, master), KO in exchange 4. Streak 1.
+- S3 R51 · ⚖ Veldra Ush tries Pebblescale 5–1, Thornscale 3–3 against 3 remembered dragons; it leans Pebblescale.
+- S3 R51 · ◆ Ironheart takes Pebblescale from the spoils (of Pebblescale, Whetted Nail, Thornscale).
+- S3 R52 · ✓ Ironheart slays Zarven Ka's Cindercrest (true-dragon + air, Whetted Nail ×2; slugger, master), KO in exchange 3. Streak 1.
+- S3 R52 · ⚖ Veldra Ush tries Whetted Nail 5–1, Heartgrit 3–3 against 3 remembered dragons; it leans Whetted Nail.
+- S3 R52 · ♨ Ironheart melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 2.
+- S3 R53 · ✓ Ironheart slays Yramor Ash's Hollowwing (true-dragon + air, Smolder Sac, Snapping Jaw; boxer-puncher, master), KO in exchange 3. Streak 1.
+- S3 R53 · ⚖ Veldra Ush tries Pebblescale 6–0, Riposte Talons 3–3 against 3 remembered dragons; it leans Pebblescale.
+- S3 R53 · ♨ Ironheart melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Smolder Sac, Snapping Jaw) and banks it: Veldra Ush holds 2 Ichor. It stays on rung 2.
+- S3 R54 · ✓ Ironheart slays Linush Ka's Vanemaw (true-dragon + air, Sidewinder Spine, Ratchet Claws; swarmer, master), KO in exchange 3. Streak 1.
+- S3 R54 · ⚖ Veldra Ush tries Riposte Talons 5–1, Pebblescale 4–2 against 3 remembered dragons; it leans Riposte Talons.
+- S3 R54 · ♨ Ironheart melts Heartgrit from the spoils (of Heartgrit, Whetted Nail, Sidewinder Spine, Ratchet Claws) and banks it: Veldra Ush holds 3 Ichor. It stays on rung 2.
+- S3 R55 · ✗ Ironheart (true-dragon + air, Whetted Nail, Pebblescale) falls to Linush Bryn's Ashwing (true-dragon + air, Milk Fang, Sidewinder Spine; slugger, master), KO in exchange 3. Record 5–1.
+- S3 R56 · hatches #85 Thornfang (true-dragon + air) as a master
+- S3 R56 · ✗ Thornfang (true-dragon + air) falls to Quenquen Lin's Rimeheart (wyvern + fire; out-boxer, master), KO in exchange 3. Record 0–1.
+- S3 R57 · hatches #86 Irontail (true-dragon + air) as a master
+- S3 R57 · ✓ Irontail slays Torost Bryn's Galefang (true-dragon + air; swarmer, master), KO in exchange 3. Streak 1.
+- S3 R57 · ⚖ Veldra Ush tries Lance Throat 3–3, Riposte Talons 0–6 against 3 remembered dragons; it leans Lance Throat.
+- S3 R57 · ◆ Irontail takes Whetted Nail from the spoils (of Heartgrit, Whetted Nail).
+- S3 R58 · ✓ Irontail slays Venthi Dra's Brinewing (true-dragon + air, Whetted Nail; boxer-puncher, master), KO in exchange 2. Streak 1.
+- S3 R58 · ⚖ Veldra Ush tries Lance Throat 5–1, Riposte Talons 3–3 against 3 remembered dragons; it leans Lance Throat.
+- S3 R58 · ❄ Irontail melts Heartgrit from the spoils (of Heartgrit, Whetted Nail) and freezes Lance Throat from Veldra Ush's Ichor (0 left).
+- S3 R58 · ★ Irontail becomes a wyrmling champion and retires.
+- S3 R59 · hatches #87 Ashspine (true-dragon + air) as a master
+- S3 R59 · ✓ Ashspine slays Zaryra Ush's Holloweye (wyvern + fire; out-boxer, master), KO in exchange 3. Streak 1.
+- S3 R59 · ⚖ Veldra Ush tries Coiled Sinew 4–2, Smolder Sac 3–3 against 3 remembered dragons; it leans Coiled Sinew.
+- S3 R59 · ♨ Ashspine melts Smolder Sac from the spoils (of Coiled Sinew, Smolder Sac) and banks it: Veldra Ush holds 1 Ichor. It stays on rung 0.
+- S3 R60 · ✓ Ashspine slays Cortor Sul's Dusktail (wyvern + fire; out-boxer, master), KO in exchange 7. Streak 1.
+- S3 R60 · ⚖ Veldra Ush tries Riposte Talons 4–2, Whetted Nail 3–3 against 3 remembered dragons; it leans Riposte Talons.
+- S3 R60 · ❄ Ashspine melts Coiled Sinew from the spoils (of Coiled Sinew, Smolder Sac) and freezes Riposte Talons from Veldra Ush's Ichor (0 left).

@@ -1,0 +1,11 @@
+{
+  "title": "Breath effects: Water pushes, Air pulls, and together they cancel",
+  "note": "Design doc §3: Water's jet pushes the target back a band; Air's vortex pulls it a band toward the breather. Each verb lands only if the breather's Potency beats the target's Affinity. A push and a pull in the same moment cancel.",
+  "separation": 4,
+  "A": { "name": "Tide", "morph": "wyvern", "stone": "water" },
+  "B": { "name": "Gust", "morph": "wyrm", "stone": "air" },
+  "exchanges": [
+    { "A": ["breath", "hold", "hold"], "B": ["hold", "breath", "hold"] },
+    { "A": ["hold", "breath", "hold"], "B": ["hold", "breath", "hold"] }
+  ]
+}

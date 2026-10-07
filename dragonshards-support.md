@@ -1,6 +1,4 @@
 # Dragonshards: Support Suite v0.2
-*Refactored to seams, pips, points, ticks, and ordered-crunch compounds. Supersedes the Support half of support-trait v0.1; Traits remain there until refactored.*
-
 Support shards are inert alone and act on neighbors connected by seams.
 
 ## Rules
@@ -40,7 +38,7 @@ Seamed shards can't be overwritten: no shard can seat over them.
 - **Venerable rider:** anchored shards are also shielded from the victor's picks.
 
 ### Bloodstone Artery · Infuse
-Bite and Claw Techniques on seamed pips become elemental: their attacks test against Affinity instead of Hardness and carry matchups (±3).
+Bite and Claw Techniques on seamed pips become elemental: their attacks test against Affinity instead of Scales and carry matchups (±3).
 - **Venerable rider:** infused hits apply the stone's breath verb at its wyrmling strength.
 
 ### Ganglion · Quicken

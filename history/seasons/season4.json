@@ -1,0 +1,8780 @@
+{
+ "season": 4,
+ "seed": 2029,
+ "tamers": [
+  {
+   "name": "Corka Bryn",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 91,
+   "losses": 69,
+   "hatched": 66,
+   "ichor": 1,
+   "champions": [
+    "Cindermaw (true-dragon + earth, Whetted Nail, Hamstring Hooks, Smoldering Maw), 9–1, season 3 round 75",
+    "Embermaw (wyrm + earth, Milk Fang, Heartgrit, Ratchet Claws), 3–0, season 4 round 20",
+    "Thornclaw (wyrm + earth, Whetted Nail, Gnashing Teeth, Heartgrit), 3–0, season 4 round 40"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 16
+    },
+    "true-dragon + fire": {
+     "w": 16,
+     "d": 19
+    },
+    "true-dragon + air": {
+     "w": 24,
+     "d": 12
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 19,
+     "d": 9
+    },
+    "wyvern + earth": {
+     "w": 7,
+     "d": 6
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 14,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Zardra Cor",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 93,
+   "losses": 67,
+   "hatched": 60,
+   "ichor": 0,
+   "champions": [
+    "Rimeclaw (wyvern + air, Scything Forelimbs, Bounding Haunches, Ratchet Claws), 10–2, season 3 round 70",
+    "Galecrest (wyvern + air, Heartgrit, Scything Forelimbs, Hamstring Hooks), 5–0, season 4 round 5",
+    "Cindercrest (wyvern + air, Raking Talons, Baleful Eye, Heartgrit), 5–2, season 4 round 28",
+    "Ironheart (wyvern + air, Smolder Sac, Whetted Nail, Snapping Jaw), 3–0, season 4 round 45"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 89,
+     "d": 65
+    }
+   }
+  },
+  {
+   "name": "Quenka Ash",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 90,
+   "losses": 70,
+   "hatched": 66,
+   "ichor": 0,
+   "champions": [
+    "Duskspine (true-dragon + fire, Pebblescale, Smolder Sac, Smoldering Maw), 12–0, season 3 round 32",
+    "Galecrest (true-dragon + fire, Gnashing Teeth, Scything Forelimbs, Weathered Hide), 5–0, season 4 round 5",
+    "Ashheart (true-dragon + fire, Hollow Bones, Ash Gland, Ratchet Claws), 4–0, season 4 round 78"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 7,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 79,
+     "d": 64
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linash Vel",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 98,
+   "losses": 62,
+   "hatched": 57,
+   "ichor": 0,
+   "champions": [
+    "Rimehorn (wyvern + air, Smolder Sac, Milk Fang, Sapping Bellow), 9–0, season 3 round 65",
+    "Slatefang (wyvern + air, Milk Fang, Smoldering Maw, Stooping Pinions), 4–0, season 4 round 20",
+    "Duskeye (wyvern + air, Whetted Nail, Pebblescale, Stooping Pinions), 4–0, season 4 round 32",
+    "Mireheart (wyvern + air, Hamstring Hooks, Smolder Sac, Smoldering Maw), 5–0, season 4 round 37",
+    "Mirewing (wyvern + air, Snapping Jaw, Hamstring Hooks, Goading Roar), 7–0, season 4 round 76"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 81,
+     "d": 53
+    },
+    "wyvern + earth": {
+     "w": 17,
+     "d": 8
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Osttor Lin",
+   "style": "slugger",
+   "best": 3,
+   "wins": 98,
+   "losses": 62,
+   "hatched": 59,
+   "ichor": 1,
+   "champions": [
+    "Ashfang (wyrm + earth, Milk Fang, Smoldering Maw, Snapping Jaw), 12–0, season 3 round 38",
+    "Duskhorn (wyrm + earth, Ratchet Claws, Lockjaw, Sapping Bellow), 6–1, season 4 round 11",
+    "Embertail (wyrm + earth, Milk Fang, Hamstring Hooks, Goading Roar), 5–1, season 4 round 40",
+    "Embermaw (wyrm + earth, Baleful Eye, Lockjaw, Ratchet Claws), 3–0, season 4 round 48",
+    "Dusktail (wyrm + earth, Lockjaw, Heartgrit, Pebblescale), 3–0, season 4 round 73"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 94,
+     "d": 54
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashbryn Ka",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 100,
+   "losses": 60,
+   "hatched": 62,
+   "ichor": 1,
+   "champions": [
+    "Stormclaw (wyrm + earth, Smolder Sac, Snapping Jaw, Ratchet Claws), 10–1, season 3 round 72",
+    "Embercrest (wyrm + earth, Snapping Jaw, Smolder Sac, Ash Gland), 4–0, season 4 round 13",
+    "Thornspine (true-dragon + earth, Raking Talons, Milk Fang, Whetted Nail), 3–0, season 4 round 22",
+    "Mirehorn (true-dragon + air, Hollow Bones, Baleful Eye, Milk Fang), 5–0, season 4 round 32",
+    "Hollowfang (true-dragon + air, Bounding Haunches, Whetted Nail, Gnashing Teeth), 4–0, season 4 round 53",
+    "Vaneclaw (true-dragon + earth, Gnashing Teeth, Raking Talons, Heartgrit), 4–0, season 4 round 61"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 31,
+     "d": 24
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 40,
+     "d": 17
+    },
+    "true-dragon + earth": {
+     "w": 26,
+     "d": 16
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galsul Cor",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 83,
+   "losses": 77,
+   "hatched": 77,
+   "ichor": 0,
+   "champions": [
+    "Miretail (true-dragon + fire, Ratchet Claws, Snapping Jaw, Gnashing Teeth), 9–0, season 3 round 60",
+    "Vanemaw (true-dragon + fire, Whetted Nail, Ash Gland, Smoldering Maw), 4–0, season 4 round 5",
+    "Duskeye (true-dragon + fire, Smoldering Maw, Heartgrit, Gnashing Teeth), 7–2, season 4 round 39",
+    "Rimewing (true-dragon + fire, Gnashing Teeth, Snapping Jaw, Lockjaw), 3–0, season 4 round 46"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 70,
+     "d": 49
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 11
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drazar Ren",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 39,
+   "ichor": 4,
+   "champions": [
+    "Hollowwing (wyvern + air, Baleful Eye, Heartgrit, Ratchet Claws), 4–0, season 4 round 19",
+    "Galecrest (wyvern + air, Smoldering Maw, Whetted Nail, Scything Forelimbs), 4–0, season 4 round 34",
+    "Vanetail (wyvern + air, Scything Forelimbs, Smoldering Maw, Whetted Nail), 3–0, season 4 round 46",
+    "Cindermaw (wyvern + air, Pebblescale, Bounding Haunches, Milk Fang), 3–0, season 4 round 53"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 40,
+     "d": 30
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulyra Cor",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 27,
+   "losses": 53,
+   "hatched": 45,
+   "ichor": 1,
+   "champions": [
+    "Flinttail (wyvern + earth, Snapping Jaw, Hamstring Hooks, Pebblescale), 4–0, season 4 round 46"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 16,
+     "d": 31
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 10
+    },
+    "wyrm + air": {
+     "w": 4,
+     "d": 5
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Kazar Quen",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 33,
+   "ichor": 1,
+   "champions": [
+    "Slatespine (true-dragon + fire, Smoldering Maw, Weathered Hide, Ash Gland), 4–0, season 4 round 49",
+    "Stormcrest (true-dragon + fire, Hollow Bones, Pebblescale, Milk Fang), 4–0, season 4 round 55"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 23,
+     "d": 21
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 6,
+     "d": 8
+    }
+   }
+  },
+  {
+   "name": "Ilacor Ven",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Embermaw (true-dragon + fire, Milk Fang, Scything Forelimbs, Ash Gland), 3–0, season 4 round 27",
+    "Holloweye (true-dragon + fire, Raking Talons, Weathered Hide, Smoldering Maw), 3–0, season 4 round 39",
+    "Galespine (true-dragon + fire, Hollow Bones, Smolder Sac, Raking Talons), 3–0, season 4 round 48",
+    "Ironcrest (true-dragon + fire, Raking Talons, Smolder Sac, Lockjaw), 6–0, season 4 round 72"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 40,
+     "d": 31
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galren Cor",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [
+    "Thornheart (wyrm + earth, Heartgrit, Smolder Sac, Snapping Jaw), 4–0, season 4 round 24",
+    "Flinttail (wyrm + earth, Goading Roar, Smoldering Maw, Ash Gland), 4–0, season 4 round 30",
+    "Rimemaw (wyrm + earth, Milk Fang, Weathered Hide, Ash Gland), 5–0, season 4 round 50"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 34,
+     "d": 27
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corbryn Ila",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Stormhorn (wyvern + water, Smoldering Maw, Hollow Bones, Smolder Sac), 3–0, season 4 round 12"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 5,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 11
+    },
+    "wyvern + water": {
+     "w": 24,
+     "d": 22
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torven Quen",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 42,
+   "ichor": 0,
+   "champions": [
+    "Hollowmaw (wyrm + earth, Snapping Jaw, Heartgrit, Scything Forelimbs), 5–0, season 4 round 47"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 11,
+     "d": 8
+    },
+    "true-dragon + air": {
+     "w": 15,
+     "d": 17
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 8,
+     "d": 11
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Kaven Mor",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Embereye (wyvern + water, Hollow Bones, Snapping Jaw, Sidewinder Spine), 5–1, season 4 round 18",
+    "Thornclaw (wyvern + water, Lance Throat, Smoldering Maw), 4–0, season 4 round 27",
+    "Ironclaw (true-dragon + fire, Ash Gland, Smoldering Maw, Lockjaw), 4–0, season 4 round 52"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 12,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 20,
+     "d": 14
+    },
+    "wyvern + water": {
+     "w": 12,
+     "d": 10
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Morlin Lin",
+   "style": "slugger",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Ashcrest (wyrm + earth, Milk Fang, Hamstring Hooks, Goading Roar), 4–0, season 4 round 28",
+    "Flintspine (wyrm + earth, Hollow Bones, Whetted Nail, Heartgrit), 4–0, season 4 round 35",
+    "Miremaw (wyrm + earth, Smolder Sac, Slit Pupil, Scything Forelimbs), 4–0, season 4 round 57"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 40,
+     "d": 35
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thiila Ila",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [
+    "Emberwing (wyvern + earth, Raking Talons, Heartgrit, Whetted Nail), 4–0, season 4 round 10",
+    "Galeheart (wyvern + earth, Scything Forelimbs, Ash Gland, Snapping Jaw), 3–1, season 4 round 29"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 17,
+     "d": 22
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 18,
+     "d": 13
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Yrathi Dra",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [
+    "Slatespine (wyvern + earth, Raking Talons, Smoldering Maw, Weathered Hide), 6–0, season 4 round 27",
+    "Flintwing (wyvern + earth, Hollow Bones, Ash Gland, Raking Talons), 5–0, season 4 round 47",
+    "Galespine (true-dragon + water, Whetted Nail, Hollow Bones, Lockjaw), 3–0, season 4 round 58",
+    "Rimetail (wyvern + air, Whetted Nail, Hamstring Hooks, Smoldering Maw), 3–0, season 4 round 64",
+    "Ashspine (wyvern + earth, Scything Forelimbs, Raking Talons, Snapping Jaw), 3–0, season 4 round 70",
+    "Duskeye (true-dragon + fire, Hamstring Hooks, Ash Gland, Goading Roar), 5–0, season 4 round 76"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 11,
+     "d": 6
+    },
+    "wyvern + air": {
+     "w": 14,
+     "d": 15
+    },
+    "wyvern + earth": {
+     "w": 23,
+     "d": 6
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 0
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Vellin Gal",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Ashtail (wyvern + air, Stooping Pinions, Hamstring Hooks, Smoldering Maw), 6–1, season 4 round 21",
+    "Embercrest (wyvern + air, Stooping Pinions, Whetted Nail, Ash Gland), 3–0, season 4 round 50",
+    "Flintfang (wyvern + air, Hamstring Hooks, Raking Talons, Smoldering Maw), 4–0, season 4 round 78"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 37,
+     "d": 38
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Thigal Cor",
+   "style": "reader",
+   "best": 3,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 50,
+   "ichor": 1,
+   "champions": [
+    "Stormcrest (wyvern + air, Heartgrit, Whetted Nail, Raking Talons), 3–0, season 4 round 56"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 19,
+     "d": 19
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 13
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 4,
+     "d": 6
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushka Zar",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Emberspine (wyvern + air, Sapping Bellow, Milk Fang, Ratchet Claws), 5–0, season 4 round 27",
+    "Vaneclaw (wyvern + air, Smolder Sac, Raking Talons, Hollow Bones), 5–0, season 4 round 42",
+    "Rimewing (wyvern + air, Lockjaw, Pebblescale, Bounding Haunches), 3–0, season 4 round 49",
+    "Brineheart (wyvern + air, Heartgrit, Hollow Bones, Pebblescale), 4–1, season 4 round 62"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 39,
+     "d": 34
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torush Bryn",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 19,
+   "losses": 61,
+   "hatched": 55,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 13,
+     "d": 33
+    },
+    "wyrm + air": {
+     "w": 2,
+     "d": 6
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 9
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galost Bryn",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 37,
+   "ichor": 1,
+   "champions": [
+    "Thorncrest (true-dragon + fire, Stooping Pinions, Whetted Nail, Ash Gland), 3–0, season 4 round 42"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 39,
+     "d": 35
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Lincor Lin",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Hollowtail (true-dragon + fire, Whetted Nail, Smoldering Maw, Pebblescale), 3–0, season 4 round 14",
+    "Cinderspine (true-dragon + fire, Hollow Bones, Scything Forelimbs, Ash Gland), 3–0, season 4 round 61"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 38,
+     "d": 38
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renthi Lin",
+   "style": "charge-focus",
+   "best": 2,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 24,
+     "d": 33
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 7
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Kator Ost",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Flintfang (wyvern + earth, Whetted Nail, Smoldering Maw, Sidewinder Spine), 6–0, season 4 round 31",
+    "Ironheart (wyvern + earth, Whetted Nail, Hollow Bones, Raking Talons), 3–0, season 4 round 41",
+    "Rimeclaw (wyvern + earth, Hollow Bones, Smolder Sac, Gnashing Teeth), 5–0, season 4 round 69"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 29,
+     "d": 25
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 6,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Velsul Yra",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [
+    "Galefang (true-dragon + air, Whetted Nail, Lockjaw, Smolder Sac), 5–0, season 4 round 37",
+    "Cindereye (true-dragon + air, Snapping Jaw, Smolder Sac, Ratchet Claws), 4–1, season 4 round 53",
+    "Ashspine (true-dragon + air, Whetted Nail, Heartgrit, Ratchet Claws), 3–0, season 4 round 60",
+    "Galecrest (true-dragon + air, Whetted Nail, Snapping Jaw, Hamstring Hooks), 4–1, season 4 round 68",
+    "Cinderwing (true-dragon + air, Whetted Nail, Raking Talons, Lockjaw), 3–0, season 4 round 71",
+    "Ashtail (true-dragon + air, Scything Forelimbs, Lockjaw, Whetted Nail), 7–1, season 4 round 79"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 5
+    },
+    "true-dragon + air": {
+     "w": 41,
+     "d": 20
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulbryn Bryn",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 35,
+   "ichor": 1,
+   "champions": [
+    "Miremaw (wyvern + water, Hollow Bones, Milk Fang, Smoldering Maw), 7–4, season 4 round 31",
+    "Brineclaw (true-dragon + fire, Pebblescale, Hollow Bones, Ash Gland), 4–0, season 4 round 51",
+    "Hollowhorn (wyvern + water, Stooping Pinions, Pebblescale, Hollow Bones), 3–0, season 4 round 66"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 12,
+     "d": 12
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 26,
+     "d": 21
+    }
+   }
+  },
+  {
+   "name": "Ilaush Gal",
+   "style": "slugger",
+   "best": 3,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [
+    "Stormmaw (wyrm + earth, Heartgrit, Snapping Jaw, Smoldering Maw), 3–0, season 4 round 14",
+    "Hollowtail (wyrm + earth, Snapping Jaw, Ratchet Claws, Milk Fang), 4–0, season 4 round 56",
+    "Duskfang (wyrm + earth, Milk Fang, Hamstring Hooks, Snapping Jaw), 4–0, season 4 round 60",
+    "Brinewing (wyrm + earth, Milk Fang, Heartgrit, Smolder Sac), 3–0, season 4 round 71",
+    "Galecrest (wyrm + earth, Milk Fang, Hollow Bones, Smolder Sac), 3–0, season 4 round 79"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 51,
+     "d": 28
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Osttor Ila",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Vaneclaw (wyvern + air, Smolder Sac, Heartgrit, Milk Fang), 3–0, season 4 round 23",
+    "Hollowwing (wyvern + earth, Thornscale, Hollow Bones, Smolder Sac), 4–0, season 4 round 30",
+    "Rimeeye (wyvern + air, Whetted Nail, Hollow Bones, Thornscale), 4–0, season 4 round 72"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 27,
+     "d": 29
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 9,
+     "d": 8
+    }
+   }
+  },
+  {
+   "name": "Veldra Tor",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Cindereye (wyrm + earth, Whetted Nail, Hollow Bones, Snapping Jaw), 4–0, season 4 round 33",
+    "Galemaw (wyvern + air, Pebblescale, Milk Fang, Smoldering Maw), 3–0, season 4 round 66",
+    "Ashfang (wyvern + air, Ash Gland, Heartgrit, Ratchet Claws), 4–0, season 4 round 71"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 9,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 24,
+     "d": 17
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kasul Mor",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 35,
+   "ichor": 2,
+   "champions": [
+    "Vanetail (wyvern + air, Stooping Pinions, Whetted Nail, Ratchet Claws), 4–0, season 4 round 40",
+    "Asheye (wyvern + air, Pebblescale, Whetted Nail, Smolder Sac), 4–0, season 4 round 44",
+    "Brineheart (wyvern + air, Scything Forelimbs, Lockjaw, Stooping Pinions), 4–1, season 4 round 65"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 41,
+     "d": 38
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yraash Sul",
+   "style": "reader",
+   "best": 3,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 50,
+   "ichor": 1,
+   "champions": [
+    "Stormhorn (true-dragon + earth, Whetted Nail, Scything Forelimbs, Smolder Sac), 3–0, season 4 round 46",
+    "Rimespine (true-dragon + earth, Smolder Sac, Pebblescale, Hamstring Hooks), 4–0, season 4 round 74",
+    "Hollowwing (true-dragon + water, Smolder Sac, Raking Talons, Sapping Bellow), 3–0, season 4 round 77"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 5,
+     "d": 18
+    },
+    "true-dragon + earth": {
+     "w": 13,
+     "d": 6
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 9
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 9,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Renthi Gal",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [
+    "Hollowcrest (wyvern + air, Stooping Pinions, Sapping Bellow, Heartgrit), 4–1, season 4 round 34",
+    "Hollowfang (wyvern + air, Hamstring Hooks, Lockjaw, Bounding Haunches), 4–0, season 4 round 42",
+    "Brinespine (wyvern + air, Heartgrit, Hamstring Hooks, Thornscale), 3–0, season 4 round 55",
+    "Ashheart (wyvern + air, Heartgrit, Ratchet Claws, Sapping Bellow), 5–0, season 4 round 61"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 38,
+     "d": 39
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Draquen Vel",
+   "style": "bite-focus",
+   "best": 2,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 28,
+     "d": 31
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 9
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenquen Mor",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 23,
+   "losses": 57,
+   "hatched": 56,
+   "ichor": 0,
+   "champions": [
+    "Thornmaw (wyrm + fire, Smoldering Maw, Heartgrit, Smolder Sac), 3–0, season 4 round 30"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 13,
+     "d": 37
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 8,
+     "d": 12
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morush Mor",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Galemaw (true-dragon + fire, Smolder Sac, Snapping Jaw, Milk Fang), 3–0, season 4 round 21",
+    "Vanemaw (true-dragon + fire, Thornscale, Smolder Sac, Ash Gland), 4–0, season 4 round 26"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 39,
+     "d": 37
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Yrasul Gal",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Embereye (wyrm + earth, Hollow Bones, Ash Gland, Snapping Jaw), 5–0, season 4 round 6",
+    "Ashspine (wyrm + earth, Snapping Jaw, Hollow Bones, Baleful Eye), 5–1, season 4 round 26",
+    "Duskcrest (wyrm + earth, Heartgrit, Smolder Sac, Gnashing Teeth), 4–0, season 4 round 47"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 5
+    },
+    "wyrm + earth": {
+     "w": 38,
+     "d": 25
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galthi Tor",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [
+    "Cinderhorn (wyvern + water, Ash Gland, Sidewinder Spine, Hollow Bones), 6–4, season 4 round 39",
+    "Embermaw (wyvern + earth, Ash Gland, Raking Talons, Smoldering Maw), 4–0, season 4 round 56"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 14
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 6,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 13,
+     "d": 14
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Quenost Dra",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Stormclaw (wyvern + air, Milk Fang, Pebblescale, Heartgrit), 3–0, season 4 round 23",
+    "Thornspine (true-dragon + earth, Heartgrit, Smoldering Maw, Whetted Nail), 4–0, season 4 round 37",
+    "Vaneheart (true-dragon + air, Whetted Nail, Hamstring Hooks, Milk Fang), 4–0, season 4 round 60",
+    "Brineclaw (true-dragon + air, Ratchet Claws, Heartgrit, Smolder Sac), 3–1, season 4 round 69"
+   ],
+   "prefs": {
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 23,
+     "d": 15
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 11,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Corven Ost",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 33,
+   "ichor": 1,
+   "champions": [
+    "Galetail (wyvern + water, Smoldering Maw, Lockjaw, Sidewinder Spine), 5–0, season 4 round 18",
+    "Stormmaw (wyvern + earth, Bounding Haunches, Smoldering Maw, Scything Forelimbs), 4–1, season 4 round 42",
+    "Brinefang (wyvern + earth, Scything Forelimbs, Smolder Sac, Ash Gland), 3–0, season 4 round 51",
+    "Brinespine (true-dragon + fire, Smoldering Maw, Hollow Bones, Sidewinder Spine), 3–0, season 4 round 60"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 16,
+     "d": 13
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 10
+    },
+    "wyvern + earth": {
+     "w": 14,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Ushila Lin",
+   "style": "slugger",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Stormhorn (wyrm + earth, Pebblescale, Gnashing Teeth, Snapping Jaw), 4–0, season 4 round 6",
+    "Mireclaw (wyrm + earth, Hamstring Hooks, Smoldering Maw, Smolder Sac), 3–0, season 4 round 22",
+    "Rimetail (wyrm + earth, Sapping Bellow, Scything Forelimbs, Ash Gland), 3–0, season 4 round 49",
+    "Slateeye (wyrm + earth, Pebblescale, Sapping Bellow, Milk Fang), 3–0, season 4 round 52",
+    "Slatehorn (wyrm + earth, Snapping Jaw, Whetted Nail, Smolder Sac), 3–0, season 4 round 65",
+    "Slatefang (wyrm + earth, Heartgrit, Milk Fang, Ash Gland), 3–0, season 4 round 71"
+   ],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 45,
+     "d": 31
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Venila Quen",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Galeeye (wyvern + air, Heartgrit, Ratchet Claws, Milk Fang), 3–0, season 4 round 8",
+    "Emberwing (wyvern + air, Lockjaw, Hollow Bones, Ash Gland), 3–0, season 4 round 31",
+    "Slatehorn (wyrm + earth, Hollow Bones, Smolder Sac, Lockjaw), 4–0, season 4 round 68"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 9,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 36,
+     "d": 27
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quengal Ila",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [
+    "Thornwing (wyvern + air, Smoldering Maw, Milk Fang, Scything Forelimbs), 4–0, season 4 round 27",
+    "Brinemaw (wyvern + air, Bounding Haunches, Snapping Jaw, Pebblescale), 4–0, season 4 round 52"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 23,
+     "d": 27
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashvel Ush",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Thornmaw (wyvern + air, Hollow Bones, Whetted Nail, Milk Fang), 3–0, season 4 round 3",
+    "Mirecrest (wyvern + air, Stooping Pinions, Smoldering Maw, Raking Talons), 5–0, season 4 round 20",
+    "Stormspine (wyvern + air, Raking Talons, Gnashing Teeth, Hollow Bones), 3–0, season 4 round 29"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 45,
+     "d": 35
+    }
+   }
+  },
+  {
+   "name": "Linlin Vel",
+   "style": "reader",
+   "best": 3,
+   "wins": 31,
+   "losses": 49,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [
+    "Rimeclaw (true-dragon + fire, Pebblescale, Milk Fang, Hamstring Hooks), 3–1, season 4 round 4",
+    "Galehorn (true-dragon + fire, Ash Gland, Milk Fang, Weathered Hide), 3–1, season 4 round 64"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 21,
+     "d": 31
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 10,
+     "d": 16
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynash Lin",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 30,
+   "ichor": 1,
+   "champions": [
+    "Duskeye (wyvern + air, Scything Forelimbs, Whetted Nail, Raking Talons), 3–0, season 4 round 32",
+    "Vanewing (wyvern + air, Riposte Talons, Hollow Bones, Weathered Hide), 5–1, season 4 round 52",
+    "Flinteye (wyvern + air, Hollow Bones, Bounding Haunches, Whetted Nail), 4–1, season 4 round 62"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 44,
+     "d": 36
+    }
+   }
+  },
+  {
+   "name": "Ostka Ven",
+   "style": "bite-focus",
+   "best": 2,
+   "wins": 23,
+   "losses": 57,
+   "hatched": 55,
+   "ichor": 4,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 12,
+     "d": 22
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 13
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torzar Zar",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 29,
+     "d": 34
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Galila Ven",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 44,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 26,
+     "d": 33
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Ushgal Thi",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Galeheart (true-dragon + fire, Snapping Jaw, Milk Fang, Riposte Talons), 4–0, season 4 round 7",
+    "Stormclaw (wyrm + earth, Ash Gland, Ratchet Claws, Gnashing Teeth), 5–0, season 4 round 34",
+    "Slatecrest (wyrm + earth, Raking Talons, Smoldering Maw, Mantle Wings), 6–0, season 4 round 65",
+    "Mirespine (wyrm + earth, Smoldering Maw, Whetted Nail, Snapping Jaw), 3–0, season 4 round 74"
+   ],
+   "prefs": {
+    "wyrm + air": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 20,
+     "d": 16
+    },
+    "wyrm + earth": {
+     "w": 27,
+     "d": 13
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linzar Bryn",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 35,
+   "ichor": 2,
+   "champions": [
+    "Flintwing (wyvern + earth, Hollow Bones, Smolder Sac, Scything Forelimbs), 3–0, season 4 round 27",
+    "Miremaw (wyvern + earth, Weathered Hide, Sidewinder Spine, Smoldering Maw), 5–0, season 4 round 36",
+    "Cinderspine (wyvern + earth, Sidewinder Spine, Gnashing Teeth, Ash Gland), 4–0, season 4 round 61"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 40,
+     "d": 24
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kavel Ven",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 42,
+   "ichor": 0,
+   "champions": [
+    "Mireheart (true-dragon + earth, Hamstring Hooks, Hollow Bones, Ash Gland), 4–0, season 4 round 66",
+    "Miretail (true-dragon + earth, Hamstring Hooks, Milk Fang, Heartgrit), 3–0, season 4 round 71",
+    "Rimetail (true-dragon + earth, Milk Fang, Scything Forelimbs, Ash Gland), 3–0, season 4 round 74"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 25,
+     "d": 17
+    },
+    "wyvern + air": {
+     "w": 5,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 10,
+     "d": 12
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Renthi Ush",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 36,
+   "ichor": 2,
+   "champions": [
+    "Hollowcrest (true-dragon + fire, Smoldering Maw, Hamstring Hooks, Gnashing Teeth), 4–0, season 4 round 14",
+    "Cindermaw (wyvern + air, Lance Throat, Weathered Hide), 3–0, season 4 round 55",
+    "Flinthorn (wyvern + air, Hamstring Hooks, Smolder Sac, Lockjaw), 4–0, season 4 round 74"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 20,
+     "d": 19
+    },
+    "wyvern + water": {
+     "w": 7,
+     "d": 8
+    },
+    "wyvern + earth": {
+     "w": 7,
+     "d": 8
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 7,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulven Bryn",
+   "style": "slugger",
+   "best": 3,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [
+    "Mirehorn (true-dragon + earth, Heartgrit, Ratchet Claws, Goading Roar), 5–3, season 4 round 21",
+    "Brinetail (wyrm + air, Milk Fang, Heartgrit, Lockjaw), 4–0, season 4 round 57"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 23,
+     "d": 33
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 6,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yragal Ost",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Hollowfang (wyvern + air, Milk Fang, Sidewinder Spine, Ratchet Claws), 4–0, season 4 round 17",
+    "Vanemaw (wyvern + air, Milk Fang, Whetted Nail, Mantle Wings), 4–0, season 4 round 38",
+    "Duskmaw (wyvern + air, Scything Forelimbs, Smolder Sac, Milk Fang), 3–0, season 4 round 69"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 40,
+     "d": 34
+    }
+   }
+  },
+  {
+   "name": "Ushush Quen",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Hollowtail (true-dragon + fire, Heartgrit, Milk Fang, Hamstring Hooks), 4–0, season 4 round 10",
+    "Thorneye (wyvern + air, Whetted Nail, Pebblescale, Scything Forelimbs), 4–0, season 4 round 50",
+    "Slateeye (wyvern + air, Raking Talons, Weathered Hide, Smoldering Maw), 6–0, season 4 round 71",
+    "Brinecrest (wyvern + air, Gnashing Teeth, Whetted Nail, Smoldering Maw), 4–0, season 4 round 79"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 24,
+     "d": 15
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 18,
+     "d": 15
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashka Ven",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Slateheart (wyvern + air, Smolder Sac, Milk Fang, Ratchet Claws), 3–0, season 4 round 28",
+    "Stormmaw (wyvern + air, Smolder Sac, Ash Gland, Stooping Pinions), 4–0, season 4 round 54"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 33,
+     "d": 46
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thisul Bryn",
+   "style": "reader",
+   "best": 3,
+   "wins": 26,
+   "losses": 54,
+   "hatched": 53,
+   "ichor": 1,
+   "champions": [
+    "Thornfang (wyvern + air, Lockjaw, Ratchet Claws, Scything Forelimbs), 4–0, season 4 round 59",
+    "Ashhorn (wyvern + air, Pebblescale, Whetted Nail, Smolder Sac), 3–0, season 4 round 63"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 14
+    },
+    "wyvern + air": {
+     "w": 14,
+     "d": 21
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 7,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Ilamor Sul",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 28,
+   "ichor": 1,
+   "champions": [
+    "Rimeeye (wyvern + air, Ratchet Claws, Mantle Wings, Scything Forelimbs), 7–2, season 4 round 38",
+    "Slatewing (wyvern + air, Milk Fang, Hamstring Hooks, Ash Gland), 4–0, season 4 round 50",
+    "Duskhorn (wyvern + air, Raking Talons, Whetted Nail, Hollow Bones), 4–0, season 4 round 58",
+    "Vanemaw (wyvern + air, Hamstring Hooks, Gnashing Teeth, Scything Forelimbs), 4–1, season 4 round 76"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 49,
+     "d": 26
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kabryn Ash",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 26,
+   "losses": 54,
+   "hatched": 53,
+   "ichor": 2,
+   "champions": [
+    "Galemaw (wyrm + earth, Whetted Nail, Weathered Hide, Snapping Jaw), 5–0, season 4 round 15"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 3,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 22,
+     "d": 42
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ushcor Gal",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Emberclaw (true-dragon + fire, Milk Fang, Hollow Bones, Stooping Pinions), 4–0, season 4 round 15",
+    "Ashtail (true-dragon + fire, Whetted Nail, Milk Fang, Heartgrit), 4–0, season 4 round 61",
+    "Flintclaw (true-dragon + fire, Weathered Hide, Mantle Wings, Smoldering Maw), 3–0, season 4 round 69",
+    "Hollowfang (true-dragon + fire, Heartgrit, Pebblescale, Raking Talons), 5–0, season 4 round 74"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 43,
+     "d": 33
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushtor Sul",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Brinecrest (wyrm + earth, Pebblescale, Smolder Sac, Raking Talons), 4–0, season 4 round 5",
+    "Flinthorn (wyrm + water, Goading Roar, Mantle Wings, Smoldering Maw), 4–0, season 4 round 16",
+    "Hollowmaw (true-dragon + fire, Weathered Hide, Hollow Bones, Ash Gland), 4–0, season 4 round 44",
+    "Dusktail (wyrm + water, Milk Fang, Gnashing Teeth, Smoldering Maw), 4–0, season 4 round 64"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 22,
+     "d": 27
+    },
+    "wyrm + earth": {
+     "w": 4,
+     "d": 0
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 16,
+     "d": 9
+    }
+   }
+  },
+  {
+   "name": "Ashtor Ven",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [
+    "Vaneeye (wyrm + earth, Milk Fang, Smolder Sac, Ratchet Claws), 4–0, season 4 round 68"
+   ],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 20,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 20
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ushvel Tor",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Slatespine (wyvern + earth, Smolder Sac, Ash Gland, Mantle Wings), 4–0, season 4 round 49",
+    "Duskeye (wyvern + earth, Mantle Wings, Smoldering Maw, Hollow Bones), 4–1, season 4 round 70"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 26,
+     "d": 23
+    },
+    "wyvern + water": {
+     "w": 6,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 6
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Yrabryn Zar",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 54,
+   "losses": 26,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [
+    "Ironeye (true-dragon + earth, Whetted Nail, Snapping Jaw, Milk Fang), 4–0, season 4 round 4",
+    "Hollowmaw (true-dragon + air, Pebblescale, Ash Gland, Whetted Nail), 3–0, season 4 round 7",
+    "Slateheart (true-dragon + air, Scything Forelimbs, Hollow Bones, Heartgrit), 4–0, season 4 round 15",
+    "Stormfang (true-dragon + earth, Gnashing Teeth, Hamstring Hooks, Hollow Bones), 5–0, season 4 round 55",
+    "Galespine (true-dragon + earth, Ratchet Claws, Ash Gland, Lockjaw), 4–0, season 4 round 67",
+    "Rimeeye (true-dragon + air, Heartgrit, Hamstring Hooks, Ratchet Claws), 3–0, season 4 round 80"
+   ],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 23,
+     "d": 9
+    },
+    "true-dragon + air": {
+     "w": 28,
+     "d": 15
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Bryndra Tor",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [
+    "Mirefang (wyvern + water, Heartgrit, Smolder Sac, Scything Forelimbs), 4–0, season 4 round 26",
+    "Cinderfang (wyvern + water, Snapping Jaw, Ash Gland, Goading Roar), 6–0, season 4 round 36"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 40,
+     "d": 26
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Corquen Bryn",
+   "style": "slugger",
+   "best": 2,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 42,
+     "d": 37
+    }
+   }
+  },
+  {
+   "name": "Linbryn Thi",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [
+    "Flintcrest (wyrm + earth, Thornscale, Hollow Bones, Milk Fang), 4–0, season 4 round 4",
+    "Ironwing (wyvern + earth, Smoldering Maw, Hollow Bones, Gnashing Teeth), 3–0, season 4 round 13",
+    "Embermaw (wyvern + air, Lockjaw, Hollow Bones, Raking Talons), 4–0, season 4 round 21",
+    "Galespine (wyvern + earth, Ash Gland, Lockjaw, Thornscale), 4–0, season 4 round 52",
+    "Galemaw (wyvern + air, Snapping Jaw, Ash Gland, Smoldering Maw), 3–0, season 4 round 68"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 12,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 21,
+     "d": 18
+    },
+    "wyvern + earth": {
+     "w": 15,
+     "d": 5
+    }
+   }
+  },
+  {
+   "name": "Coryra Ush",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 43,
+   "ichor": 1,
+   "champions": [
+    "Flinteye (wyrm + earth, Slit Pupil, Milk Fang, Scything Forelimbs), 3–0, season 4 round 21"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 17,
+     "d": 17
+    },
+    "wyvern + air": {
+     "w": 13,
+     "d": 19
+    },
+    "wyrm + earth": {
+     "w": 7,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Renyra Thi",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [
+    "Galefang (wyvern + air, Hamstring Hooks, Thornscale, Stooping Pinions), 3–0, season 4 round 20"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 46,
+     "d": 34
+    }
+   }
+  },
+  {
+   "name": "Dragal Ka",
+   "style": "reader",
+   "best": 1,
+   "wins": 26,
+   "losses": 54,
+   "hatched": 51,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 21,
+     "d": 36
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 9
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Morila Quen",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [
+    "Galemaw (wyvern + air, Hollow Bones, Smolder Sac, Milk Fang), 3–0, season 4 round 17",
+    "Galeeye (wyvern + air, Heartgrit, Riposte Talons, Whetted Nail), 3–0, season 4 round 21",
+    "Ironcrest (wyvern + air, Thornscale, Whetted Nail, Milk Fang), 4–0, season 4 round 27"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 41,
+     "d": 37
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynquen Vel",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 28,
+   "losses": 52,
+   "hatched": 51,
+   "ichor": 0,
+   "champions": [
+    "Brineeye (wyrm + earth, Heartgrit, Weathered Hide, Pebblescale), 4–0, season 4 round 72"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 11,
+     "d": 16
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 8,
+     "d": 18
+    },
+    "wyrm + air": {
+     "w": 5,
+     "d": 7
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Brynthi Ash",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 38,
+   "ichor": 3,
+   "champions": [
+    "Embercrest (true-dragon + fire, Hollow Bones, Smoldering Maw, Milk Fang), 4–0, season 4 round 71"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 31,
+     "d": 31
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenila Gal",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Embertail (true-dragon + fire, Baleful Eye, Smoldering Maw, Mantle Wings), 5–0, season 4 round 12",
+    "Ashtail (true-dragon + fire, Ash Gland, Raking Talons, Mantle Wings), 4–0, season 4 round 42"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 40,
+     "d": 36
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ushyra Vel",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Brinetail (wyrm + water, Pebblescale, Whetted Nail, Snapping Jaw), 4–0, season 4 round 6",
+    "Slateclaw (true-dragon + fire, Stooping Pinions, Smoldering Maw, Ratchet Claws), 5–0, season 4 round 11",
+    "Mirespine (wyrm + earth, Smolder Sac, Hamstring Hooks, Milk Fang), 4–0, season 4 round 37",
+    "Cindercrest (wyrm + earth, Ash Gland, Whetted Nail, Snapping Jaw), 5–0, season 4 round 57",
+    "Thorncrest (wyrm + earth, Smoldering Maw, Gnashing Teeth, Smolder Sac), 5–0, season 4 round 69",
+    "Dusktail (wyrm + earth, Smolder Sac, Milk Fang, Scything Forelimbs), 4–0, season 4 round 77"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 16,
+     "d": 14
+    },
+    "wyrm + earth": {
+     "w": 25,
+     "d": 12
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynlin Tor",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 35,
+   "ichor": 1,
+   "champions": [
+    "Ironcrest (wyvern + earth, Smoldering Maw, Thornscale, Lockjaw), 5–0, season 4 round 39"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 24,
+     "d": 23
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 6
+    },
+    "wyvern + fire": {
+     "w": 10,
+     "d": 9
+    }
+   }
+  },
+  {
+   "name": "Yracor Ush",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Dusktail (wyrm + earth, Heartgrit, Smolder Sac, Whetted Nail), 3–0, season 4 round 5",
+    "Thornwing (true-dragon + air, Bounding Haunches, Milk Fang, Snapping Jaw), 5–0, season 4 round 13",
+    "Brinetail (true-dragon + earth, Scything Forelimbs, Milk Fang, Smoldering Maw), 5–0, season 4 round 31",
+    "Ironfang (true-dragon + earth, Whetted Nail, Ratchet Claws, Gnashing Teeth), 5–0, season 4 round 44",
+    "Emberheart (true-dragon + earth, Hollow Bones, Milk Fang, Ash Gland), 3–0, season 4 round 49"
+   ],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 25,
+     "d": 16
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 14,
+     "d": 19
+    }
+   }
+  },
+  {
+   "name": "Morthi Yra",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Embermaw (true-dragon + fire, Scything Forelimbs, Bounding Haunches, Hollow Bones), 4–1, season 4 round 11",
+    "Slatemaw (true-dragon + fire, Hollow Bones, Smoldering Maw, Sidewinder Spine), 5–1, season 4 round 24",
+    "Galehorn (true-dragon + fire, Heartgrit, Hollow Bones, Weathered Hide), 3–0, season 4 round 43",
+    "Flinteye (true-dragon + fire, Sidewinder Spine, Hollow Bones, Ash Gland), 4–1, season 4 round 65"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 26,
+     "d": 26
+    },
+    "wyvern + earth": {
+     "w": 9,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ilaush Ren",
+   "style": "slugger",
+   "best": 3,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [
+    "Duskclaw (wyrm + earth, Lockjaw, Smolder Sac, Gnashing Teeth), 4–0, season 4 round 8",
+    "Ashheart (wyrm + earth, Goading Roar, Milk Fang, Lockjaw), 4–0, season 4 round 34",
+    "Thorneye (wyrm + earth, Raking Talons, Pebblescale, Smoldering Maw), 4–0, season 4 round 46",
+    "Ashtail (wyrm + earth, Scything Forelimbs, Hollow Bones, Pebblescale), 5–1, season 4 round 66",
+    "Hollowcrest (wyrm + earth, Smolder Sac, Milk Fang, Hamstring Hooks), 4–0, season 4 round 74",
+    "Slatehorn (wyrm + earth, Pebblescale, Milk Fang, Ratchet Claws), 4–0, season 4 round 80"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 51,
+     "d": 27
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashvel Dra",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Stormmaw (wyrm + earth, Smoldering Maw, Pebblescale, Lockjaw), 3–0, season 4 round 50",
+    "Rimewing (wyrm + earth, Heartgrit, Snapping Jaw, Pebblescale), 3–0, season 4 round 56",
+    "Duskclaw (wyvern + air, Smolder Sac, Raking Talons, Whetted Nail), 3–0, season 4 round 72"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 16,
+     "d": 10
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 17,
+     "d": 22
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Zardra Yra",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 28,
+   "ichor": 0,
+   "champions": [
+    "Brinetail (wyvern + air, Milk Fang, Whetted Nail, Stooping Pinions), 3–0, season 4 round 19",
+    "Cindermaw (wyvern + air, Hamstring Hooks, Ratchet Claws, Ash Gland), 6–0, season 4 round 25",
+    "Emberclaw (wyvern + earth, Smolder Sac, Smoldering Maw, Gnashing Teeth), 3–0, season 4 round 67"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 43,
+     "d": 23
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velila Cor",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Flintwing (wyvern + air, Whetted Nail, Smolder Sac, Raking Talons), 4–0, season 4 round 13",
+    "Flintspine (wyvern + air, Stooping Pinions, Sidewinder Spine, Snapping Jaw), 6–0, season 4 round 53",
+    "Brinespine (wyvern + air, Milk Fang, Weathered Hide, Ratchet Claws), 4–0, season 4 round 67",
+    "Rimemaw (wyvern + air, Whetted Nail, Pebblescale, Smolder Sac), 4–2, season 4 round 74"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 49,
+     "d": 31
+    }
+   }
+  },
+  {
+   "name": "Quenthi Vel",
+   "style": "reader",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Hollowhorn (true-dragon + fire, Heartgrit, Whetted Nail, Raking Talons), 3–1, season 4 round 25",
+    "Thorntail (true-dragon + fire, Baleful Eye, Mantle Wings, Hamstring Hooks), 6–1, season 4 round 32"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 40,
+     "d": 37
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velila Lin",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 38,
+   "ichor": 2,
+   "champions": [
+    "Galeheart (wyvern + air, Heartgrit, Raking Talons, Mantle Wings), 8–1, season 4 round 34",
+    "Duskclaw (wyvern + air, Sapping Bellow, Ratchet Claws, Mantle Wings), 3–0, season 4 round 43",
+    "Irontail (wyvern + air, Heartgrit, Smolder Sac, Mantle Wings), 4–0, season 4 round 58"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 36,
+     "d": 34
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Zarka Bryn",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Rimefang (wyrm + earth, Weathered Hide, Sidewinder Spine, Heartgrit), 4–1, season 4 round 7",
+    "Duskeye (wyrm + earth, Snapping Jaw, Milk Fang, Bounding Haunches), 6–1, season 4 round 75"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 6
+    },
+    "wyrm + earth": {
+     "w": 34,
+     "d": 33
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulzar Tor",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 31,
+   "losses": 49,
+   "hatched": 44,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 27,
+     "d": 34
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 5
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drazar Ila",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 37,
+   "ichor": 1,
+   "champions": [
+    "Stormheart (true-dragon + fire, Smolder Sac, Thornscale, Gnashing Teeth), 4–0, season 4 round 20",
+    "Vanehorn (true-dragon + fire, Baleful Eye, Smolder Sac, Weathered Hide), 5–0, season 4 round 42",
+    "Ashheart (true-dragon + fire, Ash Gland, Sidewinder Spine, Scything Forelimbs), 4–0, season 4 round 64"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 42,
+     "d": 31
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashmor Ka",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Slatehorn (true-dragon + fire, Pebblescale, Lockjaw, Gnashing Teeth), 5–1, season 4 round 37",
+    "Mirehorn (true-dragon + fire, Pebblescale, Whetted Nail, Gnashing Teeth), 4–0, season 4 round 45"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 25,
+     "d": 23
+    },
+    "wyrm + earth": {
+     "w": 11,
+     "d": 13
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torgal Thi",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 30,
+   "ichor": 0,
+   "champions": [
+    "Mirecrest (wyvern + earth, Smoldering Maw, Pebblescale, Hollow Bones), 4–0, season 4 round 6",
+    "Thorntail (wyvern + water, Heartgrit, Ratchet Claws, Snapping Jaw), 5–0, season 4 round 69",
+    "Rimefang (wyvern + earth, Hollow Bones, Heartgrit, Ash Gland), 3–0, season 4 round 78"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 20,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 12
+    },
+    "wyvern + fire": {
+     "w": 11,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulbryn Vel",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Thornheart (true-dragon + earth, Lockjaw, Bounding Haunches, Weathered Hide), 4–0, season 4 round 11",
+    "Hollowclaw (true-dragon + air, Ash Gland, Scything Forelimbs, Smoldering Maw), 4–0, season 4 round 21",
+    "Ashfang (true-dragon + air, Heartgrit, Milk Fang, Hamstring Hooks), 4–0, season 4 round 42",
+    "Slatemaw (true-dragon + earth, Milk Fang, Pebblescale, Smolder Sac), 3–0, season 4 round 64"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 25,
+     "d": 19
+    },
+    "true-dragon + earth": {
+     "w": 17,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velzar Ush",
+   "style": "out-boxer",
+   "best": 2,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 47,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 30
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 7,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 9
+    }
+   }
+  },
+  {
+   "name": "Dramor Ila",
+   "style": "slugger",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Cinderwing (wyrm + earth, Heartgrit, Raking Talons, Gnashing Teeth), 4–0, season 4 round 50",
+    "Slateheart (wyrm + earth, Hollow Bones, Gnashing Teeth, Smoldering Maw), 3–0, season 4 round 58"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 36,
+     "d": 36
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Brynthi Yra",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 38,
+   "ichor": 2,
+   "champions": [
+    "Slatecrest (wyvern + air, Whetted Nail, Raking Talons, Hollow Bones), 5–1, season 4 round 33",
+    "Flintwing (wyvern + air, Gnashing Teeth, Riposte Talons, Smoldering Maw), 3–0, season 4 round 36",
+    "Miremaw (wyvern + air, Hollow Bones, Heartgrit, Smoldering Maw), 3–0, season 4 round 44",
+    "Vanecrest (wyvern + earth, Smoldering Maw, Weathered Hide, Scything Forelimbs), 3–0, season 4 round 61",
+    "Rimeclaw (wyvern + earth, Milk Fang, Ash Gland, Hamstring Hooks), 3–0, season 4 round 64",
+    "Ironmaw (wyvern + air, Heartgrit, Milk Fang, Ash Gland), 4–0, season 4 round 70"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 36,
+     "d": 25
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Corven Ila",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Brineclaw (wyrm + earth, Heartgrit, Smolder Sac, Whetted Nail), 3–0, season 4 round 9",
+    "Hollowclaw (wyvern + air, Whetted Nail, Snapping Jaw, Ash Gland), 3–0, season 4 round 29",
+    "Vanefang (wyvern + air, Heartgrit, Milk Fang, Ash Gland), 3–0, season 4 round 61",
+    "Rimecrest (wyvern + air, Ash Gland, Whetted Nail, Snapping Jaw), 3–0, season 4 round 73"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 8
+    },
+    "wyvern + air": {
+     "w": 28,
+     "d": 21
+    },
+    "wyrm + earth": {
+     "w": 9,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corquen Mor",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 37,
+   "ichor": 2,
+   "champions": [
+    "Duskeye (wyvern + air, Whetted Nail, Smolder Sac, Stooping Pinions), 4–0, season 4 round 8",
+    "Cinderwing (wyvern + air, Hamstring Hooks, Whetted Nail, Ash Gland), 3–0, season 4 round 29",
+    "Stormclaw (wyvern + air, Hamstring Hooks, Heartgrit, Ash Gland), 3–0, season 4 round 49"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 46,
+     "d": 33
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Tordra Ush",
+   "style": "reader",
+   "best": 3,
+   "wins": 28,
+   "losses": 52,
+   "hatched": 53,
+   "ichor": 0,
+   "champions": [
+    "Brineeye (wyvern + air, Smoldering Maw, Scything Forelimbs, Snapping Jaw), 3–0, season 4 round 62"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 17
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 14,
+     "d": 21
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushka Bryn",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [
+    "Emberheart (wyrm + air, Smolder Sac, Hollow Bones, Mantle Wings), 6–1, season 4 round 8",
+    "Galeclaw (wyvern + air, Pebblescale, Raking Talons, Riposte Talons), 4–0, season 4 round 32",
+    "Mirespine (wyvern + air, Scything Forelimbs, Whetted Nail, Ash Gland), 4–1, season 4 round 42",
+    "Flinthorn (wyvern + air, Smolder Sac, Milk Fang, Smoldering Maw), 5–1, season 4 round 52"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 42,
+     "d": 31
+    },
+    "wyrm + air": {
+     "w": 6,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kalin Sul",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 29,
+   "losses": 51,
+   "hatched": 48,
+   "ichor": 2,
+   "champions": [
+    "Mirespine (wyvern + earth, Heartgrit, Hollow Bones, Lockjaw), 3–1, season 4 round 35",
+    "Vanetail (wyvern + earth, Heartgrit, Baleful Eye, Lockjaw), 5–0, season 4 round 73"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 14,
+     "d": 14
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 13,
+     "d": 29
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashren Thi",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Slatecrest (true-dragon + fire, Smoldering Maw, Sapping Bellow, Weathered Hide), 6–0, season 4 round 32",
+    "Ashclaw (true-dragon + fire, Thornscale, Riposte Talons, Lockjaw), 3–0, season 4 round 37",
+    "Emberspine (true-dragon + fire, Smoldering Maw, Lockjaw, Whetted Nail), 3–0, season 4 round 57"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 41,
+     "d": 38
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corbryn Ost",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 25,
+     "d": 34
+    },
+    "wyrm + water": {
+     "w": 10,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarmor Lin",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Cinderfang (wyrm + earth, Ash Gland, Smoldering Maw, Gnashing Teeth), 4–0, season 4 round 42"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 12,
+     "d": 18
+    },
+    "wyrm + earth": {
+     "w": 30,
+     "d": 18
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Kabryn Thi",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Stormhorn (true-dragon + fire, Hollow Bones, Smolder Sac, Smoldering Maw), 3–1, season 4 round 13"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 9,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 7
+    },
+    "wyvern + fire": {
+     "w": 10,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 11,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Tortor Mor",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Flintfang (wyrm + earth, Smolder Sac, Milk Fang, Whetted Nail), 3–0, season 4 round 4",
+    "Galeclaw (true-dragon + earth, Heartgrit, Hamstring Hooks, Bounding Haunches), 6–0, season 4 round 10",
+    "Brinehorn (wyrm + earth, Gnashing Teeth, Bounding Haunches, Hamstring Hooks), 4–0, season 4 round 17",
+    "Dusktail (wyrm + earth, Raking Talons, Heartgrit, Milk Fang), 3–0, season 4 round 28",
+    "Brinefang (wyrm + earth, Mantle Wings, Bounding Haunches, Ratchet Claws), 4–0, season 4 round 50"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 24,
+     "d": 15
+    },
+    "true-dragon + earth": {
+     "w": 21,
+     "d": 13
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Linash Ush",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Mirewing (true-dragon + fire, Smoldering Maw, Scything Forelimbs, Milk Fang), 3–0, season 4 round 13",
+    "Slateeye (true-dragon + fire, Ash Gland, Hollow Bones, Gnashing Teeth), 4–0, season 4 round 26",
+    "Emberclaw (true-dragon + fire, Smolder Sac, Ash Gland, Gnashing Teeth), 5–0, season 4 round 35",
+    "Vaneclaw (true-dragon + fire, Smolder Sac, Hollow Bones, Ash Gland), 4–0, season 4 round 40",
+    "Thornhorn (true-dragon + fire, Pebblescale, Hollow Bones, Ash Gland), 3–0, season 4 round 67",
+    "Flintclaw (true-dragon + fire, Smoldering Maw, Hollow Bones, Smolder Sac), 3–1, season 4 round 78"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 7,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 43,
+     "d": 19
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Kaka Bryn",
+   "style": "slugger",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Slatespine (wyrm + earth, Hollow Bones, Milk Fang, Heartgrit), 3–0, season 4 round 36",
+    "Flinteye (wyrm + earth, Gnashing Teeth, Milk Fang, Ash Gland), 4–0, season 4 round 40",
+    "Hollowheart (wyrm + earth, Milk Fang, Snapping Jaw, Pebblescale), 4–0, season 4 round 60",
+    "Duskmaw (wyrm + earth, Heartgrit, Snapping Jaw, Milk Fang), 3–0, season 4 round 63",
+    "Ironheart (wyrm + earth, Lockjaw, Smoldering Maw, Heartgrit), 3–0, season 4 round 72"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 43,
+     "d": 25
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashmor Sul",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Slatecrest (wyvern + air, Ratchet Claws, Gnashing Teeth, Thornscale), 5–0, season 4 round 17",
+    "Ashtail (wyvern + earth, Lockjaw, Pebblescale, Snapping Jaw), 4–0, season 4 round 66"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 28,
+     "d": 29
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Yramor Yra",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 37,
+   "ichor": 1,
+   "champions": [
+    "Vaneeye (wyrm + earth, Whetted Nail, Weathered Hide, Gnashing Teeth), 4–0, season 4 round 6",
+    "Holloweye (wyrm + earth, Smolder Sac, Milk Fang, Ratchet Claws), 3–0, season 4 round 19",
+    "Flintcrest (wyvern + air, Lockjaw, Whetted Nail, Slit Pupil), 5–0, season 4 round 33",
+    "Brinehorn (wyvern + air, Milk Fang, Gnashing Teeth, Smolder Sac), 4–1, season 4 round 60",
+    "Duskheart (wyrm + earth, Smoldering Maw, Heartgrit, Smolder Sac), 3–0, season 4 round 67",
+    "Rimemaw (wyvern + air, Milk Fang, Smoldering Maw, Lockjaw), 4–0, season 4 round 73"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 12,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 25,
+     "d": 18
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 9
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Draila Lin",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 34,
+   "ichor": 2,
+   "champions": [
+    "Galeclaw (wyvern + air, Whetted Nail, Milk Fang, Snapping Jaw), 3–0, season 4 round 67"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 41,
+     "d": 35
+    }
+   }
+  },
+  {
+   "name": "Brynven Tor",
+   "style": "reader",
+   "best": 2,
+   "wins": 19,
+   "losses": 61,
+   "hatched": 58,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 4,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 11,
+     "d": 26
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 9
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thibryn Gal",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Hollowwing (wyvern + air, Milk Fang, Ash Gland, Ratchet Claws), 4–0, season 4 round 37",
+    "Slateeye (wyvern + air, Whetted Nail, Scything Forelimbs, Ratchet Claws), 4–0, season 4 round 41",
+    "Asheye (wyvern + air, Pebblescale, Thornscale, Scything Forelimbs), 6–2, season 4 round 62"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 38,
+     "d": 37
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ushmor Dra",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [
+    "Cinderheart (wyrm + earth, Bounding Haunches, Gnashing Teeth, Smoldering Maw), 3–0, season 4 round 53"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 20,
+     "d": 31
+    },
+    "wyrm + air": {
+     "w": 6,
+     "d": 7
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 4,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenthi Ila",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Vanemaw (true-dragon + fire, Pebblescale, Smolder Sac, Smoldering Maw), 4–1, season 4 round 16"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 35,
+     "d": 40
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corost Lin",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [
+    "Cinderhorn (true-dragon + fire, Whetted Nail, Smolder Sac, Snapping Jaw), 3–0, season 4 round 17",
+    "Duskmaw (wyvern + air, Baleful Eye, Ash Gland, Hamstring Hooks), 3–0, season 4 round 23",
+    "Slatecrest (true-dragon + fire, Smoldering Maw, Heartgrit, Lockjaw), 5–0, season 4 round 33",
+    "Brinespine (true-dragon + fire, Milk Fang, Snapping Jaw, Ratchet Claws), 4–0, season 4 round 76"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 36
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynila Ost",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 2,
+   "champions": [
+    "Stormeye (true-dragon + earth, Raking Talons, Pebblescale, Snapping Jaw), 4–1, season 4 round 12",
+    "Miretail (wyrm + earth, Hollow Bones, Ash Gland, Smolder Sac), 4–0, season 4 round 22",
+    "Embereye (wyvern + earth, Snapping Jaw, Smolder Sac, Ash Gland), 4–1, season 4 round 52"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 13,
+     "d": 14
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 22,
+     "d": 15
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilalin Vel",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [
+    "Galetail (wyvern + earth, Smoldering Maw, Pebblescale, Ratchet Claws), 3–0, season 4 round 65",
+    "Galemaw (wyvern + earth, Ash Gland, Lockjaw, Hamstring Hooks), 6–1, season 4 round 77"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 19,
+     "d": 17
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 8,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 8,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 6,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Velthi Thi",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 48,
+   "ichor": 0,
+   "champions": [
+    "Brinetail (true-dragon + earth, Hamstring Hooks, Raking Talons, Heartgrit), 3–0, season 4 round 6",
+    "Vanemaw (true-dragon + earth, Smolder Sac, Snapping Jaw, Weathered Hide), 5–0, season 4 round 12",
+    "Duskcrest (true-dragon + earth, Smolder Sac, Heartgrit, Hamstring Hooks), 3–0, season 4 round 44",
+    "Thornfang (true-dragon + earth, Pebblescale, Raking Talons, Gnashing Teeth), 5–0, season 4 round 58",
+    "Cindereye (true-dragon + earth, Gnashing Teeth, Lockjaw, Scything Forelimbs), 4–0, season 4 round 66"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 2,
+     "d": 9
+    },
+    "true-dragon + earth": {
+     "w": 32,
+     "d": 25
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 6
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thiquen Yra",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Flintfang (wyvern + earth, Ash Gland, Smolder Sac, Sidewinder Spine), 4–0, season 4 round 18",
+    "Duskclaw (true-dragon + fire, Weathered Hide, Whetted Nail, Hollow Bones), 3–1, season 4 round 56"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 16,
+     "d": 17
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 11,
+     "d": 10
+    },
+    "wyvern + water": {
+     "w": 10,
+     "d": 12
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kacor Ren",
+   "style": "slugger",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [
+    "Stormcrest (wyrm + earth, Ratchet Claws, Milk Fang, Whetted Nail), 4–0, season 4 round 10",
+    "Galeeye (wyrm + earth, Heartgrit, Gnashing Teeth, Lockjaw), 5–0, season 4 round 15",
+    "Emberclaw (wyrm + earth, Hollow Bones, Raking Talons, Goading Roar), 3–0, season 4 round 33",
+    "Duskcrest (wyrm + earth, Goading Roar, Ratchet Claws, Milk Fang), 4–0, season 4 round 42"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 45,
+     "d": 31
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilasul Yra",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 48,
+   "ichor": 1,
+   "champions": [
+    "Emberclaw (wyrm + earth, Whetted Nail, Snapping Jaw, Riposte Talons), 4–0, season 4 round 14",
+    "Brinecrest (wyvern + air, Whetted Nail, Hollow Bones, Thornscale), 4–0, season 4 round 23"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 11
+    },
+    "wyvern + air": {
+     "w": 26,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Sulthi Ila",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 37,
+   "ichor": 1,
+   "champions": [
+    "Hollowmaw (true-dragon + air, Scything Forelimbs, Heartgrit, Lockjaw), 4–1, season 4 round 18",
+    "Galetail (wyvern + air, Smoldering Maw, Snapping Jaw, Whetted Nail), 3–0, season 4 round 50"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 18,
+     "d": 17
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 11
+    },
+    "true-dragon + air": {
+     "w": 7,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thibryn Thi",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Duskhorn (wyvern + air, Milk Fang, Pebblescale, Scything Forelimbs), 3–0, season 4 round 20",
+    "Hollowfang (wyvern + air, Whetted Nail, Snapping Jaw, Smolder Sac), 3–0, season 4 round 62",
+    "Slatemaw (wyvern + air, Scything Forelimbs, Ash Gland, Stooping Pinions), 4–0, season 4 round 71"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 44,
+     "d": 36
+    }
+   }
+  },
+  {
+   "name": "Bryntor Tor",
+   "style": "reader",
+   "best": 2,
+   "wins": 31,
+   "losses": 49,
+   "hatched": 48,
+   "ichor": 3,
+   "champions": [],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 10
+    },
+    "true-dragon + fire": {
+     "w": 25,
+     "d": 31
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Renka Zar",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [
+    "Emberclaw (wyvern + air, Raking Talons, Pebblescale, Stooping Pinions), 5–1, season 4 round 29",
+    "Ironwing (wyvern + air, Goading Roar, Bounding Haunches, Riposte Talons), 3–0, season 4 round 77"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 38,
+     "d": 37
+    },
+    "true-dragon + air": {
+     "w": 4,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushquen Yra",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Stormtail (wyrm + earth, Smolder Sac, Pebblescale, Milk Fang), 5–1, season 4 round 9"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 31,
+     "d": 41
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostcor Ash",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Flintspine (true-dragon + fire, Ash Gland, Whetted Nail, Hollow Bones), 3–0, season 4 round 28"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 33,
+     "d": 32
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Draren Zar",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [
+    "Stormcrest (true-dragon + fire, Heartgrit, Gnashing Teeth, Thornscale), 4–0, season 4 round 16",
+    "Duskheart (wyrm + water, Snapping Jaw, Gnashing Teeth, Smolder Sac), 3–0, season 4 round 50",
+    "Rimeheart (true-dragon + fire, Smolder Sac, Heartgrit, Ash Gland), 3–0, season 4 round 55",
+    "Embertail (true-dragon + fire, Thornscale, Pebblescale, Whetted Nail), 4–0, season 4 round 61",
+    "Thornspine (true-dragon + fire, Ash Gland, Gnashing Teeth, Smoldering Maw), 3–1, season 4 round 77"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 7,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Velquen Sul",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 47,
+   "ichor": 1,
+   "champions": [
+    "Thornmaw (wyrm + earth, Milk Fang, Pebblescale, Ash Gland), 3–0, season 4 round 24"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 26,
+     "d": 28
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yralin Ila",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Asheye (wyvern + earth, Smoldering Maw, Milk Fang, Raking Talons), 4–0, season 4 round 77"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 34,
+     "d": 23
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 5,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilagal Ash",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Thornspine (wyrm + earth, Lockjaw, Smolder Sac, Bounding Haunches), 5–0, season 4 round 30",
+    "Ashtail (wyvern + air, Ratchet Claws, Sidewinder Spine, Smolder Sac), 5–0, season 4 round 50",
+    "Ironmaw (true-dragon + air, Milk Fang, Heartgrit, Gnashing Teeth), 3–0, season 4 round 62",
+    "Ashheart (wyvern + air, Hamstring Hooks, Milk Fang, Gnashing Teeth), 4–0, season 4 round 76"
+   ],
+   "prefs": {
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 15,
+     "d": 9
+    },
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 5
+    },
+    "true-dragon + air": {
+     "w": 15,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 12,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Draash Sul",
+   "style": "out-boxer",
+   "best": 2,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 2,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 26,
+     "d": 27
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Quenost Zar",
+   "style": "slugger",
+   "best": 2,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 40,
+     "d": 35
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torcor Ila",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Slateheart (wyvern + air, Milk Fang, Smolder Sac, Hamstring Hooks), 3–0, season 4 round 7",
+    "Galespine (wyvern + air, Gnashing Teeth, Smolder Sac, Smoldering Maw), 3–0, season 4 round 21",
+    "Brinewing (wyvern + earth, Whetted Nail, Pebblescale, Heartgrit), 3–0, season 4 round 40"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 13,
+     "d": 8
+    },
+    "wyvern + air": {
+     "w": 24,
+     "d": 28
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 5
+    }
+   }
+  },
+  {
+   "name": "Renquen Tor",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [
+    "Flintheart (true-dragon + fire, Milk Fang, Smolder Sac, Lockjaw), 3–0, season 4 round 57",
+    "Flintfang (true-dragon + water, Snapping Jaw, Milk Fang, Whetted Nail), 3–0, season 4 round 78"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 17,
+     "d": 25
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 14
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Ostven Tor",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Stormtail (wyvern + air, Ratchet Claws, Smolder Sac, Whetted Nail), 3–1, season 4 round 22",
+    "Mireeye (wyvern + air, Smolder Sac, Milk Fang, Whetted Nail), 5–1, season 4 round 33"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 37,
+     "d": 41
+    }
+   }
+  },
+  {
+   "name": "Sulyra Vel",
+   "style": "reader",
+   "best": 3,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 44,
+   "ichor": 1,
+   "champions": [
+    "Thornwing (true-dragon + fire, Whetted Nail, Pebblescale, Milk Fang), 3–0, season 4 round 74"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 31,
+     "d": 37
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Karen Lin",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 39,
+   "ichor": 4,
+   "champions": [
+    "Galespine (wyvern + air, Pebblescale, Milk Fang, Hamstring Hooks), 4–0, season 4 round 9",
+    "Ashspine (wyvern + air, Slit Pupil, Smolder Sac, Raking Talons), 3–0, season 4 round 24",
+    "Stormspine (wyvern + air, Milk Fang, Scything Forelimbs, Ratchet Claws), 5–0, season 4 round 40",
+    "Ashwing (wyvern + air, Bounding Haunches, Hamstring Hooks, Whetted Nail), 3–0, season 4 round 79"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 42,
+     "d": 34
+    }
+   }
+  },
+  {
+   "name": "Velgal Ost",
+   "style": "bite-focus",
+   "best": 2,
+   "wins": 31,
+   "losses": 49,
+   "hatched": 44,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 12,
+     "d": 15
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 14,
+     "d": 22
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drabryn Ven",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Flinttail (true-dragon + fire, Heartgrit, Hollow Bones, Smolder Sac), 3–0, season 4 round 24",
+    "Ironfang (true-dragon + fire, Weathered Hide, Lockjaw, Milk Fang), 8–1, season 4 round 45",
+    "Emberfang (true-dragon + fire, Smoldering Maw, Slit Pupil, Weathered Hide), 6–1, season 4 round 68"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 31
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Renlin Ush",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Vanespine (true-dragon + fire, Smolder Sac, Mantle Wings, Hamstring Hooks), 4–0, season 4 round 20",
+    "Galecrest (true-dragon + fire, Mantle Wings, Hollow Bones, Heartgrit), 3–0, season 4 round 27",
+    "Hollowfang (true-dragon + fire, Mantle Wings, Hamstring Hooks, Lockjaw), 7–0, season 4 round 54"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 43,
+     "d": 33
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Corush Ash",
+   "style": "charge-focus",
+   "best": 2,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 18,
+     "d": 19
+    },
+    "true-dragon + fire": {
+     "w": 13,
+     "d": 16
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kator Bryn",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 35,
+   "ichor": 1,
+   "champions": [
+    "Flinteye (true-dragon + fire, Weathered Hide, Milk Fang, Smoldering Maw), 3–1, season 4 round 32",
+    "Ironcrest (true-dragon + fire, Hollow Bones, Smoldering Maw, Bounding Haunches), 5–0, season 4 round 38",
+    "Thornmaw (wyrm + earth, Hollow Bones, Raking Talons, Gnashing Teeth), 4–1, season 4 round 45"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 10,
+     "d": 14
+    },
+    "wyrm + earth": {
+     "w": 7,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 9,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 16,
+     "d": 9
+    }
+   }
+  },
+  {
+   "name": "Corsul Quen",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [
+    "Stormspine (true-dragon + air, Smoldering Maw, Heartgrit, Snapping Jaw), 3–0, season 4 round 53",
+    "Hollowheart (true-dragon + air, Heartgrit, Ratchet Claws, Raking Talons), 4–0, season 4 round 70"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 4,
+     "d": 7
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 21,
+     "d": 18
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Bryndra Lin",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [
+    "Duskfang (true-dragon + fire, Milk Fang, Ash Gland, Hollow Bones), 4–0, season 4 round 9",
+    "Hollowspine (true-dragon + fire, Hollow Bones, Raking Talons, Ash Gland), 3–0, season 4 round 35",
+    "Hollowclaw (wyvern + air, Whetted Nail, Pebblescale, Hollow Bones), 4–0, season 4 round 62"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 29,
+     "d": 28
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 8,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Lintor Gal",
+   "style": "slugger",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Stormwing (wyrm + earth, Milk Fang, Pebblescale, Heartgrit), 3–0, season 4 round 55",
+    "Rimespine (wyrm + earth, Pebblescale, Baleful Eye, Hamstring Hooks), 3–0, season 4 round 62",
+    "Vanewing (wyrm + earth, Gnashing Teeth, Raking Talons, Pebblescale), 3–0, season 4 round 68",
+    "Cindercrest (wyrm + earth, Heartgrit, Smolder Sac, Lockjaw), 4–0, season 4 round 80"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 40,
+     "d": 31
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linost Ven",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [
+    "Mireheart (wyvern + earth, Sidewinder Spine, Smolder Sac, Thornscale), 3–0, season 4 round 19",
+    "Embereye (wyvern + air, Raking Talons, Weathered Hide, Whetted Nail), 5–0, season 4 round 29"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 35,
+     "d": 26
+    },
+    "wyvern + earth": {
+     "w": 12,
+     "d": 6
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renash Ost",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Slatefang (true-dragon + air, Pebblescale, Smoldering Maw, Gnashing Teeth), 4–0, season 4 round 12",
+    "Stormfang (true-dragon + fire, Pebblescale, Ash Gland, Gnashing Teeth), 3–0, season 4 round 16",
+    "Rimefang (true-dragon + fire, Heartgrit, Milk Fang, Scything Forelimbs), 3–0, season 4 round 33",
+    "Cindercrest (true-dragon + air, Smolder Sac, Hollow Bones, Hamstring Hooks), 3–0, season 4 round 47"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 30,
+     "d": 25
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 13,
+     "d": 5
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Mordra Yra",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 28,
+   "ichor": 1,
+   "champions": [
+    "Embereye (wyvern + air, Scything Forelimbs, Stooping Pinions, Smoldering Maw), 5–0, season 4 round 18",
+    "Rimemaw (wyvern + air, Raking Talons, Stooping Pinions, Sapping Bellow), 5–0, season 4 round 51",
+    "Duskheart (wyvern + air, Hamstring Hooks, Whetted Nail, Heartgrit), 3–0, season 4 round 57",
+    "Brineheart (wyvern + air, Whetted Nail, Lockjaw, Ratchet Claws), 4–0, season 4 round 63",
+    "Duskcrest (wyvern + air, Whetted Nail, Ash Gland, Lockjaw), 7–2, season 4 round 73"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 51,
+     "d": 29
+    }
+   }
+  },
+  {
+   "name": "Torren Ila",
+   "style": "reader",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Ironheart (true-dragon + fire, Milk Fang, Gnashing Teeth, Raking Talons), 3–0, season 4 round 31",
+    "Ironheart (true-dragon + fire, Smolder Sac, Heartgrit, Gnashing Teeth), 4–1, season 4 round 39"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 34
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drabryn Ven",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 32,
+   "ichor": 3,
+   "champions": [
+    "Rimewing (wyvern + air, Hollow Bones, Hamstring Hooks, Baleful Eye), 3–0, season 4 round 25",
+    "Hollowclaw (wyvern + air, Lockjaw, Raking Talons, Weathered Hide), 4–1, season 4 round 60"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 48,
+     "d": 32
+    }
+   }
+  },
+  {
+   "name": "Quengal Vel",
+   "style": "bite-focus",
+   "best": 2,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 44,
+   "ichor": 2,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 8,
+     "d": 9
+    },
+    "wyrm + earth": {
+     "w": 19,
+     "d": 27
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Velcor Ost",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Flintcrest (true-dragon + fire, Whetted Nail, Heartgrit, Weathered Hide), 4–0, season 4 round 4"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 29,
+     "d": 31
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 6,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Zarren Cor",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 48,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 24,
+     "d": 34
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 8
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenila Ush",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Vanecrest (true-dragon + earth, Ratchet Claws, Smolder Sac, Snapping Jaw), 6–2, season 4 round 26",
+    "Cinderfang (true-dragon + fire, Smolder Sac, Thornscale, Smoldering Maw), 4–0, season 4 round 39",
+    "Cindereye (true-dragon + earth, Heartgrit, Ash Gland, Whetted Nail), 3–0, season 4 round 59"
+   ],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 11
+    },
+    "wyrm + earth": {
+     "w": 21,
+     "d": 19
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 10,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Ashush Ash",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Cinderheart (wyvern + fire, Sidewinder Spine, Riposte Talons, Smoldering Maw), 4–0, season 4 round 16"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 17,
+     "d": 18
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 15,
+     "d": 13
+    }
+   }
+  },
+  {
+   "name": "Sulvel Mor",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 42,
+   "ichor": 0,
+   "champions": [
+    "Emberhorn (true-dragon + air, Snapping Jaw, Milk Fang, Ash Gland), 4–1, season 4 round 15",
+    "Stormcrest (wyrm + earth, Hollow Bones, Smoldering Maw, Whetted Nail), 3–0, season 4 round 26",
+    "Flintwing (wyrm + earth, Scything Forelimbs, Lockjaw, Hollow Bones), 5–0, season 4 round 75"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 20,
+     "d": 13
+    },
+    "true-dragon + air": {
+     "w": 20,
+     "d": 23
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ushzar Thi",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 30,
+   "ichor": 1,
+   "champions": [
+    "Slatemaw (true-dragon + fire, Heartgrit, Smoldering Maw, Lockjaw), 4–0, season 4 round 6",
+    "Rimeclaw (true-dragon + fire, Smoldering Maw, Smolder Sac, Scything Forelimbs), 5–0, season 4 round 11",
+    "Flintspine (true-dragon + fire, Milk Fang, Gnashing Teeth, Smoldering Maw), 6–1, season 4 round 25",
+    "Cinderhorn (wyvern + water, Hollow Bones, Ash Gland, Smoldering Maw), 6–1, season 4 round 41",
+    "Rimecrest (wyvern + water, Smolder Sac, Hollow Bones, Milk Fang), 4–1, season 4 round 57"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 35,
+     "d": 18
+    },
+    "wyvern + water": {
+     "w": 15,
+     "d": 10
+    }
+   }
+  },
+  {
+   "name": "Morvel Yra",
+   "style": "slugger",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [
+    "Embertail (wyrm + earth, Pebblescale, Hollow Bones, Goading Roar), 3–0, season 4 round 24",
+    "Ironwing (wyrm + earth, Sapping Bellow, Pebblescale, Lockjaw), 6–1, season 4 round 50"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 36,
+     "d": 33
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushka Ush",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Vaneeye (wyvern + air, Heartgrit, Whetted Nail, Mantle Wings), 4–0, season 4 round 37",
+    "Brinehorn (wyvern + air, Hamstring Hooks, Sapping Bellow, Milk Fang), 3–0, season 4 round 41",
+    "Ashheart (wyvern + air, Sidewinder Spine, Gnashing Teeth, Raking Talons), 3–0, season 4 round 70"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 30,
+     "d": 25
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 8
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynmor Ost",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 45,
+   "ichor": 2,
+   "champions": [
+    "Emberhorn (true-dragon + fire, Whetted Nail, Smolder Sac, Ash Gland), 3–0, season 4 round 48"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 8,
+     "d": 6
+    },
+    "wyvern + air": {
+     "w": 20,
+     "d": 26
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 8
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashka Dra",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Ashwing (wyvern + earth, Lockjaw, Whetted Nail, Hamstring Hooks), 4–0, season 4 round 8",
+    "Flinthorn (wyvern + air, Ratchet Claws, Scything Forelimbs, Smoldering Maw), 4–0, season 4 round 20",
+    "Miremaw (wyvern + air, Scything Forelimbs, Whetted Nail, Smoldering Maw), 6–0, season 4 round 36"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 37,
+     "d": 37
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Galsul Ost",
+   "style": "reader",
+   "best": 3,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 45,
+   "ichor": 1,
+   "champions": [
+    "Ironfang (wyvern + air, Milk Fang, Whetted Nail, Bounding Haunches), 3–0, season 4 round 20",
+    "Ashhorn (wyvern + air, Milk Fang, Lockjaw, Ash Gland), 3–0, season 4 round 77"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 25,
+     "d": 22
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 16
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynbryn Yra",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [
+    "Stormhorn (wyvern + air, Smolder Sac, Bounding Haunches, Pebblescale), 4–0, season 4 round 20",
+    "Ashfang (wyvern + air, Scything Forelimbs, Smolder Sac, Mantle Wings), 4–0, season 4 round 32"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 44,
+     "d": 33
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kacor Vel",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 29,
+   "losses": 51,
+   "hatched": 49,
+   "ichor": 0,
+   "champions": [
+    "Thornspine (wyrm + earth, Milk Fang, Whetted Nail, Sapping Bellow), 4–0, season 4 round 36"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 9,
+     "d": 12
+    },
+    "wyrm + earth": {
+     "w": 17,
+     "d": 30
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostdra Mor",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 27,
+     "d": 41
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Drathi Dra",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 37,
+   "ichor": 1,
+   "champions": [
+    "Hollowspine (true-dragon + fire, Bounding Haunches, Mantle Wings, Smoldering Maw), 5–0, season 4 round 60",
+    "Galehorn (true-dragon + fire, Hamstring Hooks, Smolder Sac, Milk Fang), 3–0, season 4 round 73"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 33,
+     "d": 29
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 7
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Bryntor Sul",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [
+    "Thornheart (wyrm + earth, Pebblescale, Milk Fang, Smoldering Maw), 3–0, season 4 round 54"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 20,
+     "d": 26
+    },
+    "wyrm + earth": {
+     "w": 20,
+     "d": 13
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velthi Ila",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [
+    "Thorncrest (true-dragon + fire, Smoldering Maw, Hollow Bones, Ash Gland), 3–0, season 4 round 29",
+    "Galeheart (true-dragon + fire, Pebblescale, Milk Fang, Smoldering Maw), 4–0, season 4 round 59",
+    "Cinderspine (wyvern + fire, Smolder Sac, Smoldering Maw, Stooping Pinions), 4–0, season 4 round 78"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 15,
+     "d": 9
+    },
+    "wyvern + earth": {
+     "w": 11,
+     "d": 18
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 9
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yraost Ash",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Vanewing (wyrm + earth, Heartgrit, Smolder Sac, Whetted Nail), 4–1, season 4 round 8",
+    "Ironclaw (wyrm + earth, Raking Talons, Smoldering Maw, Snapping Jaw), 3–0, season 4 round 15",
+    "Hollowfang (wyrm + earth, Whetted Nail, Milk Fang, Bounding Haunches), 4–0, season 4 round 24",
+    "Rimewing (true-dragon + air, Stooping Pinions, Raking Talons, Lockjaw), 4–0, season 4 round 46",
+    "Duskeye (wyrm + earth, Lockjaw, Heartgrit, Ratchet Claws), 4–0, season 4 round 79"
+   ],
+   "prefs": {
+    "wyrm + air": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 28,
+     "d": 12
+    },
+    "true-dragon + air": {
+     "w": 15,
+     "d": 15
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Ventor Tor",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Flintmaw (wyvern + water, Ash Gland, Smoldering Maw, Smolder Sac), 3–0, season 4 round 14",
+    "Mireclaw (true-dragon + fire, Hollow Bones, Goading Roar, Gnashing Teeth), 4–0, season 4 round 20",
+    "Flintheart (wyvern + water, Ash Gland, Thornscale, Lockjaw), 5–4, season 4 round 40",
+    "Thorneye (true-dragon + fire, Snapping Jaw, Smoldering Maw, Hamstring Hooks), 5–1, season 4 round 48"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 4,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 5,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 15
+    },
+    "wyvern + water": {
+     "w": 18,
+     "d": 12
+    }
+   }
+  },
+  {
+   "name": "Brynsul Lin",
+   "style": "slugger",
+   "best": 3,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 48,
+   "ichor": 1,
+   "champions": [
+    "Ironwing (true-dragon + earth, Smolder Sac, Goading Roar, Gnashing Teeth), 3–0, season 4 round 22",
+    "Ashhorn (true-dragon + earth, Smolder Sac, Whetted Nail, Snapping Jaw), 3–0, season 4 round 45"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 7,
+     "d": 25
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 15,
+     "d": 7
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Torka Tor",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Duskmaw (wyvern + water, Milk Fang, Pebblescale, Raking Talons), 3–1, season 4 round 9",
+    "Cinderspine (wyvern + air, Whetted Nail, Pebblescale, Riposte Talons), 7–1, season 4 round 25"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 39,
+     "d": 29
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kathi Quen",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Brinespine (true-dragon + air, Whetted Nail, Smolder Sac, Gnashing Teeth), 3–0, season 4 round 31",
+    "Galecrest (wyvern + earth, Ratchet Claws, Heartgrit, Ash Gland), 4–0, season 4 round 35",
+    "Rimewing (wyvern + air, Lockjaw, Milk Fang, Hamstring Hooks), 4–0, season 4 round 52",
+    "Brinemaw (wyvern + air, Smolder Sac, Whetted Nail, Lockjaw), 3–0, season 4 round 71",
+    "Flinteye (wyvern + air, Pebblescale, Ash Gland, Gnashing Teeth), 4–0, season 4 round 75",
+    "Slateheart (wyvern + air, Whetted Nail, Ratchet Claws, Milk Fang), 3–0, season 4 round 78"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 22,
+     "d": 11
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 7,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 6,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ilazar Zar",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Stormcrest (wyvern + earth, Lockjaw, Stooping Pinions, Raking Talons), 4–0, season 4 round 16",
+    "Brinemaw (wyvern + air, Whetted Nail, Ratchet Claws, Stooping Pinions), 5–0, season 4 round 29",
+    "Ashcrest (wyvern + air, Hollow Bones, Scything Forelimbs, Heartgrit), 4–0, season 4 round 47",
+    "Ashfang (wyvern + air, Whetted Nail, Smolder Sac, Stooping Pinions), 4–0, season 4 round 54",
+    "Ironclaw (wyvern + air, Lockjaw, Smolder Sac, Scything Forelimbs), 4–0, season 4 round 62"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 39,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yraash Thi",
+   "style": "reader",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Ironclaw (true-dragon + fire, Scything Forelimbs, Lockjaw, Snapping Jaw), 3–0, season 4 round 21"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 29,
+     "d": 32
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 7
+    }
+   }
+  },
+  {
+   "name": "Drabryn Lin",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Rimetail (wyvern + air, Weathered Hide, Whetted Nail, Smolder Sac), 3–0, season 4 round 35",
+    "Vanewing (wyvern + air, Bounding Haunches, Ratchet Claws, Heartgrit), 4–0, season 4 round 53"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 30,
+     "d": 39
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kaka Ka",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Ironhorn (wyvern + earth, Gnashing Teeth, Milk Fang, Goading Roar), 4–0, season 4 round 8"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 25,
+     "d": 26
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 15
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thivel Ren",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 44,
+   "ichor": 2,
+   "champions": [
+    "Slatefang (true-dragon + fire, Smoldering Maw, Smolder Sac, Milk Fang), 3–0, season 4 round 45",
+    "Duskfang (true-dragon + fire, Stooping Pinions, Smolder Sac, Ash Gland), 4–0, season 4 round 66"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 34,
+     "d": 38
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velven Ush",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Flintfang (true-dragon + fire, Smoldering Maw, Mantle Wings, Milk Fang), 5–0, season 4 round 20",
+    "Slatespine (true-dragon + fire, Whetted Nail, Snapping Jaw, Lockjaw), 4–0, season 4 round 46",
+    "Duskmaw (true-dragon + fire, Milk Fang, Raking Talons, Smoldering Maw), 5–0, season 4 round 53",
+    "Hollowheart (true-dragon + fire, Pebblescale, Whetted Nail, Raking Talons), 4–0, season 4 round 64"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 42,
+     "d": 32
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushyra Mor",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [
+    "Slatetail (true-dragon + earth, Heartgrit, Snapping Jaw, Raking Talons), 6–0, season 4 round 25",
+    "Emberhorn (true-dragon + earth, Smoldering Maw, Raking Talons, Hollow Bones), 4–1, season 4 round 40",
+    "Vaneclaw (wyrm + water, Snapping Jaw, Heartgrit, Weathered Hide), 4–0, season 4 round 65"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 14
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 10
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 15,
+     "d": 8
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 5,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashash Vel",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 34,
+   "ichor": 2,
+   "champions": [
+    "Slatewing (wyvern + earth, Lockjaw, Ash Gland, Smolder Sac), 4–0, season 4 round 4",
+    "Slatefang (wyvern + water, Smoldering Maw, Hollow Bones, Hamstring Hooks), 5–0, season 4 round 19",
+    "Asheye (wyvern + air, Smolder Sac, Hollow Bones, Smoldering Maw), 3–0, season 4 round 65"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 16,
+     "d": 16
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 24,
+     "d": 16
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Morost Thi",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Stormtail (true-dragon + earth, Gnashing Teeth, Whetted Nail, Sidewinder Spine), 4–0, season 4 round 49",
+    "Cindertail (true-dragon + air, Ratchet Claws, Smoldering Maw, Hamstring Hooks), 3–0, season 4 round 52"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 21,
+     "d": 17
+    },
+    "true-dragon + earth": {
+     "w": 12,
+     "d": 9
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 8,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Quenven Ren",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [
+    "Galefang (wyvern + earth, Milk Fang, Bounding Haunches, Gnashing Teeth), 5–1, season 4 round 25",
+    "Emberwing (wyvern + earth, Smoldering Maw, Heartgrit, Ash Gland), 4–0, season 4 round 71",
+    "Stormhorn (wyvern + earth, Smoldering Maw, Hollow Bones, Ratchet Claws), 5–0, season 4 round 76"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 21,
+     "d": 12
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 20
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corzar Ka",
+   "style": "slugger",
+   "best": 3,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Stormclaw (wyrm + earth, Ash Gland, Heartgrit, Pebblescale), 4–1, season 4 round 68"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 34,
+     "d": 42
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sultor Bryn",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 35,
+   "ichor": 1,
+   "champions": [
+    "Rimehorn (wyvern + earth, Heartgrit, Thornscale, Milk Fang), 3–0, season 4 round 5",
+    "Embertail (wyvern + earth, Mantle Wings, Scything Forelimbs, Ratchet Claws), 3–0, season 4 round 14",
+    "Vaneclaw (wyvern + air, Mantle Wings, Whetted Nail, Smolder Sac), 4–0, season 4 round 58"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 8
+    },
+    "wyvern + earth": {
+     "w": 15,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 23,
+     "d": 16
+    }
+   }
+  },
+  {
+   "name": "Ushven Ost",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Mireheart (true-dragon + earth, Hollow Bones, Smolder Sac, Whetted Nail), 4–0, season 4 round 18",
+    "Slatecrest (wyrm + earth, Scything Forelimbs, Gnashing Teeth, Hamstring Hooks), 4–0, season 4 round 39",
+    "Slateheart (wyrm + earth, Smoldering Maw, Lockjaw, Ratchet Claws), 4–1, season 4 round 61",
+    "Duskfang (true-dragon + earth, Milk Fang, Snapping Jaw, Scything Forelimbs), 5–0, season 4 round 80"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 15,
+     "d": 18
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 7
+    },
+    "true-dragon + earth": {
+     "w": 14,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 10,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Cormor Gal",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Ashheart (wyvern + air, Gnashing Teeth, Ratchet Claws, Whetted Nail), 4–0, season 4 round 21",
+    "Cinderfang (wyvern + air, Pebblescale, Smoldering Maw, Whetted Nail), 4–0, season 4 round 44"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 43,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Ilaquen Gal",
+   "style": "reader",
+   "best": 3,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 50,
+   "ichor": 0,
+   "champions": [
+    "Thornspine (wyvern + air, Whetted Nail, Ash Gland, Lockjaw), 4–0, season 4 round 69"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 6,
+     "d": 9
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 31
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corost Yra",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Galespine (wyvern + air, Hollow Bones, Milk Fang, Whetted Nail), 3–0, season 4 round 76"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 40,
+     "d": 39
+    }
+   }
+  },
+  {
+   "name": "Kaush Ka",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 25,
+   "losses": 55,
+   "hatched": 51,
+   "ichor": 1,
+   "champions": [
+    "Brinewing (wyrm + earth, Lockjaw, Heartgrit, Hollow Bones), 5–0, season 4 round 49"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 17,
+     "d": 30
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Venlin Ven",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [
+    "Rimemaw (true-dragon + fire, Hollow Bones, Snapping Jaw, Smolder Sac), 4–0, season 4 round 54",
+    "Flintfang (true-dragon + fire, Hollow Bones, Milk Fang, Pebblescale), 3–0, season 4 round 67",
+    "Vaneclaw (true-dragon + fire, Whetted Nail, Hollow Bones, Raking Talons), 3–0, season 4 round 74"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 34,
+     "d": 36
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torven Ka",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [
+    "Galecrest (wyrm + fire, Whetted Nail, Weathered Hide, Ash Gland), 4–0, season 4 round 8"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 23,
+     "d": 35
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Draka Zar",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Stormtail (true-dragon + earth, Heartgrit, Gnashing Teeth, Scything Forelimbs), 4–0, season 4 round 18",
+    "Galefang (wyrm + earth, Smolder Sac, Heartgrit, Hamstring Hooks), 3–0, season 4 round 64"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 7,
+     "d": 8
+    },
+    "true-dragon + earth": {
+     "w": 7,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 28,
+     "d": 25
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Venvel Vel",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [
+    "Slatehorn (wyvern + earth, Heartgrit, Lockjaw, Riposte Talons), 4–0, season 4 round 58",
+    "Brinespine (wyvern + water, Hollow Bones, Sidewinder Spine, Ash Gland), 4–0, season 4 round 75"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 18,
+     "d": 19
+    },
+    "wyvern + water": {
+     "w": 20,
+     "d": 13
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velven Cor",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Hollowwing (true-dragon + earth, Pebblescale, Milk Fang, Whetted Nail), 4–0, season 4 round 4",
+    "Slateheart (true-dragon + earth, Hamstring Hooks, Milk Fang, Raking Talons), 3–0, season 4 round 11",
+    "Stormtail (true-dragon + earth, Smolder Sac, Lockjaw, Milk Fang), 3–0, season 4 round 15",
+    "Stormclaw (true-dragon + earth, Heartgrit, Gnashing Teeth, Bounding Haunches), 4–0, season 4 round 19",
+    "Emberfang (true-dragon + air, Snapping Jaw, Hollow Bones, Gnashing Teeth), 4–0, season 4 round 29"
+   ],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 26,
+     "d": 15
+    },
+    "true-dragon + air": {
+     "w": 20,
+     "d": 16
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renbryn Ven",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 29,
+   "losses": 51,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [
+    "Rimewing (wyvern + water, Smolder Sac, Whetted Nail, Lockjaw), 4–0, season 4 round 71"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 4,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 11,
+     "d": 21
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 8,
+     "d": 11
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 6
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Draush Gal",
+   "style": "slugger",
+   "best": 3,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [
+    "Ironheart (wyrm + earth, Ash Gland, Milk Fang, Heartgrit), 3–0, season 4 round 23",
+    "Slatespine (wyrm + earth, Milk Fang, Pebblescale, Lockjaw), 3–0, season 4 round 35",
+    "Flintclaw (wyrm + earth, Ash Gland, Gnashing Teeth, Smolder Sac), 3–1, season 4 round 77"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 51,
+     "d": 29
+    }
+   }
+  },
+  {
+   "name": "Velash Yra",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Stormcrest (wyrm + earth, Thornscale, Heartgrit, Raking Talons), 5–0, season 4 round 15",
+    "Flintcrest (wyvern + air, Ash Gland, Whetted Nail, Lockjaw), 4–0, season 4 round 44",
+    "Hollowcrest (wyrm + earth, Pebblescale, Hamstring Hooks, Ash Gland), 3–0, season 4 round 57",
+    "Duskcrest (wyvern + air, Raking Talons, Whetted Nail, Hollow Bones), 3–1, season 4 round 79"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 27,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 17,
+     "d": 10
+    }
+   }
+  },
+  {
+   "name": "Dravel Zar",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [
+    "Slatecrest (wyvern + earth, Milk Fang, Raking Talons, Ratchet Claws), 5–1, season 4 round 14",
+    "Galewing (true-dragon + fire, Gnashing Teeth, Hamstring Hooks, Smoldering Maw), 5–1, season 4 round 33",
+    "Vanecrest (wyvern + air, Whetted Nail, Milk Fang, Lockjaw), 3–1, season 4 round 78"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 9,
+     "d": 11
+    },
+    "true-dragon + fire": {
+     "w": 25,
+     "d": 21
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashila Vel",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Ironmaw (wyvern + air, Smolder Sac, Smoldering Maw, Stooping Pinions), 4–0, season 4 round 12",
+    "Mireclaw (wyvern + air, Smolder Sac, Scything Forelimbs, Smoldering Maw), 4–0, season 4 round 37",
+    "Irontail (wyvern + air, Stooping Pinions, Smoldering Maw, Ash Gland), 4–0, season 4 round 45",
+    "Vanecrest (wyvern + air, Heartgrit, Whetted Nail, Milk Fang), 3–0, season 4 round 75"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 45,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Torsul Zar",
+   "style": "reader",
+   "best": 2,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 51,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 7,
+     "d": 13
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 14,
+     "d": 17
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Yragal Ven",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Flintheart (wyvern + air, Smolder Sac, Heartgrit, Hamstring Hooks), 4–0, season 4 round 46",
+    "Brineheart (wyvern + air, Hollow Bones, Pebblescale, Smoldering Maw), 4–1, season 4 round 53"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 39,
+     "d": 38
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torthi Mor",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [
+    "Hollowtail (wyvern + earth, Snapping Jaw, Milk Fang, Bounding Haunches), 4–0, season 4 round 22",
+    "Galewing (wyvern + earth, Heartgrit, Ratchet Claws, Milk Fang), 4–0, season 4 round 26"
+   ],
+   "prefs": {
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 17
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 22,
+     "d": 24
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velost Ush",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [
+    "Cindereye (true-dragon + fire, Smolder Sac, Sidewinder Spine, Ash Gland), 7–1, season 4 round 40"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 29
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velvel Mor",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Cindereye (true-dragon + fire, Whetted Nail, Smolder Sac, Milk Fang), 4–0, season 4 round 9",
+    "Mirecrest (true-dragon + fire, Snapping Jaw, Weathered Hide, Ash Gland), 4–0, season 4 round 16",
+    "Hollowspine (true-dragon + fire, Smolder Sac, Milk Fang, Hollow Bones), 4–1, season 4 round 67"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 40,
+     "d": 36
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yraven Thi",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Duskheart (wyrm + earth, Smolder Sac, Milk Fang, Whetted Nail), 3–0, season 4 round 6",
+    "Embertail (wyrm + earth, Smolder Sac, Ratchet Claws, Lockjaw), 5–0, season 4 round 33",
+    "Brineclaw (wyrm + earth, Hamstring Hooks, Lockjaw, Ash Gland), 4–0, season 4 round 56"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 39,
+     "d": 26
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 7
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Lincor Ka",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Duskheart (wyvern + water, Hollow Bones, Smolder Sac, Lockjaw), 4–1, season 4 round 14",
+    "Flintmaw (wyvern + water, Hollow Bones, Riposte Talons, Smoldering Maw), 4–0, season 4 round 28",
+    "Rimetail (wyvern + water, Milk Fang, Hollow Bones, Smoldering Maw), 6–1, season 4 round 47"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 34,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Thiash Ost",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [
+    "Thornheart (wyvern + fire, Whetted Nail, Ratchet Claws, Thornscale), 4–0, season 4 round 6",
+    "Flinthorn (true-dragon + air, Scything Forelimbs, Ratchet Claws, Thornscale), 5–0, season 4 round 32",
+    "Brinehorn (true-dragon + air, Snapping Jaw, Whetted Nail, Heartgrit), 3–0, season 4 round 43",
+    "Cinderhorn (true-dragon + air, Hamstring Hooks, Bounding Haunches, Ratchet Claws), 3–0, season 4 round 51",
+    "Mireclaw (true-dragon + air, Milk Fang, Scything Forelimbs, Lockjaw), 5–0, season 4 round 57"
+   ],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 4,
+     "d": 0
+    },
+    "true-dragon + air": {
+     "w": 34,
+     "d": 28
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drator Sul",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 31,
+   "losses": 49,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [
+    "Thornhorn (wyrm + water, Milk Fang, Smoldering Maw, Hollow Bones), 6–0, season 4 round 63"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 4,
+     "d": 9
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 10,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 15
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 8
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ventor Zar",
+   "style": "slugger",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [
+    "Galeclaw (wyrm + earth, Hollow Bones, Snapping Jaw, Milk Fang), 3–0, season 4 round 46",
+    "Rimespine (wyrm + earth, Sapping Bellow, Smoldering Maw, Milk Fang), 4–0, season 4 round 53",
+    "Slatewing (wyrm + earth, Ash Gland, Baleful Eye, Hamstring Hooks), 3–0, season 4 round 60",
+    "Embertail (wyrm + earth, Whetted Nail, Pebblescale, Lockjaw), 3–0, season 4 round 68"
+   ],
+   "prefs": {
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 43,
+     "d": 34
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynquen Quen",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [
+    "Ironspine (wyvern + air, Riposte Talons, Hollow Bones, Ash Gland), 5–0, season 4 round 18"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 34,
+     "d": 38
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynush Ush",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 42,
+   "ichor": 0,
+   "champions": [
+    "Ashcrest (wyvern + air, Heartgrit, Pebblescale, Snapping Jaw), 4–0, season 4 round 4",
+    "Thornclaw (wyvern + air, Gnashing Teeth, Pebblescale, Lockjaw), 3–0, season 4 round 16",
+    "Irontail (wyvern + air, Milk Fang, Lockjaw, Ash Gland), 3–0, season 4 round 23",
+    "Galemaw (wyvern + air, Hollow Bones, Smolder Sac, Snapping Jaw), 3–0, season 4 round 26",
+    "Slatewing (wyvern + air, Smolder Sac, Thornscale, Snapping Jaw), 3–0, season 4 round 33",
+    "Flintspine (wyvern + air, Lockjaw, Smolder Sac, Ratchet Claws), 4–0, season 4 round 47",
+    "Slatehorn (wyvern + earth, Snapping Jaw, Milk Fang, Hamstring Hooks), 4–0, season 4 round 56",
+    "Thorncrest (wyvern + air, Smoldering Maw, Weathered Hide, Whetted Nail), 4–0, season 4 round 63"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 39,
+     "d": 30
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galush Ven",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 35,
+   "ichor": 1,
+   "champions": [
+    "Embertail (wyvern + air, Scything Forelimbs, Snapping Jaw, Hollow Bones), 4–0, season 4 round 11",
+    "Ashspine (wyvern + air, Smoldering Maw, Ratchet Claws, Ash Gland), 4–0, season 4 round 17",
+    "Flinteye (wyvern + air, Hamstring Hooks, Weathered Hide, Smoldering Maw), 3–0, season 4 round 43",
+    "Duskheart (wyvern + air, Ash Gland, Stooping Pinions, Ratchet Claws), 3–0, season 4 round 57",
+    "Holloweye (wyvern + air, Smolder Sac, Hamstring Hooks, Smoldering Maw), 5–0, season 4 round 63"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 48,
+     "d": 32
+    }
+   }
+  },
+  {
+   "name": "Sulka Yra",
+   "style": "reader",
+   "best": 2,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 50,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 15,
+     "d": 27
+    },
+    "wyvern + air": {
+     "w": 10,
+     "d": 14
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ilasul Ila",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 40,
+   "ichor": 2,
+   "champions": [
+    "Ashtail (wyvern + air, Bounding Haunches, Whetted Nail, Smoldering Maw), 4–0, season 4 round 31",
+    "Ashclaw (wyvern + air, Raking Talons, Weathered Hide, Scything Forelimbs), 3–0, season 4 round 49",
+    "Mireclaw (wyvern + air, Whetted Nail, Ash Gland, Ratchet Claws), 3–0, season 4 round 55"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 37,
+     "d": 40
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Draven Lin",
+   "style": "bite-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [
+    "Vaneeye (wyrm + earth, Pebblescale, Sapping Bellow, Lockjaw), 5–1, season 4 round 13"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 28,
+     "d": 34
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynush Ash",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Mireheart (true-dragon + fire, Smolder Sac, Lockjaw, Whetted Nail), 3–0, season 4 round 26"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 38,
+     "d": 38
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drayra Ven",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [
+    "Vanefang (wyrm + water, Lockjaw, Mantle Wings, Riposte Talons), 5–0, season 4 round 39",
+    "Stormwing (true-dragon + fire, Hollow Bones, Ash Gland, Smoldering Maw), 3–0, season 4 round 54"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 17,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 30,
+     "d": 25
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashvel Gal",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Rimefang (true-dragon + earth, Mantle Wings, Gnashing Teeth, Ratchet Claws), 7–0, season 4 round 19",
+    "Slatemaw (true-dragon + fire, Snapping Jaw, Pebblescale, Ash Gland), 3–0, season 4 round 45",
+    "Cindermaw (wyrm + earth, Heartgrit, Snapping Jaw, Smoldering Maw), 4–0, season 4 round 77"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 17,
+     "d": 12
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 14,
+     "d": 15
+    },
+    "true-dragon + earth": {
+     "w": 12,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Linka Zar",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Vanecrest (true-dragon + fire, Pebblescale, Heartgrit, Smolder Sac), 3–0, season 4 round 19",
+    "Hollowcrest (true-dragon + fire, Milk Fang, Smoldering Maw, Sidewinder Spine), 4–0, season 4 round 29",
+    "Stormheart (wyvern + fire, Ash Gland, Hollow Bones, Lockjaw), 3–0, season 4 round 69"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 15,
+     "d": 14
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 9
+    },
+    "wyvern + fire": {
+     "w": 10,
+     "d": 9
+    },
+    "wyvern + water": {
+     "w": 7,
+     "d": 8
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Kamor Gal",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Galeeye (true-dragon + air, Ratchet Claws, Smolder Sac, Hamstring Hooks), 5–0, season 4 round 36",
+    "Flintspine (wyrm + earth, Hollow Bones, Whetted Nail, Scything Forelimbs), 3–0, season 4 round 54",
+    "Brinehorn (true-dragon + air, Whetted Nail, Heartgrit, Gnashing Teeth), 4–0, season 4 round 59"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 3,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 38,
+     "d": 25
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynila Zar",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 37,
+   "ichor": 5,
+   "champions": [
+    "Thornclaw (true-dragon + fire, Sidewinder Spine, Hollow Bones, Smoldering Maw), 4–0, season 4 round 22",
+    "Vaneclaw (true-dragon + fire, Smoldering Maw, Hollow Bones, Ash Gland), 8–0, season 4 round 50",
+    "Duskeye (true-dragon + fire, Weathered Hide, Ash Gland, Snapping Jaw), 3–0, season 4 round 54",
+    "Vaneeye (true-dragon + fire, Snapping Jaw, Lance Throat), 2–0, season 4 round 62",
+    "Slateeye (true-dragon + fire, Sapping Bellow, Smoldering Maw, Smolder Sac), 3–0, season 4 round 65"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 35,
+     "d": 21
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 8,
+     "d": 7
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Quengal Yra",
+   "style": "slugger",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [
+    "Galeeye (wyrm + earth, Baleful Eye, Snapping Jaw, Gnashing Teeth), 4–0, season 4 round 27",
+    "Dusktail (wyrm + earth, Hollow Bones, Whetted Nail, Lockjaw), 3–0, season 4 round 44"
+   ],
+   "prefs": {
+    "wyrm + air": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 40,
+     "d": 32
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velzar Quen",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 42,
+   "ichor": 0,
+   "champions": [
+    "Slatemaw (wyvern + air, Snapping Jaw, Heartgrit, Smolder Sac), 3–0, season 4 round 10",
+    "Emberhorn (wyvern + earth, Hamstring Hooks, Milk Fang, Snapping Jaw), 3–0, season 4 round 58",
+    "Ashmaw (wyvern + air, Whetted Nail, Scything Forelimbs, Smolder Sac), 3–0, season 4 round 76"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 27,
+     "d": 28
+    },
+    "wyrm + earth": {
+     "w": 5,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 10,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Sulyra Ila",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [
+    "Cinderclaw (true-dragon + water, Pebblescale, Heartgrit, Lockjaw), 4–0, season 4 round 7",
+    "Thornspine (true-dragon + fire, Hollow Bones, Weathered Hide, Snapping Jaw), 4–0, season 4 round 14",
+    "Ironclaw (true-dragon + fire, Smolder Sac, Raking Talons, Ratchet Claws), 3–0, season 4 round 43",
+    "Galewing (true-dragon + fire, Smolder Sac, Gnashing Teeth, Lockjaw), 3–0, season 4 round 68"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 10,
+     "d": 10
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 25,
+     "d": 15
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thiquen Thi",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [
+    "Dusktail (wyvern + air, Heartgrit, Stooping Pinions, Smoldering Maw), 3–0, season 4 round 34",
+    "Vanemaw (wyvern + air, Smolder Sac, Lockjaw, Ash Gland), 7–2, season 4 round 44",
+    "Ashclaw (wyvern + air, Scything Forelimbs, Milk Fang, Gnashing Teeth), 4–1, season 4 round 56"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 38,
+     "d": 33
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Lintor Ost",
+   "style": "reader",
+   "best": 3,
+   "wins": 22,
+   "losses": 58,
+   "hatched": 56,
+   "ichor": 0,
+   "champions": [
+    "Vaneheart (true-dragon + fire, Whetted Nail, Baleful Eye, Gnashing Teeth), 4–0, season 4 round 59"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 9
+    },
+    "true-dragon + fire": {
+     "w": 18,
+     "d": 32
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Morgal Dra",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 29,
+   "ichor": 4,
+   "champions": [
+    "Brinewing (wyvern + air, Pebblescale, Hamstring Hooks, Weathered Hide), 3–0, season 4 round 42",
+    "Mirewing (wyvern + air, Milk Fang, Riposte Talons, Bounding Haunches), 6–1, season 4 round 49",
+    "Ashhorn (wyvern + air, Weathered Hide, Milk Fang, Scything Forelimbs), 5–0, season 4 round 78"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 43,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Zargal Sul",
+   "style": "bite-focus",
+   "best": 2,
+   "wins": 27,
+   "losses": 53,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 3,
+     "d": 9
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 10,
+     "d": 28
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 6,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashsul Vel",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Vaneclaw (wyvern + water, Ash Gland, Smoldering Maw, Stooping Pinions), 7–5, season 4 round 74"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 28,
+     "d": 33
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 7,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Ashyra Tor",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Slatespine (true-dragon + fire, Hollow Bones, Weathered Hide, Snapping Jaw), 4–0, season 4 round 4",
+    "Hollowfang (true-dragon + fire, Ash Gland, Whetted Nail, Weathered Hide), 4–1, season 4 round 61"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 40,
+     "d": 37
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velren Ush",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [
+    "Embereye (wyrm + earth, Goading Roar, Heartgrit, Smoldering Maw), 3–0, season 4 round 23"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 13
+    },
+    "wyrm + earth": {
+     "w": 28,
+     "d": 20
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Corzar Ash",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 36,
+   "ichor": 2,
+   "champions": [
+    "Brinefang (wyvern + earth, Smolder Sac, Whetted Nail, Ash Gland), 4–0, season 4 round 36",
+    "Cinderspine (wyvern + earth, Smolder Sac, Ash Gland, Milk Fang), 3–0, season 4 round 64",
+    "Irontail (wyvern + earth, Milk Fang, Smolder Sac, Heartgrit), 3–0, season 4 round 76"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 28,
+     "d": 22
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 10,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynash Quen",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 21,
+     "d": 16
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 18,
+     "d": 14
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ventor Thi",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Thornhorn (wyvern + water, Smolder Sac, Hollow Bones, Lockjaw), 3–0, season 4 round 31",
+    "Slatefang (wyvern + water, Weathered Hide, Hollow Bones, Raking Talons), 4–1, season 4 round 53",
+    "Thornhorn (wyvern + water, Smoldering Maw, Hollow Bones, Sidewinder Spine), 3–0, season 4 round 60"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 6
+    },
+    "wyvern + water": {
+     "w": 34,
+     "d": 24
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 6
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushbryn Gal",
+   "style": "slugger",
+   "best": 3,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Cindereye (wyrm + earth, Pebblescale, Whetted Nail, Smoldering Maw), 3–0, season 4 round 13",
+    "Hollowtail (wyrm + earth, Smolder Sac, Milk Fang, Lockjaw), 3–0, season 4 round 29",
+    "Ashheart (wyrm + earth, Milk Fang, Heartgrit, Smoldering Maw), 4–0, season 4 round 38",
+    "Flinttail (wyrm + earth, Snapping Jaw, Smolder Sac, Scything Forelimbs), 5–0, season 4 round 43",
+    "Hollowspine (wyrm + earth, Smoldering Maw, Lockjaw, Smolder Sac), 3–0, season 4 round 46",
+    "Rimeeye (wyrm + earth, Whetted Nail, Hollow Bones, Ash Gland), 3–0, season 4 round 67"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 47,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Thilin Zar",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Dusktail (wyrm + earth, Smolder Sac, Whetted Nail, Hollow Bones), 3–0, season 4 round 7",
+    "Stormtail (wyrm + earth, Whetted Nail, Hollow Bones, Smolder Sac), 3–0, season 4 round 10",
+    "Thornspine (wyvern + air, Pebblescale, Smoldering Maw, Sidewinder Spine), 4–0, season 4 round 40",
+    "Duskheart (wyrm + earth, Mantle Wings, Lockjaw, Smoldering Maw), 4–0, season 4 round 52",
+    "Vanetail (wyrm + earth, Ash Gland, Heartgrit, Hollow Bones), 4–0, season 4 round 67",
+    "Mireheart (wyrm + earth, Raking Talons, Ash Gland, Smolder Sac), 4–1, season 4 round 80"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 16,
+     "d": 16
+    },
+    "wyrm + earth": {
+     "w": 31,
+     "d": 14
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilaquen Ush",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 3,
+   "champions": [
+    "Embertail (true-dragon + air, Snapping Jaw, Stooping Pinions, Weathered Hide), 3–0, season 4 round 41",
+    "Rimecrest (true-dragon + fire, Hollow Bones, Ash Gland, Lockjaw), 4–0, season 4 round 58",
+    "Hollowhorn (wyvern + air, Scything Forelimbs, Hamstring Hooks, Gnashing Teeth), 5–0, season 4 round 75"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 8,
+     "d": 10
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 21,
+     "d": 19
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 5,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Lintor Vel",
+   "style": "aerialist",
+   "best": 2,
+   "wins": 24,
+   "losses": 56,
+   "hatched": 54,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 18,
+     "d": 44
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 10
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashka Ren",
+   "style": "reader",
+   "best": 2,
+   "wins": 24,
+   "losses": 56,
+   "hatched": 52,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 2,
+     "d": 9
+    },
+    "true-dragon + fire": {
+     "w": 17,
+     "d": 33
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 5,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenvel Ash",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [
+    "Hollowclaw (wyvern + air, Smolder Sac, Hollow Bones, Scything Forelimbs), 5–1, season 4 round 22",
+    "Flinthorn (wyvern + air, Scything Forelimbs, Heartgrit, Hollow Bones), 4–0, season 4 round 31",
+    "Brinetail (wyvern + air, Hollow Bones, Snapping Jaw, Whetted Nail), 3–1, season 4 round 52"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 38,
+     "d": 39
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Rentor Ven",
+   "style": "bite-focus",
+   "best": 2,
+   "wins": 27,
+   "losses": 53,
+   "hatched": 48,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 20,
+     "d": 36
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 5
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Velven Vel",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Galeclaw (wyrm + water, Scything Forelimbs, Hollow Bones, Smoldering Maw), 8–3, season 4 round 33",
+    "Mirefang (true-dragon + fire, Heartgrit, Hollow Bones, Weathered Hide), 4–0, season 4 round 74"
+   ],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 15,
+     "d": 20
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 17,
+     "d": 13
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corgal Ila",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [
+    "Stormeye (true-dragon + fire, Whetted Nail, Weathered Hide, Ratchet Claws), 3–0, season 4 round 37",
+    "Mireeye (true-dragon + fire, Hamstring Hooks, Milk Fang, Smoldering Maw), 3–0, season 4 round 64"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 35
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corgal Zar",
+   "style": "charge-focus",
+   "best": 3,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 42,
+   "ichor": 0,
+   "champions": [
+    "Stormfang (wyvern + earth, Lockjaw, Whetted Nail, Ash Gland), 3–0, season 4 round 19",
+    "Cinderwing (true-dragon + fire, Whetted Nail, Scything Forelimbs, Smolder Sac), 3–0, season 4 round 61"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 16,
+     "d": 22
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 12,
+     "d": 13
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Dradra Quen",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [
+    "Cinderheart (wyvern + earth, Heartgrit, Weathered Hide, Smoldering Maw), 3–0, season 4 round 8",
+    "Thornmaw (wyvern + earth, Smoldering Maw, Heartgrit, Hamstring Hooks), 5–0, season 4 round 59",
+    "Galehorn (wyvern + earth, Weathered Hide, Ash Gland, Ratchet Claws), 5–0, season 4 round 68"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 35,
+     "d": 28
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Vengal Ash",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [
+    "Mireclaw (true-dragon + air, Whetted Nail, Milk Fang, Smolder Sac), 3–0, season 4 round 12",
+    "Thornhorn (wyrm + earth, Milk Fang, Raking Talons, Smoldering Maw), 4–0, season 4 round 39",
+    "Rimecrest (wyrm + earth, Heartgrit, Milk Fang, Hollow Bones), 4–0, season 4 round 48",
+    "Brinespine (true-dragon + air, Milk Fang, Hollow Bones, Heartgrit), 3–0, season 4 round 54",
+    "Ironclaw (wyrm + earth, Raking Talons, Snapping Jaw, Bounding Haunches), 3–0, season 4 round 71"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 24,
+     "d": 20
+    },
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 6
+    },
+    "wyrm + earth": {
+     "w": 17,
+     "d": 7
+    }
+   }
+  },
+  {
+   "name": "Venquen Quen",
+   "style": "out-boxer",
+   "best": 3,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Galemaw (true-dragon + fire, Hollow Bones, Smolder Sac, Scything Forelimbs), 3–0, season 4 round 75"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 20
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Karen Zar",
+   "style": "slugger",
+   "best": 3,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [
+    "Ironhorn (wyrm + earth, Lockjaw, Whetted Nail, Ash Gland), 5–0, season 4 round 5",
+    "Ashwing (wyrm + earth, Smolder Sac, Lockjaw, Snapping Jaw), 4–0, season 4 round 9",
+    "Hollowmaw (wyrm + earth, Heartgrit, Lockjaw, Raking Talons), 3–1, season 4 round 48",
+    "Vanehorn (wyrm + earth, Lockjaw, Raking Talons, Whetted Nail), 4–0, season 4 round 79"
+   ],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 49,
+     "d": 31
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,9921 @@
+{
+ "seed": 2027,
+ "tamers": [
+  {
+   "name": "Sulila Gal",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 104,
+   "losses": 56,
+   "hatched": 58,
+   "ichor": 0,
+   "champions": [
+    "Holloweye (true-dragon + air, Hollow Bones, Heartgrit, Smolder Sac), 9\u20130, season 1 round 40"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 60,
+     "d": 26
+    },
+    "wyvern + air": {
+     "w": 12,
+     "d": 6
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Karen Ash",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 59,
+   "losses": 30,
+   "hatched": 32,
+   "ichor": 1,
+   "champions": [
+    "Ironhorn (true-dragon + fire, Heartgrit, Hollow Bones, Pebblescale), 9\u20130, season 1 round 9"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 0
+    },
+    "wyvern + air": {
+     "w": 48,
+     "d": 29
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yramor Quen",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 58,
+   "losses": 32,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [
+    "Hollowclaw (wyvern + water, Whetted Nail, Heartgrit, Smolder Sac), 9\u20130, season 1 round 11"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 9,
+     "d": 0
+    },
+    "wyvern + air": {
+     "w": 49,
+     "d": 31
+    }
+   }
+  },
+  {
+   "name": "Galvel Ila",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 54,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Rimehorn (wyvern + air, Milk Fang, Pebblescale, Whetted Nail), 9\u20130, season 1 round 12"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 54,
+     "d": 35
+    }
+   }
+  },
+  {
+   "name": "Cortor Tor",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 101,
+   "losses": 59,
+   "hatched": 61,
+   "ichor": 0,
+   "champions": [
+    "Duskclaw (wyvern + air, Pebblescale, Heartgrit, Milk Fang), 9\u20130, season 1 round 14",
+    "Rimetail (wyvern + earth, Heartgrit, Milk Fang, Hollow Bones), 9\u20130, season 1 round 65"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 28,
+     "d": 11
+    },
+    "wyvern + earth": {
+     "w": 10,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 23,
+     "d": 15
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Yrayra Ash",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 59,
+   "losses": 33,
+   "hatched": 35,
+   "ichor": 2,
+   "champions": [
+    "Slatewing (wyvern + air, Weathered Hide, Heartgrit, Smolder Sac), 9\u20130, season 1 round 20"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 21,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 30,
+     "d": 17
+    },
+    "wyvern + fire": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ostash Ren",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 68,
+   "losses": 25,
+   "hatched": 27,
+   "ichor": 0,
+   "champions": [
+    "Vaneclaw (wyvern + earth, Pebblescale, Heartgrit, Smolder Sac), 9\u20130, season 1 round 22"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 17,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 51,
+     "d": 18
+    }
+   }
+  },
+  {
+   "name": "Corush Lin",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 54,
+   "losses": 41,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [
+    "Stormclaw (wyvern + air, Smolder Sac, Whetted Nail, Heartgrit), 9\u20130, season 1 round 28"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 54,
+     "d": 35
+    }
+   }
+  },
+  {
+   "name": "Ilayra Bryn",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 55,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 1,
+   "champions": [
+    "Hollowheart (wyvern + fire, Whetted Nail, Pebblescale, Smolder Sac), 9\u20130, season 1 round 36"
+   ],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 11,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 39,
+     "d": 22
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Yrazar Yra",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 56,
+   "losses": 41,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Vaneheart (wyvern + air, Milk Fang, Whetted Nail, Smolder Sac), 9\u20130, season 1 round 38"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 56,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Ilamor Gal",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 59,
+   "losses": 41,
+   "hatched": 43,
+   "ichor": 1,
+   "champions": [
+    "Thorntail (wyrm + water, Milk Fang, Whetted Nail, Heartgrit), 9\u20130, season 1 round 43"
+   ],
+   "prefs": {
+    "wyrm + water": {
+     "w": 16,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 43,
+     "d": 26
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarbryn Bryn",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 61,
+   "losses": 48,
+   "hatched": 50,
+   "ichor": 0,
+   "champions": [
+    "Rimespine (true-dragon + fire, Milk Fang, Heartgrit, Whetted Nail), 9\u20130, season 1 round 47"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 24,
+     "d": 15
+    },
+    "wyvern + water": {
+     "w": 18,
+     "d": 7
+    }
+   }
+  },
+  {
+   "name": "Kathi Ash",
+   "style": "aerialist",
+   "best": 3,
+   "wins": 63,
+   "losses": 41,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [
+    "Thorntail (wyvern + air, Whetted Nail, Milk Fang, Pebblescale), 9\u20130, season 1 round 51"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 63,
+     "d": 26
+    }
+   }
+  },
+  {
+   "name": "Rendra Dra",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 61,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 1,
+   "champions": [
+    "Mirecrest (wyvern + earth, Smolder Sac, Heartgrit, Milk Fang), 9\u20130, season 1 round 54"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 50,
+     "d": 25
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 8,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morzar Yra",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 60,
+   "losses": 52,
+   "hatched": 53,
+   "ichor": 1,
+   "champions": [
+    "Hollowfang (wyvern + water, Hollow Bones, Pebblescale, Whetted Nail), 9\u20130, season 1 round 54"
+   ],
+   "prefs": {
+    "wyvern + water": {
+     "w": 9,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 48,
+     "d": 24
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Zarvel Mor",
+   "style": "claw-focus",
+   "best": 3,
+   "wins": 55,
+   "losses": 56,
+   "hatched": 57,
+   "ichor": 1,
+   "champions": [
+    "Brinecrest (wyvern + air, Heartgrit, Weathered Hide, Whetted Nail), 9\u20130, season 1 round 56"
+   ],
+   "prefs": {
+    "wyvern + air": {
+     "w": 55,
+     "d": 34
+    }
+   }
+  },
+  {
+   "name": "Ashquen Cor",
+   "style": "counterpuncher",
+   "best": 3,
+   "wins": 56,
+   "losses": 67,
+   "hatched": 68,
+   "ichor": 0,
+   "champions": [
+    "Flinthorn (true-dragon + fire, Milk Fang, Hollow Bones, Gnashing Teeth), 9\u20130, season 1 round 69"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 0
+    },
+    "wyvern + air": {
+     "w": 47,
+     "d": 31
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarash Ila",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 60,
+   "losses": 54,
+   "hatched": 56,
+   "ichor": 3,
+   "champions": [
+    "Stormtail (wyvern + earth, Smolder Sac, Whetted Nail, Weathered Hide), 9\u20130, season 1 round 76"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 11,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 34,
+     "d": 20
+    },
+    "true-dragon + fire": {
+     "w": 15,
+     "d": 6
+    }
+   }
+  },
+  {
+   "name": "Velzar Gal",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 62,
+   "losses": 64,
+   "hatched": 65,
+   "ichor": 1,
+   "champions": [
+    "Rimewing (true-dragon + fire, Smolder Sac, Hollow Bones, Whetted Nail), 9\u20130, season 1 round 79"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 62,
+     "d": 27
+    }
+   }
+  },
+  {
+   "name": "Zarbryn Mor",
+   "style": "reader",
+   "best": 0,
+   "wins": 21,
+   "losses": 59,
+   "hatched": 60,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 17
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 6
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 12
+    },
+    "wyvern + water": {
+     "w": 5,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Draila Dra",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 31,
+   "losses": 49,
+   "hatched": 49,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 30,
+     "d": 42
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Coryra Ush",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 50,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 6
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 20,
+     "d": 28
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galzar Quen",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 30,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 34,
+     "d": 21
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 13,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morgal Ush",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 33,
+   "ichor": 2,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 6,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 38,
+     "d": 28
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Galzar Sul",
+   "style": "charge-focus",
+   "best": 0,
+   "wins": 22,
+   "losses": 58,
+   "hatched": 59,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 7,
+     "d": 12
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 12,
+     "d": 22
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Yraash Vel",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 4,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 19,
+     "d": 22
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Yrabryn Yra",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 2,
+     "d": 7
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 6
+    },
+    "wyrm + earth": {
+     "w": 18,
+     "d": 12
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Velmor Quen",
+   "style": "out-boxer",
+   "best": 2,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 32,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 35,
+     "d": 16
+    },
+    "wyvern + water": {
+     "w": 8,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velila Ka",
+   "style": "slugger",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 5
+    },
+    "wyrm + earth": {
+     "w": 16,
+     "d": 21
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 5,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Thidra Ila",
+   "style": "counterpuncher",
+   "best": 0,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 51,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 6,
+     "d": 11
+    },
+    "wyvern + air": {
+     "w": 11,
+     "d": 18
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 7,
+     "d": 9
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Tordra Sul",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [
+    "Slateclaw (wyvern + air, Snapping Jaw, Hollow Bones, Ash Gland), 9\u20130, season 2 round 39"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 31,
+     "d": 10
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yrathi Ven",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 22,
+     "d": 32
+    },
+    "wyvern + earth": {
+     "w": 8,
+     "d": 9
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Linash Yra",
+   "style": "reader",
+   "best": 0,
+   "wins": 17,
+   "losses": 63,
+   "hatched": 63,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 6,
+     "d": 17
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 16
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 10
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velgal Ush",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 41,
+     "d": 36
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thiash Vel",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 28,
+     "d": 29
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 6
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zardra Vel",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 30,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 32,
+     "d": 19
+    },
+    "wyvern + fire": {
+     "w": 14,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilamor Ila",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 30,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 49,
+     "d": 25
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostsul Mor",
+   "style": "charge-focus",
+   "best": 0,
+   "wins": 23,
+   "losses": 57,
+   "hatched": 57,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 5,
+     "d": 13
+    },
+    "true-dragon + fire": {
+     "w": 8,
+     "d": 16
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 7
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 5
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yramor Ren",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 31,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 22,
+     "d": 12
+    },
+    "wyvern + water": {
+     "w": 16,
+     "d": 11
+    },
+    "wyvern + fire": {
+     "w": 6,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yraka Ost",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 59,
+   "losses": 21,
+   "hatched": 22,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 9,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 15,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 33,
+     "d": 11
+    }
+   }
+  },
+  {
+   "name": "Renyra Bryn",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 6,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 22
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Venush Mor",
+   "style": "slugger",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 44,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 23,
+     "d": 21
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 7,
+     "d": 6
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Quenquen Tor",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 20,
+   "losses": 60,
+   "hatched": 60,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 2,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 15
+    },
+    "wyrm + earth": {
+     "w": 4,
+     "d": 12
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 7
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Iladra Dra",
+   "style": "boxer-puncher",
+   "best": 2,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 12,
+     "d": 11
+    },
+    "true-dragon + water": {
+     "w": 13,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 6
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 7
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Thiost Vel",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 33,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 47,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Sulthi Ila",
+   "style": "reader",
+   "best": 1,
+   "wins": 29,
+   "losses": 51,
+   "hatched": 51,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 11
+    },
+    "wyvern + air": {
+     "w": 7,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 7
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 12,
+     "d": 9
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Brynquen Ash",
+   "style": "claw-focus",
+   "best": 2,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 43,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 29,
+     "d": 29
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 4,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Thika Ven",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 18,
+     "d": 23
+    },
+    "wyvern + earth": {
+     "w": 9,
+     "d": 13
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulsul Ven",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 45,
+     "d": 30
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulush Ila",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 18,
+     "d": 22
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 7,
+     "d": 7
+    },
+    "wyrm + water": {
+     "w": 13,
+     "d": 9
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashyra Cor",
+   "style": "charge-focus",
+   "best": 2,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 28,
+     "d": 14
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 20,
+     "d": 9
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Dravel Vel",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 11,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 26,
+     "d": 11
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linush Cor",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 15,
+     "d": 14
+    },
+    "true-dragon + air": {
+     "w": 13,
+     "d": 8
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 11,
+     "d": 5
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Rensul Ost",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 10,
+     "d": 11
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 8,
+     "d": 15
+    },
+    "wyvern + water": {
+     "w": 9,
+     "d": 11
+    },
+    "wyvern + air": {
+     "w": 5,
+     "d": 6
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renost Sul",
+   "style": "slugger",
+   "best": 2,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 26,
+     "d": 21
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 8,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 4,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Thitor Ka",
+   "style": "counterpuncher",
+   "best": 2,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 8,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 29,
+     "d": 24
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ushgal Lin",
+   "style": "boxer-puncher",
+   "best": 3,
+   "wins": 55,
+   "losses": 25,
+   "hatched": 27,
+   "ichor": 1,
+   "champions": [
+    "Hollowclaw (true-dragon + fire, Milk Fang, Heartgrit, Weathered Hide), 9\u20130, season 2 round 45"
+   ],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 28,
+     "d": 12
+    },
+    "wyvern + air": {
+     "w": 20,
+     "d": 9
+    },
+    "true-dragon + air": {
+     "w": 4,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Torzar Tor",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 27,
+     "d": 29
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 11,
+     "d": 11
+    }
+   }
+  },
+  {
+   "name": "Velven Bryn",
+   "style": "reader",
+   "best": 1,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 9,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 19
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 10,
+     "d": 13
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Tormor Tor",
+   "style": "claw-focus",
+   "best": 2,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 28,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 50,
+     "d": 26
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarren Zar",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 20,
+   "losses": 60,
+   "hatched": 60,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 4,
+     "d": 9
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 7
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 10,
+     "d": 16
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 5
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 5
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Quenila Yra",
+   "style": "breath-focus",
+   "best": 3,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [
+    "Cindertail (true-dragon + fire, Ash Gland, Smolder Sac, Pebblescale), 9\u20130, season 2 round 75"
+   ],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 8,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 39,
+     "d": 23
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quensul Sul",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 50,
+     "d": 27
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilagal Ush",
+   "style": "charge-focus",
+   "best": 2,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 2,
+     "d": 6
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 39,
+     "d": 25
+    }
+   }
+  },
+  {
+   "name": "Zardra Yra",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 8,
+     "d": 7
+    },
+    "wyvern + earth": {
+     "w": 21,
+     "d": 13
+    },
+    "wyvern + fire": {
+     "w": 4,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 8,
+     "d": 6
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velmor Bryn",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [
+    "Hollowmaw (true-dragon + air, Smolder Sac, Heartgrit, Ash Gland), 9\u20130, season 2 round 49"
+   ],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 7
+    },
+    "true-dragon + air": {
+     "w": 28,
+     "d": 17
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Mormor Dra",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 18,
+     "d": 10
+    },
+    "true-dragon + fire": {
+     "w": 30,
+     "d": 17
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Yrathi Dra",
+   "style": "slugger",
+   "best": 1,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 35,
+     "d": 25
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linila Gal",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 14,
+     "d": 8
+    },
+    "wyvern + air": {
+     "w": 16,
+     "d": 8
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 17,
+     "d": 9
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quengal Tor",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 6,
+     "d": 8
+    },
+    "wyvern + earth": {
+     "w": 18,
+     "d": 8
+    },
+    "wyvern + air": {
+     "w": 7,
+     "d": 11
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 5,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morgal Yra",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 41,
+     "d": 35
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Linka Ila",
+   "style": "reader",
+   "best": 0,
+   "wins": 23,
+   "losses": 57,
+   "hatched": 57,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 13
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 18
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 6,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 6
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Yrabryn Quen",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 41,
+     "d": 34
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenash Bryn",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 26,
+   "losses": 54,
+   "hatched": 54,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 19,
+     "d": 28
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 8
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sullin Bryn",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 4,
+     "d": 5
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 22,
+     "d": 20
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 6
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Velthi Ost",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 23,
+     "d": 26
+    },
+    "wyrm + water": {
+     "w": 6,
+     "d": 6
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashka Ash",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 7,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 23,
+     "d": 13
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 8
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 9,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushgal Vel",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 4,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 15,
+     "d": 9
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 16,
+     "d": 7
+    },
+    "wyvern + fire": {
+     "w": 9,
+     "d": 6
+    },
+    "wyrm + earth": {
+     "w": 4,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushcor Quen",
+   "style": "swarmer",
+   "best": 3,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [
+    "Flintcrest (true-dragon + air, Whetted Nail, Pebblescale, Bounding Haunches), 9\u20130, season 2 round 78"
+   ],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 22,
+     "d": 10
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 5,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 9,
+     "d": 7
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Venzar Zar",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 40,
+   "ichor": 2,
+   "champions": [],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 23,
+     "d": 16
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 6,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Veldra Quen",
+   "style": "slugger",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 45,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 27,
+     "d": 31
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drator Vel",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 6,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 22,
+     "d": 17
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 16,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Galost Mor",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 5,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 5
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 20,
+     "d": 19
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morila Cor",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 41,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 33,
+     "d": 32
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Venmor Ash",
+   "style": "reader",
+   "best": 0,
+   "wins": 15,
+   "losses": 65,
+   "hatched": 66,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 1,
+     "d": 5
+    },
+    "true-dragon + air": {
+     "w": 7,
+     "d": 13
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 11
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 15
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 6
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilavel Ven",
+   "style": "claw-focus",
+   "best": 0,
+   "wins": 21,
+   "losses": 59,
+   "hatched": 59,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 12,
+     "d": 34
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 6
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 5
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Tortor Ost",
+   "style": "bite-focus",
+   "best": 0,
+   "wins": 25,
+   "losses": 55,
+   "hatched": 55,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + air": {
+     "w": 5,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 10,
+     "d": 17
+    },
+    "wyvern + water": {
+     "w": 6,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 8
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Velsul Gal",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 21
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 7
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashdra Quen",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 47,
+     "d": 29
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashthi Ren",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 24,
+     "d": 21
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 9
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yravel Vel",
+   "style": "kite-focus",
+   "best": 3,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [
+    "Cinderfang (true-dragon + fire, Hollow Bones, Milk Fang, Smolder Sac), 9\u20130, season 2 round 10"
+   ],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 11,
+     "d": 11
+    },
+    "true-dragon + fire": {
+     "w": 42,
+     "d": 15
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Draila Ost",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 7,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 18,
+     "d": 9
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 23,
+     "d": 13
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galzar Sul",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 15,
+     "d": 11
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 22,
+     "d": 15
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostdra Thi",
+   "style": "slugger",
+   "best": 2,
+   "wins": 58,
+   "losses": 22,
+   "hatched": 23,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 6,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 50,
+     "d": 19
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulka Ren",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 21,
+     "d": 12
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 11,
+     "d": 13
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashyra Tor",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 22,
+     "d": 15
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 12,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Quengal Dra",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 45,
+     "d": 32
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashtor Dra",
+   "style": "reader",
+   "best": 0,
+   "wins": 13,
+   "losses": 67,
+   "hatched": 67,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 16
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 6
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Mortor Tor",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 33,
+     "d": 39
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulila Vel",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 49,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 25,
+     "d": 29
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linthi Vel",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 4,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 29,
+     "d": 28
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 5,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torka Ven",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 50,
+     "d": 23
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Suldra Sul",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 48,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 8,
+     "d": 15
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 14,
+     "d": 14
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 6,
+     "d": 8
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Bryncor Ash",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 9,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 25,
+     "d": 15
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Zarila Gal",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 28,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 6
+    },
+    "wyvern + air": {
+     "w": 8,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 37,
+     "d": 15
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drayra Yra",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 45,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 9,
+     "d": 10
+    },
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 12
+    },
+    "wyvern + water": {
+     "w": 12,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Draka Dra",
+   "style": "slugger",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 26,
+     "d": 25
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 6,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Veldra Ven",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 11,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 11,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 19,
+     "d": 10
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kaka Lin",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 15,
+     "d": 19
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 10,
+     "d": 7
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yrazar Zar",
+   "style": "aerialist",
+   "best": 2,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 31,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 45,
+     "d": 29
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostash Yra",
+   "style": "reader",
+   "best": 0,
+   "wins": 22,
+   "losses": 58,
+   "hatched": 59,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 11,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 7
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 9
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ostyra Ush",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 37,
+     "d": 34
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velbryn Lin",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 24,
+   "losses": 56,
+   "hatched": 56,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 7
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 19
+    },
+    "wyrm + air": {
+     "w": 4,
+     "d": 7
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Renyra Yra",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 47,
+     "d": 33
+    }
+   }
+  },
+  {
+   "name": "Renlin Mor",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 47,
+     "d": 31
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Vensul Cor",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 46,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 6
+    },
+    "wyrm + earth": {
+     "w": 9,
+     "d": 10
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 17,
+     "d": 17
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Venost Ven",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 56,
+   "losses": 24,
+   "hatched": 24,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 23,
+     "d": 11
+    },
+    "wyvern + water": {
+     "w": 14,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Kaka Yra",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 33,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 33,
+     "d": 14
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 7,
+     "d": 7
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Karen Lin",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 45,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 21,
+     "d": 18
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 6
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushila Ven",
+   "style": "slugger",
+   "best": 1,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 39,
+     "d": 29
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Lintor Ila",
+   "style": "counterpuncher",
+   "best": 0,
+   "wins": 28,
+   "losses": 52,
+   "hatched": 52,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 12,
+     "d": 23
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 7
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 4,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corka Ven",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 7
+    },
+    "true-dragon + air": {
+     "w": 8,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 8,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 13,
+     "d": 14
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Velthi Sul",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 39,
+     "d": 30
+    },
+    "wyvern + fire": {
+     "w": 4,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Zarush Ka",
+   "style": "reader",
+   "best": 0,
+   "wins": 13,
+   "losses": 67,
+   "hatched": 67,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 13
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 4,
+     "d": 19
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 7
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 7
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velcor Yra",
+   "style": "claw-focus",
+   "best": 0,
+   "wins": 20,
+   "losses": 60,
+   "hatched": 60,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 13,
+     "d": 29
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 5,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Dracor Lin",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 28,
+   "losses": 52,
+   "hatched": 52,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 12,
+     "d": 20
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 17
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renush Ost",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 3,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 13,
+     "d": 18
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 7,
+     "d": 9
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Quenush Ila",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 44,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 31,
+     "d": 28
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulila Mor",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 7
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 8,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 6,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 12,
+     "d": 10
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 6,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yraila Bryn",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 31,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 21,
+     "d": 15
+    },
+    "true-dragon + fire": {
+     "w": 25,
+     "d": 9
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynthi Ren",
+   "style": "swarmer",
+   "best": 0,
+   "wins": 23,
+   "losses": 57,
+   "hatched": 57,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 8,
+     "d": 12
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 8
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 6
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 10
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 5
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilator Bryn",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 37,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 21,
+     "d": 15
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 12,
+     "d": 8
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galthi Sul",
+   "style": "slugger",
+   "best": 1,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 32,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 23,
+     "d": 20
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 13,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renila Bryn",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 51,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 11,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 9,
+     "d": 18
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 9
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 7
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galdra Quen",
+   "style": "boxer-puncher",
+   "best": 2,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 16,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 21,
+     "d": 15
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostmor Gal",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 13,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 26,
+     "d": 29
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velren Quen",
+   "style": "reader",
+   "best": 2,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 34,
+     "d": 31
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 5
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilaven Ven",
+   "style": "claw-focus",
+   "best": 0,
+   "wins": 28,
+   "losses": 52,
+   "hatched": 53,
+   "ichor": 2,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 20,
+     "d": 34
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Zarven Cor",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 26,
+   "losses": 54,
+   "hatched": 54,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 2,
+     "d": 8
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 5
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 18
+    },
+    "wyrm + air": {
+     "w": 6,
+     "d": 7
+    },
+    "wyrm + water": {
+     "w": 4,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Sultor Ka",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 43,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 5,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 24,
+     "d": 22
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 4,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thiren Ka",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 18,
+     "d": 15
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 5,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 6,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 8,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ashven Lin",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 5,
+     "d": 8
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 20,
+     "d": 14
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 11,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenash Ven",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 15,
+     "d": 12
+    },
+    "true-dragon + fire": {
+     "w": 14,
+     "d": 10
+    },
+    "wyvern + water": {
+     "w": 7,
+     "d": 8
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Iladra Gal",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 31,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 15,
+     "d": 10
+    },
+    "true-dragon + water": {
+     "w": 6,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 27,
+     "d": 14
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linyra Ven",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 18,
+     "d": 14
+    },
+    "true-dragon + fire": {
+     "w": 8,
+     "d": 10
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 9,
+     "d": 9
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashila Sul",
+   "style": "slugger",
+   "best": 1,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 46,
+   "ichor": 2,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 17,
+     "d": 27
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 11,
+     "d": 6
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morven Vel",
+   "style": "counterpuncher",
+   "best": 2,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 28,
+     "d": 19
+    },
+    "wyvern + earth": {
+     "w": 7,
+     "d": 6
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 8,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Sulash Vel",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 30,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 16,
+     "d": 8
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 27,
+     "d": 13
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morsul Quen",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 43,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 35,
+     "d": 36
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Zarash Dra",
+   "style": "reader",
+   "best": 0,
+   "wins": 22,
+   "losses": 58,
+   "hatched": 58,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 3,
+     "d": 10
+    },
+    "true-dragon + fire": {
+     "w": 11,
+     "d": 19
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 7
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 8
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Mortor Ven",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 42,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 38,
+     "d": 40
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thitor Thi",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 48,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 18,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 7,
+     "d": 8
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 5
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilayra Thi",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 35,
+     "d": 32
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarila Zar",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 39,
+     "d": 29
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thidra Sul",
+   "style": "charge-focus",
+   "best": 2,
+   "wins": 39,
+   "losses": 41,
+   "hatched": 42,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 33,
+     "d": 26
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 8
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarost Sul",
+   "style": "kite-focus",
+   "best": 2,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 31,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 12,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 30,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 7
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostyra Ush",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 21,
+     "d": 22
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 15,
+     "d": 12
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Dracor Cor",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 27,
+   "losses": 53,
+   "hatched": 54,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 9,
+     "d": 16
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 9
+    },
+    "true-dragon + fire": {
+     "w": 11,
+     "d": 14
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashbryn Zar",
+   "style": "slugger",
+   "best": 1,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 48,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 4,
+     "d": 5
+    },
+    "wyrm + fire": {
+     "w": 4,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 23,
+     "d": 26
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velost Quen",
+   "style": "counterpuncher",
+   "best": 2,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 10,
+     "d": 12
+    },
+    "wyrm + earth": {
+     "w": 37,
+     "d": 20
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thiush Ush",
+   "style": "boxer-puncher",
+   "best": 2,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 19,
+     "d": 11
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 12
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 10,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Tortor Ka",
+   "style": "aerialist",
+   "best": 0,
+   "wins": 24,
+   "losses": 56,
+   "hatched": 57,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 15,
+     "d": 32
+    },
+    "wyvern + earth": {
+     "w": 6,
+     "d": 14
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 7
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ostcor Ven",
+   "style": "reader",
+   "best": 1,
+   "wins": 20,
+   "losses": 60,
+   "hatched": 60,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 3,
+     "d": 14
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 19
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Suldra Ash",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 29,
+   "losses": 51,
+   "hatched": 51,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 24,
+     "d": 37
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Draven Bryn",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 29,
+   "losses": 51,
+   "hatched": 51,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 22,
+     "d": 32
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 10
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velbryn Ush",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 28
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 5,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulvel Tor",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 6,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 45,
+     "d": 23
+    }
+   }
+  },
+  {
+   "name": "Ushquen Ven",
+   "style": "charge-focus",
+   "best": 0,
+   "wins": 24,
+   "losses": 56,
+   "hatched": 56,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 8,
+     "d": 18
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 7,
+     "d": 9
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 13
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Torcor Sul",
+   "style": "kite-focus",
+   "best": 2,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 32,
+     "d": 17
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 6
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 9,
+     "d": 5
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galbryn Ka",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 30,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 6,
+     "d": 9
+    },
+    "true-dragon + earth": {
+     "w": 39,
+     "d": 14
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostren Ash",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 5,
+     "d": 11
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 15
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 14,
+     "d": 14
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velven Gal",
+   "style": "slugger",
+   "best": 1,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 41,
+     "d": 31
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kadra Yra",
+   "style": "counterpuncher",
+   "best": 2,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 11,
+     "d": 18
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 10
+    },
+    "wyrm + fire": {
+     "w": 13,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Zarost Zar",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 40,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 33,
+     "d": 19
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 7
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ilavel Ash",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 44,
+     "d": 30
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ilathi Ka",
+   "style": "reader",
+   "best": 0,
+   "wins": 22,
+   "losses": 58,
+   "hatched": 59,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 8
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 6,
+     "d": 15
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 9
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 8
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 7
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ushush Zar",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 38,
+   "losses": 42,
+   "hatched": 43,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 36,
+     "d": 36
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Quenquen Yra",
+   "style": "bite-focus",
+   "best": 0,
+   "wins": 21,
+   "losses": 59,
+   "hatched": 60,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 4,
+     "d": 12
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 8,
+     "d": 15
+    },
+    "wyrm + water": {
+     "w": 4,
+     "d": 9
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Ostmor Mor",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 27,
+     "d": 29
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velthi Tor",
+   "style": "meter-focus",
+   "best": 3,
+   "wins": 55,
+   "losses": 25,
+   "hatched": 27,
+   "ichor": 0,
+   "champions": [
+    "Hollowmaw (true-dragon + fire, Hollow Bones, Smolder Sac, Raking Talons), 9\u20130, season 2 round 16"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 55,
+     "d": 22
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynbryn Ila",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 33,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 43,
+     "d": 23
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 4,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulmor Vel",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 6,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 25,
+     "d": 15
+    },
+    "wyrm + fire": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 9,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 0
+    }
+   }
+  },
+  {
+   "name": "Ilabryn Tor",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 13,
+     "d": 11
+    },
+    "true-dragon + air": {
+     "w": 11,
+     "d": 12
+    },
+    "wyrm + earth": {
+     "w": 19,
+     "d": 10
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarlin Ost",
+   "style": "out-boxer",
+   "best": 2,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 28,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 16,
+     "d": 9
+    },
+    "true-dragon + fire": {
+     "w": 35,
+     "d": 16
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulquen Mor",
+   "style": "slugger",
+   "best": 3,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [
+    "Slateeye (wyrm + earth, Heartgrit, Hollow Bones, Snapping Jaw), 9\u20130, season 2 round 55"
+   ],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 47,
+     "d": 28
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Brynren Ven",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 24,
+     "d": 19
+    },
+    "wyrm + earth": {
+     "w": 13,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 9,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Torbryn Ka",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 35,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 8,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 10,
+     "d": 6
+    },
+    "wyrm + earth": {
+     "w": 6,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 15,
+     "d": 6
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drathi Ost",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 36,
+     "d": 35
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Quenush Ost",
+   "style": "reader",
+   "best": 0,
+   "wins": 15,
+   "losses": 65,
+   "hatched": 65,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 3,
+     "d": 16
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 12
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 10
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 7
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 5
+    }
+   }
+  },
+  {
+   "name": "Ushush Ash",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 50,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 25,
+     "d": 37
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Vengal Ren",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 26,
+   "losses": 54,
+   "hatched": 55,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 10,
+     "d": 23
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 8
+    },
+    "true-dragon + earth": {
+     "w": 5,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 5
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morush Dra",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 61,
+   "losses": 19,
+   "hatched": 19,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 60,
+     "d": 18
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galren Dra",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 3,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 33,
+     "d": 27
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Cormor Gal",
+   "style": "charge-focus",
+   "best": 0,
+   "wins": 30,
+   "losses": 50,
+   "hatched": 50,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 5,
+     "d": 13
+    },
+    "wyrm + earth": {
+     "w": 12,
+     "d": 14
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 3,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 5
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Vengal Yra",
+   "style": "kite-focus",
+   "best": 2,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 17,
+     "d": 9
+    },
+    "wyvern + earth": {
+     "w": 27,
+     "d": 17
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quensul Quen",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 31,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 49,
+     "d": 26
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Drazar Ila",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 8,
+     "d": 7
+    },
+    "true-dragon + fire": {
+     "w": 17,
+     "d": 12
+    },
+    "wyrm + water": {
+     "w": 6,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 15,
+     "d": 9
+    }
+   }
+  },
+  {
+   "name": "Quencor Tor",
+   "style": "slugger",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 31,
+     "d": 28
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 4,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Torven Sul",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 20,
+     "d": 20
+    },
+    "wyrm + fire": {
+     "w": 4,
+     "d": 6
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 8,
+     "d": 12
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kamor Dra",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 7,
+     "d": 4
+    },
+    "true-dragon + air": {
+     "w": 9,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 13,
+     "d": 10
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 9,
+     "d": 5
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashmor Cor",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 41,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 26,
+     "d": 30
+    },
+    "wyvern + earth": {
+     "w": 10,
+     "d": 9
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Venost Ka",
+   "style": "reader",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 4,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 20,
+     "d": 24
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 8
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ilacor Bryn",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 35,
+     "d": 41
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostgal Thi",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 23,
+   "losses": 57,
+   "hatched": 57,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 14,
+     "d": 24
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 10
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Yrator Yra",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 41,
+   "losses": 39,
+   "hatched": 39,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 40,
+     "d": 35
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Vengal Gal",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 54,
+   "losses": 26,
+   "hatched": 27,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 47,
+     "d": 23
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ushthi Gal",
+   "style": "charge-focus",
+   "best": 2,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 26,
+     "d": 13
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 4,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 13,
+     "d": 12
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 4,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostquen Zar",
+   "style": "kite-focus",
+   "best": 2,
+   "wins": 53,
+   "losses": 27,
+   "hatched": 27,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 37,
+     "d": 17
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 12,
+     "d": 6
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renren Ka",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 18,
+     "d": 17
+    },
+    "wyrm + earth": {
+     "w": 5,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 7,
+     "d": 10
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 3
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashmor Bryn",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 49,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 6,
+     "d": 12
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 7,
+     "d": 9
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 10,
+     "d": 6
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Velven Dra",
+   "style": "slugger",
+   "best": 2,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 37,
+     "d": 30
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenush Ost",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 13,
+     "d": 13
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 16,
+     "d": 12
+    },
+    "wyvern + earth": {
+     "w": 15,
+     "d": 9
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Morka Lin",
+   "style": "boxer-puncher",
+   "best": 2,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 29,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 34,
+     "d": 15
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 7,
+     "d": 7
+    },
+    "wyrm + earth": {
+     "w": 7,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Ushtor Zar",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 34,
+   "losses": 46,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 20,
+     "d": 32
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 8,
+     "d": 8
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thiven Thi",
+   "style": "reader",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 1,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 26,
+     "d": 28
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Corcor Zar",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 38,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 37,
+     "d": 34
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 4,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ostquen Ka",
+   "style": "bite-focus",
+   "best": 0,
+   "wins": 17,
+   "losses": 63,
+   "hatched": 63,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 15
+    },
+    "wyvern + earth": {
+     "w": 9,
+     "d": 17
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 9
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 6
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quenlin Ush",
+   "style": "breath-focus",
+   "best": 2,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 34,
+   "ichor": 2,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 41,
+     "d": 28
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 3,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yrator Sul",
+   "style": "meter-focus",
+   "best": 2,
+   "wins": 46,
+   "losses": 34,
+   "hatched": 35,
+   "ichor": 2,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 44,
+     "d": 30
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thithi Tor",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 49,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 12,
+     "d": 10
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 4
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 9,
+     "d": 11
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 8
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 7
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 4,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renquen Dra",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 50,
+   "losses": 30,
+   "hatched": 31,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 28,
+     "d": 10
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 12,
+     "d": 10
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 5,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Thilin Ren",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 47,
+   "losses": 33,
+   "hatched": 34,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 45,
+     "d": 28
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashlin Ven",
+   "style": "out-boxer",
+   "best": 2,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + water": {
+     "w": 29,
+     "d": 22
+    },
+    "true-dragon + fire": {
+     "w": 9,
+     "d": 11
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ashtor Lin",
+   "style": "slugger",
+   "best": 1,
+   "wins": 48,
+   "losses": 32,
+   "hatched": 33,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 38,
+     "d": 23
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 5,
+     "d": 3
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Kayra Ka",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 32,
+   "losses": 48,
+   "hatched": 48,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 7,
+     "d": 8
+    },
+    "wyrm + earth": {
+     "w": 2,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 17,
+     "d": 20
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 2,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 3
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Sulvel Dra",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 7,
+     "d": 9
+    },
+    "wyvern + air": {
+     "w": 1,
+     "d": 7
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 3,
+     "d": 4
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 10
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 11,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Coryra Ven",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 21,
+     "d": 34
+    },
+    "wyvern + earth": {
+     "w": 13,
+     "d": 8
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Quenyra Ila",
+   "style": "reader",
+   "best": 1,
+   "wins": 28,
+   "losses": 52,
+   "hatched": 53,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 19,
+     "d": 25
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Zarzar Zar",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 39,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 36,
+     "d": 33
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Vendra Ila",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 27,
+   "losses": 53,
+   "hatched": 53,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 13,
+     "d": 18
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 6
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 14
+    },
+    "wyrm + air": {
+     "w": 3,
+     "d": 5
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Quenush Gal",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 51,
+   "losses": 29,
+   "hatched": 30,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 21
+    },
+    "true-dragon + earth": {
+     "w": 6,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 8,
+     "d": 4
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Morost Ila",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 42,
+   "losses": 38,
+   "hatched": 38,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 3,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 36,
+     "d": 27
+    },
+    "wyrm + water": {
+     "w": 2,
+     "d": 4
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Linash Gal",
+   "style": "charge-focus",
+   "best": 2,
+   "wins": 52,
+   "losses": 28,
+   "hatched": 28,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 3,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 17,
+     "d": 11
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 32,
+     "d": 15
+    }
+   }
+  },
+  {
+   "name": "Yrabryn Dra",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 20,
+     "d": 16
+    },
+    "wyvern + water": {
+     "w": 16,
+     "d": 13
+    },
+    "true-dragon + fire": {
+     "w": 2,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 5,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Galsul Ila",
+   "style": "swarmer",
+   "best": 2,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 1,
+     "d": 4
+    },
+    "true-dragon + earth": {
+     "w": 13,
+     "d": 11
+    },
+    "wyrm + earth": {
+     "w": 10,
+     "d": 6
+    },
+    "true-dragon + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 19,
+     "d": 4
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Morbryn Cor",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 36,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 12,
+     "d": 8
+    },
+    "true-dragon + fire": {
+     "w": 28,
+     "d": 16
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 4,
+     "d": 6
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Galash Thi",
+   "style": "slugger",
+   "best": 1,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + water": {
+     "w": 3,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 46,
+     "d": 27
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Sulvel Quen",
+   "style": "counterpuncher",
+   "best": 1,
+   "wins": 44,
+   "losses": 36,
+   "hatched": 36,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + earth": {
+     "w": 10,
+     "d": 10
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 30,
+     "d": 20
+    },
+    "wyvern + fire": {
+     "w": 3,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Karen Ila",
+   "style": "boxer-puncher",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 45,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 17,
+     "d": 14
+    },
+    "wyvern + air": {
+     "w": 11,
+     "d": 15
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 5
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 2,
+     "d": 3
+    }
+   }
+  },
+  {
+   "name": "Linbryn Mor",
+   "style": "aerialist",
+   "best": 1,
+   "wins": 36,
+   "losses": 44,
+   "hatched": 44,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 30,
+     "d": 39
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Rencor Ila",
+   "style": "reader",
+   "best": 1,
+   "wins": 33,
+   "losses": 47,
+   "hatched": 47,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 27,
+     "d": 25
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 2,
+     "d": 8
+    },
+    "wyvern + earth": {
+     "w": 1,
+     "d": 3
+    },
+    "wyrm + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Ashost Ush",
+   "style": "claw-focus",
+   "best": 1,
+   "wins": 23,
+   "losses": 57,
+   "hatched": 57,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 14,
+     "d": 37
+    },
+    "true-dragon + earth": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 5,
+     "d": 7
+    },
+    "wyrm + earth": {
+     "w": 3,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Yraila Sul",
+   "style": "bite-focus",
+   "best": 1,
+   "wins": 40,
+   "losses": 40,
+   "hatched": 40,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 32,
+     "d": 28
+    },
+    "wyvern + earth": {
+     "w": 8,
+     "d": 7
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Renzar Ven",
+   "style": "breath-focus",
+   "best": 1,
+   "wins": 35,
+   "losses": 45,
+   "hatched": 46,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 12,
+     "d": 16
+    },
+    "wyrm + water": {
+     "w": 4,
+     "d": 7
+    },
+    "wyrm + fire": {
+     "w": 8,
+     "d": 8
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + water": {
+     "w": 11,
+     "d": 7
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Venven Ven",
+   "style": "meter-focus",
+   "best": 1,
+   "wins": 49,
+   "losses": 31,
+   "hatched": 32,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + fire": {
+     "w": 37,
+     "d": 21
+    },
+    "wyvern + earth": {
+     "w": 2,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 3,
+     "d": 2
+    },
+    "wyrm + water": {
+     "w": 7,
+     "d": 4
+    }
+   }
+  },
+  {
+   "name": "Drabryn Sul",
+   "style": "charge-focus",
+   "best": 1,
+   "wins": 29,
+   "losses": 51,
+   "hatched": 52,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 5,
+     "d": 12
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 4
+    },
+    "wyrm + earth": {
+     "w": 13,
+     "d": 13
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + earth": {
+     "w": 3,
+     "d": 5
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 4,
+     "d": 7
+    },
+    "wyrm + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + air": {
+     "w": 1,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + water": {
+     "w": 2,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Corcor Gal",
+   "style": "kite-focus",
+   "best": 1,
+   "wins": 45,
+   "losses": 35,
+   "hatched": 35,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 0,
+     "d": 3
+    },
+    "wyvern + air": {
+     "w": 10,
+     "d": 6
+    },
+    "wyvern + earth": {
+     "w": 33,
+     "d": 21
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "wyrm + water": {
+     "w": 1,
+     "d": 1
+    }
+   }
+  },
+  {
+   "name": "Quendra Sul",
+   "style": "swarmer",
+   "best": 1,
+   "wins": 31,
+   "losses": 49,
+   "hatched": 50,
+   "ichor": 1,
+   "champions": [],
+   "prefs": {
+    "wyvern + fire": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 3,
+     "d": 15
+    },
+    "wyrm + earth": {
+     "w": 9,
+     "d": 5
+    },
+    "true-dragon + earth": {
+     "w": 10,
+     "d": 13
+    },
+    "true-dragon + water": {
+     "w": 3,
+     "d": 4
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "wyvern + earth": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 4,
+     "d": 5
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Coryra Quen",
+   "style": "out-boxer",
+   "best": 1,
+   "wins": 37,
+   "losses": 43,
+   "hatched": 44,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyvern + air": {
+     "w": 2,
+     "d": 5
+    },
+    "wyvern + water": {
+     "w": 5,
+     "d": 6
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "wyvern + earth": {
+     "w": 3,
+     "d": 6
+    },
+    "wyrm + water": {
+     "w": 5,
+     "d": 4
+    },
+    "true-dragon + fire": {
+     "w": 20,
+     "d": 17
+    },
+    "true-dragon + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + fire": {
+     "w": 1,
+     "d": 2
+    }
+   }
+  },
+  {
+   "name": "Ilalin Quen",
+   "style": "slugger",
+   "best": 1,
+   "wins": 43,
+   "losses": 37,
+   "hatched": 37,
+   "ichor": 0,
+   "champions": [],
+   "prefs": {
+    "wyrm + earth": {
+     "w": 23,
+     "d": 17
+    },
+    "wyvern + earth": {
+     "w": 5,
+     "d": 6
+    },
+    "wyvern + water": {
+     "w": 0,
+     "d": 2
+    },
+    "wyvern + air": {
+     "w": 0,
+     "d": 1
+    },
+    "true-dragon + air": {
+     "w": 0,
+     "d": 2
+    },
+    "true-dragon + water": {
+     "w": 1,
+     "d": 2
+    },
+    "wyrm + fire": {
+     "w": 1,
+     "d": 1
+    },
+    "true-dragon + fire": {
+     "w": 1,
+     "d": 2
+    },
+    "true-dragon + earth": {
+     "w": 12,
+     "d": 3
+    },
+    "wyrm + water": {
+     "w": 0,
+     "d": 1
+    }
+   }
+  }
+ ],
+ "season": 2
+}

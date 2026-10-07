@@ -1,0 +1,10 @@
+{
+  "title": "Footsies at Close: bite beats claw",
+  "note": "Design doc §4: at Close only the claw's arc edge reaches, so bites win there.",
+  "separation": 4,
+  "A": { "name": "Ash", "morph": "true-dragon", "stone": "air" },
+  "B": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "exchanges": [
+    { "A": ["claw:left", "hold", "hold"], "B": ["bite", "hold", "hold"] }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Two brains: a swarmer against an out-boxer",
+  "note": "Archetype brains imagine scripts, guess the opponent, play both in the Referee, and choose by their goals. Try the five archetypes: swarmer, out-boxer, slugger, counterpuncher, boxer-puncher; skills: novice, adept, master.",
+  "bout": true,
+  "A": {
+    "name": "Hound",
+    "morph": "wyrm",
+    "stone": "earth",
+    "ai": "swarmer",
+    "skill": "adept",
+    "seed": 3
+  },
+  "B": {
+    "name": "Kite",
+    "morph": "wyvern",
+    "stone": "air",
+    "ai": "out-boxer",
+    "skill": "adept",
+    "seed": 9
+  }
+}

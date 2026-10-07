@@ -1,0 +1,27 @@
+{
+  "name": "dragon-duel-referee",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Dragon Duel rules engine: two dragons, two scripts, an exact outcome.",
+  "type": "module",
+  "scripts": {
+    "duel": "node --experimental-strip-types --no-warnings src/cli.ts",
+    "test": "node --experimental-strip-types --no-warnings --test test/*.test.ts",
+    "tourney": "node --experimental-strip-types --no-warnings src/tourney.ts",
+    "brains": "node --experimental-strip-types --no-warnings src/brains.ts",
+    "golden": "node --experimental-strip-types --no-warnings src/golden.ts",
+    "diag:pairing": "node --experimental-strip-types --no-warnings src/diagnostics/pairing.ts",
+    "diag:movement": "node --experimental-strip-types --no-warnings src/diagnostics/movement.ts",
+    "ladder": "node --experimental-strip-types --no-warnings src/ladder.ts",
+    "dials": "node --experimental-strip-types --no-warnings src/dials.ts",
+    "pool": "node --experimental-strip-types --no-warnings src/pool.ts",
+    "draft": "node --experimental-strip-types --no-warnings src/draft.ts",
+    "gauntlet": "node --experimental-strip-types --no-warnings src/gauntlet.ts",
+    "measure": "node --experimental-strip-types --no-warnings src/measure.ts",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "~5.9.3"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Wyvern strafes a bite",
+  "note": "Design doc §2: the Wyvern is never where you aimed. A strafe still inside the bite tests Evasion against Accuracy.",
+  "separation": 4,
+  "A": { "name": "Ash", "morph": "true-dragon", "stone": "water" },
+  "B": { "name": "Gale", "morph": "wyvern", "stone": "air" },
+  "exchanges": [
+    { "A": ["bite", "breath", "claw:left"], "B": ["strafe:ccw", "strafe:ccw", "approach"] }
+  ]
+}

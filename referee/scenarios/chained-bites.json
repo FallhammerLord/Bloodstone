@@ -1,0 +1,10 @@
+{
+  "title": "Chained bites: the 21-point ceiling",
+  "note": "Design doc §4: chained bites deal 21 (58%) to a True Dragon. Each link must land; the third gets +3.",
+  "separation": 4,
+  "A": { "name": "Brine", "morph": "true-dragon", "stone": "water" },
+  "B": { "name": "Cinder", "morph": "true-dragon", "stone": "water" },
+  "exchanges": [
+    { "A": ["bite", "bite", "bite"], "B": ["hold", "hold", "hold"] }
+  ]
+}

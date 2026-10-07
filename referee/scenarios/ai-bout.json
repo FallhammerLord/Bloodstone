@@ -1,0 +1,19 @@
+{
+  "title": "A full bout between two crude brains",
+  "note": "The crude brain swings its best reaching attack, guards now and then when outgunned, and otherwise walks toward its best band. Change the seeds to see other fights.",
+  "bout": true,
+  "A": {
+    "name": "Ember",
+    "morph": "true-dragon",
+    "stone": "fire",
+    "ai": "crude",
+    "seed": 7
+  },
+  "B": {
+    "name": "Gale",
+    "morph": "wyvern",
+    "stone": "air",
+    "ai": "crude",
+    "seed": 11
+  }
+}

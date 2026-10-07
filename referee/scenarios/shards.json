@@ -1,0 +1,24 @@
+{
+  "title": "Shards: a wyrmling's three pips",
+  "note": "A wyrmling's array is one valence of three pips. Chips take one pip, Elder and Venerable shards two. Brine runs Bastion Plates (an Elder Hardness splinter: +3, and +3 more while guarding with Scales) plus Razor Talons. Ash stacks Bite chips; its Deep Keel landed on a pip Crushing Molars held, destroying it.",
+  "separation": 4,
+  "A": {
+    "name": "Ash", "morph": "true-dragon", "stone": "earth",
+    "shards": [
+      { "shard": "Crushing Molars", "pips": [0] },
+      { "shard": "Set Jaw", "pips": [1] },
+      { "shard": "Milk Fang", "pips": [2] },
+      { "shard": "Deep Keel", "pips": [0] }
+    ]
+  },
+  "B": {
+    "name": "Brine", "morph": "true-dragon", "stone": "water",
+    "shards": [
+      { "shard": "Bastion Plates", "pips": [0, 1] },
+      { "shard": "Razor Talons", "pips": [2] }
+    ]
+  },
+  "exchanges": [
+    { "A": ["bite", "bite", "bite"], "B": ["guard", "hold", "claw:left"] }
+  ]
+}

@@ -1,11 +1,9 @@
-# Dragon Duel: Design Document v0.1.3
+# Dragon Duel: Design Document v0.1.4
 *Working title TBD. A spiritual successor to Dragonseeds (Jaleco, PS1, 1998).*
 
 **Status convention:** everything here is settled unless marked **[Proposed]** (suggested, not yet confirmed) or **[Open]** (undecided).
 
-**Companion files**
-- `dragon-duel-changelog.md`: version history.
-- `dragonshards-body-v0.3.md`, `dragonshards-bloodstone-v0.1.md`, `dragonshards-technique-v0.2.md`, `dragonshards-support-v0.2.md`, `dragonshards-trait-v0.2.md`: shard suites.
+**Companion files:** `dragonshards-body.md`, `dragonshards-bloodstone.md`, `dragonshards-technique.md`, `dragonshards-support.md`, `dragonshards-trait.md` (shard suites).
 
 ---
 
@@ -49,99 +47,85 @@
 ### Attributes
 | Tier | Attributes | Source |
 |---|---|---|
-| Primary | Wounds, Evasion, Hardness | Egg |
+| Primary | Wounds, Evasion, Scales | Egg |
 | Secondary | Claw Sharpness, Bite Force, Breath Potency | Bloodstone |
 | Tertiary | Accuracy, Affinity, Acumen | Derived at hatching, then grown |
 
 - **Wounds:** the health pool. 3 points make one Wound.
-- **Evasion:** how far and fast a dragon moves; tested on dodge and strafe.
-- **Hardness:** damage reduction; improved when guarding.
+- **Evasion:** how fast and finely a dragon moves; tested on dodge and strafe. **[Proposed]** Every primary move (Approach, Retreat, Strafe, Leap, Dive) carries a full band for every dragon, a Strafe's as 3 paces of arc around the opponent; Evasion buys where in that band it lands (± Evasion ÷ 6 paces, scripted short or long), how fast the move resolves (72 ÷ Evasion ticks), and how long it counts as evading (2 × Evasion ticks of active window).
+- **Scales** (was Hardness): damage reduction; improved by the Guard action.
 - **Claw Sharpness, Bite Force, Breath Potency:** attack damage.
-- **Accuracy:** tracking and reach without leaving position; sets the phantom band around hitboxes.
-- **Affinity:** elemental resistance.
-- **Acumen:** battle sense. A hidden percentage shown as an integer. It converts near misses, tips close contests, and scales punishes. No shards raise it; it grows only through play.
+- **Accuracy:** **[Proposed]** how late an attack's aim settles: it tracks through the wind-up and settles 12 − Accuracy ticks before the strike (never less than 1, never longer than the wind-up), so movement after that is what the shape must cover. Also tracking and reach without leaving position; sets the phantom band around hitboxes.
+- **Affinity:** elemental resistance; improved by the Guard action. **[Proposed]** It is the element's Evasion: a Breath's verb (push, pull, burn, corrosion) takes hold only if the breather's Potency beats the target's Affinity, ties to the higher Acumen. Affinity still subtracts from Breath damage, and it fuels Surge (below).
+- **Acumen:** battle sense, shown as an integer and mapped through a hidden curve. It converts near misses, tips close contests, and scales punishes. It starts Surge (below). No shards raise it; it grows only through play.
 
-**Units.** 3 points make one combat unit, everywhere. Everything runs on integers and displays as units and thirds. Damage is dealt in points: attack attributes add, Hardness and Affinity subtract. Acumen is the exception, mapping through a hidden curve.
+**Units.** 3 points make one combat unit, everywhere. Everything runs on integers and displays as units and thirds. Damage is dealt in points: attack attributes add, Scales and Affinity subtract. Acumen is the exception, mapping through a hidden curve.
 
-**Derivation.** Tertiaries derive once at hatching: Accuracy from Evasion plus an egg modifier, Affinity from Breath Potency plus a stone modifier, Acumen from a starting value. **[Proposed]** Acumen's starting value is seeded from egg and stone rather than rolled. After hatching, each attribute grows independently, so no attribute buys another.
+**Derivation.** **[Proposed]** Tertiaries derive once at hatching, after every base add (morph, stone, and a disliked stone's Wounds): Accuracy = Claw Sharpness − Evasion, Affinity = Breath Potency − Scales, each at least 3; Acumen = 10 × age category. A preferred stone adds +3 to one derived stat. After hatching, each attribute grows independently, so no attribute buys another.
 
-**Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. Every defense has an attack that ignores it, which answers concentration. Single-attribute builds are avoided by design; Stomp scales by age only for this reason. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
+**Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. The base design avoids single-attribute dependence: every derived stat draws on two attributes (Accuracy = Claw − Evasion, Affinity = Breath − Scales), and every morph and stone trades one attribute for another. Shard allocation is free within the array's shape: attribute shards stack, Techniques never duplicate, and min-maxing is allowed. Every defense has an attack that ignores it, which answers concentration. **[Proposed]** Stomp adds Scales ÷ 3, kept small so Scales stacking stays a minor gain; its radius still scales by age only. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
 
 ### Starting Attributes [Proposed]
-A hidden baseline; each morph and each stone takes one +3 peak and one −3 valley. Wounds runs on a doubled scale so a baseline hit is about a sixth of a pool.
+A hidden baseline; each morph and each stone takes one peak and one valley off it. Wounds runs on a doubled scale (it moves in 6s) so a baseline hit is about a sixth of a pool. Peaks and valleys may be shared.
 
-| Morph | Wounds | Evasion | Hardness | Accuracy (egg) |
-|---|---|---|---|---|
-| Baseline | 30 | 6 | 3 | 6 (+0) |
-| True Dragon | 36 | 3 | 3 | 6 (+3) |
-| Wyvern | 30 | 9 | 0 | 6 (−3) |
-| Wyrm | 30 | 6 | 6 | 3 (−3) |
+| Morph | Wounds | Evasion | Scales | Peak | Valley | Prefers | Dislikes |
+|---|---|---|---|---|---|---|---|
+| Baseline | 36 | 6 | 6 | | | | |
+| True Dragon | 42 | 3 | 6 | Wounds | Evasion | Fire | Earth |
+| Wyvern | 36 | 9 | 3 | Evasion | Scales | Air | Fire |
+| Wyrm | 30 | 6 | 9 | Scales | Wounds | Water | Air |
+| Drake | 30 | 9 | 6 | Evasion | Wounds | Earth | Water |
 
 - **True Dragon outlasts:** the most Wounds, paid for in mobility. Its generalism lives in its kit.
-- **Wyvern is never where you aimed:** the highest Evasion, no Hardness.
-- **Wyrm shrugs:** the highest Hardness, a narrow phantom band.
+- **Wyvern is never where you aimed:** the highest Evasion, the thinnest hide; and the finest elemental resistance, since Affinity is Breath − Scales.
+- **Wyrm shrugs:** the highest Scales against Claw and Bite, the fewest Wounds, and the poorest elemental resistance.
+- **Drake runs it down:** wingless and four-legged, as quick as a Wyvern on the ground, the hunter's Bite.
 
-| Stone | Claw | Bite | Breath | Affinity (stone) |
-|---|---|---|---|---|
-| Baseline | 6 | 9 | 9 | 3 (−6) |
-| Water | 3 | 9 | 9 | 6 (−3) |
-| Earth | 6 | 12 | 9 | 0 (−9) |
-| Fire | 6 | 6 | 12 | 3 (−9) |
-| Air | 9 | 9 | 6 | 3 (−3) |
+| Stone | Claw | Bite | Breath | Peak | Valley | If preferred |
+|---|---|---|---|---|---|---|
+| Baseline | 9 | 12 | 15 | | | |
+| Water | 9 | 9 | 18 | Breath | Bite | +3 Acumen |
+| Earth | 9 | 15 | 12 | Bite | Breath | +3 Accuracy |
+| Fire | 6 | 12 | 18 | Breath | Claw | +3 Affinity |
+| Air | 12 | 12 | 12 | Claw | Breath | +3 Surge per trigger |
 
 - **Water endures, Earth crushes, Fire scorches, Air rakes.**
-- The element that beats you peaks where you're weakest, so matchup stacks reach two layers at most.
+- **Derived:** Accuracy = Claw − Evasion (fast dragons swing wild); Affinity = Breath − Scales (hard hides or elemental resistance); each at least 3. Acumen = 10 × age category.
 - Intermediates sum their parents' tilts: Salt +Bite −Claw; Magma +Breath −Affinity; Lightning +Claw −Bite; Storm +Affinity −Breath.
 - Each dragon gets the same allotment, varying only slightly with lineage.
 
 ### Elemental Preference
 Each morph prefers one element and dislikes the element that beats it.
-
-| Morph | Prefers | Dislikes |
-|---|---|---|
-| True Dragon | Fire | Earth |
-| Wyvern | Air | Fire |
-| Wyrm | Water | Air |
-
-**The swing** is zero-sum, so no pairing is simply better:
-- **Preferred stone:** +3 to the stone's peak attribute, −3 to the egg's peak. The dragon leans into its stone: more element, less body.
-- **Disliked stone:** −3 to the stone's peak, +3 to the egg's peak. The dragon fights its stone and toughens for it: more body, less element.
-- **Neutral stone:** no swing.
-- Wounds moves in 6s on its doubled scale.
-
-| Pairing | Swing |
-|---|---|
-| True Dragon + Fire | Breath 12 → 15, Wounds 36 → 30: a breath cannon |
-| True Dragon + Earth | Bite 12 → 9, Wounds 36 → 42: the hardest True Dragon to kill |
-| Wyvern + Air | Claw 9 → 12, Evasion 9 → 6 |
-| Wyvern + Fire | Breath 12 → 9, Evasion 9 → 12: almost impossible to pin down |
-| Wyrm + Water | Affinity 6 → 9, Hardness 6 → 3: a supple sea serpent |
-| Wyrm + Air | Claw 9 → 6, Hardness 6 → 9 |
+- **Preferred stone:** +3 to the stone's derived stat (Water Acumen, Earth Accuracy, Fire Affinity); Air's +3 goes to every Surge trigger instead.
+- **Disliked stone:** −6 Wounds.
+- **Neutral stone:** no change.
+- The element wheel's matchup (±3 on Breath and in verb contests) is separate from preference.
 
 - **Growth leans the same way:** preferred pairings weight age-up points toward the stone's attributes; disliked pairings toward the egg's.
 - **Intermediates derive:** one preferred parent counts as preference, one disliked parent as distaste, one of each cancels to neutral. For a True Dragon, Lightning is preferred, Salt disliked, Magma neutral.
-- **[Open]** Coverage: among the core three, no morph prefers Earth or dislikes Water. Extended morphs can fill it; a Lindworm or Drake preferring Earth would be natural.
+- Coverage: with the Drake, each core stone is preferred once and disliked once.
 
 ### Aspects and Parity
 - **Draconic test:** every morph fills bite, claw, breath, and scales, and earns its identity by bending one of them.
 - **Aspect** is the player-facing name for that bend ("bend" stays as design shorthand).
 - Morphs offer interesting choices and never overshadow base dragons. A True Dragon stands alongside an Ouroboros proudly. Unlock depth measures cost in lifetimes, never power.
 - No RPS at the egg or morph level.
-- Every Aspect has a price. The True Dragon is the generalist and gold standard: its Aspect is having none.
+- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 45. Its own zones never harm it, and each charging slot widens its released Breath by ½ pace: the master of the charged Breath. (A Breath that wound up 3 ticks sooner was tried and overshot.)
 - **[Proposed]** Readability balances specialists: an Aspect telegraphs through the silhouette.
 - **[Proposed]** Audit rule: an Aspect may change its holder's own actions or respond to generic attack types, never another morph's features.
 - Balance watches pick rate against win rate across every choice. No Aspect should be an obvious best pick.
 
 ### Core Morphs
 - **True Dragon:** four limbs plus wings. The generalist.
-- **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude.
-- **Wyrm:** serpentine and grounded. Owns lateral movement and close range.
+- **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude. **Talons:** the Wyvern bends the one-band move rule in its Leap: it climbs up to two bands. A Claw scripted while aloft, against a grounded opponent within Far, is a stoop: it descends to the ground during the wind-up, carrying at most one band forward (stopping 1½ paces short of where the target stood) or one band back, and swipes both left and right. A stoop from Close lands at Melee and connects; from Far it lands at Close and falls short, so the Wyvern closes in aloft first, and a Wyvern hovering at Close is a threat both players can see. The descent takes time: the wind-up grows 2 ticks per pace it falls, so a stoop from one band strikes at tick 12 (it beats a Stomp) and from two bands at tick 18 (a Stomp's quake catches it as it lands). Against an airborne opponent it simply claws. Its price is positional: it must get airborne and close first, and it lands in Bite range. **[Proposed]** A stoop hits harder the farther it falls: +1 per 2 paces of altitude it starts from (+3 from two bands), like a charge paying for its setup. **[Proposed]** It must also have been aloft since the exchange began: no Leap and stoop in the same exchange. Its Claw reaches as any Claw does, from the ground or the air.
+- **Wyrm:** serpentine and grounded. Owns lateral movement and close range. **[Proposed] Serpentine:** its Strafe tests Evasion with Dodge's bonus, against Breath too: a strafing Wyrm can slip a Breath that would otherwise skip Evasion. Its Leap is a hop that lands within the slot; it can't Dive.
+- **Drake:** wingless, four-legged and grounded; the Bite specialist. **[Proposed] Ravener:** an Approach or hop that moves opens a 3-slot window, across an exchange; a Retreat doesn't close it. The Drake's first Bite in it lunges 1 pace, and while the window is live its Bite tracks at Melee and Close (its aim follows to the strike, and it tests no Evasion against a strafe). The window closes at that Bite, landed or not; a landed Bite opens nothing. **The hop** (its Leap): it arcs a band up and carries a full band forward (short or long by Evasion), landing within the slot; slow to wind up, quick to recover. While up it clears floor zones and Stomp's quake; Breath and tracking still catch it, and it never reaches a flier.
 
 ### Extended Morphs (Aspects **[Proposed]** unless noted)
 - **Chimera:** three heads; a native cruncher.
-- **Manticore:** its breath is a physical spray of spines that slips Affinity and meets Hardness.
+- **Manticore:** its breath is a physical spray of spines that slips Affinity and meets Scales.
 - **Hydra:** regrowing heads bend Wounds through regeneration.
-- **Feathered Serpent:** a wyrm with flight; trades Hardness for Evasion.
+- **Feathered Serpent:** a wyrm with flight; trades Scales for Evasion.
 - **Tarasque:** its shell guards two slots at once; pays with flight.
 - **Drake:** wingless; burrows instead of flying.
 - **Druk:** Bhutan's Thunder Dragon. Its Intimidate works out to Very Far and Rattles.
@@ -151,10 +135,10 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Zilant:** its Stomp works from the air as a diving slam; it lands Staggered.
 - **Mordiford Wyvern:** a creature of habit. Its chains build from the second link; it can't revise slot 3 while chaining.
 - **Cockatrice:** a wyvern with a rooster's head. Its breath becomes a gaze that deals no damage and Pins on a clean hit.
-- **Gargouille:** guard turns it to stone: near-total Hardness, unable to act next slot.
+- **Gargouille:** guard turns it to stone: near-total Scales, unable to act next slot.
 - **Lindworm:** grappling forelegs turn claw hits into holds.
-- **Zmey:** the Slavic fire serpent. Its breath leaves burning zones natively.
-- **Leviathan:** swallows whole. A landed Bite engulfs the target; if the target's next action is an attack, it lands from inside ignoring Hardness and bursts free, otherwise it takes 3 from digestion. Either way it's spat to a range band of the Leviathan's choosing.
+- **Zmey:** the Slavic fire serpent. Its breath leaves burning zones natively. **[Open]** Fire breath already leaves a burning zone (§3), so this Aspect needs a different bend, such as larger or longer-lasting zones.
+- **Leviathan:** swallows whole. A landed Bite engulfs the target; if the target's next action is an attack, it lands from inside ignoring Scales and bursts free, otherwise it takes 3 from digestion. Either way it's spat to a range band of the Leviathan's choosing.
 - **Amphisbaena:** a head at each end; attacks while retreating.
 - **Basilisk** (tier 3): the crowned serpent king. Gaze Pins; breath scorches and splits rock.
 - **Tiamat, Jörmungandr, Ouroboros** (tier 3): see section 9.
@@ -186,14 +170,16 @@ Each morph prefers one element and dislikes the element that beats it.
 
 | Element | Shape | Substance and verb |
 |---|---|---|
-| Water | Line | High-pressure jet; pushes the target back |
-| Earth | Narrow cone | Acidic slurry; eats obstacles and leaves a corrosive pool |
-| Fire | Ranged blast | Flame; leaves a burning zone |
-| Air | Wide cone | Scouring gust; shoves sideways and disperses clouds |
+| Water | Line | High-pressure jet; pushes the target back a band, slamming it into walls and obstacles (3); shoves boulders **[Proposed]** |
+| Earth | Narrow cone | Acidic slurry; eats obstacles and corrodes the target. **[Proposed]** A corroded dragon takes +Potency ÷ 4 from every hit for Potency ÷ 6 slots (plus an exchange per charging slot), and each hit on it is an Acumen trigger |
+| Fire | Ranged blast, ¾ pace radius **[Proposed]** | Flame; sets the world on fire. **[Proposed]** The ground burns in a lane along its line through Close and Far, as wide as the blast, so closing in means crossing it. A burn deals Potency ÷ 4 to grounded dragons at slot's end |
+| Air | Ranged vortex **[Proposed]** | Vortex at the target, 1 pace across; pulls the target a band toward the breather (lowering, never grounding, a flier), while a vortex in the breather's own space throws Melee out to Close; disperses clouds |
 | Salt | Line blooming into a cloud **[Proposed]** | Caustic gas; Blinds dragons inside |
 | Magma | Narrow cone that pools **[Proposed]** | Molten spray; burns, then cools into a low ridge |
 | Lightning | Forking blast **[Proposed]** | Instant arc; jumps through cover |
 | Storm | Wide cone along a line **[Proposed]** | Wind and rain; shoves back and sideways at once |
+
+**[Proposed]** Fire's burning lanes linger Potency ÷ 6 slots after the one they land in, plus an exchange per charging slot. Each dragon keeps at most two; the oldest goes out. Overlapping fires burn a dragon once a slot. **[Proposed]** The element wheel holds in every element contest and every burn: a target whose stone beats the breather's adds 3 to its Affinity against the verb, and a burn adds the matchup (±3) as the Breath does, so Earth smothers Fire and Fire consumes Air.
 
 **[Proposed]** Optional depth: interacting surfaces in the style of Divinity: Original Sin 2.
 
@@ -204,29 +190,31 @@ Each morph prefers one element and dislikes the element that beats it.
 ## 4. Combat
 
 ### Exchange and Scripting
-- Each exchange has 3 action slots, scripted simultaneously. Slots 1 and 2 lock; slot 3 can be revised live while slots 1 and 2 resolve, once per exchange. A revision makes the slot flash on screen. Default: no change.
+- Each exchange has 3 action slots, scripted simultaneously. Slots 1 and 2 lock; slot 3 can be revised live while slots 1 and 2 resolve, once per exchange. A revision makes the slot flash on screen; the opponent sees that a revision happened, never what it was. Default: no change.
+- **Unfilled slots** hold position when the clock runs out, so an idle dragon gets punished. **[Proposed]** Intimidate is the alternative default.
 - Each action opens a menu of sub-actions and directions. A ghost preview shows the first few frames; confirm sends the set.
-- Scripting clock: 15 seconds in PvP, unlimited in campaign.
+- Scripting clock: 30 seconds in PvP, unlimited in campaign.
 - **[Proposed]** Directions are scripted relative to the orbit (clockwise or counterclockwise), so camera swings never flip inputs.
-- **[Proposed]** Pacing: about 24 seconds per exchange; six to eight exchanges per fight, about three minutes.
+- **[Proposed]** Pacing: about 40 seconds per exchange; six to eight exchanges per fight, about four to five minutes.
 
 **Readable information.** Slots 1 and 2 lock, so a wind-up inside a locked slot can't be answered; wind-ups matter for timing, not reading. What players can act on:
-- **Between exchanges:** positions, cooldown rhythms, statuses, silhouettes, the chest stone.
+- **Between exchanges:** positions, cooldown rhythms, statuses, Surge meters, silhouettes, the chest stone.
 - **During the revision window:** slots 1 and 2 resolving, revision flashes, and a charge releasing in slot 3.
 
 ### Actions
 | Category | Actions | Notes |
 |---|---|---|
 | Attack | Bite, Claw, Breath, Stomp | Shapes below |
-| Move | Approach, Retreat, Strafe, Leap, Dive | Three degrees of freedom |
-| Guard | Dodge, Scales | |
-| Intimidate | Intimidate | +3 to the next attack; open for that action |
+| Move | Approach, Retreat, Strafe, Leap, Dive | Three degrees of freedom. **[Proposed] Gravity:** a flier that doesn't Leap during an exchange drops a band at its end. A Wyvern's Leap climbs two bands (Talons). **Dive** comes down a band, or makes a **hard landing**: from two bands up or more, with Stomp ready, it comes all the way down and Stomps where it lands, spending Stomp's cooldown. |
+| Defend | Dodge, Guard | Dodge avoids harm (Evasion); Guard presents the hide: +Scales against Bite and Claw, +Affinity against Breath and its verbs. **[Proposed]** A Guard or Dodge slot held to the end also fills Surge. **Reversal:** a guard with a full Surge turns an attack that lands, Breath included, back on its owner, against the owner's own hide, and empties the meter. Unlike Dragonseeds' always-on reflector, it costs a full meter and a read. |
+| Intimidate | Intimidate | +3 to the next attack; open for that action. **[Proposed]** One that reaches (within Far) also demoralizes: the target's next Bite or Claw loses 3. |
 
 **Attack shapes**
-- **Bite:** forward and narrow, Melee into Close. High damage, piercing.
-- **Claw:** an arc sweeping right-to-left or left-to-right, Melee into Close on either side. Short wind-up, long active window, short recovery: the natural strafe punish.
-- **Breath:** a shaped area set by element. Skips Evasion. Reaches no further than Far. Cooldown 2.
-- **Stomp:** a ground-only Melee quake. Fixed damage; Staggers. Cooldown 2. Grows narrow, short, far (1, 2, 3 paces) at wyrmling, adult, and venerable; modified by age only. Misses anything aloft. **[Proposed]** Hits burrowed dragons and forces them up; its long wind-up leaves it open to interruption.
+- **Reach is in whole range bands;** widths and radii are paces, tuned by attributes.
+- **Bite:** forward and narrow, through Close. High damage, piercing.
+- **Claw:** an arc sweeping right-to-left or left-to-right, from the ground or the air. **[Proposed]** It reaches Melee's edge forward, sweeps half into Close at the sides (4½ paces), and wraps a pace behind the shoulders, so it still catches a full-band strafe. Short wind-up, long active window, short recovery: the natural strafe punish.
+- **Breath:** a shaped area set by element. Skips Evasion. Reaches through Far. Cooldown 2. **At Melee a Breath is lost to any hit before it resolves,** a Bite or Claw trade included: Melee belongs to the body. A charged Breath's release can't be interrupted.
+- **Stomp:** a ground quake through whole bands: Close at wyrmling, Far at adult, Far at venerable with Scales ÷ 2. **[Proposed]** 3 + Scales ÷ 3 true damage, and it shatters boulders inside its radius; Staggers. Cooldown 2. Modified by age only. Misses anything aloft. **[Proposed]** Hits burrowed dragons and forces them up; its long wind-up leaves it open to interruption. **[Proposed]** A Stomp that lands on a dragon mid-move Staggers it for two slots, and a Staggered dragon tests half its Evasion: Stomp is the answer to a dragon that won't stop moving.
 
 ### Space
 - Combatants always face one another.
@@ -234,7 +222,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - An action reaches at least its minimum distance within its band; modifiers extend reach to the band's outer edge, never beyond.
 - **Three degrees of freedom:** advance or retreat along the line between dragons, strafe around the opponent, leap or fly. Altitude is ordinary movement.
 - Obstacles restrict movement, and so does the opponent's body. Obstructions are physical: **[Proposed]** an attack shape stops where it meets an obstacle and damages it instead.
-- **[Proposed]** A move carries at most one band per action; Evasion beyond that buys timing.
+- **[Proposed]** Approach, Retreat, Strafe, Leap and Dive carry exactly one band (3 paces), adjusted short or long by Evasion (a Wyvern's Leap climbs two); a Strafe's band is 3 paces of arc around the opponent at its separation. Bands are the range game; paces are hit geometry, which settles near misses (a lunge's extra pace can still reach into the next band). Where a dragon lands in a band matters only for that action: between slots, separation snaps to the nearest ½ pace.
 
 **Threat map**
 | Band | Bite | Claw | Breath | Stomp |
@@ -252,7 +240,9 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Claw timing:** direction and speed decide it. A fast claw catches the counter-strafe and misses the patient one.
 
 ### Timeline
-- An action runs 30 ticks of 100 ms, split into wind-up, active, and recovery, each a whole number of ticks. Attributes and shards shift them.
+- An action runs 30 ticks of 100 ms, split into wind-up, active, and recovery, each a whole number of ticks. Attributes, shards, and statuses shift wind-up and recovery; the active window absorbs the difference, so the action always totals 30. Faster wind-up or shorter recovery widens the active window; slower wind-up or longer recovery narrows it.
+- **[Proposed]** The active window never drops below 3 ticks; shifts past that floor are lost.
+- **[Proposed]** A crunch half runs 15 ticks: wind-up and recovery halve (rounding down), and the active window absorbs the rest.
 - Identical attacks trade. An active window hitting the opponent's wind-up interrupts it; hitting their recovery is a punish, a guaranteed bonus scaled by Acumen.
 - Fast attacks win when they connect; slow, wide attacks punish them when they whiff.
 - **[Proposed] Base profiles** (wind-up / active / recovery ticks): Claw 6 / 15 / 9; Bite 12 / 6 / 12; Breath 12 / 9 / 9; Stomp 15 / 6 / 9.
@@ -263,8 +253,8 @@ Each morph prefers one element and dislikes the element that beats it.
 
 ### Hits
 - A dragon outside an attack's active area during its active window takes no hit.
-- **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). Acumen converts them into grazes, animated dynamically.
-- **[Proposed] Acumen meter:** starts at the dragon's base Acumen; each near miss adds 10; at 100 that near miss converts and the meter returns to base. Deterministic and streak-free.
+- **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). **[Proposed]** They fill Surge; the graze is retired. The phantom band belongs to aimed attacks: a Stomp's quake has no near misses, so a Stomp thrown from beyond its reach is a gambit on an advance, never a meter pump.
+- **Surge** (was the Acumen meter): visible to both players. **[Proposed]** Affinity fuels it, so Water dragons fill it best. **[Proposed]** It starts at Acumen (10 × age category, so 10 for a wyrmling, 13 for a Water-preferring one). Each trigger adds Affinity + 9, +3 more for an Air-preferring dragon: a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath (the breather's meter). Full at 100, the next landed Bite, Claw or Breath deals true damage, ignoring Scales and Affinity (and so any verb contest), plus a steroid of Affinity ÷ 3, and drains it to 0. A miss spends nothing; a Stomp or a Technique's side-hit never spends it. Acumen itself still breaks ties. Deterministic and streak-free.
 
 **Evasive resolution**
 - **Strafe:** pure geometry. A dragon out of coverage is untouched; one still inside during the active window tests Evasion against Accuracy.
@@ -274,26 +264,26 @@ Each morph prefers one element and dislikes the element that beats it.
 - Strafe is the hedge: clean escapes ignore attributes, and position carries forward. Dodge is the commitment: its bonus answers wide coverage, and it holds range and altitude.
 
 ### Damage [Proposed]
-- **Bite:** Bite Force − Hardness. Baseline 9 − 3 = 6.
-- **Claw:** one hit, Claw Sharpness − Hardness. Baseline 6 − 3 = 3; it earns its keep by landing often, its long active window catching strafes.
-- **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 9 − 3 = 6.
-- **Stomp:** 3 true damage plus Staggered.
+- **Bite:** Bite Force − Scales. Bite is piercing: it ignores 3 Scales. Baseline 9 − (3 − 3) = 9.
+- **Claw:** one hit, Claw Sharpness − Scales. Baseline 6 − 3 = 3; it earns its keep by landing often, its long active window catching strafes.
+- **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 15 − 9 = 6. **[Proposed]** Affinity derives as Breath − Scales, so a Breath against the same stone deals the target's own Scales: hard hides take more Breath, high-Breath stones resist it.
+- **Stomp:** 3 + Scales ÷ 3 true damage (a Venerable's ÷ 2) plus Staggered.
 - **Floor:** every landed hit deals at least 1 point.
-- A True Dragon's 36 points fall to six landed bites or breaths.
+- A True Dragon's 45 points fall to five landed bites or eight landed breaths.
 
 **Modifiers:** Intimidate +3 to the next attack; +3 on a chain's third link; punish +3, raised by Acumen; graze −3. Crunched actions carry no modifier: the reward is doing the thing twice.
 
-**Ceilings against a True Dragon:** chained bites 21 (58%); crunched claws through Raking Talons 18 (50%); crunched bites through Gnashing Teeth 36, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs, and Gnashing Teeth carries the tightest.
+**Ceilings against a True Dragon (45 Wounds):** chained bites 30 (67%); crunched claws through Raking Talons 18 (40%); crunched bites through Gnashing Teeth 54, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs.
 
 ### Chains, Cooldowns, Crunch, Charge
-- **Chains:** repeating an input 2 or 3 times improves efficacy. **[Proposed]** Each bonus requires the previous link to land; a Guard in any slot breaks the combo; a revised slot 3 caps the bonus. **[Proposed]** Crunched slots don't count toward chains unless a shard says otherwise.
+- **Chains:** repeating an input 2 or 3 times improves efficacy. Each link counts only when it lands. Chains carry across exchanges: other actions in between don't break one, and a different attack starts a new one. A chain lapses only when a whole exchange passes without a landed hit. **[Proposed]** A revised slot 3 caps the bonus. **[Proposed]** Crunched slots don't count toward chains unless a shard says otherwise.
 - **Cooldowns** replace stamina. Breath and Stomp default to 2; shards shift them. **[Proposed]** Dodge cooldown 1; cooldown actions can't chain. An action used in a slot returns N+1 slots later, so cooldown 2 locks to the same slot each exchange, a rhythm readable between exchanges.
 - **Crunch:** an action done twice, or two actions, back to back in one slot, 15 ticks each. Crunching comes only from dragonshard builds, never innate to an action class; the Chimera's Aspect is the one morph exception. No cooldown debt: a cooldown action can't crunch with itself. Compounds are crunches of two different actions in order (approach then bite is a Pounce; bite then retreat is a hit-and-run). **[Proposed]** A crunch's first half winds up faster and gains priority, so crunch access stays gated; counterplay lives between halves.
-- **Charge:** one action across two slots. A charge stays visible: readable during the revision window when it releases in slot 3, and between exchanges. Charging grants a defensive bonus mirroring the crunch's offense, a function of Scales. **[Proposed]** The charge slot counts as a Scales guard; an interrupt still cancels the charge.
+- **Charge:** one action across two slots. A charge stays visible: readable during the revision window when it releases in slot 3, and between exchanges. Charging grants a defensive bonus mirroring the crunch's offense, a function of Scales. **[Proposed]** The charge slot counts as a Guard; an interrupt still cancels the charge.
 
-**Collision triangle [Proposed]:** Guard beats Attack; Attack beats Intimidate; Intimidate beats Guard; Move wins no slot outright but gains position. Attack against Attack resolves by the timeline.
+**Collision triangle [Proposed]:** Defend beats Attack; Attack beats Intimidate; Intimidate beats Defend; Move wins no slot outright but gains position. Attack against Attack resolves by the timeline.
 
-**Statuses:** Pinned (can't Move next slot); Staggered (Evasion distance halved next slot); Rattled (next wind-up +3 ticks); Blinded (Accuracy −3 next slot).
+**Statuses:** Pinned (can't Move next slot); Staggered (Evasion halved next slot, for its move and its Evasion tests); Rattled (next wind-up +3 ticks); Blinded (Accuracy −3 next slot).
 
 **Currencies** that Techniques trade: attributes, tempo, chain ceiling, coverage, exposure, priority, persistence, information, charge. Information carries the steepest price.
 
@@ -322,6 +312,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - A radial array with the bloodstone at the nucleus and five valences, one per age category, holding 3, 5, 8, 11, and 14 pips (41 total). Every morph shares these counts.
 - Each egg gives the array an overall shape, informed by its morph and modified by its stone. Patterns build on three core shapes, **Wheel** (True Dragon), **Wings** (Wyvern), and **Coil** (Wyrm); extended morphs modify their base shape.
 - Seating locks.
+- **Stacking:** attribute shards (Body and Bloodstone) stack: any number of copies, as the array's shape permits. Shards don't grow on their own, so a stronger version comes from climbing the ladder. Techniques never duplicate.
 
 **Shard shapes:** chips (one pip, or a compact cluster across adjacent valences), splinters (adjacent pips along one valence), and spikes (adjacent pips spanning valences). Very powerful shards may take compound shapes.
 
@@ -333,7 +324,7 @@ Each morph prefers one element and dislikes the element that beats it.
 
 **Carving:** the tamer carves seams into the bloodstone, spending Ichor. Allowance: Juvenile 1, Adult 2, Elder 3, Venerable 4, up to ten in a life; wyrmlings can't bear carving. **[Proposed]** An unused allowance carries one age, then goes stale; Venerable's never stales. With up to five lineage seams, a fully realized stone holds fifteen player-chosen seams before the morph's natural ones. **[Proposed]** Seams index by valence and pip, which every morph shares, so stone-held seams map onto any egg.
 
-**Ichor:** the blood in the bloodstone, spent to carve seams, the channels that carry elemental might. A resource in the spirit of Warframe's Endo. Sources: victories; melting shards down; **[Proposed]** overwritten pips; **[Proposed]** resting venerables.
+**Ichor:** the blood in the bloodstone, spent to carve seams, the channels that carry elemental might. A resource in the spirit of Warframe's Endo. Sources: victories; melting shards down; **[Proposed]** overwritten pips; **[Proposed]** resting venerables. **Freezing:** Ichor freezes into a shard of the tamer's choosing, at the grade its amount buys. It is how Techniques enter a tamer's hands: a tamer can seat what the spoils offer and climb, or melt it and freeze toward the shard it wants, staying on its ladder longer. **[Proposed]** A melted shard yields 1 Ichor per pip; freezing costs 2 per pip. Ichor belongs to the tamer and outlives its dragons.
 
 **Hub effect:** inner pips gain seams at every age-up, making the core the natural home for heirlooms.
 
@@ -346,14 +337,14 @@ Full details live in the companion suites.
 
 | Family | Scaling | Rarity | Covers |
 |---|---|---|---|
-| Body | Magnitude | Common | Wounds, Evasion, Hardness, Accuracy |
+| Body | Magnitude | Common | Wounds, Evasion, Scales, Accuracy |
 | Bloodstone | Magnitude | Common | Claw Sharpness, Bite Force, Breath Potency, Affinity |
-| Technique | Terms | Uncommon | How actions behave; every grade keeps a cost |
+| Technique | Terms | Uncommon | How actions behave; most keep a cost at every grade |
 | Support | Reach | Uncommon | Inert alone; acts along seams |
 | Trait | Commitment | Rare | Rule bends with a hard price |
 
 - **Grades** borrow the age categories, Wyrmling through Venerable, and track the defeated dragon's age.
-- **No element alignment.** A shard is exactly what it says. Points add directly: three +1 chips make one full unit.
+- **No element alignment.** A shard is exactly what it says. Points add directly: **[Proposed]** suite v0.4 grades attribute chips +2, +3, +4, so three Wyrmling chips make two full units.
 - Acumen has no shards.
 
 ---
@@ -379,12 +370,13 @@ Dragons don't age naturally; tamers force their growth through dragon magic.
 - Every slain dragon drops two generated shards at its age grade, a Body shard of its morph's favored attribute and a Bloodstone shard of its stone's, plus any shards still intact in its array.
 - The victor picks a number of shards equal to the slain dragon's age category: 1 from a wyrmling, 5 from a venerable.
 - Campaign NPC dragons carry authored loadouts.
-- Timeouts aren't lethal. **[Proposed]** A timeout awards no shard; unpicked shards are lost with the dragon.
+- Timeouts aren't lethal. **[Proposed]** A timeout awards no shard; unpicked shards are lost with the dragon. **[Proposed]** The victor is paid Ichor instead, by the ladder: 1 on the novice ladder, 2 on adept, 3 on master, from the loser's Ichor where it has it.
+- **[Proposed] The yield.** Before a bout, having seen the other dragon, or at any exchange boundary during scripting, a tamer may yield to save its dragon. It pays the victor Ichor by the ladder (1, 2 or 3); without that Ichor, it can't yield. A yield is non-lethal: no spoils, since nothing was slain. It counts toward the victor's streak, but a pick the streak earns waits for the next kill.
 
 ### Harvest, Death, Scars
 - Shards are permanent unless the dragon is harvested or slain.
 - Harvest requires Adult or older and reclaims one shard per age category. It always returns the bloodstone.
-- A slain dragon's stone returns scarred. Scars come from the killing blow, each +3 to an attribute: Claw scars Hardness, Bite scars Wounds, Breath scars Affinity. **[Proposed]** Stomp scars Evasion; environmental deaths leave no scar; one scar per attribute.
+- A slain dragon's stone returns scarred. Scars come from the killing blow, each +3 to an attribute: Claw scars Scales, Bite scars Wounds, Breath scars Affinity. **[Proposed]** Stomp scars Evasion; environmental deaths leave no scar; one scar per attribute.
 - Scars accrue only from deaths at Adult or older, and they show on the stone and the dragon.
 
 ### Lineage
@@ -408,7 +400,7 @@ Dragons don't age naturally; tamers force their growth through dragon magic.
 - The dragon tamer's weir, kept stocked by immortal egg layers of each basic morph.
 - A tamer with no dragon and no stone receives a starter egg and stone; with a stone but no dragon, an egg only. **[Proposed]** Unhatched eggs count too.
 - Basic morphs: True Dragon, Wyvern, Wyrm. Basic stones: Water, Earth, Fire, Air. Everything else is earned.
-- Early play is one dragon at a time; more dragons come from resting venerables. Future: dragon lairs at the weir.
+- One dragon per bout. A tamer's total dragons are limited by their lair. Early play is one dragon at a time; more dragons come from resting venerables and lair growth.
 
 ### Tutorial
 - The opening fight is a tutorial with no death.
@@ -418,7 +410,7 @@ Dragons don't age naturally; tamers force their growth through dragon magic.
 ### Modes
 | Mode | Progression | Death | Rules |
 |---|---|---|---|
-| Open lobby | None | None | Player-set; any dragon |
+| Open lobby | None | None | Player-set; any dragon; local hot-seat between save profiles |
 | Ranked ladder | Shards | Permadeath | Locked track; age brackets |
 | Campaign | Shards | Permadeath | Player-paced |
 
@@ -457,6 +449,9 @@ Blank cells are plain sub-model variants. Zilant and Mordiford placements fill g
 ---
 
 ## 10. Presentation and Tech [Proposed]
+- **Platform:** PC and Linux, private build, local play first. Online play comes later.
+- **Art direction:** hand-drawn watercolor, ink-blot, and ink-stamp. Brief artists and animators against that, not a Monster Hunter look.
+- **[Open]** The clip-set approach below assumes 3D. Watercolor art may favor 2D cutout rigs or painted dragons in a 3D space; settle with the artists.
 - **Resolve, then choreograph:** the outcome is known before animation starts.
 - Authored clip sets per morph skeleton, adapted at runtime: motion warping steers attacks (Accuracy as warp tolerance), root-motion scaling carries moves (Evasion as distance and speed), IK handles footing and aim, blend spaces mix by speed and distance.
 - Shards change proportions, surfaces, and attachments, never topology, which keeps animation authored rather than fully procedural.
@@ -480,14 +475,14 @@ The testbed: the three core morphs, the four core elements, wyrmling through adu
 
 ### Active
 1. **Dev manual** for the vertical slice, then a browser mockup.
-2. **Numbers pass:** confirm the base attack profiles; move, guard, and Intimidate profiles; growth weighting per morph and stone, breath verb values per breakpoint, Ichor rates for victories and melting.
+2. **Numbers pass:** confirm the base attack profiles; move, Defend, and Intimidate profiles; growth weighting per morph and stone, breath verb values per breakpoint, Ichor rates for victories and melting.
 3. **Feature catalog:** specific blockers, forced movement, and damage traps per theme.
 4. **Arena roster:** themes and threat ratings.
 
 ### Later
 - Valence patterns in detail; seam quality.
 - Campaign structure: rest timing, rival hunts, the tutorial elder's pattern.
-- Element depth: interacting surfaces; Twin-Blooded scope.
+- Element depth: interacting surfaces.
 - Roster: open grid cells; Tiamat's pair ban list; signature Traits and elemental preferences for the extended morphs.
 - Region sectors as body regions on the array.
 - Retreat penalty, if champions kite in testing.

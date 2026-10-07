@@ -1,0 +1,11 @@
+{
+  "title": "Breath effects: burn and corrode",
+  "note": "Design doc §3: Fire sets a lane burning along its line through Close and Far, as wide as the blast; Earth corrodes the target, which then takes +3 from every hit. Burning ground hits grounded dragons standing in it at slot's end and lingers Potency ÷ 6 slots (more for a charged Breath); a burn deals Potency ÷ 4, ±3 by the element wheel. A True Dragon's own fire never harms it. Corrosion lasts Potency ÷ 6 slots, and each hit on the corroded dragon fills the attacker's Acumen meter. (Water's push and Air's pull are in push-and-shove.json.)",
+  "separation": 5,
+  "A": { "name": "Ember", "morph": "true-dragon", "stone": "fire" },
+  "B": { "name": "Clod", "morph": "wyrm", "stone": "earth" },
+  "exchanges": [
+    { "A": ["breath", "hold", "hold"], "B": ["hold", "breath", "hold"] },
+    { "A": ["hold", "hold", "hold"], "B": ["bite", "hold", "hold"] }
+  ]
+}
