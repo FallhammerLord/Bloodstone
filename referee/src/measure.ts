@@ -136,7 +136,7 @@ const shardMargin = (name: string) => {
   return (100 * 1.96 * sd) / Math.sqrt(Math.max(1, diffs.length));
 };
 for (const x of [...shards].sort((a, b) => pooled(shardCells, b.name) - pooled(shardCells, a.name))) console.log(`  ${(100 * pooled(shardCells, x.name)).toFixed(0).padStart(4)} pts ±${shardMargin(x.name).toFixed(0)}  ${x.name}`);
-console.log('\nShards by the carrier\'s morph (change in win rate; True Dragon / Wyvern / Wyrm):');
+console.log('\nShards by the carrier\'s morph (change in win rate; True Dragon / Wyvern / Wyrm / Drake):');
 for (const x of shards) {
   const byMorph = CORE_MORPHS.map((m) => { const c = morphCells.get(`morph:${m}|${x.name}`); return c && c.n ? `${(100 * c.w / c.n).toFixed(0).padStart(4)}` : '   —'; });
   console.log(`  ${x.name.padEnd(20)} ${byMorph.join(' / ')}`);
@@ -144,7 +144,7 @@ for (const x of shards) {
 console.log('\nEach style\'s best sheet and best shard:');
 for (const style of BRAIN_STYLES) {
   const bs = Object.entries(sheets[style]).sort((a, b) => b[1] - a[1])[0] ?? ['—', 0];
-  const bd = Object.entries(shardTable[style]).sort((a, b) => b[1] - a[1])[0];
+  const bd = Object.entries(shardTable[style]).sort((a, b) => b[1] - a[1])[0] ?? ['—', 0];
   console.log(`  ${style.padEnd(15)} ${bs[0].padEnd(20)} ${(100 * bs[1]).toFixed(0)}%   ${bd[0]} ${(100 * bd[1]).toFixed(0).padStart(3)} pts`);
 }
 console.log(`\nWrote ${out.pathname}.`);
