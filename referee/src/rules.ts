@@ -81,8 +81,9 @@ export const DEFAULT_RULES = {
   GUARD_AFFINITY: 3, // [Assumed] Affinity bonus while Guarding: presenting the hide to the elements
   DODGE_BONUS: 3, // [Assumed] Evasion bonus while dodging
   // ---- Acumen ---- [Proposed] §4 Surge
-  // The Surge [Proposed]: Affinity fuels it. It starts at age bracket × 10 + 3 × Affinity, and each trigger
-  // (a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds Affinity + 9.
+  // The Surge [Proposed]: Affinity fuels it. It starts at Acumen (10 × age category, +3 for a Water-preferring dragon), and
+  // each trigger (a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds
+  // Affinity + 9, +3 more for an Air-preferring dragon.
   // Full, the next landed Bite, Claw or Breath deals true damage (no Scales or Affinity) and drains it. A miss spends nothing.
   METER_BASE_FILL: 9, // [Proposed] raised from 3 so low-Affinity stones still fill
   GRAVITY_DROP: BAND, // [Proposed] a flier that doesn't Leap during an exchange drops a band at its end

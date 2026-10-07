@@ -27,6 +27,8 @@ export interface StatSheet {
   accuracy: number;
   affinity: number;
   acumen: number;
+  /** added to every Surge trigger: a preferred Air stone's +3 */
+  surgeFill: number;
 }
 
 // [Proposed] §2 Starting Attributes (the wyrmling regrid). Baseline Wounds 36, Evasion 6, Scales 6; each morph takes
@@ -38,14 +40,14 @@ const MORPHS: Record<Morph, { wounds: number; evasion: number; scales: number }>
   drake: { wounds: 30, evasion: 9, scales: 6 }, // peak Evasion, valley Wounds: wingless, four-legged
 };
 
-type Derived = 'accuracy' | 'affinity' | 'acumen';
+type Derived = 'accuracy' | 'affinity' | 'acumen' | 'surge';
 // Baseline Claw 9, Bite 12, Breath 15; each stone takes one peak and one valley. A preferred stone adds +3 to its
 // derived stat ("perk").
 const STONES: Record<CoreStone, { claw: number; bite: number; breath: number; perk: Derived }> = {
   water: { claw: 9, bite: 9, breath: 18, perk: 'acumen' }, // peak Breath, valley Bite
   earth: { claw: 9, bite: 15, breath: 12, perk: 'accuracy' }, // peak Bite, valley Breath
   fire: { claw: 6, bite: 12, breath: 18, perk: 'affinity' }, // peak Breath, valley Claw
-  air: { claw: 12, bite: 9, breath: 15, perk: 'accuracy' }, // peak Claw, valley Bite
+  air: { claw: 12, bite: 12, breath: 12, perk: 'surge' }, // peak Claw, valley Breath
 };
 
 /** The age categories, of five: wyrmling 1, juvenile 2, adult 3, elder 4, venerable 5. */
@@ -71,7 +73,7 @@ export function preference(morph: Morph, stone: CoreStone): Preference {
 /**
  * Egg + stone → stat sheet. The base adds come first (morph, stone, and a disliked stone's −6 Wounds); then the
  * tertiaries derive from them: Accuracy = Claw − Evasion, Affinity = Breath − Scales (each at least 3), Acumen = 10 ×
- * age category; a preferred stone adds +3 to its own derived stat.
+ * age category; a preferred stone adds +3 to its own derived stat (Air's goes to every Surge trigger).
  */
 export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): StatSheet {
   if (!(morph in MORPHS)) throw new Error(`Unknown morph "${morph}". Core morphs: ${Object.keys(MORPHS).join(', ')}.`);
@@ -87,6 +89,7 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
     accuracy: Math.max(DERIVED_FLOOR, s.claw - m.evasion) + perk('accuracy'),
     affinity: Math.max(DERIVED_FLOOR, s.breath - m.scales) + perk('affinity'),
     acumen: 10 * AGE_CATEGORY[age] + perk('acumen'),
+    surgeFill: perk('surge'),
   };
 }
 

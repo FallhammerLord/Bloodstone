@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { parseAction } from '../src/actions.ts';
 import { makeArena, standardBoulders } from '../src/arena.ts';
 import { newBout, runExchange, simulateSlot, type Bout, type Event, type FighterSetup } from '../src/referee.ts';
+import { fillMeter } from '../src/referee/meter.ts';
 import * as R from '../src/rules.ts';
 
 const TD_WATER: FighterSetup = { name: 'Brine', morph: 'true-dragon', stone: 'water' };
@@ -257,12 +258,12 @@ test('seeded boulders: same seed, same map; starting spots stay clear', () => {
 });
 
 test('an obstacle in the way takes the hit instead', () => {
-  // True Dragon + Air breathes 15 into a large boulder (9 Wounds): the boulder shatters, and the target is untouched.
+  // True Dragon + Air breathes 12 into a large boulder (9 Wounds): the boulder shatters, and the target is untouched.
   const bout = newBout({ name: 'A', morph: 'true-dragon', stone: 'air' }, TD_WATER, 5.5, 'B', { obstacles: [{ size: 'large', x: 0, y: 0 }] });
   const ev = run(bout, ['breath'], ['hold']);
   assert.equal(hits(ev).length, 0);
   const o = ev.find((e) => e.kind === 'obstacle');
-  assert.ok(o && o.kind === 'obstacle' && o.damage === 15 && o.destroyed);
+  assert.ok(o && o.kind === 'obstacle' && o.damage === 12 && o.destroyed);
 });
 
 test('Earth breath eats through an obstacle it destroys and carries on', () => {
@@ -339,10 +340,10 @@ test('a landed jet breaks a charge', () => {
 // ---- Affinity contests the element [Proposed] ----
 
 test('a verb lands only if Potency beats Affinity, and the element wheel counts: Air scatters Water', () => {
-  // Wyrm + Air breathes Potency 15 at Wyvern + Water, Affinity 15 (Acumen raised to 11). Air beats Water, so the wheel
-  // takes 3 off: 15 against 12, and the pull lands. Without the wheel, 15 against 15 ties to the higher Acumen, and holds.
+  // Wyrm + Air breathes Potency 12 at True Dragon + Water, Affinity 12 (Acumen raised to 11). Air beats Water, so the
+  // wheel takes 3 off: 12 against 9, and the pull lands. Without the wheel, 12 against 12 ties to the higher Acumen, and holds.
   const pull = (rules = R.DEFAULT_RULES) => {
-    const bout = newBout({ name: 'G', morph: 'wyrm', stone: 'air' }, { name: 'H', morph: 'wyvern', stone: 'water' }, 8, 'B', {}, rules);
+    const bout = newBout({ name: 'G', morph: 'wyrm', stone: 'air' }, { name: 'H', morph: 'true-dragon', stone: 'water' }, 8, 'B', {}, rules);
     bout.fighters.B.sheet.acumen = 11;
     const x0 = bout.fighters.B.pos.x;
     const ev = run(bout, ['breath'], ['hold']);
@@ -352,7 +353,7 @@ test('a verb lands only if Potency beats Affinity, and the element wheel counts:
   assert.ok(pull().moved);
   const off = pull(R.rulesWith({ ELEMENT_MATCHUP_CONTEST: 0 }));
   assert.ok(!off.moved);
-  assert.ok(off.ev.some((e) => e.kind === 'note' && e.text === 'Affinity 15 holds against Potency 15: the pull fails.'));
+  assert.ok(off.ev.some((e) => e.kind === 'note' && e.text === 'Affinity 12 holds against Potency 12: the pull fails.'));
 });
 
 test('the wheel shapes a burn as it shapes the Breath: Earth smothers Fire, Fire consumes Air', () => {
@@ -608,4 +609,14 @@ test('Ravener: within Close, the Drake\'s Bite tracks a strafe and tests no Evas
   };
   assert.equal(strafeOn(false), 0, 'unprimed, a Wyvern\'s strafe slips it');
   assert.equal(strafeOn(true), 1, 'in the window, the Bite follows it home');
+});
+
+test('a preferred Air stone adds 3 to every Surge trigger', () => {
+  // Wyvern + Air (preferred, Affinity 12 − 3 = 9) fills 9 + 9 + 3; True Dragon + Air (neutral, Affinity 6) fills 9 + 6.
+  const bout = newBout({ name: 'Gust', morph: 'wyvern', stone: 'air' }, { name: 'Tor', morph: 'true-dragon', stone: 'air' }, 8);
+  const [a0, b0] = [bout.fighters.A.meter, bout.fighters.B.meter];
+  fillMeter(bout.rules, bout.fighters.A, 'test', 0, []);
+  fillMeter(bout.rules, bout.fighters.B, 'test', 0, []);
+  assert.equal(bout.fighters.A.meter - a0, R.DEFAULT_RULES.METER_BASE_FILL + 9 + 3);
+  assert.equal(bout.fighters.B.meter - b0, R.DEFAULT_RULES.METER_BASE_FILL + 6);
 });

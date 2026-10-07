@@ -87,7 +87,7 @@ A hidden baseline; each morph and each stone takes one peak and one valley off i
 | Water | 9 | 9 | 18 | Breath | Bite | +3 Acumen |
 | Earth | 9 | 15 | 12 | Bite | Breath | +3 Accuracy |
 | Fire | 6 | 12 | 18 | Breath | Claw | +3 Affinity |
-| Air | 12 | 9 | 15 | Claw | Bite | +3 Accuracy |
+| Air | 12 | 12 | 12 | Claw | Breath | +3 Surge per trigger |
 
 - **Water endures, Earth crushes, Fire scorches, Air rakes.**
 - **Derived:** Accuracy = Claw − Evasion (fast dragons swing wild); Affinity = Breath − Scales (hard hides or elemental resistance); each at least 3. Acumen = 10 × age category.
@@ -96,7 +96,7 @@ A hidden baseline; each morph and each stone takes one peak and one valley off i
 
 ### Elemental Preference
 Each morph prefers one element and dislikes the element that beats it.
-- **Preferred stone:** +3 to the stone's derived stat (Water Acumen, Earth and Air Accuracy, Fire Affinity).
+- **Preferred stone:** +3 to the stone's derived stat (Water Acumen, Earth Accuracy, Fire Affinity); Air's +3 goes to every Surge trigger instead.
 - **Disliked stone:** −6 Wounds.
 - **Neutral stone:** no change.
 - The element wheel's matchup (±3 on Breath and in verb contests) is separate from preference.
@@ -254,7 +254,7 @@ Each morph prefers one element and dislikes the element that beats it.
 ### Hits
 - A dragon outside an attack's active area during its active window takes no hit.
 - **Near misses** fall in a phantom band whose width Accuracy sets (⅓ pace per point, capped at the band edge). **[Proposed]** They fill Surge; the graze is retired. The phantom band belongs to aimed attacks: a Stomp's quake has no near misses, so a Stomp thrown from beyond its reach is a gambit on an advance, never a meter pump.
-- **Surge** (was the Acumen meter): visible to both players. **[Proposed]** Affinity fuels it, so Water dragons fill it best. **[Proposed]** It starts at Acumen (10 × age category, so 10 for a wyrmling, 13 for a Water-preferring one). Each trigger adds Affinity + 9: a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath (the breather's meter). Full at 100, the next landed Bite, Claw or Breath deals true damage, ignoring Scales and Affinity (and so any verb contest), plus a steroid of Affinity ÷ 3, and drains it to 0. A miss spends nothing; a Stomp or a Technique's side-hit never spends it. Acumen itself still breaks ties. Deterministic and streak-free.
+- **Surge** (was the Acumen meter): visible to both players. **[Proposed]** Affinity fuels it, so Water dragons fill it best. **[Proposed]** It starts at Acumen (10 × age category, so 10 for a wyrmling, 13 for a Water-preferring one). Each trigger adds Affinity + 9, +3 more for an Air-preferring dragon: a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath (the breather's meter). Full at 100, the next landed Bite, Claw or Breath deals true damage, ignoring Scales and Affinity (and so any verb contest), plus a steroid of Affinity ÷ 3, and drains it to 0. A miss spends nothing; a Stomp or a Technique's side-hit never spends it. Acumen itself still breaks ties. Deterministic and streak-free.
 
 **Evasive resolution**
 - **Strafe:** pure geometry. A dragon out of coverage is untouched; one still inside during the active window tests Evasion against Accuracy.

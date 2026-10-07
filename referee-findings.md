@@ -13,11 +13,56 @@
 
 | Round | What changed |
 |---|---|
+| [6](#round-6-season-3-what-makes-air-strong-and-the-air-regrid) | Season 3; Air's edge is Claw damage, not Accuracy; Air regridded to 12/12/12 with a Surge perk; dice odds for hit resolution |
 | [5](#round-5-season-2-and-suite-v04) | Season 2: the monoculture holds; suite v0.4 and the Scales/Guard/Defend rename |
 | [4](#round-4-season-1-a-true-dragon--air-monoculture) | Season 1: a TD+Air monoculture; no Evasion counter formed |
 | [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 6: Season 3, what makes Air strong, and the Air regrid
+
+Season 3 run locally by Ken under suite v0.3 (seed 2026, 200 tamers, 60 rounds, carried from season 2). Numbers parsed from the tamer histories, each bout counted once from the loser's line: 14,613 bouts across seasons 1–3, 5,937 in season 3.
+
+**Season 3:**
+- TD+Air is 66% of all dragons fought across seasons 1–3 and Air is 88% of season 3's stones. TD+Air wins 53% overall and 59% outside the mirror; mirrors are 48% of bouts.
+- The triangle holds, lopsided: TD+Air beats Wyvern+Air 70%, Wyvern+Air beats Wyvern+Fire 59%, Wyvern+Fire beats TD+Air 56%. Drake is gone by season 3; Earth 33%, Water 36%, TD+Fire 39%.
+- Fights keep shortening: 4.07, 3.93, 3.78 exchanges by season, against the 6–8 target. Half end in exchange 3.
+- Styles converge: a 12-point spread in season 1, 5 points in season 3.
+- Shard count doesn't move win rate (50.0 / 50.1 / 49.8% for 0 / 1 / 2 shards), confounded by rung pairing. Scything Forelimbs 72% on the ladder but 50% in the omnibus: a carrier effect, not the shard.
+
+**Omnibus, suite v0.3** (`npm run brains -- --skill master --shards`, 1,392 bouts): morphs 44–55% (±5); stones Air 59%, Fire 51%, Water 48%, Earth 43% (±5). TD+Air tops the pairings at 68% (±9) with random styles, so the ladder didn't invent it. 4.1 exchanges a bout: short fights are the engine, not the meta.
+
+**The planted True Dragon:** 17% of True Dragons never leave 1½ paces of the start. In those 117 bouts 85% script no move at all; they bite (41% of slots) and breathe as the opponent closes, win 58%, and end in 2.8 exchanges. Evasion 3 makes a move cost 24 of the slot's 30 ticks for a 6-tick evasive window, so trading in place is the better deal. Band moves verified: every primary move carries one band ± Evasion ÷ 6 paces, unchanged from v0.3 to v0.4.
+
+**What makes TD+Air strong** (`diag:pairing --morph true-dragon --stone air --bouts 48 --skill master`, 720 bouts each, suite v0.3, the sheet patched in a scratch copy):
+
+| TD+Air | Wins | Claw's share of damage dealt |
+|---|---|---|
+| Base (Claw 12, Accuracy 9) | 68% ±3 | 14.9 of 31.9 |
+| Accuracy forced to 6 | 61% ±4 | 15.8 of 30.8 |
+| Claw cut to 9 | 50% ±4 | 6.6 of 28.6 |
+
+Claw damage is the larger lever; Accuracy is secondary. This overturns Round 5's Accuracy hypothesis. Damage is attack − Scales, and Claw's baseline 9 sits nearest typical Scales, so at wyrmling a +3 Claw peak doubles a landed Claw (3 → 6 against Scales 6) and halves time-to-kill. The gain is linear (+3 a hit) and shrinks in share as growth widens margins; the Entry track stays wyrmling.
+
+**Air at 12 / 12 / 12** (Claw peak, Breath valley, +3 Surge a trigger when preferred), same instrument, before the regrid landed:
+- TD+Air 65% ±3 (from 68%). Bite takes over from Claw: Bite 17.8 of 31.5 dealt; fights 3.8 exchanges.
+- Wyvern+Air 60% ±4 (from 66%), down to Accuracy 3; its matchup with TD+Air goes from 27% to 42%.
+- Reading: with two attacks at 12 against Scales 6, Air stays strong. The doubling lives in the damage formula, not in which attack carries the peak.
+
+**Rules now in force (the Air regrid):**
+- **Air:** Claw 12, Bite 12, Breath 12; peak Claw, valley Breath (was Bite 9, Breath 15). Each attack is now one stone's peak and one's valley: Claw (Air / Fire), Bite (Earth / Water), Breath (Water, Fire / Earth, Air).
+- **Air preference:** +3 on every Surge trigger (was +3 Accuracy). Surge starts at Acumen and each trigger adds Affinity + 9, + 3 for a preferred Air stone. Only the Wyvern prefers Air.
+- Air's Affinity falls 3 on every egg (TD 6, Wyvern 9, Wyrm 3, Drake 6). Wyvern+Air's Accuracy falls to 3.
+- Tests: the grid, the obstacle and the verb-contest tests follow the new numbers; a new test pins the Surge perk. Goldens re-recorded: 7 scenarios with an Air dragon change.
+- The brains' measured table predates both v0.4 and this regrid; rebuild it before trusting `draft` or `gauntlet`.
+
+**Dice for hit resolution (explored; not built).** The current Evasion test is deterministic. One candidate replaces it: attack dice = attack stat ÷ 3, Evasion dice = Evasion ÷ 3 (a dodge adds one). Sort both high to low and pair them off; the first difference decides, the higher die winning. An unbroken chain goes to the side with dice left; equal pools matched all the way down go to the defender as a near miss. The phantom band stays as is. Equal pools land near 50%; every row and column is monotonic. Exact odds for 1–8 dice a side are in `dice-hit-odds.tsv`. Rejected along the way: dividing by Evasion (a ×3 multiplier on the True Dragon's valley), highest-against-lowest pairing by count (Evasion 6 out-defends 9), summed pools with doubled Evasion (Evasion-9 morphs near immune).
+
+**Open:**
+- Fight length: 3.8–4.1 exchanges against a 6–8 target. Candidates: higher wyrmling margins against Scales, or a start at full Far (9 paces), where every Breath sits exactly at its reach.
+- Measure the regrid: an omnibus on this commit against `HEAD~1` (`npm run ladder`).
+- A growth chart, to check that stone peaks fade on schedule past wyrmling.
 
 ## Round 5: Season 2, and suite v0.4
 

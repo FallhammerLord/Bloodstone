@@ -3,8 +3,8 @@
   "name": "ai-bout.json",
   "winner": "A",
   "exchanges": 2,
-  "wounds": "41/-2",
-  "hash": "41bb22e7d2851b92"
+  "wounds": "41/-5",
+  "hash": "92746d7a27914ff0"
  },
  {
   "name": "altitude.json",
@@ -16,9 +16,9 @@
  {
   "name": "brains.json",
   "winner": "B",
-  "exchanges": 6,
-  "wounds": "-1/15",
-  "hash": "1944cd43bee6a115"
+  "exchanges": 4,
+  "wounds": "-6/27",
+  "hash": "f1d0af4975a1bf63"
  },
  {
   "name": "breath-effects.json",
@@ -45,15 +45,15 @@
   "name": "charge-and-crunch.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "33/7",
-  "hash": "9fe9b6f0002c9810"
+  "wounds": "33/4",
+  "hash": "e167091e19ee0a9d"
  },
  {
   "name": "footsies-close.json",
   "winner": "-",
   "exchanges": 1,
   "wounds": "36/42",
-  "hash": "39e312ac92e20393"
+  "hash": "6f0c1d06c7813e3c"
  },
  {
   "name": "footsies-melee.json",
@@ -66,8 +66,8 @@
   "name": "full-bout.json",
   "winner": "B",
   "exchanges": 3,
-  "wounds": "0/29",
-  "hash": "c2d4e6a77940e5a3"
+  "wounds": "0/26",
+  "hash": "aee845759c5561ff"
  },
  {
   "name": "intimidate-punish.json",
@@ -80,15 +80,15 @@
   "name": "obstacles.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "38/36",
-  "hash": "7adf8c359b14c956"
+  "wounds": "35/36",
+  "hash": "bc8dd49d82750c21"
  },
  {
   "name": "push-and-shove.json",
-  "winner": "-",
+  "winner": "A",
   "exchanges": 2,
-  "wounds": "30/2",
-  "hash": "63140e695f31b33b"
+  "wounds": "34/-4",
+  "hash": "099a3bf7803a8971"
  },
  {
   "name": "revision-read.json",

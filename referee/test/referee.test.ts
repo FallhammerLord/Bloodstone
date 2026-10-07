@@ -29,14 +29,15 @@ test('the grid: base adds first (a disliked stone costs 6 Wounds), then the tert
   assert.deepEqual([td.breath, td.wounds, td.accuracy, td.affinity], [18, 42, 3, 18 - 6 + 3]);
   const tdE = hatch('true-dragon', 'earth');
   assert.deepEqual([tdE.bite, tdE.wounds, tdE.accuracy, tdE.affinity], [15, 36, 6, 6]);
+  // Air (Claw 12, Bite 12, Breath 12): a preferred Air stone adds +3 to every Surge trigger, not to a derived stat.
   const wa = hatch('wyvern', 'air');
-  assert.deepEqual([wa.claw, wa.wounds, wa.evasion, wa.accuracy, wa.affinity], [12, 36, 9, 3 + 3, 12]);
+  assert.deepEqual([wa.claw, wa.bite, wa.breath, wa.wounds, wa.evasion, wa.accuracy, wa.affinity, wa.surgeFill], [12, 12, 12, 36, 9, 3, 9, 3]);
   const wf = hatch('wyvern', 'fire');
   assert.deepEqual([wf.breath, wf.wounds, wf.accuracy, wf.affinity], [18, 30, 3, 15]);
   const ww = hatch('wyrm', 'water');
   assert.deepEqual([ww.affinity, ww.wounds, ww.scales, ww.acumen], [9, 30, 9, 13]);
   const wr = hatch('wyrm', 'air');
-  assert.deepEqual([wr.claw, wr.wounds, wr.accuracy, wr.affinity], [12, 24, 6, 6]);
+  assert.deepEqual([wr.claw, wr.wounds, wr.accuracy, wr.affinity, wr.surgeFill], [12, 24, 6, 3, 0]);
 });
 
 test('neutral pairings keep the base tables', () => {
