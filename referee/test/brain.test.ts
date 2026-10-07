@@ -68,3 +68,12 @@ test('a brain sees only the public view: the opponent\'s planned script never re
   assert.equal(view.rules, bout.rules);
   assert.equal(view.separation, Math.round(6 * R.PACE / 2) * 2);
 });
+
+test('attribute shards stack in drafting; a Technique never duplicates', async () => {
+  const { canAdd } = await import('../src/brain/hatchery.ts');
+  const { findShard } = await import('../src/shards.ts');
+  const sinew = findShard('Coiled Sinew');
+  const jaw = findShard('Snapping Jaw', 'wyrmling');
+  assert.ok(canAdd([{ name: 'Coiled Sinew' }, { name: 'Coiled Sinew' }], sinew));
+  assert.ok(!canAdd([{ name: 'Snapping Jaw' }], jaw));
+});

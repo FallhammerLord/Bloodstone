@@ -3,6 +3,8 @@ Technique shards change how an action behaves. Every Technique is a sidegrade: e
 
 ## Rules
 
+**No duplicates:** a dragon seats at most one of each Technique. (Attribute shards stack; Techniques don't.)
+
 **Grade ladder**
 - **Wyrmling:** narrow trigger, full cost.
 - **Juvenile:** full effect, full cost.

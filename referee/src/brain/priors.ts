@@ -16,17 +16,21 @@ export function bandScore(style: Archetype, ctx: Context, band: Band): number {
 }
 
 /** How readily an archetype imagines an action from a band. */
-export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, a: ActionSpec): number {
+export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, a: ActionSpec, primed = false): number {
   const g = GOALS[style];
   const here = bandScore(style, ctx, band);
   const move = (to: Band) => Math.max(0.15, 1 + 8 * (bandScore(style, ctx, to) - here));
   let w: number;
   if (a.setup) w = (prior(style, ctx, band, s, { name: a.setup }) + prior(style, ctx, band === 'veryFar' ? 'far' : band, s, { name: a.name })) / 2;
-  else if (ACTIONS[a.name].category === 'attack' && a.name !== 'intimidate') w = 0.1 + 10 * (ctx.mine.attack[band][a.name] ?? 0) * (g.dealt + 0.3 * g.big);
-  else if (a.name === 'approach' || (a.name === 'leap' && s.f.sheet.aspect === 'ravener')) w = move(closer[band]);
+  else if (ACTIONS[a.name].category === 'attack' && a.name !== 'intimidate') {
+    w = 0.1 + 10 * (ctx.mine.attack[band][a.name] ?? 0) * (g.dealt + 0.3 * g.big);
+    // A Drake's open Ravener window: its next Bite lunges and tracks, so it reaches for the Bite.
+    if (primed && a.name === 'bite') w = 2 * w + 0.3 * g.payoff;
+  } else if (a.name === 'approach' || (a.name === 'leap' && s.f.sheet.aspect === 'ravener')) w = move(closer[band]) * (1 + 0.25 * g.pursuit);
   else if (a.name === 'retreat') w = move(farther[band]);
-  else if (a.name === 'strafe') w = 0.4 + 0.3 * g.misses;
-  else if (a.name === 'scales' || a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken + 0.2 * g.misses;
+  else if (a.name === 'strafe') w = 0.4 + 0.3 * g.misses + 0.2 * g.free;
+  else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken + 0.3 * g.misses + 0.2 * g.free;
+  else if (a.name === 'scales') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken;
   else if (a.name === 'intimidate') w = 0.2 + 0.15 * (g.punish + g.big);
   else if (a.name === 'leap' || a.name === 'dive') w = s.f.sheet.flies ? 0.6 : 0.2;
   else w = 0.3;
@@ -43,9 +47,15 @@ export function nextSep(sep: number, a: ActionSpec, s: Situation): number {
 /** One imagined script: slot by slot, each action drawn by its prior (or uniformly, to explore). */
 export function sampleScript(style: Archetype, ctx: Context, s: Situation, sep: number, rng: () => number, styled: boolean, band: (sep: number) => Band): ActionSpec[] {
   const out: ActionSpec[] = [];
+  // A Drake's Ravener window: open now, or opened by an Approach or hop earlier in this script; a Bite closes it.
+  const drake = s.f.sheet.aspect === 'ravener';
+  let primed = drake && s.f.marks.ravener > 0;
   while (out.length < R.SLOTS_PER_EXCHANGE) {
     const legal = legalActions(s, rng);
-    const a = pick(legal, legal.map((x) => (styled ? prior(style, ctx, band(sep), s, x) : 1)), rng);
+    const a = pick(legal, legal.map((x) => (styled ? prior(style, ctx, band(sep), s, x, primed) : 1)), rng);
+    // An Approach-then-Bite setup opens the window and spends it at once.
+    if (a.name === 'bite') primed = false;
+    else if (drake && (a.name === 'approach' || a.name === 'leap')) primed = true;
     sep = nextSep(sep, a, s);
     s = place(out, s, a);
   }

@@ -62,6 +62,37 @@ function perched(b: Bout, f: Fighter, opp: Fighter): number {
   return Math.hypot(f.pos.x - opp.pos.x, f.pos.y - opp.pos.y) <= b.rules.STOOP_RANGE ? 1 : 0;
 }
 
+/** Slot by slot: its hits in slots where it took nothing back, and the setups it cashed (a lunging Bite, a pouncing Claw). */
+function slotWise(o: Outcome): { free: number; payoff: number } {
+  const them = other(o.me);
+  let free = 0, payoff = 0;
+  let hits: Extract<Event, { kind: 'hit' }>[] = [];
+  let hurt = false, lunged = false, pounced = false;
+  const close = () => {
+    if (!hurt) free += hits.length;
+    payoff += hits.filter((h) => (h.action === 'bite' && lunged) || (h.action === 'claw' && pounced)).length;
+    hits = [];
+    hurt = lunged = pounced = false;
+  };
+  for (const e of o.events) {
+    if (e.kind === 'slotStart') close();
+    else if (e.kind === 'hit' && e.attacker === o.me) hits.push(e);
+    else if ((e.kind === 'hit' && e.attacker === them) || (e.kind === 'zoneEffect' && e.side === o.me && e.damage > 0)) hurt = true;
+    else if (e.kind === 'note' && e.side === o.me && e.tag === 'lunge') lunged = true;
+    else if (e.kind === 'note' && e.side === o.me && e.tag === 'pounce') pounced = true;
+  }
+  close();
+  return { free, payoff };
+}
+
+/** The opponent backed off this exchange: did it keep its reach (1), or lose it (−1)? Otherwise 0. */
+function pursuit(o: Outcome, ctx: Context): number {
+  const them = other(o.me);
+  const backedOff = o.after.record.slice(o.before.record.length).some((r) => r.actions[them] === 'retreat');
+  if (!backedOff) return 0;
+  return ctx.mine.best[bandOf(sepOf(o.after))] >= ctx.mine.best[bandOf(sepOf(o.before))] ? 1 : -1;
+}
+
 export function features(o: Outcome, ctx: Context): Goals {
   const them = other(o.me);
   const me0 = o.before.fighters[o.me], op0 = o.before.fighters[them];
@@ -71,6 +102,7 @@ export function features(o: Outcome, ctx: Context): Goals {
   const mineHits = o.events.filter((e): e is Extract<Event, { kind: 'hit' }> => e.kind === 'hit' && e.attacker === o.me);
   const misses = o.events.filter((e) => (e.kind === 'whiff' || e.kind === 'evade' || e.kind === 'nearMiss') && e.attacker === them).length;
   const full = (f: Fighter) => (f.meter >= R.METER_MAX ? 0.5 : 0);
+  const slots = slotWise(o);
   return {
     dealt: (op0.wounds - op1.wounds) / op0.sheet.wounds,
     taken: -(me0.wounds - me1.wounds) / me0.sheet.wounds,
@@ -79,7 +111,10 @@ export function features(o: Outcome, ctx: Context): Goals {
     misses,
     punish: mineHits.filter((h) => h.tags.includes('punish')).length,
     big: mineHits.filter((h) => h.damage >= op0.sheet.wounds / 5).length,
+    free: slots.free,
+    pursuit: pursuit(o, ctx),
     tempo: tempo(o.after, me1, sep) - tempo(o.after, op1, sep),
+    payoff: slots.payoff,
     surge: (me1.meter - op1.meter) / R.METER_MAX + full(me1) - full(op1),
     status: burdens(op1) - burdens(me1),
     ground: exposed(o.after, op1) - exposed(o.after, me1),

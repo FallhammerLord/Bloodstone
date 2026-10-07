@@ -59,12 +59,35 @@ export function sheetScores(style: BrainStyle): number[] {
   return SHEETS.map((x) => (m ? MEASURED_SCALE * ((m[`${x.morph} + ${x.stone}`] ?? 0.5) - 0.5) : 0));
 }
 
-/** How much a style wants a shard on a given sheet: its measured worth. Without a table, every shard is even. */
-export function shardScore(style: BrainStyle, shard: Shard, sheet: StatSheet): number {
+/** A measured row's name: the shard, or a stack of it ("Coiled Sinew ×2"). */
+const stackName = (name: string, k: number) => (k === 1 ? name : `${name} ×${k}`);
+const isTechnique = (s: Shard) => (s.kind as { family: string }).family === 'technique';
+
+/** Attribute shards stack as far as the array's shape permits; a Technique never duplicates. */
+export function canAdd(seated: { name: string }[], s: Shard): boolean {
+  return !isTechnique(s) || !seated.some((x) => x.name === s.name);
+}
+
+/** What a stack of k copies is worth to a style: its measured row, or failing one, k times a single copy. */
+function stackWorth(style: BrainStyle, s: Shard, k: number): number {
+  if (k <= 0) return 0;
+  const row = (n: number) => MEASURED?.shards[style]?.[stackName(s.name, n)];
+  for (let n = k; n >= 1; n--) {
+    const v = row(n);
+    if (v !== undefined) return MEASURED_SCALE * (v + (k - n) * (row(1) ?? 0));
+  }
+  return 0;
+}
+
+/**
+ * How much a style wants one more copy of a shard on a given sheet, holding `have` already: the measured gain from the
+ * stack it makes. Without a table, every shard is even.
+ */
+export function shardScore(style: BrainStyle, shard: Shard, sheet: StatSheet, have = 0): number {
   const kind = shard.kind as { family: string; technique?: string };
   // A flight Technique does nothing for a dragon that can't fly: a fact, not a measurement.
   if (kind.family === 'technique' && FLIGHT_TECHNIQUES.has(kind.technique ?? '') && !sheet.flies) return -2;
-  return MEASURED_SCALE * (MEASURED?.shards[style]?.[shard.name] ?? 0);
+  return stackWorth(style, shard, have + 1) - stackWorth(style, shard, have);
 }
 
 function draw<T>(items: T[], scores: number[], temperature: number, rng: () => number): T {
@@ -95,10 +118,12 @@ export function draftDragon(
   let free = Array.from({ length: pips }, (_, i) => i);
   const pool = shardPool('wyrmling');
   while (free.length) {
-    const options = pool.filter((s) => s.pips <= free.length && !shards.some((x) => x.shard === s.name));
+    const seated = shards.map((x) => ({ name: x.shard }));
+    const options = pool.filter((s) => s.pips <= free.length && canAdd(seated, s));
     if (!options.length) break;
     const nov = picks.novelty(style, options.map((s) => `shard|${s.name}`), scale);
-    const s = draw(options, options.map((o, i) => shardScore(style, o, sheet) + nov[i]), t, rng);
+    const have = (o: Shard) => seated.filter((x) => x.name === o.name).length;
+    const s = draw(options, options.map((o, i) => shardScore(style, o, sheet, have(o)) + nov[i]), t, rng);
     picks.add(style, `shard|${s.name}`);
     shards.push({ shard: s.name, grade: s.grade, pips: free.slice(0, s.pips) });
     free = free.slice(s.pips);
@@ -119,37 +144,18 @@ export const ICHOR = { meltPerPip: 1, freezePerPip: 2 };
 const ICHOR_VALUE = 0.3;
 /** How far ahead a tamer plans its array, in picks: a novice takes what's best now; a master plans the whole array. */
 const PLAN_DEPTH: Record<Skill, number> = { novice: 0, adept: 1, master: 2 };
-/** Each further shard serving the same want counts this much less than the one before. */
-const DIMINISH = 0.6;
 
 export type SpoilsChoice =
   | { kind: 'seat'; shard: Shard }
   | { kind: 'freeze'; melt: Shard; shard: Shard }
   | { kind: 'bank'; melt: Shard };
 
-/** The action each Technique fires on: shards serving the same action overlap. */
-const FIRES_ON: Record<string, string> = {
-  'snapping-jaw': 'bite', lockjaw: 'bite', 'gnashing-teeth': 'bite',
-  'hamstring-hooks': 'claw', 'scything-forelimbs': 'claw', 'ratchet-claws': 'claw', 'raking-talons': 'claw',
-  'lance-throat': 'breath', 'smoldering-maw': 'breath', 'bellows-chest': 'breath', 'ash-gland': 'breath',
-  'stooping-pinions': 'dive', 'sidewinder-spine': 'strafe', 'bounding-haunches': 'approach',
-  thornscale: 'scales', 'riposte-talons': 'dodge', 'mantle-wings': 'scales',
-  'sapping-bellow': 'intimidate', 'goading-roar': 'intimidate',
-};
-
-/** What a shard mainly serves: a chip its attribute, a Technique the action it fires on. */
-function wantOf(_style: BrainStyle, shard: Shard): string {
-  const kind = shard.kind as { family: string; attr?: string; technique?: string };
-  if (kind.family !== 'technique') return kind.attr ?? shard.name;
-  return FIRES_ON[kind.technique ?? ''] ?? shard.name;
-}
-
-/** A whole array's worth to a style: its shards' scores, each further shard serving the same want counting less. */
+/** A whole array's worth to a style: each stack at its measured worth, each Technique at its own. */
 export function arrayValue(style: BrainStyle, sheet: StatSheet, shards: Shard[]): number {
-  const byWant = new Map<string, number[]>();
-  for (const s of shards) byWant.set(wantOf(style, s), [...(byWant.get(wantOf(style, s)) ?? []), shardScore(style, s, sheet)]);
+  const counts = new Map<string, { s: Shard; k: number }>();
+  for (const s of shards) counts.set(s.name, { s, k: (counts.get(s.name)?.k ?? 0) + 1 });
   let v = 0;
-  for (const scores of byWant.values()) scores.sort((a, b) => b - a).forEach((x, k) => (v += x * DIMINISH ** k));
+  for (const { s, k } of counts.values()) v += isTechnique(s) ? shardScore(style, s, sheet) : stackWorth(style, s, k);
   return v;
 }
 
@@ -187,9 +193,8 @@ export function chooseSpoils(style: BrainStyle, skill: Skill, sheet: StatSheet, 
   const worth = (st: PlanState) => arrayValue(style, sheet, st.seated) + ICHOR_VALUE * st.ichor;
   // Looking ahead, only the few best freezes are worth imagining.
   const moves = (st: PlanState, offer: Shard[], ahead = false): [SpoilsChoice, PlanState][] => {
-    const has = new Set(st.seated.map((x) => x.name));
-    const fits = (s: Shard) => s.pips <= st.room && !has.has(s.name);
-    const score = (s: Shard) => shardScore(style, s, sheet);
+    const fits = (s: Shard) => s.pips <= st.room && canAdd(st.seated, s);
+    const score = (s: Shard) => shardScore(style, s, sheet, st.seated.filter((x) => x.name === s.name).length);
     const melt = [...offer].sort((a, b) => b.pips - a.pips || score(a) - score(b))[0];
     const bank = st.ichor + ICHOR.meltPerPip * melt.pips;
     const out: [SpoilsChoice, PlanState][] = [];

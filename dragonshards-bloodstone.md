@@ -1,5 +1,5 @@
 # Dragonshards: Bloodstone Suite v0.1
-Bloodstone shards buff what the stone sets: Claw Sharpness, Bite Force, Breath Potency, and Affinity (derived from Breath Potency and the stone). Common.
+Bloodstone shards buff what the stone sets: Claw Sharpness, Bite Force, Breath Potency, and Affinity (derived from Breath − Hardness at hatching; a chip adds to it directly). Common.
 
 ## Rules
 
@@ -14,7 +14,7 @@ Bloodstone shards buff what the stone sets: Claw Sharpness, Bite Force, Breath P
 
 **Pip budget [Settled]:** 1 pip per unit of value at Adult efficiency, 1 pip per perk. Lower grades buy fewer points per pip; Venerable's related point is top-grade efficiency.
 
-**Points add directly.** Three Wyrmling chips make +3 points, one full unit.
+**Points add directly, and chips stack.** Three Wyrmling chips, the same or different, make +3 points, one full unit.
 
 **Overlap [Settled]:** a covered pip strips perks first (the rider, then the related point), then attribute points. A shard with no pips left is destroyed. **[Proposed]** Each covered pip salvages into Ichor.
 

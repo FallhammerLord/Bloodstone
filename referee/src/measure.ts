@@ -4,7 +4,7 @@
 //           and without it: same opponent, arena and seeds), on random sheets.
 // Each cell is shrunk toward its row's pooled value (a sheet's rate across styles, a shard's change across styles), so
 // a style's own number only moves the estimate as far as its sample supports. Writes src/brain/measured.json.
-//   npm run measure [-- --skill adept] [--n 24] [--seed N] [--rule KEY=VALUE ...] [--out file] [--only "Shard,Shard"] [--sheets "morph + stone,..."]
+//   npm run measure [-- --skill adept] [--n 24] [--seed N] [--rule KEY=VALUE ...] [--out file] [--only "Shard,Shard"] [--sheets "morph + stone,..."] [--no-stacks]
 // Rerun after any rules patch: the table is the brains' knowledge of what wins.
 
 import { writeFileSync } from 'node:fs';
@@ -13,7 +13,7 @@ import type { Job, Result } from './brains-worker.ts';
 import { flag, inWorkers, rulesFromArgs, WORKERS } from './harness.ts';
 import { CORE_MORPHS, type CoreStone, type Morph } from './hatch.ts';
 import { seededRandom } from './random.ts';
-import type { FighterSetup } from './referee.ts';
+import type { FighterSetup, ShardSetup } from './referee.ts';
 import { setPoolRules, shardPool } from './shards.ts';
 
 const argv = process.argv.slice(2);
@@ -34,7 +34,17 @@ const GENERAL = BRAIN_STYLES;
 const only = flag(argv, '--only', '').split(',').map((x) => x.trim()).filter(Boolean);
 // --sheets "true-dragon + fire,..." measures just those sheets (and skips shards): a targeted run for a morph or stone call.
 const onlySheets = flag(argv, '--sheets', '').split(',').map((x) => x.trim()).filter(Boolean);
-const shards = onlySheets.length ? [] : shardPool('wyrmling').filter((x) => !only.length || only.includes(x.name));
+// Attribute shards stack (Techniques don't): each chip also gets rows for two and three copies, "Coiled Sinew ×2".
+// --no-stacks skips them.
+const stacks = !argv.includes('--no-stacks');
+const stackName = (name: string, k: number) => (k === 1 ? name : `${name} ×${k}`);
+const shards: { name: string; setup: ShardSetup[] }[] = onlySheets.length ? [] : shardPool('wyrmling').flatMap((x) => {
+  const ks = x.kind.family !== 'technique' && stacks ? [1, 2, 3] : [1];
+  return ks.map((k) => ({
+    name: stackName(x.name, k),
+    setup: k === 1 ? [{ shard: x.name, grade: x.grade, pips: Array.from({ length: x.pips }, (_, j) => j) }] : Array.from({ length: k }, (_, j) => ({ shard: x.name, grade: x.grade, pips: [j] })),
+  }));
+}).filter((x) => !only.length || only.includes(x.name) || only.includes(x.name.replace(/ ×\d$/, '')));
 const rng = seededRandom(seed);
 const pick = <T>(xs: readonly T[]) => xs[Math.floor(rng() * xs.length)];
 
@@ -60,7 +70,7 @@ for (const style of BRAIN_STYLES) {
       s += 2;
       const base = { name: style, morph: me.morph, stone: me.stone };
       const B = { name: 'field', morph: o.morph, stone: o.stone };
-      add('with', style, shard.name, { ...base, shards: [{ shard: shard.name, grade: shard.grade, pips: Array.from({ length: shard.pips }, (_, k) => k) }] }, B, opp, s, i, me.morph);
+      add('with', style, shard.name, { ...base, shards: shard.setup }, B, opp, s, i, me.morph);
       add('without', style, shard.name, base, B, opp, s, i, me.morph);
     }
   }

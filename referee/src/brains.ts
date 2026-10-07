@@ -187,17 +187,20 @@ console.log('\n── Habits by archetype (every brain bout; share of its slots)
 for (const st of BRAIN_STYLES) {
   const acts: Record<string, number> = {};
   const bandsOf: Record<string, number> = {};
+  const gam = [0, 0];
   for (const j of jobs) for (const side of ['A', 'B'] as const) {
     const p = side === 'A' ? j.playerA : j.playerB;
     if (p.kind !== 'brain' || p.style !== st) continue;
     const r = byId.get(j.id)!;
     for (const [k, v] of Object.entries(r.sideActions[side])) acts[k] = (acts[k] ?? 0) + v;
     for (const [k, v] of Object.entries(r.sideBands[side])) bandsOf[k] = (bandsOf[k] ?? 0) + v;
+    gam[0] += r.gambits[side][0];
+    gam[1] += r.gambits[side][1];
   }
   const n = Object.values(acts).reduce((x, y) => x + y, 0);
   const top = Object.entries(acts).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k, v]) => `${k} ${pct(v, n).trim()}`).join(', ');
   const where = ['melee', 'close', 'far', 'very far'].map((b) => `${b} ${pct(bandsOf[b] ?? 0, n).trim()}`).join(', ');
-  console.log(`  ${st.padEnd(15)} ${top}\n  ${''.padEnd(15)} at ${where}`);
+  console.log(`  ${st.padEnd(15)} ${top}\n  ${''.padEnd(15)} at ${where}; gambits (attacks from beyond reach) ${pct(gam[0], n).trim()} of slots, landing ${pct(gam[1], gam[0]).trim()}`);
 }
 console.log('\n  The boxing triangle (swarmer > out-boxer > slugger > swarmer):');
 for (const [x, y] of [['swarmer', 'out-boxer'], ['out-boxer', 'slugger'], ['slugger', 'swarmer']]) {

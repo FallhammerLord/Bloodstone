@@ -101,3 +101,53 @@ test('Talons: a Wyvern aloft over a grounded opponent within stoop reach holds t
   const f = features({ before, after, events: [], me: 'A' }, { mine: worth(before, 'A'), theirs: worth(before, 'B') });
   assert.equal(f.perch, 1);
 });
+
+test('a cashed setup pays: a lunging Bite that lands counts as payoff', () => {
+  const before = newBout(TD_WATER, TD_WATER, 4);
+  const after = cloneBout(before);
+  const events = [
+    { kind: 'slotStart', exchange: 1, slot: 1 },
+    { kind: 'note', tick: 0, side: 'A', tag: 'lunge', text: 'Lunges.' },
+    { kind: 'hit', tick: 12, attacker: 'A', action: 'bite', damage: 6, parts: [], tags: [], interrupt: false, trade: false, woundsLeft: 36 },
+  ] as Parameters<typeof features>[0]['events'];
+  const f = features({ before, after, events, me: 'A' }, { mine: worth(before, 'A'), theirs: worth(before, 'B') });
+  assert.equal(f.payoff, 1);
+  assert.equal(f.free, 1, 'and it took nothing back that slot: a free hit');
+});
+
+test('a hit traded for a hit is not free', () => {
+  const before = newBout(TD_WATER, TD_WATER, 4);
+  const events = [
+    { kind: 'slotStart', exchange: 1, slot: 1 },
+    { kind: 'hit', tick: 12, attacker: 'A', action: 'claw', damage: 3, parts: [], tags: [], interrupt: false, trade: true, woundsLeft: 39 },
+    { kind: 'hit', tick: 12, attacker: 'B', action: 'claw', damage: 3, parts: [], tags: [], interrupt: false, trade: true, woundsLeft: 39 },
+  ] as Parameters<typeof features>[0]['events'];
+  assert.equal(features({ before, after: cloneBout(before), events, me: 'A' }, { mine: worth(before, 'A'), theirs: worth(before, 'B') }).free, 0);
+});
+
+test('pursuit: when the opponent backs off, keeping its reach counts, losing it counts against', () => {
+  const run = (endSep: number) => {
+    const before = newBout({ name: 'D', morph: 'drake', stone: 'earth' }, TD_WATER, 4);
+    const after = cloneBout(before);
+    after.record.push({ exchange: 1, slot: 0, separation: 4 * R.PACE, z: { A: 0, B: 0 }, wounds: { A: 30, B: 42 }, actions: { A: 'approach', B: 'retreat' }, landed: { A: false, B: false }, breathReady: { A: true, B: true }, meterFull: { A: false, B: false } });
+    after.fighters.B.pos = { x: after.fighters.A.pos.x + endSep * R.PACE, y: 0, z: 0 };
+    return features({ before, after, events: [], me: 'A' }, { mine: worth(before, 'A'), theirs: worth(before, 'B') }).pursuit;
+  };
+  assert.equal(run(4), 1, 'kept Close');
+  assert.equal(run(9.5), -1, 'let it slip beyond Far');
+});
+
+test('Ravener: a Drake values revising slot 3 into a safe Approach over a Bite from beyond reach', async () => {
+  const { value } = await import('../src/brain.ts');
+  const { simulateSlot } = await import('../src/referee.ts');
+  const base = newBout({ name: 'D', morph: 'drake', stone: 'earth' }, TD_WATER, 8);
+  base.exchange = 1;
+  base.globalSlot = 2;
+  const ctx = { mine: worth(base, 'A'), theirs: worth(base, 'B') };
+  const slot3 = (name: 'approach' | 'bite') => {
+    const b = cloneBout(base);
+    const events = simulateSlot(b, { A: { name }, B: { name: 'hold' } });
+    return value('swarmer', { before: base, after: b, events, me: 'A' }, ctx);
+  };
+  assert.ok(slot3('approach') > slot3('bite'), `${slot3('approach')} vs ${slot3('bite')}`);
+});

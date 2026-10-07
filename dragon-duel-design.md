@@ -63,7 +63,7 @@
 
 **Derivation.** **[Proposed]** Tertiaries derive once at hatching, after every base add (morph, stone, and a disliked stone's Wounds): Accuracy = Claw Sharpness − Evasion, Affinity = Breath Potency − Hardness, each at least 3; Acumen = 10 × age category. A preferred stone adds +3 to one derived stat. After hatching, each attribute grows independently, so no attribute buys another.
 
-**Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. Every defense has an attack that ignores it, which answers concentration. Single-attribute builds are avoided by design. **[Proposed]** Stomp now adds Hardness ÷ 3, kept small so Hardness stacking stays a minor gain; its radius still scales by age only. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
+**Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. The base design avoids single-attribute dependence: every derived stat draws on two attributes (Accuracy = Claw − Evasion, Affinity = Breath − Hardness), and every morph and stone trades one attribute for another. Shard allocation is free within the array's shape: attribute shards stack, Techniques never duplicate, and min-maxing is allowed. Every defense has an attack that ignores it, which answers concentration. **[Proposed]** Stomp adds Hardness ÷ 3, kept small so Hardness stacking stays a minor gain; its radius still scales by age only. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
 
 ### Starting Attributes [Proposed]
 A hidden baseline; each morph and each stone takes one peak and one valley off it. Wounds runs on a doubled scale (it moves in 6s) so a baseline hit is about a sixth of a pool. Peaks and valleys may be shared.
@@ -312,6 +312,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - A radial array with the bloodstone at the nucleus and five valences, one per age category, holding 3, 5, 8, 11, and 14 pips (41 total). Every morph shares these counts.
 - Each egg gives the array an overall shape, informed by its morph and modified by its stone. Patterns build on three core shapes, **Wheel** (True Dragon), **Wings** (Wyvern), and **Coil** (Wyrm); extended morphs modify their base shape.
 - Seating locks.
+- **Stacking:** attribute shards (Body and Bloodstone) stack: any number of copies, as the array's shape permits. Shards don't grow on their own, so a stronger version comes from climbing the ladder. Techniques never duplicate.
 
 **Shard shapes:** chips (one pip, or a compact cluster across adjacent valences), splinters (adjacent pips along one valence), and spikes (adjacent pips spanning valences). Very powerful shards may take compound shapes.
 

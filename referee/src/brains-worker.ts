@@ -56,6 +56,8 @@ export interface Result {
   /** slots spent on each action, and slots ended in each band, by side */
   sideActions: Record<'A' | 'B', Record<string, number>>;
   sideBands: Record<'A' | 'B', Record<string, number>>;
+  /** gambits by side: attacks started beyond their reach (betting on the opponent closing), and how many landed */
+  gambits: Record<'A' | 'B', [number, number]>;
   /** what came of them: revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, and more */
   outcomes: Record<string, number>;
   /** movement census: per morph [paces traveled, bouts, bouts that stayed within 1½ paces of the start]; slots per band */
@@ -175,12 +177,19 @@ for (const job of mine) {
     }
   });
   const sideActions: Result['sideActions'] = { A: {}, B: {} };
+  const gambits: Result['gambits'] = { A: [0, 0], B: [0, 0] };
+  const reach: Record<string, number> = { bite: R.CLOSE_EDGE + bout.rules.BITE_LUNGE, claw: bout.rules.CLAW_SIDE, breath: R.FAR_EDGE, stomp: bout.rules.STOMP_RADIUS.wyrmling };
   const sideBands: Result['sideBands'] = { A: {}, B: {} };
   for (const r of bout.record) for (const s of ['A', 'B'] as const) {
     actions[r.actions[s]] = (actions[r.actions[s]] ?? 0) + 1;
     sideActions[s][r.actions[s]] = (sideActions[s][r.actions[s]] ?? 0) + 1;
     const band = r.separation <= R.MELEE_EDGE ? 'melee' : r.separation <= R.CLOSE_EDGE ? 'close' : r.separation <= R.FAR_EDGE ? 'far' : 'very far';
     sideBands[s][band] = (sideBands[s][band] ?? 0) + 1;
+    const far = reach[r.actions[s]];
+    if (far !== undefined && r.separation > far) {
+      gambits[s][0]++;
+      if (r.landed[s]) gambits[s][1]++;
+    }
   }
   // Movement census: how far each dragon travels, and at what range the fight happens.
   const travel: Result['travel'] = {};
@@ -212,6 +221,6 @@ for (const job of mine) {
     stats[5]++;
     if (r.actions[s] === 'scales') stats[4]++;
   }
-  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, sideActions, sideBands, outcomes, travel, bands });
+  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, sideActions, sideBands, gambits, outcomes, travel, bands });
 }
 parentPort!.postMessage(results);
