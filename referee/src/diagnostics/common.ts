@@ -11,7 +11,7 @@ import { PACE, type Rules } from '../rules.ts';
 export const MORPHS: Morph[] = CORE_MORPHS;
 export const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 export const PAIRINGS: FighterSetup[] = MORPHS.flatMap((m) => STONES.map((s) => ({ name: `${m}-${s}`, morph: m, stone: s })));
-export const GENERAL = BRAIN_STYLES.filter((s) => !s.endsWith('-focus'));
+export const GENERAL = BRAIN_STYLES;
 export const label = (f: FighterSetup) => `${f.morph} + ${f.stone}`;
 
 /**

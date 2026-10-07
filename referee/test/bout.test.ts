@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAction, type ActionSpec } from '../src/actions.ts';
-import { aiController, STYLES } from '../src/ai.ts';
+import { crudeController } from '../src/brain.ts';
 import { DEFAULT_FORMAT, rimPulse, runBout, viewOf, type Controller } from '../src/bout.ts';
 import { newBout, runExchange, type Event, type FighterSetup } from '../src/referee.ts';
 import * as R from '../src/rules.ts';
@@ -127,19 +127,15 @@ test('open-lobby timeout can go to most Wounds', () => {
 test('the same seeds play the same bout', () => {
   const play = () => {
     const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'fire' }, { name: 'G', morph: 'wyvern', stone: 'air' }, 6.5);
-    return runBout(bout, { A: aiController('mixed', 3), B: aiController('guardian', 4) });
+    return runBout(bout, { A: crudeController(3), B: crudeController(4) });
   };
   assert.deepEqual(play(), play());
 });
 
-test('the AI never scripts an action that is cooling down', () => {
-  for (const a of STYLES) {
-    for (const b of STYLES) {
-      for (let seed = 0; seed < 5; seed++) {
-        const bout = newBout({ name: 'X', morph: 'wyrm', stone: 'fire' }, { name: 'Y', morph: 'true-dragon', stone: 'earth' }, 6.5);
-        const ev = runBout(bout, { A: aiController(a, seed), B: aiController(b, seed + 100) });
-        assert.ok(!ev.some((e) => e.kind === 'note' && e.text.includes('cooling down')), `${a} vs ${b}, seed ${seed}`);
-      }
-    }
+test('the crude brain never scripts an action that is cooling down', () => {
+  for (let seed = 0; seed < 10; seed++) {
+    const bout = newBout({ name: 'X', morph: 'wyrm', stone: 'fire' }, { name: 'Y', morph: 'true-dragon', stone: 'earth' }, 6.5);
+    const ev = runBout(bout, { A: crudeController(seed), B: crudeController(seed + 100) });
+    assert.ok(!ev.some((e) => e.kind === 'note' && e.text.includes('cooling down')), `seed ${seed}`);
   }
 });

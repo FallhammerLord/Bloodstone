@@ -1,16 +1,20 @@
-// The brain: an AI tamer that reads its opponent, imagines the exchange in the Referee, and chooses
-// among good scripts by its style's values. It sees only what a player sees.
+// The brains: AI tamers that see only what a player sees.
 //
-//   1. Read      tally the opponent's habits from the public slot record          brain/read.ts
-//   2. Imagine   play candidate scripts against predicted opponent scripts         brain/controller.ts
-//   3. Value     score each imagined outcome by the style's priorities             brain/value.ts
-//   4. Choose    pick among the best with weighted chance, so it can bluff         brain/controller.ts
-//   5. Tell      each style keeps a readable habit; lower skill shows it more      brain/controller.ts
+//   archetype brain  imagine scripts, guess the opponent, play both in the Referee, value the outcome by the
+//                    archetype's goals, look ahead by skill, choose          brain/controller.ts
+//   crude brain      no imagining: its best reaching attack, or a step toward its best band        brain/crude.ts
 //
-// Styles, tastes and skill levels live in brain/styles.ts; legal options in brain/options.ts.
+// Goals and skill levels live in brain/archetypes.ts; outcome features and value in brain/features.ts; attack worth,
+// asked of the Referee, in brain/probe.ts; what gets imagined in brain/priors.ts; the opponent read in brain/read.ts;
+// legal options in brain/options.ts; drafting in brain/hatchery.ts.
 
-export { BRAIN_STYLES, SKILLS, allowed } from './brain/styles.ts';
-export type { BrainStyle, Skill } from './brain/styles.ts';
-export { Read } from './brain/read.ts';
-export { value } from './brain/value.ts';
-export { brainController } from './brain/controller.ts';
+export { ARCHETYPES, SKILLS, GOALS, SKILL, skillOf } from './brain/archetypes.ts';
+export type { Archetype, Skill } from './brain/archetypes.ts';
+export { brainController, boutFromView } from './brain/controller.ts';
+export { crudeController } from './brain/crude.ts';
+export { features, value } from './brain/features.ts';
+export { worth } from './brain/probe.ts';
+
+// The tools' names for the archetypes.
+export { ARCHETYPES as BRAIN_STYLES } from './brain/archetypes.ts';
+export type { Archetype as BrainStyle } from './brain/archetypes.ts';

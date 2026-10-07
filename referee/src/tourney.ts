@@ -2,7 +2,7 @@
 // as challenger and as challenged. Reports who wins too often.
 //   npm run tourney [-- --rounds 2]
 
-import { aiController, STYLES } from './ai.ts';
+import { crudeController } from './brain.ts';
 import { runBout } from './bout.ts';
 import { CORE_MORPHS, type CoreStone, type Morph } from './hatch.ts';
 import { newBout, type FighterSetup, type Side } from './referee.ts';
@@ -47,15 +47,15 @@ for (const a of entrants) {
   for (const b of entrants) {
     if (a.key === b.key) continue;
     for (let round = 0; round < rounds; round++) {
-      for (const styleA of STYLES) {
-        for (const styleB of STYLES) {
+      {
+        {
           for (const challenged of ['A', 'B'] as Side[]) {
             const seed = total * 7919 + 17;
             const rng = seededRandom(seed);
             const la = withShards ? randomLoadout(rng) : undefined;
             const lb = withShards ? randomLoadout(rng) : undefined;
             const bout = newBout({ ...a.setup, shards: la }, { ...b.setup, shards: lb }, R.DEFAULT_RULES.START_SEPARATION / R.PACE, challenged, { boulders: standardBoulders(seed), seed });
-            const events = runBout(bout, { A: aiController(styleA, seed), B: aiController(styleB, seed + 1) });
+            const events = runBout(bout, { A: crudeController(seed), B: crudeController(seed + 1) });
             const end = events.find((e) => e.kind === 'boutEnd');
             if (end?.reason.startsWith('timeout')) endings.timeout++;
             else if (events.some((e) => e.kind === 'pulse' && e.woundsLeft <= 0)) endings.pulse++;
@@ -92,7 +92,7 @@ for (const a of entrants) {
 const pct = (t: Tally) => (100 * t.wins) / t.bouts;
 const fmt = (n: number) => `${n.toFixed(0).padStart(3)}%`;
 
-console.log(`Tournament: ${total} bouts. Every pairing against every other, ${STYLES.length * STYLES.length} AI style matchups, both as challenger and challenged.`);
+console.log(`Tournament: ${total} bouts. Every pairing against every other, crude brains on both sides, both as challenger and challenged.`);
 console.log(`Endings: ${endings.ko} KO, ${endings.pulse} rim-pulse KO, ${endings.timeout} timeout. Average ${(exchanges / total).toFixed(1)} exchanges per bout.`);
 console.log('Arenas: the four rim pillars plus 1d4+2 seeded boulders per bout.');
 if (withShards) console.log('Loadouts: every dragon gets a random, seeded 3-pip wyrmling loadout from every built shard at every grade.');

@@ -3,8 +3,8 @@
   "name": "ai-bout.json",
   "winner": "A",
   "exchanges": 2,
-  "wounds": "41/-4",
-  "hash": "47c2198fd9a678a9"
+  "wounds": "41/-2",
+  "hash": "ab0373edb9a7377c"
  },
  {
   "name": "altitude.json",
@@ -16,9 +16,9 @@
  {
   "name": "brains.json",
   "winner": "B",
-  "exchanges": 8,
-  "wounds": "-5/-1",
-  "hash": "5ca2e80d87e357c0"
+  "exchanges": 2,
+  "wounds": "0/17",
+  "hash": "d4487dc5cc47fb71"
  },
  {
   "name": "breath-effects.json",

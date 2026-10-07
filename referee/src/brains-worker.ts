@@ -1,8 +1,7 @@
 // A worker for the brain tournament: plays the bouts it's handed and reports who won.
 
 import { parentPort, workerData } from 'node:worker_threads';
-import { aiController, type Style } from './ai.ts';
-import { brainController, type BrainStyle, type Skill } from './brain.ts';
+import { brainController, crudeController, type BrainStyle, type Skill } from './brain.ts';
 import { runBout, type Controller, type View } from './bout.ts';
 import { newBout, type FighterSetup, type NoteTag, type Side } from './referee.ts';
 import { standardBoulders } from './arena.ts';
@@ -64,7 +63,7 @@ export interface Result {
 }
 
 const controller = (p: Player, policy?: YieldPolicy): Controller => {
-  const c = p.kind === 'brain' ? brainController(p.style as BrainStyle, p.skill, p.seed) : aiController(p.style as Style, p.seed);
+  const c = p.kind === 'brain' ? brainController(p.style as BrainStyle, p.skill, p.seed) : crudeController(p.seed);
   if (!policy || p.skill === 'novice') return c;
   return { ...c, yields: (view: View) => {
     // The chance of losing, from how fast each dragon is being worn down: exchanges each has left at the rate so far.

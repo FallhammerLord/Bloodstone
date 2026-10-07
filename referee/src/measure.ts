@@ -29,7 +29,7 @@ const SHARD_TRUST = 24;
 const MORPHS: Morph[] = CORE_MORPHS;
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 const SHEETS = MORPHS.flatMap((morph) => STONES.map((stone) => ({ morph, stone, key: `${morph} + ${stone}` })));
-const GENERAL = BRAIN_STYLES.filter((s) => !s.endsWith('-focus'));
+const GENERAL = BRAIN_STYLES;
 // --only "A,B" measures just those shards (and skips sheets): a targeted run with more pairs, for a parity call.
 const only = flag(argv, '--only', '').split(',').map((x) => x.trim()).filter(Boolean);
 // --sheets "true-dragon + fire,..." measures just those sheets (and skips shards): a targeted run for a morph or stone call.

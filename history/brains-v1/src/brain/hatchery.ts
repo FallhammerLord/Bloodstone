@@ -1,18 +1,60 @@
-// The hatchery: a brain drafts its egg, bloodstone and shards by its archetype alone. It scores each option by its
-// archetype's measured results, then draws with weighted chance: skill sets how closely it sticks to its style's best pick, and a
+// The hatchery: a brain drafts its egg, bloodstone and shards by its playstyle alone. It scores each option by what
+// its style wants, then draws with weighted chance: skill sets how closely it sticks to its style's best pick, and a
 // novelty bonus pulls it toward what its style has picked least, so a style explores its plausible builds.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { CORE_MORPHS, hatch, type CoreStone, type Morph, type StatSheet } from '../hatch.ts';
 import type { FighterSetup, ShardSetup } from '../referee.ts';
 import { shardPool, WYRMLING_PIPS, type Shard } from '../shards.ts';
-import type { Archetype as BrainStyle, Skill } from './archetypes.ts';
+import { TASTE, type BrainStyle, type Skill } from './styles.ts';
 
 const MORPHS: Morph[] = CORE_MORPHS;
 const STONES: CoreStone[] = ['water', 'earth', 'fire', 'air'];
 
-/** Which Techniques need wings: a fact about the dragon, not a measurement. */
-const FLIGHT_TECHNIQUES = new Set(['stooping-pinions']);
+type Body = 'wounds' | 'evasion' | 'hardness' | 'accuracy' | 'affinity' | 'flies' | 'talons';
+
+/** What each style wants from a body, beyond its attacks: weights on each attribute, compared across the hatchery. */
+const BODY_WANTS: Record<BrainStyle, Partial<Record<Body, number>>> = {
+  swarmer: { wounds: 1, hardness: 0.3 },
+  'out-boxer': { evasion: 1, affinity: 0.5, flies: 0.3 },
+  slugger: { hardness: 0.8, wounds: 0.5 },
+  counterpuncher: { evasion: 0.8, hardness: 0.6 },
+  'boxer-puncher': { wounds: 0.4, evasion: 0.3, hardness: 0.3, accuracy: 0.3, affinity: 0.3 },
+  aerialist: { talons: 1.5, flies: 1, evasion: 0.4 },
+  reader: { accuracy: 0.5, affinity: 0.5, wounds: 0.3 },
+  'claw-focus': { evasion: 0.3 },
+  'bite-focus': { hardness: 0.3 },
+  'breath-focus': { affinity: 0.5, evasion: 0.3 },
+  'meter-focus': { affinity: 1.2 },
+  'charge-focus': { wounds: 0.5, hardness: 0.5 },
+  'kite-focus': { evasion: 1.2, flies: 0.4 },
+};
+
+/** What each Technique serves. Attribute chips serve their attribute. */
+type Tag = 'claw' | 'bite' | 'breath' | 'charge' | 'read' | 'air' | 'strafe' | 'approach' | 'guard' | 'dodge' | 'intimidate';
+const TECHNIQUE_TAGS: Record<string, Tag[]> = {
+  'snapping-jaw': ['bite'], lockjaw: ['bite'], 'gnashing-teeth': ['bite'],
+  'hamstring-hooks': ['claw'], 'scything-forelimbs': ['claw'], 'ratchet-claws': ['claw'], 'raking-talons': ['claw'],
+  'lance-throat': ['breath'], 'smoldering-maw': ['breath'], 'bellows-chest': ['breath', 'charge'], 'ash-gland': ['breath', 'read'],
+  'stooping-pinions': ['air'], 'sidewinder-spine': ['strafe'], 'bounding-haunches': ['approach'],
+  thornscale: ['guard'], 'riposte-talons': ['dodge'], 'mantle-wings': ['guard'],
+  'sapping-bellow': ['intimidate'], 'baleful-eye': ['intimidate', 'read'], 'goading-roar': ['intimidate'],
+};
+
+/** How much each style wants each kind of Technique (attacks come from its taste). */
+const TAG_WANTS: Partial<Record<BrainStyle, Partial<Record<Tag, number>>>> = {
+  swarmer: { approach: 1 },
+  'out-boxer': { strafe: 0.6, charge: 0.6 },
+  slugger: { intimidate: 0.8, charge: 0.6 },
+  counterpuncher: { guard: 1.2, dodge: 1, strafe: 0.6 },
+  aerialist: { air: 1.5 },
+  reader: { read: 1.2, intimidate: 1 },
+  'claw-focus': { approach: 0.8 },
+  'bite-focus': { approach: 0.5 },
+  'meter-focus': { guard: 0.8, charge: 0.6 },
+  'charge-focus': { charge: 1.5, guard: 0.6 },
+  'kite-focus': { strafe: 1, dodge: 0.6 },
+};
 
 /** How loosely each skill picks: a master sticks close to its style's best, a novice wanders. */
 const TEMPERATURE: Record<Skill, number> = { novice: 1, adept: 0.6, master: 0.35 };
@@ -38,11 +80,22 @@ export class Picks {
   }
 }
 
+const zscores = (xs: number[]) => {
+  const mean = xs.reduce((a, b) => a + b, 0) / xs.length;
+  const sd = Math.sqrt(xs.reduce((a, b) => a + (b - mean) ** 2, 0) / xs.length) || 1;
+  return xs.map((x) => (x - mean) / sd);
+};
+
+/** Rough damage per attempt of the attacks a style likes, as its brains judge a sheet. */
+const attackValue = (style: BrainStyle, s: StatSheet) =>
+  Math.max(1, s.claw - 4) * 0.68 * TASTE[style].claw + Math.max(1, s.bite - 1) * 0.45 * TASTE[style].bite + Math.max(1, s.breath - 6) * 0.5 * TASTE[style].breath;
+
 const SHEETS = MORPHS.flatMap((morph) => STONES.map((stone) => ({ morph, stone, sheet: hatch(morph, stone) })));
+const bodyValue = (s: StatSheet, b: Body) => (b === 'flies' ? (s.flies ? 1 : 0) : b === 'talons' ? (s.aspect === 'talons' ? 1 : 0) : s[b]);
 
 /**
  * What drafting brains know (npm run measure): each style's measured win rate on each sheet, and its measured
- * win-rate change from each shard. With the table, brains draft on results; without it, evenly (novelty still spreads them).
+ * win-rate change from each shard. With the table, brains draft on results; without it, on their style's tastes.
  */
 interface Measured {
   sheets: Record<string, Record<string, number>>;
@@ -53,18 +106,38 @@ export const MEASURED: Measured | null = existsSync(MEASURED_FILE) ? JSON.parse(
 /** Score units per unit of measured win rate: a sheet 10 points above even scores 1.2; a shard worth +5 points, 0.6. */
 const MEASURED_SCALE = 12;
 
-/** How much a style wants each hatched sheet: its measured win rate there. Without a table, every sheet is even. */
+/** How much a style wants each hatched sheet: its measured win rate there, or failing a table, its tastes. */
 export function sheetScores(style: BrainStyle): number[] {
   const m = MEASURED?.sheets[style];
-  return SHEETS.map((x) => (m ? MEASURED_SCALE * ((m[`${x.morph} + ${x.stone}`] ?? 0.5) - 0.5) : 0));
+  if (m) return SHEETS.map((x) => MEASURED_SCALE * ((m[`${x.morph} + ${x.stone}`] ?? 0.5) - 0.5));
+  return tasteScores(style);
 }
 
-/** How much a style wants a shard on a given sheet: its measured worth. Without a table, every shard is even. */
+/** The old way, kept as the fallback: its attacks plus its body wants, each compared across the hatchery. */
+function tasteScores(style: BrainStyle): number[] {
+  const attack = zscores(SHEETS.map((x) => attackValue(style, x.sheet)));
+  const score = attack.slice();
+  for (const [b, w] of Object.entries(BODY_WANTS[style]) as [Body, number][]) {
+    zscores(SHEETS.map((x) => bodyValue(x.sheet, b))).forEach((z, i) => (score[i] += w * z));
+  }
+  return score;
+}
+
+/** How much a style wants a shard on a given sheet: its measured worth, or failing a table, its tags. */
 export function shardScore(style: BrainStyle, shard: Shard, sheet: StatSheet): number {
-  const kind = shard.kind as { family: string; technique?: string };
+  const kind = shard.kind as { family: string; attr?: string; technique?: string };
   // A flight Technique does nothing for a dragon that can't fly: a fact, not a measurement.
-  if (kind.family === 'technique' && FLIGHT_TECHNIQUES.has(kind.technique ?? '') && !sheet.flies) return -2;
-  return MEASURED_SCALE * (MEASURED?.shards[style]?.[shard.name] ?? 0);
+  if (kind.family === 'technique' && (TECHNIQUE_TAGS[kind.technique ?? ''] ?? []).includes('air') && !sheet.flies) return -2;
+  const m = MEASURED?.shards[style]?.[shard.name];
+  if (m !== undefined) return MEASURED_SCALE * m;
+  if (kind.family === 'technique') {
+    const tags = TECHNIQUE_TAGS[kind.technique ?? ''] ?? [];
+    const want = (t: Tag) => (t === 'claw' || t === 'bite' || t === 'breath' ? TASTE[style][t] : TAG_WANTS[style]?.[t] ?? 0.1);
+    return 1 * Math.max(...tags.map(want));
+  }
+  const attr = kind.attr as keyof typeof TASTE.swarmer | Body;
+  const want = attr === 'claw' || attr === 'bite' || attr === 'breath' ? TASTE[style][attr] : (BODY_WANTS[style][attr as Body] ?? 0) + 0.2;
+  return 0.5 * want;
 }
 
 function draw<T>(items: T[], scores: number[], temperature: number, rng: () => number): T {
@@ -127,21 +200,13 @@ export type SpoilsChoice =
   | { kind: 'freeze'; melt: Shard; shard: Shard }
   | { kind: 'bank'; melt: Shard };
 
-/** The action each Technique fires on: shards serving the same action overlap. */
-const FIRES_ON: Record<string, string> = {
-  'snapping-jaw': 'bite', lockjaw: 'bite', 'gnashing-teeth': 'bite',
-  'hamstring-hooks': 'claw', 'scything-forelimbs': 'claw', 'ratchet-claws': 'claw', 'raking-talons': 'claw',
-  'lance-throat': 'breath', 'smoldering-maw': 'breath', 'bellows-chest': 'breath', 'ash-gland': 'breath',
-  'stooping-pinions': 'dive', 'sidewinder-spine': 'strafe', 'bounding-haunches': 'approach',
-  thornscale: 'scales', 'riposte-talons': 'dodge', 'mantle-wings': 'scales',
-  'sapping-bellow': 'intimidate', 'goading-roar': 'intimidate',
-};
-
-/** What a shard mainly serves: a chip its attribute, a Technique the action it fires on. */
-function wantOf(_style: BrainStyle, shard: Shard): string {
+/** What a shard mainly serves: a chip its attribute, a Technique the tag its style wants most. */
+function wantOf(style: BrainStyle, shard: Shard): string {
   const kind = shard.kind as { family: string; attr?: string; technique?: string };
   if (kind.family !== 'technique') return kind.attr ?? shard.name;
-  return FIRES_ON[kind.technique ?? ''] ?? shard.name;
+  const tags = TECHNIQUE_TAGS[kind.technique ?? ''] ?? [];
+  const want = (t: Tag) => (t === 'claw' || t === 'bite' || t === 'breath' ? TASTE[style][t] : TAG_WANTS[style]?.[t] ?? 0.1);
+  return [...tags].sort((a, b) => want(b) - want(a))[0] ?? shard.name;
 }
 
 /** A whole array's worth to a style: its shards' scores, each further shard serving the same want counting less. */

@@ -2,8 +2,7 @@
 
 import { HOLD, parseAction, type ActionSpec } from './actions.ts';
 import type { ArenaSetup } from './arena.ts';
-import { aiController, STYLES, type Style } from './ai.ts';
-import { brainController, BRAIN_STYLES, SKILLS, type BrainStyle, type Skill } from './brain.ts';
+import { brainController, crudeController, BRAIN_STYLES, SKILLS, type BrainStyle, type Skill } from './brain.ts';
 import { DEFAULT_FORMAT, type Controller, type Format, type View } from './bout.ts';
 import type { FighterSetup, Moment, Side } from './referee.ts';
 import * as R from './rules.ts';
@@ -32,9 +31,9 @@ export interface Scenario {
   bout?: boolean;
   exchangeLimit?: number;
   timeout?: Format['timeout'];
-  /** ai: a crude style (brawler, skirmisher, guardian, mixed) or a brain style (swarmer, out-boxer, ...); skill for brains */
-  A: FighterSetup & { ai?: Style | BrainStyle; seed?: number; skill?: Skill };
-  B: FighterSetup & { ai?: Style | BrainStyle; seed?: number; skill?: Skill };
+  /** ai: "crude", or an archetype (swarmer, out-boxer, slugger, counterpuncher, boxer-puncher); skill for archetypes */
+  A: FighterSetup & { ai?: 'crude' | BrainStyle; seed?: number; skill?: Skill };
+  B: FighterSetup & { ai?: 'crude' | BrainStyle; seed?: number; skill?: Skill };
   exchanges?: Partial<Record<Side, SideScript>>[];
   /** boulders: random ("boulders", "seed") or placed ("obstacles": [{ size, x, y }] in paces) */
   arena?: ArenaSetup;
@@ -73,13 +72,12 @@ function conditionHolds(cond: string, view: View, opponentRevised: boolean, reve
 
 export function scenarioController(sc: Scenario, side: Side): Controller {
   const setup = sc[side];
-  const isCrude = (x: string): x is Style => (STYLES as readonly string[]).includes(x);
   const isBrain = (x: string): x is BrainStyle => (BRAIN_STYLES as readonly string[]).includes(x);
-  if (setup.ai && !isCrude(setup.ai) && !isBrain(setup.ai)) {
-    throw new Error(`Unknown AI style "${setup.ai}". Brains: ${BRAIN_STYLES.join(', ')}. Crude: ${STYLES.join(', ')}.`);
+  if (setup.ai && setup.ai !== 'crude' && !isBrain(setup.ai)) {
+    throw new Error(`Unknown AI "${setup.ai}". Brains: ${BRAIN_STYLES.join(', ')}; or "crude".`);
   }
   if (setup.skill && !SKILLS.includes(setup.skill)) throw new Error(`Unknown skill "${setup.skill}". Skills: ${SKILLS.join(', ')}.`);
-  const ai = !setup.ai ? null : isBrain(setup.ai) ? brainController(setup.ai, setup.skill ?? 'adept', setup.seed ?? 1) : aiController(setup.ai, setup.seed ?? 1);
+  const ai = !setup.ai ? null : isBrain(setup.ai) ? brainController(setup.ai, setup.skill ?? 'adept', setup.seed ?? 1) : crudeController(setup.seed ?? 1);
   let rule: RevisionRule | null = null;
   let usingAi = false;
 

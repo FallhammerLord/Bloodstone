@@ -5,7 +5,6 @@
 //   --rule changes one dial for the whole run (BREATH.blast.radius=1p); --json also writes the numbers to a file.
 
 import { writeFileSync } from 'node:fs';
-import { STYLES } from './ai.ts';
 import { BRAIN_STYLES, SKILLS, type BrainStyle, type Skill } from './brain.ts';
 import { CORE_MORPHS, type CoreStone, type Morph } from './hatch.ts';
 import { seededRandom } from './random.ts';
@@ -36,20 +35,19 @@ const withShards = argv.includes('--shards');
 // Loadouts draw from their own stream, so a run without --shards replays exactly as before.
 const loadRng = seededRandom(seed * 7 + 1);
 const kit = (f: FighterSetup): FighterSetup => (withShards ? { ...f, shards: randomLoadout(loadRng) } : f);
-// The general styles; the focus brains (claw, bite, breath only) join the style matrix.
-const GENERAL = BRAIN_STYLES.filter((x) => !x.endsWith('-focus'));
+// The five archetypes.
 const jobs: Job[] = [];
 const brain = (style: string, s: number): Player => ({ kind: 'brain', style, skill, seed: s + (seed - 2026) * 100003 });
 const crude = (style: string, s: number): Player => ({ kind: 'crude', style, skill, seed: s + (seed - 2026) * 100003 });
 const add = (group: string, A: FighterSetup, B: FighterSetup, playerA: Player, playerB: Player, challenged?: Side) =>
   jobs.push({ id: jobs.length, group, A: group.startsWith('crunch|') ? A : kit(A), B: group.startsWith('crunch|') ? B : kit(B), playerA, playerB, challenged: challenged ?? (jobs.length % 2 ? 'A' : 'B'), arenaSeed: jobs.length * 31 + 7 + (seed - 2026) * 100003 });
 
-// 1. Thinking against habit: a balanced brain against each crude style, every pairing against every other.
+// 1. Thinking against habit: a balanced brain against the crude brain, every pairing against every other.
 for (const a of pairings) for (const b of pairings) {
   if (a === b) continue;
   const n = jobs.length;
-  if (n % 2) add('crude', a.setup, b.setup, brain('boxer-puncher', n), crude(STYLES[n % 4], n + 1));
-  else add('crude', a.setup, b.setup, crude(STYLES[n % 4], n), brain('boxer-puncher', n + 1));
+  if (n % 2) add('crude', a.setup, b.setup, brain('boxer-puncher', n), crude('crude', n + 1));
+  else add('crude', a.setup, b.setup, crude('crude', n), brain('boxer-puncher', n + 1));
 }
 // 2. Style against style, on identical dragons so only the style differs.
 for (const sa of BRAIN_STYLES) for (const sb of BRAIN_STYLES) {
@@ -63,8 +61,8 @@ for (const sa of BRAIN_STYLES) for (const sb of BRAIN_STYLES) {
 for (const a of pairings) for (const b of pairings) {
   if (a === b) continue;
   for (let i = 0; i < 3; i++) {
-    const s1 = GENERAL[Math.floor(rng() * GENERAL.length)];
-    const s2 = GENERAL[Math.floor(rng() * GENERAL.length)];
+    const s1 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
+    const s2 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
     add(`pair|${a.label}|${b.label}`, a.setup, b.setup, brain(s1, jobs.length), brain(s2, jobs.length + 1));
   }
 }
@@ -73,8 +71,8 @@ for (const a of pairings) for (const b of pairings) {
 for (const p of pairings) {
   for (let i = 0; i < 12; i++) {
     const crunchling: FighterSetup = { ...p.setup, shards: [{ shard: 'Raking Talons', grade: 'juvenile', pips: [0] }] };
-    const s1 = GENERAL[Math.floor(rng() * GENERAL.length)];
-    const s2 = GENERAL[Math.floor(rng() * GENERAL.length)];
+    const s1 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
+    const s2 = BRAIN_STYLES[Math.floor(rng() * BRAIN_STYLES.length)];
     // The crunchling sits on each side equally, and is the challenged dragon half the time (timeouts go to the challenged).
     const challenged: Side = i % 4 < 2 ? 'A' : 'B';
     if (i % 2) add('crunch|A', crunchling, p.setup, brain(s1, jobs.length), brain(s2, jobs.length + 1), challenged);
@@ -137,15 +135,7 @@ const brainWins = crudeJobs.filter((j) => {
   const r = byId.get(j.id)!;
   return (j.playerA.kind === 'brain' && r.winner === 'A') || (j.playerB.kind === 'brain' && r.winner === 'B');
 }).length;
-console.log(`\n── Thinking against habit ──\n  A boxer-puncher brain beats the crude AIs ${pct(brainWins, crudeJobs.length)} of ${crudeJobs.length} bouts.`);
-for (const st of STYLES) {
-  const js = crudeJobs.filter((j) => (j.playerA.kind === 'crude' ? j.playerA.style : j.playerB.style) === st);
-  const w = js.filter((j) => {
-    const r = byId.get(j.id)!;
-    return (j.playerA.kind === 'brain' && r.winner === 'A') || (j.playerB.kind === 'brain' && r.winner === 'B');
-  }).length;
-  console.log(`    against ${st.padEnd(10)} ${pct(w, js.length)}`);
-}
+console.log(`\n── Thinking against habit ──\n  A boxer-puncher brain beats the crude brain ${pct(brainWins, crudeJobs.length)} of ${crudeJobs.length} bouts.`);
 
 // 2.
 const styleWins = new Map<string, { w: number; n: number }>();
@@ -165,7 +155,7 @@ const rate = (x: string, y: string) => {
   return (100 * t.w) / t.n;
 };
 console.log('\n── Style against style (identical dragons; row\'s win rate against column) ──');
-const short: Record<BrainStyle, string> = { swarmer: 'swarm', 'out-boxer': 'outbx', slugger: 'slug', counterpuncher: 'count', 'boxer-puncher': 'boxpn', aerialist: 'aeria', reader: 'readr', 'claw-focus': 'claw', 'bite-focus': 'bite', 'breath-focus': 'brth', 'meter-focus': 'metr', 'charge-focus': 'chrg', 'kite-focus': 'kite' };
+const short: Record<BrainStyle, string> = { swarmer: 'swarm', 'out-boxer': 'outbx', slugger: 'slug', counterpuncher: 'count', 'boxer-puncher': 'boxpn' };
 console.log(`  ${''.padEnd(15)}${BRAIN_STYLES.map((s) => short[s].padStart(6)).join('')}`);
 for (const a of BRAIN_STYLES) {
   console.log(`  ${a.padEnd(15)}${BRAIN_STYLES.map((b) => (a === b ? '     ·' : `${rate(a, b).toFixed(0).padStart(5)}%`)).join('')}`);
@@ -183,21 +173,6 @@ const overallStyle = BRAIN_STYLES.map((a) => {
   return { a, p: (100 * w) / n, w, n };
 }).sort((x, y) => y.p - x.p);
 for (const { a, w, n } of overallStyle) console.log(`    ${rateWithMargin(w, n)}  ${a}`);
-console.log('\n  Focus brains (one attack only; meter-focus plays Surge, charge-focus two-slot charges, kite-focus position), against the general styles and each other:');
-for (const f of BRAIN_STYLES.filter((x) => x.endsWith('-focus'))) {
-  const vs = (group: readonly BrainStyle[]) => {
-    let w = 0;
-    let n = 0;
-    for (const o of group) {
-      if (o === f) continue;
-      const t = styleWins.get(`${f}|${o}`)!;
-      w += t.w;
-      n += t.n;
-    }
-    return pct(w, n);
-  };
-  console.log(`    ${f.padEnd(13)} vs general ${vs(GENERAL)}   vs focus ${vs(BRAIN_STYLES.filter((x) => x.endsWith('-focus')))}`);
-}
 console.log('\n  The boxing triangle (swarmer > out-boxer > slugger > swarmer):');
 for (const [x, y] of [['swarmer', 'out-boxer'], ['out-boxer', 'slugger'], ['slugger', 'swarmer']]) {
   const p = (rate(x, y) + (100 - rate(y, x))) / 2;
