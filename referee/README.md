@@ -12,7 +12,7 @@ Needs [Node.js](https://nodejs.org) 22 or newer. From this folder:
 npm install                                  # once, for the type checker
 npm run duel -- scenarios/footsies-melee.json  # run a fight and print it
 npm test                                     # check the Referee against the design doc
-npm run brains -- --skill master             # the brain tournament (see "The brain tournament")
+npm run brains -- --skill master             # the brain tournament (see Brains)
 npm run check                                # type-check everything
 ```
 
@@ -30,7 +30,7 @@ npm run dials > DIALS.md                               # the [Proposed]/[Assumed
 npm run brains -- --skill master --seed 2027 --json b.json  # an independent run; then:
 npm run pool -- a.json b.json                          # pool runs for tighter margins
 npm run brains -- --skill master --shards              # every dragon carries a random 3-pip wyrmling-grade loadout; ranks the shards
-npm run draft -- --skill master                       # the hatch tournament: each brain drafts egg, stone and shards by its style
+npm run draft -- --skill master                       # the hatch tournament: each archetype drafts egg, stone and shards
 npm run gauntlet -- --cards cards.md                  # the living ladder: tamers raise wyrmlings rung by rung on spoils
 ```
 
@@ -65,11 +65,7 @@ A scenario is a small text file in `scenarios/`. Copy one and edit it.
 
 **Full bouts.** Add `"bout": true` to play until a KO or the exchange limit (8), with rim pulses in the final three exchanges and the timeout rule at the end. `"exchangeLimit"` changes the limit. `"timeout": "mostWounds"` gives an open-lobby timeout to the dragon with more Wounds; the default is that the challenger forfeits. `"challenged"` is `"A"` or `"B"` (default B). Exchanges you don't script are played by the side's AI, or held.
 
-**AI sides.** Add `"ai": "brawler"` (and optionally `"seed": 7`) to a side. Brain styles are below, under Brains. The crude styles, kept for comparison:
-- **brawler:** closes in and hits. Claw up close, Bite at Close, Breath at Far.
-- **skirmisher:** keeps range. Breathes at Far, backs off when crowded.
-- **guardian:** waits for you to commit. Guards, dodges, counters up close.
-- **mixed:** picks a different habit each slot.
+**AI sides.** Add `"ai": "swarmer"` (any archetype under Brains) or `"ai": "crude"`, and optionally `"seed": 7` and `"skill"`, to a side.
 
 **Revisions.** Write a side's exchange as an object to give slot 3 a revision rule:
 
@@ -143,60 +139,45 @@ A wyrmling's array is one valence of three pips (pips 0, 1 and 2), treated as a 
 
 ## Brains
 
-Brains are AI tamers that think. Give a side `"ai": "swarmer"` (any style below) and optionally `"skill": "novice" | "adept" | "master"` and `"seed"`. See `scenarios/brains.json`.
+Brains are AI tamers. Give a side `"ai"` with an archetype and optionally `"skill": "novice" | "adept" | "master"` and `"seed"`. See `scenarios/brains.json`. Edition 1 (built fresh after the wyrmling regrid; the first era's brains are in `../history/brains-v1/`).
+
+**The archetypes** are the five boxing styles. Each is a set of goals over what an exchange produces (`src/brain/archetypes.ts`), and nothing else: no habit tables.
+
+| Archetype | Plays like | Weighs most |
+|---|---|---|
+| swarmer | presses in, builds chains and setups, accepts hits to land its own | reach, tempo |
+| out-boxer | holds the range where it hits and isn't hit back; makes the opponent miss | exposure, damage taken, forced misses |
+| slugger | trades for big hits and punishes, behind an Intimidate | big hits, punishes |
+| counterpuncher | makes the opponent miss, then punishes | forced misses, punishes, damage taken |
+| boxer-puncher | even on everything: the baseline | — |
+
+The features, on one scale: damage dealt and taken; reach (its best hit from where it ends up) and exposure (the opponent's); forced misses; punishes; big hits; tempo (open setups, a held Intimidate, chain links); Surge; lasting statuses and debts; ground (the opponent's zones, the rim late); and the perch. **The aerial overlay:** on a winged dragon every archetype values the perch in full; grounded, only the threat of one.
 
 How a brain decides, each exchange:
-1. **Read.** It tallies the opponent's habits from the public slot record: what it did, by range band, slot, and whether its Breath was ready. Old habits fade. Before it has seen anything, it guesses from what's available and sensible at that range. A charge on the board is a certainty.
-2. **Imagine.** It writes candidate scripts, mostly in its style's lean, including charges and any crunches its shards allow. Adept and master brains also build counter-scripts against their likeliest guesses, testing each slot in the Referee. Then it plays every candidate against every guess in a copy of the bout.
-3. **Value.** It scores each imagined outcome by its style's priorities.
-4. **Choose.** It picks among good scripts with weighted chance, so it can bluff and isn't perfectly predictable.
-5. **Revise.** At the end of slot 2 it imagines slot 3 again, using a Baleful Eye reveal if it has one, and revises when a new idea is clearly better.
-6. **Tell.** Each style keeps one readable habit. Novices show it 90% of the time, adepts 50%, masters 15%.
+1. **Probe.** It asks the Referee what each attack is worth from each band, for both dragons: one probe slot per attack and band against a target that holds (`src/brain/probe.ts`). Hardness, Affinity, the element wheel, pierce, Surge and Techniques are all in the answer; no damage math is copied into a brain.
+2. **Read.** It guesses the opponent from what the opponent's own attacks are worth from here, plus what it has done at this range before (`src/brain/read.ts`).
+3. **Imagine.** It draws candidate scripts, weighted by its goals and the probed worth (`src/brain/priors.ts`), plus last exchange's script, its own plan, and (adept and master) best answers to its likeliest guesses.
+4. **Play out and value.** Every candidate is played against every guess in the Referee and valued by its goals (`src/brain/features.ts`). Late in a bout the challenger weighs damage dealt more and the challenged damage taken (the challenged wins a timeout).
+5. **Look ahead.** Adept and master brains play their best few forward one or two more exchanges.
+6. **Choose and revise.** It picks among the best with weighted chance, and at the end of slot 2 revises slot 3 for a clear gain.
 
-It sees only what a player sees: the board, the record, and its own script.
+**Skill** sets how many scripts it imagines (8, 14, 24), how many guesses it tests each against (3, 5, 8), its counter-scripts (0, 1, 2), how far it looks (1, 2, 3 exchanges), how tightly it picks, and how long it remembers. By default a brain reads its skill from its own shard pips (none novice, one or two adept, a full array master); a scenario or tool can set it.
 
-| Style | Plays like | Values | Tell |
-|---|---|---|---|
-| swarmer | pressure, claws and chains up close | being in Melee, live chains | beyond Close, it opens by closing in |
-| out-boxer | range, breath, footwork | being at Far; hates being hit | at Close or nearer, it opens by backing off |
-| slugger | few hits, each one big | big hits, punishes, a banked Intimidate | it intimidates right before its big Bite |
-| counterpuncher | guard, make them miss, punish | the opponent's misses, punishes; hates being hit | after taking a hit, it opens with Scales |
-| boxer-puncher | balanced | damage dealt against taken | after an exchange that went its way, it repeats the script |
-| aerialist | altitude and stoops | being aloft above a grounded opponent | on the ground, it opens by taking to the air |
-| reader | information | locking the opponent's revision, a Baleful Eye reveal | it opens by intimidating |
-| claw-focus | attacks only with Claw (crunched if it can); moves and guards to get to Melee | being at Melee | beyond Melee, it opens by closing in |
-| bite-focus | attacks only with Bite (charged or crunched if it can); holds Close | being at Close | at Melee it backs off; beyond Bite reach it closes in |
-| breath-focus | attacks only with Breath (charged if it can); holds Far | being at Far | at Close or nearer, it opens by backing off |
+**The crude brain** (`src/brain/crude.ts`) is the floor: no imagining, no read. Each slot it swings its best reaching attack, guards now and then when the opponent hits harder from here, and otherwise walks toward its best band. Every archetype must beat it reliably.
 
-Skill sets how many scripts it imagines (8, 14, 28), how many opponent guesses it tests each against (4, 6, 12), how far ahead it looks (1, 2 or 3 exchanges), how tightly it sticks to its best idea, and how long it remembers your habits. Looking ahead, an adept or master plays its best few scripts (plus a few others, so a plan that pays off later gets a hearing) forward through the next exchanges, both sides on habit, and judges the whole line, later exchanges counting less. It keeps the next exchange of its chosen line as a plan, offered again next exchange if it still fits.
+A brain sees only what a player sees: the board, the record, the rules, and its own script.
 
-`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: a balanced brain against the crude AIs, every style against every other on identical dragons (with a check for boxing's swarmer > out-boxer > slugger triangle), and every pairing against every other with random styles. It reports damage by attack type and each attack's land rate, every action's share of slots, and what came of them (revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, setups). Arenas throw 1d4+2 boulders.
+`npm run brains` (add `-- --skill master`) runs the brain tournament across four workers: each archetype against the crude brain, every archetype against every other on identical dragons, their habits (action mix and where they fight), the boxing triangle as an observation, and the pairings with both sides thinking.
 
 ### When a rule changes, update the brains
 
-A brain playing by old patch notes can't play well. For each kind of rule change, the brain code to check, and a patch-knowledge test to update in `test/patch-knowledge.test.ts` (one small fixed situation per core rule: where each attack reaches, Breath lost at Melee, who a timeout favors, the stoop's reach, playing seated shards, pulled shards):
+Most rules reach the brains through the Referee itself, in probes and imagined exchanges, and need no brain change. A brain reads a rule directly in three places; check them, and add the rule's case to `test/patch-knowledge.test.ts`:
 
-| Rule area | Brain code |
+| What changed | Where a brain reads it |
 |---|---|
-| A new or changed action, or its cooldown | `brain/options.ts` `legalActions` and `advance`; `brain/styles.ts` `LEAN`; `brain/read.ts` `prior` |
-| Movement (band moves, depth, altitude) | `brain/options.ts` `legalActions` (depth) and `advance` (altitude) |
-| Attack reach, shapes, damage | `brain/styles.ts` `idealBand` (rough damage per attempt); `brain/controller.ts` `tell` (reach thresholds); `brain/read.ts` `prior` |
-| Charges, lunges, pounces, crunches | `brain/options.ts` `legalActions` and `place`; `brain/controller.ts` `counterScript` (two-slot ideas); `brain/styles.ts` `CHARGE_LEAN` |
-| Surge | `brain/value.ts` `SHARED.meterGain` and the meter-focus `WEIGHTS`; `brain/read.ts` (the meter-full context) |
-| Forced movement and slams | `brain/value.ts` `pinned` and `SHARED.pinned` |
-| Zones (burning lanes, pools: shape, duration, burn) | `brain/value.ts` `zoneThreat` and `SHARED.zoneStanding` |
-| Element verbs and debuffs (corrosion, the wheel in contests) | `brain/value.ts` `SHARED.corrodedPending`, `zoneThreat` |
-| Technique carry-over (Snapping Jaw's debt, Ratchet Claws, Lockjaw's clamp, Ash Gland's clinging ash) | `brain/value.ts` `techniqueCarryOver` and its `SHARED` weights; ash clouds in `zoneThreat` |
-| Statuses that last (Stagger) | `brain/value.ts` `SHARED.staggerPending` |
-| The stoop (its reach and payoff) | `brain/value.ts` `inStoopReach`, `stoopThreat` and `SHARED.stoopPending`; `brain/styles.ts` aerialist lean; `ai.ts` `altitudeHabit` |
-| Reaches (bands) and shapes | `brain/styles.ts` `idealBand`; `brain/controller.ts` `tell`; `brain/read.ts` `prior` |
-| New action forms (hard landing, reversal) | `brain/options.ts` `legalActions` and `advance`; the Referee's imagined fights do the rest |
-| Intimidate, demoralize, carry-over | `brain/value.ts` `SHARED` pending terms |
-| Aspects (stoop, Talons' two-band Leap, Stalwart, Serpentine, Ravener) | `brain/options.ts` `legalActions` (the back stoop, the Drake's hop); `brain/value.ts` setup terms (the Ravener window) and `advance` (Leap height); `brain/value.ts` aerialist `perch`; `brain/read.ts` (the aloft context) |
-| Late game (rim pulses, timeouts) | `brain/value.ts` `SHARED.rim` |
-| A new style | `brain/styles.ts` (`TASTE`, `LEAN`, `MISS_TASTE`); `brain/value.ts` `WEIGHTS`; `brain/controller.ts` `tell` |
-
-Every value weight is named in `brain/value.ts` (`SHARED` for all styles, `WEIGHTS` per style), with its reason. `test/brain-behavior.test.ts` checks a few clear choices (a claw-focus claws at Melee, a full meter pulls toward Breath at Close), so a rule change that breaks a style shows up there.
+| What a dragon may script (new actions, details, Techniques that add options, morph moves) | `brain/options.ts` `legalActions`, `place`, `advance` |
+| Something that pays off beyond the look-ahead (setups, held bonuses, lasting statuses, debts, zones, Surge, the perch) | `brain/features.ts` (`tempo`, `burdens`, `exposed`, `perched`) |
+| Where a move leaves the separation, for imagining scripts | `brain/priors.ts` `nextSep` |
 
 ## Attack roles
 
@@ -209,7 +190,7 @@ Three [Proposed] rules give each attack a role. They began as switches and are n
 
 A fourth, mandatory Breath charge, was tried and retired in Round 7.
 
-Brains are updated with every rule change, so none plays by old patch notes. Their value counts what's pending when a slot or exchange ends (an Intimidate bonus, a demoralize, a setup), and their reads key on whether the opponent is aloft and whether its meter is full. Every style has an ideal band, from its taste for each attack and its own dragon's attacks (Claw at Melee, Bite at Close, Breath at Far), and values forcing misses by style. Diagnostic brains: meter-focus plays Surge, charge-focus two-slot charges, kite-focus position. They plan the setups as two-slot ideas (Approach then Bite, Strafe then Claw, a two-slot charge), weighed by their style's taste for both halves, and every style reads leverage: a target pinned within a band of the wall or an obstacle, its own exposure, and charges broken. The brain tournament prints how often a Bite follows an Approach and a Claw follows a Strafe.
+Brains learn the attack roles from the Referee: a probe or an imagined exchange includes lunges, pounces and charges as they are.
 
 ## Where the numbers live
 
@@ -220,15 +201,15 @@ Every dial is in `src/rules.ts` (`DEFAULT_RULES`), `src/actions.ts` (timing prof
 
 ## The tournament
 
-`npm run draft` (add `-- --skill novice|adept|master`) is the hatch tournament: every brain drafts its own egg, bloodstone and wyrmling-grade shards by its playstyle (`src/brain/hatchery.ts`), then fights every other style. Ladders draft 0, 1 and 3 pips of shards. A draft is a weighted draw: skill sets how tightly a brain sticks to its style's best pick, and a novelty bonus pulls it toward builds its style has picked least. It reports each style's win rate and builds (with their spread), and each build, morph, stone and shard's pick and win rates.
+`npm run draft` (add `-- --skill novice|adept|master`) is the hatch tournament: every archetype drafts its own egg, bloodstone and wyrmling-grade shards from the measured table (`src/brain/hatchery.ts`; without a table it drafts evenly), then fights every other style. Ladders draft 0, 1 and 3 pips of shards. A draft is a weighted draw: skill sets how tightly a brain sticks to its style's best pick, and a novelty bonus pulls it toward builds its style has picked least. It reports each style's win rate and builds (with their spread), and each build, morph, stone and shard's pick and win rates.
 
 **Technique suite v0.3** [Proposed] locks technique parity pass 1 (technique-parity-pass-1.md). Each reworked Technique keeps its word-valued rule key, now defaulting to its locked variant: `TECH_SNAPPING_JAW` (borrow_dmg), `TECH_LOCKJAW` (clamp), `TECH_RATCHET_CLAWS` (escalate), `TECH_THORNSCALE` (window), `TECH_BELLOWS_CHEST` (mobile: `charge:breath:retreat`), `TECH_MANTLE_WINGS` (verbguard), `TECH_LANCE_THROAT` (pierce), `TECH_SMOLDERING_MAW` (linger), `TECH_STOOPING_PINIONS` (nostack), `TECH_ASH_GLAND` (cloud: the ash clings to its target through the exchange, then falls as a cloud; `ASH_CLOUD_RADIUS`, `ASH_CLOUD_EXCHANGES`). `TECH_SAPPING_BELLOW` stays at base until its text is written (gland is a provisional reading). `base` (and `pulled`) is suite v0.2; `--rule SUITE_V02=on` restores it all, and `--rule TECH_PASS_1=on` is the pass as first measured (Snapping Jaw at borrow, Sapping Bellow at gland). Baleful Eye is cut. Tests: `test/technique-pass-1.test.ts` (each variant against v0.2), `test/techniques.test.ts` (v0.2 where v0.3 changed it), and a brain case each in `test/patch-knowledge.test.ts`.
 
-`npm run gauntlet` (add `-- --tamers N --rounds N --cards file`) is the living ladder. Each tamer (one brain style) raises one wyrmling at a time. Each round, dragons fight a random dragon on their own rung (pips of shards), or an unclaimed dragon when the rung is odd. A loss is death; each kill earns one pick from the victim's spoils, as the design doc has it (its morph's Body shard, its stone's Bloodstone shard, and its intact array) and a step up. A full three-pip array makes a wyrmling champion, who retires. Tamers learn: novice until they first reach rung 1, adept there, master from rung 2. Their drafts learn on curves: novelty fades as a tamer hatches more dragons (1 ÷ (1 + hatched ÷ 5)), and a build's record weighs in as 4 × (win rate − ½) × n ÷ (n + 4) for n fights, so a proven build outweighs novelty. At a spoils pick a tamer seats a shard; or melts one into its Ichor (1 per pip; the tamer's, outliving its dragons) and freezes a wyrmling-grade shard of its choosing (2 Ichor per pip), Techniques included; or melts and banks, staying on its rung to chase a better shard. A tamer plans the whole array: it values arrays with diminishing returns for shards serving the same want, counts later picks only as likely as its dragon is to reach them (its kills per pick won straight), and only for what the field on its rung is likely to drop; skill sets how far ahead it plans (novice none, adept one pick, master two). Yields and timeouts are non-lethal: a yield (before the bout, or at an exchange boundary) pays the victor 1, 2 or 3 Ichor by the ladder, and a tamer without it can't yield; a timeout pays the victor the same. `--kills N` sets kills per spoils pick (1, the design's; seasons 1–3 ran at 3). Seasons: `--save file` writes every tamer's state at the end, and `--carry file` brings back a saved season's champion tamers (anyone who raised a champion) with their records, Ichor and learned builds, rerolling the rest. Season rosters live in `seasons/`; `seasons/season1.json` is rebuilt from the first run's hall of champions. It reports builds by rung (win rate and field share), the drift in hatches, styles, skill, spoils, the hall of champions, and writes tamer cards with match histories.
+`npm run gauntlet` (add `-- --tamers N --rounds N --cards file`) is the living ladder. Each tamer (one archetype) raises one wyrmling at a time. Each round, dragons fight a random dragon on their own rung (pips of shards), or an unclaimed dragon when the rung is odd. A loss is death; each kill earns one pick from the victim's spoils, as the design doc has it (its morph's Body shard, its stone's Bloodstone shard, and its intact array) and a step up. A full three-pip array makes a wyrmling champion, who retires. Tamers learn: novice until they first reach rung 1, adept there, master from rung 2. Their drafts learn on curves: novelty fades as a tamer hatches more dragons (1 ÷ (1 + hatched ÷ 5)), and a build's record weighs in as 4 × (win rate − ½) × n ÷ (n + 4) for n fights, so a proven build outweighs novelty. At a spoils pick a tamer seats a shard; or melts one into its Ichor (1 per pip; the tamer's, outliving its dragons) and freezes a wyrmling-grade shard of its choosing (2 Ichor per pip), Techniques included; or melts and banks, staying on its rung to chase a better shard. A tamer plans the whole array: it values arrays with diminishing returns for shards serving the same want, counts later picks only as likely as its dragon is to reach them (its kills per pick won straight), and only for what the field on its rung is likely to drop; skill sets how far ahead it plans (novice none, adept one pick, master two). Yields and timeouts are non-lethal: a yield (before the bout, or at an exchange boundary) pays the victor 1, 2 or 3 Ichor by the ladder, and a tamer without it can't yield; a timeout pays the victor the same. `--kills N` sets kills per spoils pick (1, the design's; seasons 1–3 ran at 3). Seasons: `--save file` writes every tamer's state at the end, and `--carry file` brings back a saved season's champion tamers (anyone who raised a champion) with their records, Ichor and learned builds, rerolling the rest. Season rosters live in `seasons/`; `seasons/season1.json` is rebuilt from the first run's hall of champions. It reports builds by rung (win rate and field share), the drift in hatches, styles, skill, spoils, the hall of champions, and writes tamer cards with match histories.
 
-`npm run tourney` (add `-- --shards` for random, seeded 3-pip loadouts and a shard ranking) fights each of the 12 core pairings against the other 11, under all 16 combinations of AI styles, once as challenger and once as challenged: 4,224 bouts in a few seconds. It prints win rates by pairing, morph and stone, and the most one-sided matchups. Add `-- --rounds 3` for more bouts.
+`npm run tourney` (add `-- --shards` for random, seeded 3-pip loadouts and a shard ranking) fights each core pairing against every other with crude brains on both sides, once as challenger and once as challenged. It is fast, and reads as "strong in crude hands."
 
-Each bout's arena throws 1d4+2 seeded boulders, so it's never an open floor. The AIs are crude, so the numbers mean "strong in crude hands."
+Each bout's arena throws 1d4+2 seeded boulders, so it's never an open floor.
 
 ## Not built yet
 
@@ -248,13 +229,12 @@ Supports, Traits, compounds (Tendon Weave), hazards beyond boulders (pits, traps
 | `src/referee.ts` | The resolver's public face |
 | `src/referee/` | The resolver: `state` (fighters, bouts), `events`, `plan` (an action's timing and bends), `exchange` (slots, revisions), `tick` (the resolution order), `movement`, `damage`, `elements`, `meter`, `riders`, `techniques` |
 | `src/bout.ts` | Exchanges to a KO, rim pulses, timeouts; what each side can see |
-| `src/ai.ts` | Crude AI tamers: habits only |
-| `src/brain.ts` | Brain AI tamers' public face |
-| `src/brain/` | `styles` (tastes, leanings, skill), `read`, `options` (legal scripts), `value` (named weights), `controller` (imagine, choose, revise, tell) |
+| `src/brain.ts` | The brains' public face |
+| `src/brain/` | `archetypes` (goals, skill), `probe` (attack worth, asked of the Referee), `features` (outcome features, value), `priors` (what gets imagined), `read`, `options` (legal scripts), `controller` (the archetype brain), `crude` (the floor), `hatchery` (drafting) |
 | `src/brains.ts`, `src/brains-worker.ts` | The brain tournament, in parallel |
 | `src/scenario.ts` | Scenario files, scripted revisions |
 | `src/shards.ts` | Shard catalog, the array, seating and overlap, compiling a loadout |
-| `src/tourney.ts` | The balance harness |
+| `src/tourney.ts` | The crude-brain balance harness |
 | `src/report.ts` | Turns the event log into text |
 | `src/cli.ts` | Runs a scenario file |
 | `src/golden.ts` | Golden masters: `npm run golden` checks a refactor changed nothing |

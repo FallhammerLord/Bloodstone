@@ -42,12 +42,13 @@ const crude = (style: string, s: number): Player => ({ kind: 'crude', style, ski
 const add = (group: string, A: FighterSetup, B: FighterSetup, playerA: Player, playerB: Player, challenged?: Side) =>
   jobs.push({ id: jobs.length, group, A: group.startsWith('crunch|') ? A : kit(A), B: group.startsWith('crunch|') ? B : kit(B), playerA, playerB, challenged: challenged ?? (jobs.length % 2 ? 'A' : 'B'), arenaSeed: jobs.length * 31 + 7 + (seed - 2026) * 100003 });
 
-// 1. Thinking against habit: a balanced brain against the crude brain, every pairing against every other.
+// 1. The floor: each archetype in turn against the crude brain, every pairing against every other.
 for (const a of pairings) for (const b of pairings) {
   if (a === b) continue;
   const n = jobs.length;
-  if (n % 2) add('crude', a.setup, b.setup, brain('boxer-puncher', n), crude('crude', n + 1));
-  else add('crude', a.setup, b.setup, crude('crude', n), brain('boxer-puncher', n + 1));
+  const style = BRAIN_STYLES[n % BRAIN_STYLES.length];
+  if (n % 2) add('crude', a.setup, b.setup, brain(style, n), crude('crude', n + 1));
+  else add('crude', a.setup, b.setup, crude('crude', n), brain(style, n + 1));
 }
 // 2. Style against style, on identical dragons so only the style differs.
 for (const sa of BRAIN_STYLES) for (const sb of BRAIN_STYLES) {
@@ -135,7 +136,15 @@ const brainWins = crudeJobs.filter((j) => {
   const r = byId.get(j.id)!;
   return (j.playerA.kind === 'brain' && r.winner === 'A') || (j.playerB.kind === 'brain' && r.winner === 'B');
 }).length;
-console.log(`\n── Thinking against habit ──\n  A boxer-puncher brain beats the crude brain ${pct(brainWins, crudeJobs.length)} of ${crudeJobs.length} bouts.`);
+console.log(`\n── The floor: archetypes against the crude brain ──\n  Archetypes beat the crude brain ${pct(brainWins, crudeJobs.length)} of ${crudeJobs.length} bouts.`);
+for (const st of BRAIN_STYLES) {
+  const js = crudeJobs.filter((j) => (j.playerA.kind === 'brain' ? j.playerA.style : j.playerB.style) === st);
+  const w = js.filter((j) => {
+    const r = byId.get(j.id)!;
+    return (j.playerA.kind === 'brain' && r.winner === 'A') || (j.playerB.kind === 'brain' && r.winner === 'B');
+  }).length;
+  console.log(`    ${st.padEnd(15)} ${rateWithMargin(w, js.length)}`);
+}
 
 // 2.
 const styleWins = new Map<string, { w: number; n: number }>();
@@ -173,6 +182,23 @@ const overallStyle = BRAIN_STYLES.map((a) => {
   return { a, p: (100 * w) / n, w, n };
 }).sort((x, y) => y.p - x.p);
 for (const { a, w, n } of overallStyle) console.log(`    ${rateWithMargin(w, n)}  ${a}`);
+// What each archetype does with its slots, and where it fights: the styles should play distinctly.
+console.log('\n── Habits by archetype (every brain bout; share of its slots) ──');
+for (const st of BRAIN_STYLES) {
+  const acts: Record<string, number> = {};
+  const bandsOf: Record<string, number> = {};
+  for (const j of jobs) for (const side of ['A', 'B'] as const) {
+    const p = side === 'A' ? j.playerA : j.playerB;
+    if (p.kind !== 'brain' || p.style !== st) continue;
+    const r = byId.get(j.id)!;
+    for (const [k, v] of Object.entries(r.sideActions[side])) acts[k] = (acts[k] ?? 0) + v;
+    for (const [k, v] of Object.entries(r.sideBands[side])) bandsOf[k] = (bandsOf[k] ?? 0) + v;
+  }
+  const n = Object.values(acts).reduce((x, y) => x + y, 0);
+  const top = Object.entries(acts).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k, v]) => `${k} ${pct(v, n).trim()}`).join(', ');
+  const where = ['melee', 'close', 'far', 'very far'].map((b) => `${b} ${pct(bandsOf[b] ?? 0, n).trim()}`).join(', ');
+  console.log(`  ${st.padEnd(15)} ${top}\n  ${''.padEnd(15)} at ${where}`);
+}
 console.log('\n  The boxing triangle (swarmer > out-boxer > slugger > swarmer):');
 for (const [x, y] of [['swarmer', 'out-boxer'], ['out-boxer', 'slugger'], ['slugger', 'swarmer']]) {
   const p = (rate(x, y) + (100 - rate(y, x))) / 2;

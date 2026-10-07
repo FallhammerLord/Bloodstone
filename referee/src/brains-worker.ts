@@ -53,6 +53,9 @@ export interface Result {
   byStone: Record<string, Record<string, [number, number, number]>>;
   /** slots spent on each action (both sides) */
   actions: Record<string, number>;
+  /** slots spent on each action, and slots ended in each band, by side */
+  sideActions: Record<'A' | 'B', Record<string, number>>;
+  sideBands: Record<'A' | 'B', Record<string, number>>;
   /** what came of them: revisions, Intimidates landed and cashed, evades, verbs landed and held, slams, and more */
   outcomes: Record<string, number>;
   /** movement census: per morph [paces traveled, bouts, bouts that stayed within 1½ paces of the start]; slots per band */
@@ -171,7 +174,14 @@ for (const job of mine) {
       }
     }
   });
-  for (const r of bout.record) for (const s of ['A', 'B'] as const) actions[r.actions[s]] = (actions[r.actions[s]] ?? 0) + 1;
+  const sideActions: Result['sideActions'] = { A: {}, B: {} };
+  const sideBands: Result['sideBands'] = { A: {}, B: {} };
+  for (const r of bout.record) for (const s of ['A', 'B'] as const) {
+    actions[r.actions[s]] = (actions[r.actions[s]] ?? 0) + 1;
+    sideActions[s][r.actions[s]] = (sideActions[s][r.actions[s]] ?? 0) + 1;
+    const band = r.separation <= R.MELEE_EDGE ? 'melee' : r.separation <= R.CLOSE_EDGE ? 'close' : r.separation <= R.FAR_EDGE ? 'far' : 'very far';
+    sideBands[s][band] = (sideBands[s][band] ?? 0) + 1;
+  }
   // Movement census: how far each dragon travels, and at what range the fight happens.
   const travel: Result['travel'] = {};
   const bands: Result['bands'] = {};
@@ -202,6 +212,6 @@ for (const job of mine) {
     stats[5]++;
     if (r.actions[s] === 'scales') stats[4]++;
   }
-  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, outcomes, travel, bands });
+  results.push({ id: job.id, winner: bout.winner!, exchanges: bout.exchange, ending, stats, dealt, byAttack, setup, byStone, actions, sideActions, sideBands, outcomes, travel, bands });
 }
 parentPort!.postMessage(results);

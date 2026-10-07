@@ -13,10 +13,10 @@ Phases 0–8 are done (commits `91ad6d8` to `ee22b53`); 144 tests pass. Phase 9 
 | 2 Rules object | ✓ | Done after the split, to edit each function once. Bout's old `Ruleset` is now `Format` |
 | 3 Split referee | ✓ | `src/referee/`, 11 modules; `tick` and `damage` read as their steps |
 | 4 Structured events | ✓ | Note tags, hit tags, evade `how`; grazes removed. A tournament report came out identical line for line |
-| 5 Brains | ✓ | `src/brain/`, named weights, behavior tests, rule-to-brain checklist |
+| 5 Brains | ✓ | Rebuilt fresh as edition 1 (five goal-driven archetypes, Referee probes, a crude floor); the first brains are in `../history/brains-v1/` |
 | 6 Tooling | ✓ | `--rule`, `--json`, ± margins, `diag:pairing`, `diag:movement`, `ladder` |
 | 7 Docs | ✓ | `PRINCIPLES.md`, `DIALS.md`, findings index, push-and-pull scenario |
-| 8 Tests | ✓ | Rule dials read from `DEFAULT_RULES`. The crude AIs stay until question 3 is decided |
+| 8 Tests | ✓ | Rule dials read from `DEFAULT_RULES`. The crude AIs are retired; one crude brain stays as the floor |
 | 9 Game-facing | — | Needs questions 1 and 2 |
 
 ## Goals
@@ -116,7 +116,7 @@ charge broken, meter fill, meter spend, verb landed / held / contested, slam, gr
 
 - Separate **rule tests** (what happens: a push and a pull cancel; Stalwart ignores its own zone) from **number tests** (exact damage values). Number tests read their values from `DEFAULT_RULES`, so a tuning change touches one place.
 - Delete tests made redundant by goldens.
-- Decide the fate of the crude AIs: retire `ai.ts` and `tourney.ts` (the brains supersede them), or keep one crude AI as a regression floor. Lean: keep `random` and `aggressive` as test fixtures, retire the tourney.
+- Decided: the crude AIs are retired; one crude brain (`src/brain/crude.ts`) stays as the floor, and `tourney.ts` runs on it.
 
 ## Phase 9. Game-facing prep (medium effort, later)
 
