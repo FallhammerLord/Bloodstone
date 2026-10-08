@@ -13,6 +13,7 @@
 
 | Round | What changed |
 |---|---|
+| [8](#round-8-brains-that-scale-the-loaded-up-slugger-chips-valued-by-their-stacks-base_wounds) | Brains: pool scaling, per-style nerve, power and the loaded-up slugger; chips valued by their stacks; BASE_WOUNDS; the table rebuilt |
 | [7](#round-7-pair-off-dice-the-wounds-curve-the-heavy-slugger-and-the-table-rebuilt) | Pair-off dice for the Evasion test; brains weigh Wounds on a curve; the slugger's heavy goal; the measured table rebuilt |
 | [6](#round-6-season-3-what-makes-air-strong-and-the-air-regrid) | Season 3; Air's edge is Claw damage, not Accuracy; Air regridded to 12/12/12 with a Surge perk; dice odds for hit resolution |
 | [5](#round-5-season-2-and-suite-v04) | Season 2: the monoculture holds; suite v0.4 and the Scales/Guard/Defend rename |
@@ -20,6 +21,25 @@
 | [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 8: brains that scale, the loaded-up slugger, chips valued by their stacks, BASE_WOUNDS
+
+**Rules:** `BASE_WOUNDS` [Proposed, default 36]: every pool moves by the baseline's change; morph swings and a disliked stone's −6 stay on top (at 60: True Dragon 66, Wyvern 60, Wyrm and Drake 54). `DICE_SCALES` [Proposed, default 0]: the defender rolls Evasion + Scales.
+
+**Brains:**
+- **Pool scaling:** damage features, probed worth and the big and heavy bars count against a baseline pool (`BASE_WOUNDS` ÷ 36). Without it, a 60 pool would shrink every hit by 40% against the flat counts (misses, free hits, tempo) and tilt brains toward the counterpuncher's and out-boxer's goals. A no-op at 36.
+- **Nerve by style:** the Wounds curve is 1 + curve × (1 − left)²: swarmer 1, out-boxer 3, slugger 0.5, counterpuncher 2, boxer-puncher 2.
+- **Power:** a feature for every style, landed hits carrying a Surge's true damage or a cashed Intimidate's +3.
+- **The slugger rebuilt** to load up and land haymakers: power 2.5, surge 1 → 2.2, pursuit 2.2 → 1.2 (a chase costs most of a slot), heavy 2 → 1 (a linear lean on what gets through). Its priors raise Intimidate, a Guard and a charging Breath while its Surge has room, and its attacks while it holds a full Surge or an Intimidate.
+- **Shards valued by their stacks:** drafting valued a chip by its single row (Pebblescale +3) while three measure +16 to +25, so a chip never started the stack that pays. Drafting now scores each chip by the best stack it can still complete, per pip, and each Technique by its measured worth per pip. In spoils, an unfinished stack keeps half its promise, times the dragon's reach, at the edge of a tamer's plan.
+
+**The measured table, rebuilt** (adept, 48 pairs, 25,440 bouts, 19 min on 4 workers):
+- Sheets: TD+Air 62%, TD+Water and Wyvern+Air 55%, Wyvern+Fire 54%, Drake+Air 50%. Bottom: Drake+Fire 33%, Wyrm+Earth 34%, Drake+Earth 37%, TD+Earth 38%.
+- Shards: stacks lead harder: Pebblescale ×3 +25, Whetted Nail ×3 +24, Whetted Nail ×2 +18. The swarmer's best is Whetted Nail ×3 at +37. Elemental Jaws +8 leads the Techniques.
+
+**Open:**
+- Stacked chips are now the clearest outlier in the game; with brains drafting toward them, expect ladder arrays of three of one chip.
+- Ken's local runs: the omnibus at default, with `DICE_SCALES=1`, with `BASE_WOUNDS=60`, and both.
 
 ## Round 7: pair-off dice, the Wounds curve, the heavy slugger, and the table rebuilt
 

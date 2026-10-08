@@ -2,19 +2,22 @@
 // follows from its goals and from the Referee's own numbers, never from tables of habits.
 
 import type { Fighter } from '../referee.ts';
+import { WOUNDS_TABLE_BASE, type Rules } from '../rules.ts';
 import { findShard } from '../shards.ts';
 
 export type Archetype = 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' | 'boxer-puncher';
 export const ARCHETYPES: readonly Archetype[] = ['swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher'];
 
 /** What an imagined exchange produces, each on its own scale (see features.ts). */
-export const FEATURES = ['dealt', 'taken', 'reach', 'exposure', 'misses', 'punish', 'big', 'free', 'pursuit', 'tempo', 'payoff', 'ready', 'surge', 'status', 'ground', 'perch', 'heavy'] as const;
+export const FEATURES = ['dealt', 'taken', 'reach', 'exposure', 'misses', 'punish', 'big', 'free', 'pursuit', 'tempo', 'payoff', 'ready', 'surge', 'status', 'ground', 'perch', 'heavy', 'power'] as const;
 export type Feature = (typeof FEATURES)[number];
 export type Goals = Record<Feature, number>;
 
 /**
- * How much each feature is worth in units of a Wounds pool. These put the features on one scale; the archetypes
- * then weigh them. A whole pool dealt is 1; a forced miss is worth about a twentieth of a typical hit.
+ * How much each feature is worth in units of a baseline Wounds pool (36 points). These put the features on one scale;
+ * the archetypes then weigh them. A whole pool dealt is 1; a forced miss is worth about a twentieth of a typical hit.
+ * When BASE_WOUNDS grows, damage is still counted against a baseline pool (poolScale), so a hit and a forced miss keep
+ * their worth against each other.
  */
 export const SCALE: Goals = {
   dealt: 1, // fraction of the opponent's Wounds pool dealt
@@ -33,33 +36,37 @@ export const SCALE: Goals = {
   status: 0.03, // per lasting status or debt on the opponent, net of its own
   ground: 0.05, // standing clear of the opponent's zones and, late, the rim; net of the opponent
   perch: 0.05, // a flier aloft over a grounded opponent within stoop reach, net of the opponent
-  heavy: 0.04, // per landed hit, (damage ÷ a fifth of the opponent's pool)², at most 4: the bigger the hit, the more it counts
+  heavy: 0.04, // per landed hit, (damage ÷ a fifth of a baseline pool)², at most 4: the bigger the hit, the more it counts
+  power: 0.05, // per landed hit carrying power: a Surge's true damage, or a cashed Intimidate's +3
 };
 
 /**
  * Each archetype's goals, as multipliers on SCALE (1 is the boxer-puncher's even keel).
  *   swarmer         presses in, builds chains and setups, cashes them, and accepts hits to land its own
  *   out-boxer       holds the range where it hits and isn't hit back, and makes the opponent miss
- *   slugger         runs the opponent down for big hits, and won't let it back off; it learns which of its attacks get
- *                   through the opponent's defenses and leans hard on the heaviest (the heavy goal, curved)
+ *   slugger         loads up and lands haymakers: it chases Surge (Guard, a charging Breath) and backs its blows with an
+ *                   Intimidate, then cashes them; it learns which of its attacks get through and leans on those
  *   counterpuncher  jukes and maneuvers to make the opponent miss, then takes the free hit
  *   boxer-puncher   even on everything: the baseline
  */
 export const GOALS: Record<Archetype, Goals> = {
-  swarmer: { dealt: 1, taken: 0.7, reach: 1.4, exposure: 0.3, misses: 0.3, punish: 0.6, big: 0.6, free: 0.6, pursuit: 0.8, tempo: 1.6, payoff: 1.3, ready: 1, surge: 0.8, status: 1, ground: 1, perch: 1, heavy: 0 },
-  'out-boxer': { dealt: 0.9, taken: 1.4, reach: 0.7, exposure: 1.6, misses: 1.6, punish: 0.8, big: 0.4, free: 1.2, pursuit: 0, tempo: 0.5, payoff: 0.8, ready: 1, surge: 1, status: 1, ground: 1.2, perch: 1, heavy: 0 },
-  slugger: { dealt: 1.2, taken: 0.7, reach: 1.2, exposure: 0.4, misses: 0.1, punish: 1.3, big: 1, free: 0.5, pursuit: 2.2, tempo: 0.6, payoff: 1, ready: 1, surge: 1, status: 1, ground: 0.8, perch: 1, heavy: 2 },
-  counterpuncher: { dealt: 0.9, taken: 1, reach: 0.8, exposure: 0.9, misses: 2, punish: 1.6, big: 0.6, free: 2.2, pursuit: 0.2, tempo: 0.6, payoff: 0.8, ready: 1, surge: 1.2, status: 1, ground: 1, perch: 1, heavy: 0 },
-  'boxer-puncher': { dealt: 1, taken: 1, reach: 1, exposure: 1, misses: 1, punish: 1, big: 1, free: 1, pursuit: 1, tempo: 1, payoff: 1, ready: 1, surge: 1, status: 1, ground: 1, perch: 1, heavy: 0 },
+  swarmer: { dealt: 1, taken: 0.7, reach: 1.4, exposure: 0.3, misses: 0.3, punish: 0.6, big: 0.6, free: 0.6, pursuit: 0.8, tempo: 1.6, payoff: 1.3, ready: 1, surge: 0.8, status: 1, ground: 1, perch: 1, heavy: 0, power: 0.6 },
+  'out-boxer': { dealt: 0.9, taken: 1.4, reach: 0.7, exposure: 1.6, misses: 1.6, punish: 0.8, big: 0.4, free: 1.2, pursuit: 0, tempo: 0.5, payoff: 0.8, ready: 1, surge: 1, status: 1, ground: 1.2, perch: 1, heavy: 0, power: 0.6 },
+  slugger: { dealt: 1.2, taken: 0.7, reach: 1.2, exposure: 0.4, misses: 0.1, punish: 1.3, big: 1, free: 0.5, pursuit: 1.2, tempo: 0.8, payoff: 1, ready: 1, surge: 2.2, status: 1, ground: 0.8, perch: 1, heavy: 1, power: 2.5 },
+  counterpuncher: { dealt: 0.9, taken: 1, reach: 0.8, exposure: 0.9, misses: 2, punish: 1.6, big: 0.6, free: 2.2, pursuit: 0.2, tempo: 0.6, payoff: 0.8, ready: 1, surge: 1.2, status: 1, ground: 1, perch: 1, heavy: 0, power: 0.8 },
+  'boxer-puncher': { dealt: 1, taken: 1, reach: 1, exposure: 1, misses: 1, punish: 1, big: 1, free: 1, pursuit: 1, tempo: 1, payoff: 1, ready: 1, surge: 1, status: 1, ground: 1, perch: 1, heavy: 0, power: 1 },
 };
 
 /**
  * Its own Wounds on a curve: the lower they run, the more each point of damage coming in weighs against a hit going
- * out. Damage taken and exposure weigh 1 + WOUNDS_CURVE × (1 − left)², left being the share of its pool still
- * standing: ×1 at full, ×1.5 at half, ×2.3 at a fifth.
+ * out. Damage taken and exposure weigh 1 + curve × (1 − left)², left being the share of its pool still standing. Each
+ * style has its own nerve: at a fifth left, the slugger weighs damage ×1.3 and the out-boxer ×2.9.
  */
-export const WOUNDS_CURVE = 2;
-export const woundsRisk = (left: number) => 1 + WOUNDS_CURVE * (1 - Math.max(0, Math.min(1, left))) ** 2;
+export const WOUNDS_CURVE: Record<Archetype, number> = { swarmer: 1, 'out-boxer': 3, slugger: 0.5, counterpuncher: 2, 'boxer-puncher': 2 };
+export const woundsRisk = (left: number, style: Archetype) => 1 + WOUNDS_CURVE[style] * (1 - Math.max(0, Math.min(1, left))) ** 2;
+
+/** Damage counted against a baseline pool: 1 at BASE_WOUNDS 36, 60 ÷ 36 at 60, so features keep their balance. */
+export const poolScale = (rules: Rules) => rules.BASE_WOUNDS / WOUNDS_TABLE_BASE;
 
 /** The aerial overlay: on a winged dragon every archetype values the high ground in full; grounded, only the threat. */
 export const PERCH_GROUNDED = 0.5;

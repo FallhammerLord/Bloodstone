@@ -90,6 +90,34 @@ export function shardScore(style: BrainStyle, shard: Shard, sheet: StatSheet, ha
   return stackWorth(style, shard, have + 1) - stackWorth(style, shard, have);
 }
 
+/**
+ * What a shard promises per pip, holding `have` copies with `room` pips free: a Technique its measured worth; an
+ * attribute chip the best average gain per copy toward any stack it can still complete. A lone Pebblescale measures
+ * +3, but three measure +16: valued by its single row, a chip would never start the stack that pays, so a brain values
+ * attribute shards as fully as Techniques.
+ */
+export function shardPromise(style: BrainStyle, shard: Shard, sheet: StatSheet, have: number, room: number): number {
+  const one = shardScore(style, shard, sheet, have);
+  if (isTechnique(shard)) return one / shard.pips;
+  let best = one / shard.pips;
+  const copies = Math.floor(room / shard.pips);
+  for (let k = 2; k <= copies; k++) best = Math.max(best, (stackWorth(style, shard, have + k) - stackWorth(style, shard, have)) / (k * shard.pips));
+  return best;
+}
+
+/** The best stack a seated chip can still grow into with `room` pips, as a gain on what it holds now. */
+function stackPromise(style: BrainStyle, seated: Shard[], room: number): number {
+  let best = 0;
+  for (const s of new Set(seated.filter((x) => !isTechnique(x)).map((x) => x.name))) {
+    const shard = seated.find((x) => x.name === s)!;
+    const have = seated.filter((x) => x.name === s).length;
+    for (let k = 1; k <= Math.floor(room / shard.pips); k++) best = Math.max(best, stackWorth(style, shard, have + k) - stackWorth(style, shard, have));
+  }
+  return best;
+}
+/** How much of an unfinished stack's promise a tamer counts at the edge of its plan: it still has to find the copies. */
+const PROMISE = 0.5;
+
 function draw<T>(items: T[], scores: number[], temperature: number, rng: () => number): T {
   const top = Math.max(...scores);
   const w = scores.map((s) => Math.exp((s - top) / temperature));
@@ -123,7 +151,7 @@ export function draftDragon(
     if (!options.length) break;
     const nov = picks.novelty(style, options.map((s) => `shard|${s.name}`), scale);
     const have = (o: Shard) => seated.filter((x) => x.name === o.name).length;
-    const s = draw(options, options.map((o, i) => shardScore(style, o, sheet, have(o)) + nov[i]), t, rng);
+    const s = draw(options, options.map((o, i) => shardPromise(style, o, sheet, have(o), free.length) + nov[i]), t, rng);
     picks.add(style, `shard|${s.name}`);
     shards.push({ shard: s.name, grade: s.grade, pips: free.slice(0, s.pips) });
     free = free.slice(s.pips);
@@ -211,7 +239,8 @@ export function chooseSpoils(style: BrainStyle, skill: Skill, sheet: StatSheet, 
   // What a state is worth, looking `depth` picks ahead over the likely offers.
   const future = (st: PlanState, depth: number): number => {
     const now = worth(st);
-    if (depth === 0 || st.room === 0 || !sp.likely.length) return now;
+    // At the edge of its plan, an unfinished attribute stack still promises its completion, discounted.
+    if (depth === 0 || st.room === 0 || !sp.likely.length) return now + PROMISE * sp.reach * stackPromise(style, st.seated, st.room);
     let gain = 0;
     for (const offer of sp.likely) gain += Math.max(0, Math.max(...moves(st, offer, true).map(([, next]) => future(next, depth - 1))) - now);
     return now + sp.reach * (gain / sp.likely.length);

@@ -5,6 +5,7 @@
 import type { ActionName, ActionSpec } from '../actions.ts';
 import { cloneBout, other, simulateSlot, type Bout, type Side } from '../referee.ts';
 import * as R from '../rules.ts';
+import { poolScale } from './archetypes.ts';
 
 export type Band = 'melee' | 'close' | 'far' | 'veryFar';
 export const bandOf = (sep: number): Band => (sep <= R.MELEE_EDGE ? 'melee' : sep <= R.CLOSE_EDGE ? 'close' : sep <= R.FAR_EDGE ? 'far' : 'veryFar');
@@ -17,7 +18,7 @@ const PROBE_SEP: Record<Exclude<Band, 'veryFar'>, number> = { melee: 2 * R.PACE,
 const ATTACKS: ActionSpec[] = [{ name: 'claw', sweep: 'left' }, { name: 'bite' }, { name: 'breath' }, { name: 'stomp' }];
 
 export interface Worth {
-  /** damage per landed attempt, as a fraction of the target's Wounds pool, by band and attack */
+  /** damage per landed attempt, as a fraction of the target's Wounds pool counted against a baseline pool (poolScale), by band and attack */
   attack: Record<Band, Partial<Record<ActionName, number>>>;
   /** the best of those, by band */
   best: Record<Band, number>;
@@ -41,7 +42,7 @@ export function worth(b: Bout, att: Side): Worth {
       t.fighters[def].marks = { ...t.fighters[def].marks, charge: null };
       const before = t.fighters[def].wounds;
       simulateSlot(t, { [att]: a, [def]: { name: 'hold' } } as Record<Side, ActionSpec>);
-      const v = Math.max(0, before - t.fighters[def].wounds) / b.fighters[def].sheet.wounds;
+      const v = (Math.max(0, before - t.fighters[def].wounds) / b.fighters[def].sheet.wounds) * poolScale(b.rules);
       attack[band][a.name] = v;
       best[band] = Math.max(best[band], v);
     }

@@ -183,7 +183,10 @@ export function buildSheet(setup: FighterSetup, rules: Rules = DEFAULT_RULES): {
   const array = emptyArray();
   const notes: string[] = [];
   for (const s of setup.shards ?? []) notes.push(...seat(array, findShard(s.shard, s.grade), s.pips));
-  const { sheet, loadout } = compile(hatch(setup.morph, setup.stone), array, rules.ATTR_SHARD_BONUS);
+  const hatched = hatch(setup.morph, setup.stone);
+  // BASE_WOUNDS [Proposed]: every pool moves by the baseline's change; morph swings and a disliked stone stay on top.
+  hatched.wounds += rules.BASE_WOUNDS - R.WOUNDS_TABLE_BASE;
+  const { sheet, loadout } = compile(hatched, array, rules.ATTR_SHARD_BONUS);
   loadout.seating = notes;
   return { sheet, loadout, notes };
 }

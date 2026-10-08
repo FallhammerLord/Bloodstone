@@ -5,7 +5,7 @@ import { flatLen } from '../geometry.ts';
 import { other, type Bout, type Event, type Fighter, type Side } from '../referee.ts';
 import * as R from '../rules.ts';
 import type { ActionName } from '../actions.ts';
-import { FEATURES, GOALS, PERCH_GROUNDED, SCALE, woundsRisk, type Archetype, type Feature, type Goals } from './archetypes.ts';
+import { FEATURES, GOALS, PERCH_GROUNDED, poolScale, SCALE, woundsRisk, type Archetype, type Feature, type Goals } from './archetypes.ts';
 import { bandOf, type Worth } from './probe.ts';
 
 export interface Outcome {
@@ -113,14 +113,17 @@ export function features(o: Outcome, ctx: Context): Goals {
   const misses = o.events.filter((e) => (e.kind === 'whiff' || e.kind === 'evade' || e.kind === 'nearMiss') && e.attacker === them).length;
   const full = (f: Fighter) => (f.meter >= R.METER_MAX ? 0.5 : 0);
   const slots = slotWise(o);
+  // Damage counts against a baseline pool, so a bigger BASE_WOUNDS doesn't shrink hits against misses and tempo.
+  const k = poolScale(o.before.rules);
+  const fifth = op0.sheet.wounds / 5 / k;
   return {
-    dealt: (op0.wounds - op1.wounds) / op0.sheet.wounds,
-    taken: -(me0.wounds - me1.wounds) / me0.sheet.wounds,
+    dealt: ((op0.wounds - op1.wounds) / op0.sheet.wounds) * k,
+    taken: (-(me0.wounds - me1.wounds) / me0.sheet.wounds) * k,
     reach: ctx.mine.best[band],
     exposure: -ctx.theirs.best[band],
     misses,
     punish: mineHits.filter((h) => h.tags.includes('punish')).length,
-    big: mineHits.filter((h) => h.damage >= op0.sheet.wounds / 5).length,
+    big: mineHits.filter((h) => h.damage >= fifth).length,
     free: slots.free,
     pursuit: pursuit(o, ctx),
     tempo: tempo(o.after, me1, sep) - tempo(o.after, op1, sep),
@@ -130,7 +133,8 @@ export function features(o: Outcome, ctx: Context): Goals {
     status: burdens(op1) - burdens(me1),
     ground: exposed(o.after, op1) - exposed(o.after, me1),
     perch: perched(o.after, me1, op1) - perched(o.after, op1, me1),
-    heavy: mineHits.reduce((n, h) => n + Math.min(4, (h.damage / (op0.sheet.wounds / 5)) ** 2), 0),
+    heavy: mineHits.reduce((n, h) => n + Math.min(4, (h.damage / fifth) ** 2), 0),
+    power: mineHits.filter((h) => h.tags.includes('true-damage') || h.tags.includes('intimidate')).length,
   };
 }
 
@@ -145,7 +149,7 @@ export function value(style: Archetype, o: Outcome, ctx: Context): number {
   const urgency: Partial<Goals> = late ? (challenger ? { dealt: 1.5 } : { taken: 1.5 }) : {};
   // Its own Wounds on a curve: damage coming in weighs more the less of its pool is left going in.
   const me0 = o.before.fighters[o.me];
-  const risk = woundsRisk(me0.wounds / me0.sheet.wounds);
+  const risk = woundsRisk(me0.wounds / me0.sheet.wounds, style);
   let v = 0;
   for (const k of FEATURES) {
     const curve = k === 'taken' || k === 'exposure' ? risk : 1;

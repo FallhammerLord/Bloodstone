@@ -10,15 +10,23 @@ import { situation } from '../src/brain/options.ts';
 import { prior } from '../src/brain/priors.ts';
 import { worth } from '../src/brain/probe.ts';
 import { newBout, type FighterSetup, type SlotRecord } from '../src/referee.ts';
+import { ARCHETYPES } from '../src/brain/archetypes.ts';
+import { shardPromise, shardScore } from '../src/brain/hatchery.ts';
+import { hatch } from '../src/hatch.ts';
+import { shardPool } from '../src/shards.ts';
+import * as R from '../src/rules.ts';
 
 const TD_AIR: FighterSetup = { name: 'T', morph: 'true-dragon', stone: 'air' };
 const WYRM: FighterSetup = { name: 'C', morph: 'wyrm', stone: 'earth' };
 
-test('damage coming in weighs more as its own Wounds run down: ×1 full, ×1.5 at half, ×2.28 at a fifth', () => {
-  assert.equal(woundsRisk(1), 1);
-  assert.equal(woundsRisk(0.5), 1.5);
-  assert.ok(Math.abs(woundsRisk(0.2) - 2.28) < 1e-9);
-  assert.equal(woundsRisk(-1), 3, 'clamped at an empty pool');
+test('damage coming in weighs more as its own Wounds run down, by each style\'s nerve', () => {
+  // The boxer-puncher (curve 2): ×1 full, ×1.5 at half, ×2.28 at a fifth.
+  assert.equal(woundsRisk(1, 'boxer-puncher'), 1);
+  assert.equal(woundsRisk(0.5, 'boxer-puncher'), 1.5);
+  assert.ok(Math.abs(woundsRisk(0.2, 'boxer-puncher') - 2.28) < 1e-9);
+  assert.equal(woundsRisk(-1, 'boxer-puncher'), 3, 'clamped at an empty pool');
+  // At a fifth left the slugger barely flinches; the out-boxer weighs damage nearly three times over.
+  assert.ok(woundsRisk(0.2, 'slugger') < 1.4 && woundsRisk(0.2, 'out-boxer') > 2.9);
 });
 
 test('discovery: nothing seen trusts the board; Claws that land light pull the Claw\'s share down', () => {
@@ -57,4 +65,39 @@ test('a wounded dragon reaches for its Guard sooner', () => {
   bout.fighters.A.wounds = 8;
   const low = prior('boxer-puncher', ctx, 'melee', situation(bout.fighters.A, 0, bout.rules), { name: 'guard' });
   assert.ok(low > full);
+});
+
+test('BASE_WOUNDS moves every pool by the baseline\'s change; morph swings and a disliked stone stay on top', () => {
+  const at60 = R.rulesWith({ BASE_WOUNDS: 60 });
+  const pools = (rules?: R.Rules) => (['true-dragon', 'wyvern', 'wyrm', 'drake'] as const).map((m) => newBout({ name: 'X', morph: m, stone: 'water' }, TD_AIR, 6, 'B', {}, rules).fighters.A.sheet.wounds);
+  assert.deepEqual(pools(), [42, 36, 30, 24], 'Drake + Water is disliked: 30 − 6');
+  assert.deepEqual(pools(at60), [66, 60, 54, 48]);
+});
+
+test('damage counts against a baseline pool: at BASE_WOUNDS 60 a hit keeps its worth against misses and tempo', () => {
+  // The same Bite deals the same points; against a Wyrm's 54 instead of 30 it's a smaller share, counted ×60 ÷ 36.
+  const bite = (rules?: R.Rules) => worth(newBout(TD_AIR, WYRM, 2, 'B', {}, rules), 'A').attack.melee.bite ?? 0;
+  assert.ok(Math.abs(bite(R.rulesWith({ BASE_WOUNDS: 60 })) - bite() * (30 / 54) * (60 / 36)) < 1e-9);
+});
+
+test('a brain values an attribute chip by the stack it can still complete, as fully as a Technique', () => {
+  const sheet = hatch('true-dragon', 'water');
+  const pebble = shardPool('wyrmling').find((s) => s.name === 'Pebblescale')!;
+  for (const style of ARCHETYPES) {
+    const single = shardScore(style, pebble, sheet, 0);
+    assert.ok(shardPromise(style, pebble, sheet, 0, 3) >= single, style);
+    assert.equal(shardPromise(style, pebble, sheet, 0, 1), single, `${style}: with one pip free, only the single row counts`);
+  }
+  // The measured table: a lone Pebblescale is worth less than its share of the full stack for at least one style.
+  assert.ok(ARCHETYPES.some((style) => shardPromise(style, pebble, sheet, 0, 3) > shardScore(style, pebble, sheet, 0) + 0.1));
+});
+
+test('the slugger loads up: it reaches for Intimidate, and for a Guard while its Surge has room, more than the even keel', () => {
+  const bout = newBout(TD_AIR, WYRM, 2);
+  bout.fighters.A.meter = 10;
+  const s = situation(bout.fighters.A, 0, bout.rules);
+  const ctx: Context = { mine: worth(bout, 'A'), theirs: worth(bout, 'B') };
+  const p = (style: 'slugger' | 'boxer-puncher', name: 'intimidate' | 'guard') => prior(style, ctx, 'melee', s, { name });
+  assert.ok(p('slugger', 'intimidate') > p('boxer-puncher', 'intimidate'));
+  assert.ok(p('slugger', 'guard') > prior('slugger', ctx, 'melee', situation({ ...bout.fighters.A, meter: 100 }, 0, bout.rules), { name: 'guard' }), 'an empty meter pulls harder than a full one');
 });
