@@ -2,7 +2,7 @@
 // follows from its goals and from the Referee's own numbers, never from tables of habits.
 
 import type { Fighter } from '../referee.ts';
-import { WOUNDS_TABLE_BASE, type Rules } from '../rules.ts';
+import type { Rules } from '../rules.ts';
 import { findShard } from '../shards.ts';
 
 export type Archetype = 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' | 'boxer-puncher';
@@ -14,10 +14,10 @@ export type Feature = (typeof FEATURES)[number];
 export type Goals = Record<Feature, number>;
 
 /**
- * How much each feature is worth in units of a baseline Wounds pool (36 points). These put the features on one scale;
- * the archetypes then weigh them. A whole pool dealt is 1; a forced miss is worth about a twentieth of a typical hit.
- * When BASE_WOUNDS grows, damage is still counted against a baseline pool (poolScale), so a hit and a forced miss keep
- * their worth against each other.
+ * How much each feature is worth in units of a 36-point Wounds pool, the baseline they were tuned on. These put the
+ * features on one scale; the archetypes then weigh them. A whole pool dealt is 1; a forced miss is worth about a
+ * twentieth of a typical hit. At today's 60 baseline, damage is counted against that 36-point pool (poolScale), so a hit
+ * and a forced miss keep their worth against each other.
  */
 export const SCALE: Goals = {
   dealt: 1, // fraction of the opponent's Wounds pool dealt
@@ -65,8 +65,10 @@ export const GOALS: Record<Archetype, Goals> = {
 export const WOUNDS_CURVE: Record<Archetype, number> = { swarmer: 1, 'out-boxer': 3, slugger: 0.5, counterpuncher: 2, 'boxer-puncher': 2 };
 export const woundsRisk = (left: number, style: Archetype) => 1 + WOUNDS_CURVE[style] * (1 - Math.max(0, Math.min(1, left))) ** 2;
 
-/** Damage counted against a baseline pool: 1 at BASE_WOUNDS 36, 60 ÷ 36 at 60, so features keep their balance. */
-export const poolScale = (rules: Rules) => rules.BASE_WOUNDS / WOUNDS_TABLE_BASE;
+/** The pool SCALE was tuned against: the 36-point baseline before Wounds went to 60. */
+export const SCALE_POOL = 36;
+/** Damage counted against the pool SCALE was tuned on: 60 ÷ 36 at the 60 baseline, so features keep their balance. */
+export const poolScale = (rules: Rules) => rules.BASE_WOUNDS / SCALE_POOL;
 
 /** The aerial overlay: on a winged dragon every archetype values the high ground in full; grounded, only the threat. */
 export const PERCH_GROUNDED = 0.5;

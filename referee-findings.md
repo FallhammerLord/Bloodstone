@@ -37,6 +37,15 @@
 - Sheets: TD+Air 62%, TD+Water and Wyvern+Air 55%, Wyvern+Fire 54%, Drake+Air 50%. Bottom: Drake+Fire 33%, Wyrm+Earth 34%, Drake+Earth 37%, TD+Earth 38%.
 - Shards: stacks lead harder: Pebblescale ×3 +25, Whetted Nail ×3 +24, Whetted Nail ×2 +18. The swarmer's best is Whetted Nail ×3 at +37. Elemental Jaws +8 leads the Techniques.
 
+**Wounds at 60** (the default now; `--rule BASE_WOUNDS=36` restores 36): True Dragon 66, Wyvern 60, Wyrm and Drake 54, a disliked stone −6, all flat. The brains count damage against the 36-point pool they were tuned on (×5/3), so hits keep their worth against misses and tempo.
+
+**A measure bug, fixed:** job seeds stepped by 2, so `s % 2` was always 0 and the measured dragon was the challenger in every bout, losing every timeout. At 36 Wounds this pulled the pooled sheets to a mean near 47%; at 60, where about a fifth of adept bouts time out, to 39%. The challenged side now alternates. Every earlier table carried this bias, mildly.
+
+**The table at 60 Wounds, unbiased** (adept, 48 pairs, 25,440 bouts, 29 min on 4 workers):
+- Sheets span 41–62% (was 31–62%): Wyvern+Water 62%, Wyvern+Fire 59%, TD+Air 57%, Wyvern+Air and Wyrm+Air 56%, TD+Water 55%. Bottom: Wyrm+Earth 41%, Drake+Earth 43%, Drake+Water and Drake+Fire 45%. TD+Air no longer leads.
+- Shards: Whetted Nail ×3 +27, Pebblescale ×3 +18, Pebblescale ×2 +16, Whetted Nail ×2 +14. Stacks still lead.
+- About a fifth of adept bouts reach the 8-exchange limit (estimated from the biased run). `EXCHANGE_LIMIT` 12 is the candidate.
+
 **Open:**
 - Stacked chips are now the clearest outlier in the game; with brains drafting toward them, expect ladder arrays of three of one chip.
 - Ken's local runs: the omnibus at default, with `DICE_SCALES=1`, with `BASE_WOUNDS=60`, and both.

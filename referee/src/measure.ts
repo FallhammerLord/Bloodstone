@@ -53,7 +53,9 @@ const meta: { kind: 'sheet' | 'with' | 'without'; style: BrainStyle; key: string
 const add = (kind: 'sheet' | 'with' | 'without', style: BrainStyle, key: string, A: FighterSetup, B: FighterSetup, opp: string, s: number, pair: number, morph?: Morph) => {
   const id = jobs.length;
   jobs.push({ id, group: 'measure', A, B, playerA: { kind: 'brain', style, skill, seed: s }, playerB: { kind: 'brain', style: opp, skill, seed: s + 1 },
-    challenged: s % 2 ? 'A' : 'B', arenaSeed: s * 31 + 7 });
+    // Seeds step by 2, so the challenged side alternates on s ÷ 2: the measured side is challenger half the time, and
+    // a timeout (the challenged wins it) cuts both ways. A paired with/without bout shares its s, so both see the same side.
+    challenged: (s / 2) % 2 ? 'A' : 'B', arenaSeed: s * 31 + 7 });
   meta.push({ kind, style, key, pair, morph });
 };
 let s = seed * 1000;

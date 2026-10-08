@@ -26,24 +26,24 @@ const hitsBy = (hits: Extract<Event, { kind: 'hit' }>[], side: Side) => hits.fil
 test('the grid: base adds first (a disliked stone costs 6 Wounds), then the tertiaries derive', () => {
   // Accuracy = Claw − Evasion, Affinity = Breath − Scales (each at least 3); a preferred stone adds +3 to its own.
   const td = hatch('true-dragon', 'fire');
-  assert.deepEqual([td.breath, td.wounds, td.accuracy, td.affinity], [18, 42, 3, 18 - 6 + 3]);
+  assert.deepEqual([td.breath, td.wounds, td.accuracy, td.affinity], [18, 66, 3, 18 - 6 + 3]);
   const tdE = hatch('true-dragon', 'earth');
-  assert.deepEqual([tdE.bite, tdE.wounds, tdE.accuracy, tdE.affinity], [15, 36, 6, 6]);
+  assert.deepEqual([tdE.bite, tdE.wounds, tdE.accuracy, tdE.affinity], [15, 60, 6, 6]);
   // Air (Claw 12, Bite 12, Breath 12): a preferred Air stone adds +3 to every Surge trigger, not to a derived stat.
   const wa = hatch('wyvern', 'air');
-  assert.deepEqual([wa.claw, wa.bite, wa.breath, wa.wounds, wa.evasion, wa.accuracy, wa.affinity, wa.surgeFill], [12, 12, 12, 36, 9, 3, 9, 3]);
+  assert.deepEqual([wa.claw, wa.bite, wa.breath, wa.wounds, wa.evasion, wa.accuracy, wa.affinity, wa.surgeFill], [12, 12, 12, 60, 9, 3, 9, 3]);
   const wf = hatch('wyvern', 'fire');
-  assert.deepEqual([wf.breath, wf.wounds, wf.accuracy, wf.affinity], [18, 30, 3, 15]);
+  assert.deepEqual([wf.breath, wf.wounds, wf.accuracy, wf.affinity], [18, 54, 3, 15]);
   const ww = hatch('wyrm', 'water');
-  assert.deepEqual([ww.affinity, ww.wounds, ww.scales, ww.acumen], [9, 30, 9, 13]);
+  assert.deepEqual([ww.affinity, ww.wounds, ww.scales, ww.acumen], [9, 54, 9, 13]);
   const wr = hatch('wyrm', 'air');
-  assert.deepEqual([wr.claw, wr.wounds, wr.accuracy, wr.affinity, wr.surgeFill], [12, 24, 6, 3, 0]);
+  assert.deepEqual([wr.claw, wr.wounds, wr.accuracy, wr.affinity, wr.surgeFill], [12, 48, 6, 3, 0]);
 });
 
 test('neutral pairings keep the base tables', () => {
   const h = hatch('true-dragon', 'water');
   assert.equal(h.preference, 'neutral');
-  assert.deepEqual([h.wounds, h.evasion, h.scales, h.accuracy, h.acumen], [42, 3, 6, 6, 10]);
+  assert.deepEqual([h.wounds, h.evasion, h.scales, h.accuracy, h.acumen], [66, 3, 6, 6, 10]);
   assert.deepEqual([h.claw, h.bite, h.breath, h.affinity], [9, 9, 18, 12]);
 });
 
@@ -89,7 +89,7 @@ test('footsies at Close: bite lands, claw only reaches the arc edge', () => {
 test('chained bites deal 21 to a True Dragon: 6 + 6 + 9 (Bite pierces 3 Scales)', () => {
   const { hits, bout } = fight(TD_WATER, TD_WATER, 4, ['bite', 'bite', 'bite'], ['hold', 'hold', 'hold']);
   assert.deepEqual(hits.map((h) => h.damage), [6, 6, 9]);
-  assert.equal(bout.fighters.B.wounds, 42 - 21);
+  assert.equal(bout.fighters.B.wounds, 66 - 21);
 });
 
 test('a chain needs each link to land', () => {

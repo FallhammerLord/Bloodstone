@@ -100,8 +100,8 @@ test('pulses deal a third of maximum Wounds and spare the center', () => {
   onRim(bout);
   bout.exchange = R.DEFAULT_RULES.EXCHANGE_LIMIT;
   const ev = rimPulse(bout);
-  assert.equal(bout.fighters.A.wounds, 42 - 14);
-  assert.equal(bout.fighters.B.wounds, 42);
+  assert.equal(bout.fighters.A.wounds, 66 - 22);
+  assert.equal(bout.fighters.B.wounds, 66);
   assert.equal(ev.filter((e) => e.kind === 'pulse').length, 1);
 });
 
@@ -113,7 +113,7 @@ test('a bout runs to the exchange limit, then the challenger forfeits', () => {
   assert.equal(bout.exchange, R.DEFAULT_RULES.EXCHANGE_LIMIT);
   assert.equal(bout.winner, 'B');
   assert.ok(ev.some((e) => e.kind === 'boutEnd' && e.reason.startsWith('timeout')));
-  assert.equal(bout.fighters.A.wounds, 42, 'timeouts are never lethal');
+  assert.equal(bout.fighters.A.wounds, 66, 'timeouts are never lethal');
 });
 
 test('open-lobby timeout can go to most Wounds', () => {

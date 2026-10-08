@@ -31,13 +31,13 @@ export interface StatSheet {
   surgeFill: number;
 }
 
-// [Proposed] §2 Starting Attributes (the wyrmling regrid). Baseline Wounds 36, Evasion 6, Scales 6; each morph takes
-// one peak and one valley off it (Wounds in 6s, on its doubled scale).
+// [Proposed] §2 Starting Attributes (the wyrmling regrid). Baseline Wounds 60, Evasion 6, Scales 6; each morph takes
+// one peak and one valley off it (Wounds ±6, flat).
 const MORPHS: Record<Morph, { wounds: number; evasion: number; scales: number }> = {
-  'true-dragon': { wounds: 42, evasion: 3, scales: 6 }, // peak Wounds, valley Evasion
-  wyvern: { wounds: 36, evasion: 9, scales: 3 }, // peak Evasion, valley Scales
-  wyrm: { wounds: 30, evasion: 6, scales: 9 }, // peak Scales, valley Wounds
-  drake: { wounds: 30, evasion: 9, scales: 6 }, // peak Evasion, valley Wounds: wingless, four-legged
+  'true-dragon': { wounds: 66, evasion: 3, scales: 6 }, // peak Wounds, valley Evasion
+  wyvern: { wounds: 60, evasion: 9, scales: 3 }, // peak Evasion, valley Scales
+  wyrm: { wounds: 54, evasion: 6, scales: 9 }, // peak Scales, valley Wounds
+  drake: { wounds: 54, evasion: 9, scales: 6 }, // peak Evasion, valley Wounds: wingless, four-legged
 };
 
 type Derived = 'accuracy' | 'affinity' | 'acumen' | 'surge';
