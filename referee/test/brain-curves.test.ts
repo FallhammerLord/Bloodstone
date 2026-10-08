@@ -100,3 +100,13 @@ test('the slugger loads up: it reaches for Intimidate, and for a Guard while its
   assert.ok(p('slugger', 'intimidate') > p('boxer-puncher', 'intimidate'));
   assert.ok(p('slugger', 'guard') > prior('slugger', ctx, 'melee', situation({ ...bout.fighters.A, meter: 100 }, 0, bout.rules), { name: 'guard' }), 'an empty meter pulls harder than a full one');
 });
+
+test('the slugger values ending an exchange loaded: a full Surge, a held Intimidate', async () => {
+  const { features } = await import('../src/brain/features.ts');
+  const before = newBout(TD_AIR, WYRM, 6);
+  const after = newBout(TD_AIR, WYRM, 6);
+  after.fighters.A.meter = 100;
+  after.fighters.A.intimidateBonus = true;
+  const ctx: Context = { mine: worth(before, 'A'), theirs: worth(before, 'B') };
+  assert.equal(features({ before, after, events: [], me: 'A' }, ctx).loaded, 2);
+});

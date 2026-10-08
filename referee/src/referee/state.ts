@@ -45,7 +45,8 @@ export interface Marks {
   /** Baleful Eye: this exchange's reveal, by grade rank */
   eye: number | null;
   /** a charge on the board: it releases next slot. Visible to both sides. */
-  charge: { action: 'bite' | 'breath'; sweep?: 'left' | 'right'; slots: number } | null;
+  /** a charge in progress; crunched: Bellows Chest drew two charging slots in one [Proposed] */
+  charge: { action: 'bite' | 'breath'; sweep?: 'left' | 'right'; slots: number; crunched?: boolean } | null;
   /** an Approach that moved last slot: the next Bite lunges [Proposed] */
   advanced: boolean;
   /** a Strafe that moved last slot: the next Claw pounces [Proposed] */

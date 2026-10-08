@@ -10,29 +10,29 @@
   "name": "altitude.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "33/60",
-  "hash": "893eb30e57f5d356"
+  "wounds": "36/60",
+  "hash": "9e321bcd23df0311"
  },
  {
   "name": "brains.json",
   "winner": "B",
-  "exchanges": 7,
-  "wounds": "-6/49",
-  "hash": "c512e081c9233b28"
+  "exchanges": 6,
+  "wounds": "-3/27",
+  "hash": "81ab8a1c9c16e3b6"
  },
  {
   "name": "breath-effects.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "50/40",
-  "hash": "50bc298b0175abca"
+  "wounds": "47/43",
+  "hash": "9ebfdde3e0d32d08"
  },
  {
   "name": "breath-matchup.json",
   "winner": "-",
   "exchanges": 1,
-  "wounds": "53/43",
-  "hash": "b45a6f409395c5a5"
+  "wounds": "50/46",
+  "hash": "220350a536b4bb3f"
  },
  {
   "name": "chained-bites.json",
@@ -80,8 +80,8 @@
   "name": "obstacles.json",
   "winner": "-",
   "exchanges": 2,
-  "wounds": "59/60",
-  "hash": "345ee4123788f210"
+  "wounds": "56/60",
+  "hash": "2de63e7d9be3aa46"
  },
  {
   "name": "push-and-shove.json",
@@ -94,15 +94,15 @@
   "name": "revision-read.json",
   "winner": "-",
   "exchanges": 1,
-  "wounds": "63/50",
-  "hash": "de39be63eadd35bc"
+  "wounds": "65/50",
+  "hash": "093000aa618af589"
  },
  {
   "name": "rim-pulse.json",
   "winner": "B",
   "exchanges": 4,
-  "wounds": "0/54",
-  "hash": "922fda82d992e1b6"
+  "wounds": "66/54",
+  "hash": "af63dac521fb6d7d"
  },
  {
   "name": "serpentine.json",

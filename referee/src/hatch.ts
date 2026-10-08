@@ -29,6 +29,8 @@ export interface StatSheet {
   acumen: number;
   /** added to every Surge trigger: a preferred Air stone's +3 */
   surgeFill: number;
+  /** extra attack dice in the Evasion test: a preferred Earth stone's +1 */
+  hitDice: number;
 }
 
 // [Proposed] §2 Starting Attributes (the wyrmling regrid). Baseline Wounds 60, Evasion 6, Scales 6; each morph takes
@@ -45,14 +47,14 @@ type Derived = 'accuracy' | 'affinity' | 'acumen' | 'surge';
 // derived stat ("perk").
 const STONES: Record<CoreStone, { claw: number; bite: number; breath: number; perk: Derived }> = {
   water: { claw: 9, bite: 9, breath: 18, perk: 'acumen' }, // peak Breath, valley Bite
-  earth: { claw: 9, bite: 15, breath: 12, perk: 'accuracy' }, // peak Bite, valley Breath
+  earth: { claw: 6, bite: 15, breath: 15, perk: 'accuracy' }, // peak Bite, valley Claw
   fire: { claw: 6, bite: 12, breath: 18, perk: 'affinity' }, // peak Breath, valley Claw
   air: { claw: 12, bite: 12, breath: 12, perk: 'surge' }, // peak Claw, valley Breath
 };
 
 /** The age categories, of five: wyrmling 1, juvenile 2, adult 3, elder 4, venerable 5. */
 const AGE_CATEGORY: Record<Age, number> = { wyrmling: 1, adult: 3, venerable: 5 };
-/** Derived stats never fall below this. */
+/** Accuracy never falls below this, so every dragon has a phantom band and some aim tracking. */
 const DERIVED_FLOOR = 3;
 /** A disliked stone costs this many Wounds. */
 const DISLIKED_WOUNDS = 6;
@@ -72,7 +74,7 @@ export function preference(morph: Morph, stone: CoreStone): Preference {
 
 /**
  * Egg + stone → stat sheet. The base adds come first (morph, stone, and a disliked stone's −6 Wounds); then the
- * tertiaries derive from them: Accuracy = Claw − Evasion, Affinity = Breath − Scales (each at least 3), Acumen = 10 ×
+ * tertiaries derive from them: Accuracy = Claw − Evasion (at least 3), Affinity = Breath − Scales, Acumen = 10 ×
  * age category; a preferred stone adds +3 to its own derived stat (Air's goes to every Surge trigger).
  */
 export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): StatSheet {
@@ -87,9 +89,10 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
     wounds: m.wounds - (pref === 'disliked' ? DISLIKED_WOUNDS : 0), evasion: m.evasion, scales: m.scales,
     claw: s.claw, bite: s.bite, breath: s.breath,
     accuracy: Math.max(DERIVED_FLOOR, s.claw - m.evasion) + perk('accuracy'),
-    affinity: Math.max(DERIVED_FLOOR, s.breath - m.scales) + perk('affinity'),
+    affinity: s.breath - m.scales + perk('affinity'), // never below 3 on the core grid, so no floor
     acumen: 10 * AGE_CATEGORY[age] + perk('acumen'),
     surgeFill: perk('surge'),
+    hitDice: perk('accuracy') ? 1 : 0,
   };
 }
 

@@ -4,6 +4,7 @@ import type { ActionSpec } from './actions.ts';
 import type { Arena } from './arena.ts';
 import { flatLen, len, sub } from './geometry.ts';
 import { SIDES, checkKO, other, runExchange, type Bout, type Event, type Fighter, type Moment, type Side, type SlotRecord } from './referee.ts';
+import type { Lethal } from './referee/events.ts';
 import * as R from './rules.ts';
 import type { Rules } from './rules.ts';
 
@@ -13,13 +14,33 @@ export interface Format {
   exchangeLimit?: number;
   /** campaign and ranked: the challenger forfeits; open lobbies may pick most Wounds [Doc] §9 */
   timeout: 'challengerForfeits' | 'mostWounds';
-  /** rim pulses in the final three exchanges and a timeout verdict at the limit */
+  /** the Barrier Pulse (PULSE_START on) and a timeout verdict at the limit */
   lateGame: boolean;
 }
 
 export const DEFAULT_FORMAT: Format = { timeout: 'challengerForfeits', lateGame: true };
 
 const limitOf = (bout: Bout, format: Format) => format.exchangeLimit ?? bout.rules.EXCHANGE_LIMIT;
+
+/**
+ * The Barrier Pulse's schedule [Proposed]: it fires at the end of exchange PULSE_START, every other exchange through
+ * PULSE_EVERY_OTHER_UNTIL, then every exchange to the limit. Public, like the rules.
+ */
+export function pulseAt(rules: Rules, exchange: number, limit = rules.EXCHANGE_LIMIT): boolean {
+  if (exchange < rules.PULSE_START || exchange > limit) return false;
+  return exchange > rules.PULSE_EVERY_OTHER_UNTIL || (exchange - rules.PULSE_START) % 2 === 0;
+}
+/** The next exchange, from `from` on, whose end brings a pulse; null if none comes before the limit. */
+export function nextPulse(rules: Rules, from: number, limit = rules.EXCHANGE_LIMIT): number | null {
+  for (let x = Math.max(from, rules.PULSE_START); x <= limit; x++) if (pulseAt(rules, x, limit)) return x;
+  return null;
+}
+/** Whom the pulse at the end of `exchange` can kill: the first leaves 1; the every-other run kills only a dragon an
+ *  earlier pulse hit; once it fires every exchange it kills anyone on the rim. */
+export function pulseLethal(rules: Rules, exchange: number): Lethal {
+  if (exchange === rules.PULSE_START) return 'never';
+  return exchange > rules.PULSE_EVERY_OTHER_UNTIL ? 'all' : 'pulsed';
+}
 
 /** What one side can see. Everything on the board is visible [Doc]; only the opponent's script is not. */
 export interface View {
@@ -40,6 +61,8 @@ export interface View {
   rules: Rules;
   /** who is challenged: public, and it decides a timeout */
   challenged: Side;
+  /** the Barrier Pulse: the exchange whose end brings the next one (null: none left), and whom it can kill */
+  pulse: { at: number | null; lethal: Lethal | null };
 }
 
 export function viewOf(bout: Bout, side: Side): View {
@@ -59,6 +82,10 @@ export function viewOf(bout: Bout, side: Side): View {
     record: bout.record.map((r) => structuredClone(r)),
     rules: bout.rules,
     challenged: bout.challenged,
+    pulse: (() => {
+      const at = nextPulse(bout.rules, bout.exchange + 1);
+      return { at, lethal: at === null ? null : pulseLethal(bout.rules, at) };
+    })(),
   };
 }
 
@@ -75,6 +102,9 @@ export interface Controller {
 export function runBout(bout: Bout, controllers: Record<Side, Controller>, format: Format = DEFAULT_FORMAT, opts: { trace?: boolean } = {}): Event[] {
   const ev: Event[] = [];
   while (!bout.over && bout.exchange < limitOf(bout, format)) {
+    // The alert: as scripting begins, both sides learn the pulse ends this exchange or the next.
+    const upcoming = format.lateGame ? nextPulse(bout.rules, bout.exchange + 1, limitOf(bout, format)) : null;
+    if (upcoming !== null && upcoming <= bout.exchange + 2) ev.push({ kind: 'pulseWarning', exchange: bout.exchange + 1, at: upcoming, lethal: pulseLethal(bout.rules, upcoming) });
     const scripts = { A: controllers.A.script(viewOf(bout, 'A')), B: controllers.B.script(viewOf(bout, 'B')) };
     const revise = Object.fromEntries(
       SIDES.map((s) => [s, (b: Bout, side: Side, m: Moment, opp: boolean, seen: string | null) => controllers[s].revise?.(viewOf(b, side), m, opp, seen) ?? null]),
@@ -98,19 +128,22 @@ export function runBout(bout: Bout, controllers: Record<Side, Controller>, forma
 }
 
 /**
- * Late pressure [Doc] §5: at the end of each of the final three exchanges, the rim pillars deal ⅓ of
- * maximum Wounds to dragons on the outer rim. Pulse 1 can't kill; pulse 2 kills only a dragon pulse 1
- * already hit; pulse 3 kills any dragon in range.
+ * Late pressure [Doc] §5, the Barrier Pulse [Proposed]: at the end of each scheduled exchange (pulseAt) the rim pillars
+ * deal ⅓ of maximum Wounds to dragons on the outer rim. The first pulse can't kill; through the every-other run a pulse
+ * kills only a dragon an earlier pulse hit; once it fires every exchange it kills any dragon in range.
  */
 export function rimPulse(bout: Bout, format: Format = DEFAULT_FORMAT): Event[] {
   const ev: Event[] = [];
-  const pulse = bout.exchange - (limitOf(bout, format) - 3);
-  if (pulse < 1 || pulse > 3) return ev;
+  const limit = limitOf(bout, format);
+  if (!pulseAt(bout.rules, bout.exchange, limit)) return ev;
+  let pulse = 0;
+  for (let x = bout.rules.PULSE_START; x <= bout.exchange; x++) if (pulseAt(bout.rules, x, limit)) pulse++;
+  const lethal = pulseLethal(bout.rules, bout.exchange);
   for (const s of SIDES) {
     const f = bout.fighters[s];
     if (flatLen(f.pos) < bout.rules.ARENA_RADIUS - bout.rules.RIM_DEPTH) continue;
     let damage = Math.floor(f.sheet.wounds / 3);
-    const canKill = pulse === 3 || (pulse === 2 && f.pulsed);
+    const canKill = lethal === 'all' || (lethal === 'pulsed' && f.pulsed);
     const capped = !canKill && damage >= f.wounds;
     if (capped) damage = f.wounds - 1;
     f.wounds -= damage;

@@ -129,7 +129,7 @@ Breath's area lingers through the next slot; any dragon inside at slot's end tak
 
 ### Bellows Chest · Charge · 2 pips
 Breath charges across two slots, with the charge slot's Guard defense. The charge shows a visible tell; an interrupt burns the breath and triggers its cooldown.
-- **Wyrmling:** +3 Potency
+- **Wyrmling:** +3 Potency; **[Proposed]** the charge crunches: one charging slot draws twice, so the release is a full charge (Stalwart's full width, a longer zone) and Surge fills twice
 - **Juvenile:** +6 Potency
 - **Adult:** double Potency
 - **Elder:** as Adult; the breath's area grows one step

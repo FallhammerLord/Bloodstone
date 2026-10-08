@@ -290,7 +290,7 @@ export function applyHit(bout: Bout, plans: Record<Side, Plan>, s: Side, total: 
   // A hit in the wind-up interrupts, except a charged Breath's release: the charge is committed [Doc].
   // At Melee, a Breath is lost to any hit before it resolves, active window included.
   const chargedBreath = defPlan.spec.name === 'breath' && defPlan.spec.released;
-  const meleeBreath = defPlan.spec.name === 'breath' && !chargedBreath && !defPlan.resolved && phase(defPlan, t) === 'active' && dist(bout.fighters[s].pos, def.pos) <= R.MELEE_EDGE;
+  const meleeBreath = defPlan.spec.name === 'breath' && !chargedBreath && !defPlan.ravenerBreath && !defPlan.resolved && phase(defPlan, t) === 'active' && dist(bout.fighters[s].pos, def.pos) <= R.MELEE_EDGE;
   const interrupt = (phase(defPlan, t) === 'windup' && !chargedBreath) || meleeBreath;
   if (interrupt) defPlan.interruptedAt = t;
   ev.push({ kind: 'hit', tick: t, attacker: s, action: p.spec.name, damage: total, parts, tags, interrupt, trade, woundsLeft: def.wounds });

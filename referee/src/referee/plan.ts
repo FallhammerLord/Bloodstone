@@ -40,6 +40,8 @@ export interface Plan {
   lunges: boolean;
   /** a Drake's Bite in its Ravener window: it lunges, and tracks at Melee and Close [Proposed] */
   ravener: boolean;
+  /** a Drake's Breath in its Ravener window: Melee doesn't break it [Proposed] */
+  ravenerBreath: boolean;
   /** this Claw follows a Strafe: it pounces and pierces [Proposed] */
   pounces: boolean;
   /** Sidewinder Spine: distance to shift along the line while strafing, and how far it has */
@@ -152,6 +154,8 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   // Ravener [Proposed]: a Drake's first Bite in its window lunges and tracks, and closes the window.
   const ravener = f.sheet.aspect === 'ravener' && f.marks.ravener > 0 && spec.name === 'bite' && !spec.crunch && !spec.charge;
   if (ravener) f.marks.ravener = 0;
+  // Ravener's Breath [Proposed]: in the window, a hit at Melee doesn't break the Drake's Breath. It leaves the window open.
+  const ravenerBreath = f.sheet.aspect === 'ravener' && f.marks.ravener > 0 && spec.name === 'breath' && !spec.charge;
   const lunges = f.marks.advanced || ravener;
   f.marks.advanced = false;
   // Pounce [Proposed]: a Claw right after a Strafe that moved.
@@ -234,7 +238,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
     const bel = tech(f, 'bellows-chest');
     const ok = rules.TECH_BELLOWS_CHEST === 'mobile' && bel >= W && (spec.move === 'retreat' || (bel >= J && spec.move === 'strafe') || bel >= V);
     if (ok) {
-      if (!holding) f.marks.charge = { action: 'breath', slots: 1 };
+      if (!holding) f.marks.charge = { action: 'breath', slots: 2, crunched: true }; // Bellows Chest crunches the charge
       mobileCharge = true;
       note('technique', `Bellows Chest: charges the Breath on the move (${spec.move}).`);
       spec = { name: spec.move, ...(spec.dir ? { dir: spec.dir } : {}) };
@@ -337,7 +341,10 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   let demoralized = false;
   let diveBonus = false;
   const charging = spec.charge === true;
-  if (charging && !holding) f.marks.charge = { action: spec.name as 'bite' | 'breath', sweep: spec.sweep, slots: 1 };
+  // Bellows Chest [Proposed]: a Breath charge crunches, two charging slots drawn in one, so the release is a full charge.
+  const crunchedCharge = charging && !holding && spec.name === 'breath' && tech(f, 'bellows-chest') >= W;
+  if (charging && !holding) f.marks.charge = { action: spec.name as 'bite' | 'breath', sweep: spec.sweep, slots: crunchedCharge ? 2 : 1, ...(crunchedCharge ? { crunched: true } : {}) };
+  if (crunchedCharge) note('technique', 'Bellows Chest: draws the Breath twice over in one slot, a full charge.');
   if (holding && f.marks.charge) f.marks.charge.slots = 2;
   // Crunched halves carry no modifier: the reward is doing the thing twice [Doc]. Raking Talons Venerable counts the pair as a link.
   const crunchLink = spec.crunch && spec.name === 'claw' && crunchTech >= V;
@@ -364,7 +371,7 @@ export function makePlan(rules: Rules, f: Fighter, opp: Fighter, requested: Acti
   return {
     spec, windup: w0, active: a0, recovery: r0, interruptedAt: null,
     resolved: false, landed: false, nearMiss: false, origin: null, aim: null,
-    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, aimLock: 0, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch, ravener,
+    moveTotal, travel, moved: 0, converted: null, link, intimidateBonus, demoralized, aimLock: 0, stoop: null, carry: null, lunges: lunges && spec.name === 'bite' && !spec.crunch, ravener, ravenerBreath,
     pounces: pounces && spec.name === 'claw' && !spec.crunch,
     shiftTotal, shifted: 0, startZ: f.pos.z, evaded: false, chainPaused: f.chain.saves > 0, lockjawBonus, diveBonus, noPin, thornsUsed: false, mobileCharge,
     charging, halves, landedHalves: 0, hardLanding, quaked: false,

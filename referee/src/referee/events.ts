@@ -41,6 +41,9 @@ export type NoteTag =
 /** What shaped a hit's damage, beyond its base. */
 export type HitTag = 'true-damage' | 'charged' | 'pounce' | 'crunched' | 'intimidate' | 'demoralized' | 'chain' | 'punish' | 'corroded' | 'stoop' | 'reflected';
 
+/** Whom a Barrier Pulse can kill: nobody (it leaves 1), a dragon an earlier pulse hit, or anyone on the rim. */
+export type Lethal = 'never' | 'pulsed' | 'all';
+
 export type Event =
   | { kind: 'exchangeStart'; exchange: number }
   | { kind: 'slotStart'; exchange: number; slot: number }
@@ -55,6 +58,8 @@ export type Event =
   | { kind: 'ko'; tick: number; side: Side }
   | { kind: 'revision'; side: Side; moment: Moment; from: string; to: string }
   | { kind: 'pulse'; side: Side; pulse: number; damage: number; woundsLeft: number; capped: boolean }
+  /** the Barrier Pulse's alert, as an exchange's scripting begins: it fires at the end of exchange `at` */
+  | { kind: 'pulseWarning'; exchange: number; at: number; lethal: Lethal }
   | { kind: 'obstacle'; tick: number; attacker: Side; action: ActionName; obstacle: string; damage: number; destroyed: boolean; through: boolean }
   | { kind: 'zone'; tick: number; owner: Side; zone: 'burning' | 'corrosive' | 'smolder' | 'ash'; center: Vec; end?: Vec }
   | { kind: 'zoneEffect'; side: Side; zone: 'burning' | 'corrosive' | 'smolder' | 'ash'; damage: number; woundsLeft: number }
