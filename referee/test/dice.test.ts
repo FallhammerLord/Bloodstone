@@ -90,3 +90,17 @@ test('with HIT_DICE off, Accuracy against Evasion decides, as before', () => {
     assert.ok(ev.some((e) => e.kind === 'evade' && e.text.includes('beats Accuracy')));
   }
 });
+
+test('with DICE_SCALES, the defender rolls Evasion + Scales: a dodging Wyrm\'s hide turns a Claw at even luck', () => {
+  // True Dragon + Air's Claw 12 (4 dice) on a dodging Wyrm + Earth: Evasion 6 + 3 is 3 dice (62% to hit); with its
+  // Scales 9 it rolls 6 (33%). At an even break (luck ½) the first lands and the second doesn't.
+  const clawAt = (scales: number) => {
+    const bout = newBout({ name: 'A', morph: 'true-dragon', stone: 'air' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 2, 'B', {}, R.rulesWith({ DICE_SCALES: scales }));
+    bout.dice = { mode: 'quantile', u: 0.5 };
+    return runExchange(bout, { A: ['claw:left'].map(parseAction), B: ['dodge'].map(parseAction) });
+  };
+  assert.ok(clawAt(0).some((e) => e.kind === 'hit' && e.attacker === 'A'));
+  const hide = clawAt(1);
+  assert.ok(!hide.some((e) => e.kind === 'hit' && e.attacker === 'A'));
+  assert.ok(hide.some((e) => e.kind === 'evade' && e.text.includes('+ Scales 9')));
+});

@@ -41,6 +41,12 @@
 - **Shards:** attribute stacks lead: Whetted Nail ×3 +22 (±8), Pebblescale ×3 +16, then ×2 rows near +10. v0.4's +1 per chip plus stacking makes three of one chip the strongest pick. Snapping Jaw +9 is the top Technique; Sidewinder Spine −6 the bottom.
 - Gnashing Teeth, Raking Talons, Sapping Bellow, Goading Roar and Baleful Eye measure 0 ±0: the measured bouts never put them to work (Baleful Eye is pulled by default). Their rows carry no information.
 
+**Omnibus with and without dice** (Ken, master, `--shards`, 1,392 bouts each):
+- Dice cut evasion hard: evades while moving 0.64 → 0.15 a bout, by Dodge 0.34 → 0.07. Attack stats (9–15) roll far more dice than Evasion (3–9).
+- Stones are flat either way (46–53%): the Air regrid did that, not the dice. Morphs are the same either way (Wyvern 58–59, TD 52–53, Wyrm 44–46, Drake 43–45).
+- The slugger is last either way (31% without dice, 38% with), against 40% in the v0.3 omnibus.
+- Under test: `DICE_SCALES` (the defender rolls Evasion + Scales), which puts the baseline defender (6 + 6) level with the baseline attack (Bite 12).
+
 **Open:**
 - TD+Air still leads at adept (62%): the Air regrid and dice didn't break it, as Round 6 predicted. The damage formula is the remaining lever.
 - Stacked attribute chips (×3 rows at +16 to +22) are the new outlier.
