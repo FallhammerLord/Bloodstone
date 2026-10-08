@@ -13,6 +13,7 @@
 
 | Round | What changed |
 |---|---|
+| [10](#round-10-three-curves-measured-one-at-a-time) | Three curves as dials: proportional armor, the linear Evasion test, proportional Accuracy; an omnibus for each |
 | [9](#round-9-the-barrier-pulse-earth-ravener-s-breath-bellows-and-the-loaded-slugger) | 30 exchanges and the Barrier Pulse; Earth 6/15/15 with a hit die; Ravener's Breath; the Bellows crunch; the loaded slugger; the table rebuilt |
 | [8](#round-8-brains-that-scale-the-loaded-up-slugger-chips-valued-by-their-stacks-base_wounds) | Brains: pool scaling, per-style nerve, power and the loaded-up slugger; chips valued by their stacks; BASE_WOUNDS; the table rebuilt |
 | [7](#round-7-pair-off-dice-the-wounds-curve-the-heavy-slugger-and-the-table-rebuilt) | Pair-off dice for the Evasion test; brains weigh Wounds on a curve; the slugger's heavy goal; the measured table rebuilt |
@@ -22,6 +23,39 @@
 | [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 10: three curves, measured one at a time
+
+**Why:** flat subtraction near the damage floor prices stat points unevenly (a valley Claw deals 1 to a baseline hide, a peak Claw 6), so every sheet tweak moves pairings unevenly. The Accuracy floor holds 12 of 16 sheets at 3. The pair-off counts whole dice, so a 2-point chip often does nothing.
+
+**A census first** (120 adept bouts, plain dragons): the Evasion test rolls about once a bout, against 11 landed hits. Near misses come 2.6 a bout, all from the phantom band (none from the dice), and make 20% of Surge fills: landed Breath 28%, Guard 27%, near misses 20%, Dodge 13%, charging Breath 10%.
+
+**Rules** (each [Proposed] and off by default; `--rule CURVES=on` turns on all three):
+- **Proportional armor** (`DAMAGE_CURVE` 18): each point of Scales or Affinity turns aside 1/18 of the attack, keeping at least a sixth. Piercing comes off the defense first; riders stay flat on top.
+- **The linear Evasion test** (`HIT_LINEAR` 24): one d24 under 12 + attack stat − Evasion, clamped to 1–23. No near miss from the test.
+- **Proportional Accuracy** (`ACCURACY_CURVE` 18): Claw × (18 − Evasion) ÷ 18, no floor. True Dragon 7/5/5/10 by Water, Earth, Fire, Air; Wyvern 4/3/3/6; Wyrm 6/4/4/8; Drake 4/6/3/6.
+
+**Omnibus, one dial at a time** (master, `--shards`, 1,392 bouts each; morphs and stones ±5, pairings ±10):
+
+| | Default | All three | Armor | Linear hit | Accuracy |
+|---|---|---|---|---|---|
+| Morphs | 46–56 | 41–62 | 46–57 | 44–58 | 44–56 |
+| Stones | 46–56 | 44–59 | 41–62 | 46–57 | 45–57 |
+| Pairings, SD of 16 | 7.8 | 11.7 | 9.6 | 7.1 | 9.5 |
+| Exchanges a bout | 6.7 | 5.9 | 6.0 | 6.6 | 6.5 |
+| Claw's share of damage | 19% | 27% | 28% | 18% | 17% |
+| Floor against the crude brain | 89% | 93% | 95% | 90% | 90% |
+
+**What it shows:**
+- **The linear test is neutral,** as the census predicts: one roll a bout. Its gains are readability and chips that always count.
+- **The armor curve brings valley Claws to life** (Earth and Fire Claws 3.1 → 5.4 a landed hit; Claw's share 19% → 28%; fights 6.7 → 6.0 exchanges) **and spreads the stones:** Air 62%, Fire 41%. Under the curve a point of attack buys (18 − defense) ÷ 18 of a point: ⅔ against Scales 6, ½ against Affinity 9, ⅓ against Affinity 12. Affinity runs higher than Scales, so Breath points become the cheapest, and the two Breath-peak stones lose. Air gains on its Claw peak and on its lifted Breath valley.
+- **The Accuracy curve lifts the True Dragon** to 56% (Accuracy 5–10, against 3–8 for the rest): TD+Air 70%, TD+Fire 64%. Accuracy matters once it varies, and the True Dragon's Evasion valley pays it the most: the Round 1 suspect again.
+- **Together the effects stack:** morphs 41–62, the Wyrm to 41%, TD+Earth 30%, Wyvern+Air 74%.
+
+**Open:**
+- The armor curve with Affinity on its own, larger scale (about 1½ × Scales' 18), so a point of attack buys about the same against either baseline defense.
+- `HIT_LINEAR` as the default: a table run to confirm it's neutral.
+- The Accuracy curve: a gentler slope, or keep the floor.
 
 ## Round 9: the Barrier Pulse, Earth, Ravener's Breath, Bellows, and the loaded slugger
 
