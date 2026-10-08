@@ -3,7 +3,7 @@
 
 import { ACTIONS, type ActionSpec } from '../actions.ts';
 import * as R from '../rules.ts';
-import { GOALS, type Archetype } from './archetypes.ts';
+import { GOALS, woundsRisk, type Archetype } from './archetypes.ts';
 import type { Context } from './features.ts';
 import { legalActions, place, type Situation } from './options.ts';
 import { closer, farther, type Band } from './probe.ts';
@@ -36,6 +36,13 @@ export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, 
   else if (ACTIONS[a.name].category === 'attack' && a.name !== 'intimidate') {
     const reach = ctx.mine.attack[band][a.name] ?? 0;
     w = reach > 0 ? 0.1 + 10 * reach * (g.dealt + 0.3 * g.big) : 0.02;
+    // The heavy goal (the slugger): each attack by what has been getting through, against the heaviest here, curved by
+    // the goal, so it leans hard on whichever attack the opponent's defenses let through best.
+    if (g.heavy > 0 && reach > 0) {
+      const through = (x: ActionSpec['name']) => (ctx.mine.attack[band][x] ?? 0) * (ctx.punch?.[x] ?? 1);
+      const heaviest = Math.max(...(['bite', 'claw', 'breath', 'stomp'] as const).map(through));
+      if (heaviest > 0) w *= (through(a.name) / heaviest) ** g.heavy;
+    }
     // A Drake's open Ravener window: its next Bite lunges and tracks, so it reaches for the Bite.
     if (sc.primed && a.name === 'bite') w = 2 * w + 0.3 * g.payoff;
     // The strike after a juke (free hits), or after running the opponent down (pursuit).
@@ -44,13 +51,16 @@ export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, 
   } else if (a.name === 'approach' || (a.name === 'leap' && s.f.sheet.aspect === 'ravener')) w = move(closer[band]) * (1 + 0.6 * g.pursuit);
   else if (a.name === 'retreat') w = move(farther[band]) * Math.max(0.2, 1 - 0.3 * g.pursuit);
   else if (a.name === 'strafe') w = 0.4 + 0.5 * g.misses + 0.4 * g.free;
-  else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken + 0.5 * g.misses + 0.4 * g.free;
-  else if (a.name === 'guard') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken;
+  else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken * risk(s) + 0.5 * g.misses + 0.4 * g.free;
+  else if (a.name === 'guard') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken * risk(s);
   else if (a.name === 'intimidate') w = 0.2 + 0.15 * (g.punish + g.big);
   else if (a.name === 'leap' || a.name === 'dive') w = s.f.sheet.flies ? 0.6 : 0.2;
   else w = 0.3;
   return a.charge ? 0.5 * w : a.crunch ? 1.3 * w : w;
 }
+
+/** Its own Wounds on the curve (archetypes.ts): a wounded dragon reaches for its defenses sooner. */
+const risk = (s: Situation) => woundsRisk(s.f.wounds / s.f.sheet.wounds);
 
 /** Where a move leaves the separation, roughly: a band in or out, or nowhere. */
 export function nextSep(sep: number, a: ActionSpec, s: Situation): number {

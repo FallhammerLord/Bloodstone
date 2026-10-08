@@ -17,8 +17,9 @@ const run = (b: FighterSetup, sep: number, A: string[], B: string[]) => {
 const hits = (ev: Event[]) => ev.filter((e): e is Extract<Event, { kind: 'hit' }> => e.kind === 'hit');
 
 /** Plays slot by slot; returns the hits each slot. */
-const slots = (b: FighterSetup, sep: number, A: string[], B: string[]) => {
+const slots = (b: FighterSetup, sep: number, A: string[], B: string[], luck?: number) => {
   const bout = newBout(TD_WATER, b, sep);
+  if (luck !== undefined) bout.dice = { mode: 'quantile', u: luck }; // fixes the Evasion test's dice at a luck quantile
   return A.map((a, i) => hits(simulateSlot(bout, { A: parseAction(a), B: parseAction(B[i]) })).length);
 };
 const BELLOWS: FighterSetup = { ...TD_WATER, shards: [{ shard: 'Bellows Chest', grade: 'wyrmling', pips: [0, 1] }] };
@@ -68,7 +69,8 @@ test('lunge: approach then Bite catches a retreat one pace farther out', () => {
 });
 
 test('lunge is geometry only: a swift retreat still escapes', () => {
-  assert.deepEqual(slots(WYVERN, 3, ['approach', 'bite'], ['retreat', 'retreat']), [0, 0]);
+  // The lunge carries no tracking: the retreating Wyvern still takes the Evasion test, here with the dice its way.
+  assert.deepEqual(slots(WYVERN, 3, ['approach', 'bite'], ['retreat', 'retreat'], 0.99), [0, 0]);
 });
 
 test('only the first Bite after an Approach lunges', () => {

@@ -5,6 +5,7 @@ import { hatch, type StatSheet } from '../hatch.ts';
 import { vec, type Vec } from '../geometry.ts';
 import { makeArena, type Arena, type ArenaSetup } from '../arena.ts';
 import { compile, emptyArray, findShard, gradeRank, seat, type Grade, type Loadout, type TechniqueId } from '../shards.ts';
+import type { Dice } from './dice.ts';
 import * as R from '../rules.ts';
 import { DEFAULT_RULES, type Rules } from '../rules.ts';
 
@@ -139,6 +140,8 @@ export interface Bout {
   arena: Arena;
   /** the dials this bout plays by; shared, never cloned or changed mid-bout */
   rules: Rules;
+  /** the Evasion test's dice: a seeded stream in a real bout, a luck quantile in an imagined one */
+  dice: Dice;
   over: boolean;
   winner: Side | null;
 }
@@ -202,6 +205,7 @@ export function newBout(a: FighterSetup, b: FighterSetup, separationPaces: numbe
     fighters,
     arena: makeArena(arena, [fighters.A.pos, fighters.B.pos], rules),
     rules,
+    dice: { mode: 'roll', seed: arena.seed ?? 1, n: 0 },
     challenged, exchange: 0, globalSlot: 0, over: false, winner: null,
     startWounds: { A: 0, B: 0 }, history: { A: [], B: [] }, record: [],
   };
@@ -227,6 +231,7 @@ export function cloneBout(b: Bout): Bout {
   return {
     ...b,
     fighters: { A: fighter(b.fighters.A), B: fighter(b.fighters.B) },
+    dice: { ...b.dice },
     startWounds: { ...b.startWounds },
     history: { A: [...b.history.A], B: [...b.history.B] },
     record: [...b.record],

@@ -1,5 +1,5 @@
 // Seeded random numbers (mulberry32). The same seed always gives the same sequence on every machine.
-// Used only for AI choices and map layout, never for combat outcomes [Doc]: randomness lives in flavor.
+// Used for AI choices, map layout and, by the one exception [Proposed], the Evasion test's pair-off dice (src/referee/dice.ts).
 
 export function seededRandom(seed: number): () => number {
   let a = seed >>> 0;

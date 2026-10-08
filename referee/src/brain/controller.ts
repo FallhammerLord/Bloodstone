@@ -10,16 +10,21 @@ import { SKILL, skillOf, type Archetype, type Skill } from './archetypes.ts';
 import { type Context, value } from './features.ts';
 import { advance, legalActions, place, playable, situation, type Situation } from './options.ts';
 import { sampleScript } from './priors.ts';
+import { discover } from './discover.ts';
 import { bandOf, worth } from './probe.ts';
 import { pick, Read } from './read.ts';
 
-/** Rebuilds the bout as this side sees it. Everything in a View is public, so nothing hidden leaks in. */
-export function boutFromView(view: View): Bout {
+/**
+ * Rebuilds the bout as this side sees it. Everything in a View is public, so nothing hidden leaks in; the bout's dice
+ * aren't public, so it imagines them at a luck quantile u (½: an even break).
+ */
+export function boutFromView(view: View, u = 0.5): Bout {
   const fighters = { [view.side]: structuredClone(view.me), [view.opp.side]: structuredClone(view.opp) } as Record<Side, Fighter>;
   return {
     fighters, challenged: view.challenged, exchange: view.exchange, globalSlot: view.globalSlot,
     startWounds: { ...view.startWounds }, history: structuredClone(view.history) as Bout['history'],
     record: structuredClone(view.record), arena: structuredClone(view.arena), over: false, winner: null, rules: view.rules,
+    dice: { mode: 'quantile', u },
   };
 }
 
@@ -34,6 +39,17 @@ const LOOKAHEAD_WEIGHTS = [1, 0.7, 0.5, 0.35];
 const PLAYOUT_TRIES = 3;
 /** A revision flashes and costs a chain bonus: it revises only for a clear gain. */
 const REVISE_MARGIN = 0.03;
+
+/**
+ * Each guess is imagined at its own luck: the i-th of n at quantile (i + ½) ÷ n, so a set of guesses spans the dice's
+ * odds evenly and their average weighs each Evasion test by its true chance.
+ */
+const luck = (i: number, n: number) => (i + 0.5) / n;
+const atLuck = (b: Bout, u: number): Bout => {
+  const c = cloneBout(b);
+  c.dice = { mode: 'quantile', u };
+  return c;
+};
 
 /** The opponent's likeliest script from here, slot by slot. */
 function guessScript(read: Read, s: Situation, sep: number, rng: () => number, likeliest: boolean): ActionSpec[] {
@@ -89,7 +105,8 @@ export function brainController(style: Archetype, skill: Skill | 'auto' = 'auto'
       const me = view.side;
       const them = view.opp.side;
       const sep = view.separation;
-      const ctx: Context = { mine: worth(base, me), theirs: worth(base, them) };
+      const mineWorth = worth(base, me);
+      const ctx: Context = { mine: mineWorth, theirs: worth(base, them), punch: discover(view, mineWorth) };
       const read = new Read(view, level.memory, ctx.theirs);
       const mine = situation(view.me, view.globalSlot, view.rules);
       const theirs = situation(view.opp, view.globalSlot, view.rules);
@@ -102,15 +119,15 @@ export function brainController(style: Archetype, skill: Skill | 'auto' = 'auto'
 
       const guesses = [guessScript(read, theirs, sep, rng, true)];
       while (guesses.length < level.guesses) guesses.push(guessScript(read, theirs, sep, rng, false));
-      for (let i = 0; i < Math.min(level.counters, guesses.length); i++) candidates.push(counterScript(style, ctx, base, me, them, guesses[i], mine, rng));
+      for (let i = 0; i < Math.min(level.counters, guesses.length); i++) candidates.push(counterScript(style, ctx, atLuck(base, luck(i, guesses.length)), me, them, guesses[i], mine, rng));
 
-      // The Referee is deterministic, so each pairing is played once.
+      // The Referee is deterministic at a given luck, so each pairing is played once, its guess at its own quantile.
       const seen = new Map<string, { v: number; after: Bout }>();
-      const first = candidates.map((c) => guesses.map((g) => {
-        const key = JSON.stringify([c, g]);
+      const first = candidates.map((c) => guesses.map((g, gi) => {
+        const key = JSON.stringify([c, g, gi]);
         let r = seen.get(key);
         if (!r) {
-          const b = cloneBout(base);
+          const b = atLuck(base, luck(gi, guesses.length));
           const events = runExchange(b, { [me]: c, [them]: g } as Record<Side, ActionSpec[]>);
           r = { v: value(style, { before: base, after: b, events, me }, ctx), after: b };
           seen.set(key, r);
@@ -173,7 +190,8 @@ export function brainController(style: Archetype, skill: Skill | 'auto' = 'auto'
       const base = boutFromView(view);
       const me = view.side;
       const them = view.opp.side;
-      const ctx: Context = { mine: worth(base, me), theirs: worth(base, them) };
+      const mineWorth = worth(base, me);
+      const ctx: Context = { mine: mineWorth, theirs: worth(base, them), punch: discover(view, mineWorth) };
       const read = new Read(view, level.memory, ctx.theirs);
       const mine = situation(view.me, view.globalSlot, view.rules);
       const theirs = situation(view.opp, view.globalSlot, view.rules);
@@ -183,8 +201,8 @@ export function brainController(style: Archetype, skill: Skill | 'auto' = 'auto'
       const guesses = Array.from({ length: level.guesses }, () => read.guess(bandOf(view.separation), theirOptions, rng));
       const values = options.map((o, i) => {
         let total = 0;
-        for (const g of guesses) {
-          const b = cloneBout(base);
+        for (const [gi, g] of guesses.entries()) {
+          const b = atLuck(base, luck(gi, guesses.length));
           const events = simulateSlot(b, { [me]: i === 0 ? o : { ...o, revised: true }, [them]: g } as Record<Side, ActionSpec>);
           total += value(style, { before: base, after: b, events, me }, ctx);
         }

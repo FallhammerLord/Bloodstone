@@ -13,12 +13,38 @@
 
 | Round | What changed |
 |---|---|
+| [7](#round-7-pair-off-dice-the-wounds-curve-the-heavy-slugger-and-the-table-rebuilt) | Pair-off dice for the Evasion test; brains weigh Wounds on a curve; the slugger's heavy goal; the measured table rebuilt |
 | [6](#round-6-season-3-what-makes-air-strong-and-the-air-regrid) | Season 3; Air's edge is Claw damage, not Accuracy; Air regridded to 12/12/12 with a Surge perk; dice odds for hit resolution |
 | [5](#round-5-season-2-and-suite-v04) | Season 2: the monoculture holds; suite v0.4 and the Scales/Guard/Defend rename |
 | [4](#round-4-season-1-a-true-dragon--air-monoculture) | Season 1: a TD+Air monoculture; no Evasion counter formed |
 | [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 7: pair-off dice, the Wounds curve, the heavy slugger, and the table rebuilt
+
+**Rules:**
+- **The Evasion test rolls pair-off dice** (`HIT_DICE`, on by default; `--rule HIT_DICE=0` restores Accuracy against Evasion with ties to Acumen). Attack stat ÷ 3 in d6 against Evasion ÷ 3, sorted high to low and paired off; the first difference decides, the higher die winning. An unbroken chain goes to the side with dice left; equal pools matched all the way down are the defender's, as a near miss that fills the attacker's Surge. Blindness and Scything's −3 come off the attack stat. Accuracy keeps aim tracking and the phantom band. Exact odds: `dice-hit-odds.tsv`.
+- A real bout rolls from a stream seeded with the arena; a clone replays it.
+
+**Brains:**
+- **Imagining dice:** each guessed opponent script plays at its own luck quantile, (i + ½) ÷ n; a test lands in imagination when its exact chance beats the quantile. The average over guesses weighs every Evasion test by its true odds, with no extra Referee calls.
+- **Wounds on a curve:** damage taken and exposure weigh 1 + 2 × (1 − left)²: ×1 at full, ×1.5 at half, ×2.3 at a fifth. It shapes valuation and how readily a wounded dragon imagines a Guard or Dodge.
+- **Discovery:** from the public record, each attack's share of clean-hit worth that has been getting through (a Guard, a held Affinity), starting from the board's numbers as two prior hits.
+- **The slugger's heavy goal:** its attack priors weigh each attack by what gets through against the heaviest from here, squared; its outcomes count each landed hit by (damage ÷ a fifth of the pool)², at most 4. Its flat big goal halves (2 → 1).
+- The sheets are public (the board), so playouts already used true Scales and Affinity; discovery adds what the fight reveals.
+
+**The measured table, rebuilt** (adept, 48 pairs a cell, 25,440 bouts, 27 min on 4 workers; suite v0.4, the Air regrid, dice, the new brains). Pooled sheets (±5):
+- TD+Air 62%, Wyvern+Water 55%, Wyrm+Air 53%, TD+Water 52%, Wyvern+Earth 51%, Wyvern+Air 50%, Wyvern+Fire 49%, Drake+Air 47%.
+- Bottom: TD+Fire 43%, Wyrm+Water 42%, TD+Earth 39%, Wyrm+Fire 39%, Drake+Water 38%, Wyrm+Earth 34%, Drake+Earth 31%, Drake+Fire 31%.
+- Every style's best sheet is TD+Air except the swarmer's (Wyrm+Air).
+- **Shards:** attribute stacks lead: Whetted Nail ×3 +22 (±8), Pebblescale ×3 +16, then ×2 rows near +10. v0.4's +1 per chip plus stacking makes three of one chip the strongest pick. Snapping Jaw +9 is the top Technique; Sidewinder Spine −6 the bottom.
+- Gnashing Teeth, Raking Talons, Sapping Bellow, Goading Roar and Baleful Eye measure 0 ±0: the measured bouts never put them to work (Baleful Eye is pulled by default). Their rows carry no information.
+
+**Open:**
+- TD+Air still leads at adept (62%): the Air regrid and dice didn't break it, as Round 6 predicted. The damage formula is the remaining lever.
+- Stacked attribute chips (×3 rows at +16 to +22) are the new outlier.
+- Omnibus, hatch and gauntlet on these rules: Ken's to run locally.
 
 ## Round 6: Season 3, what makes Air strong, and the Air regrid
 
@@ -55,7 +81,7 @@ Claw damage is the larger lever; Accuracy is secondary. This overturns Round 5's
 - **Air preference:** +3 on every Surge trigger (was +3 Accuracy). Surge starts at Acumen and each trigger adds Affinity + 9, + 3 for a preferred Air stone. Only the Wyvern prefers Air.
 - Air's Affinity falls 3 on every egg (TD 6, Wyvern 9, Wyrm 3, Drake 6). Wyvern+Air's Accuracy falls to 3.
 - Tests: the grid, the obstacle and the verb-contest tests follow the new numbers; a new test pins the Surge perk. Goldens re-recorded: 7 scenarios with an Air dragon change.
-- The brains' measured table predates both v0.4 and this regrid; rebuild it before trusting `draft` or `gauntlet`.
+- The brains' measured table predated both v0.4 and this regrid; rebuilt in Round 7.
 
 **Dice for hit resolution (explored; not built).** The current Evasion test is deterministic. One candidate replaces it: attack dice = attack stat ÷ 3, Evasion dice = Evasion ÷ 3 (a dodge adds one). Sort both high to low and pair them off; the first difference decides, the higher die winning. An unbroken chain goes to the side with dice left; equal pools matched all the way down go to the defender as a near miss. The phantom band stays as is. Equal pools land near 50%; every row and column is monotonic. Exact odds for 1–8 dice a side are in `dice-hit-odds.tsv`. Rejected along the way: dividing by Evasion (a ×3 multiplier on the True Dragon's valley), highest-against-lowest pairing by count (Evasion 6 out-defends 9), summed pools with doubled Evasion (Evasion-9 morphs near immune).
 

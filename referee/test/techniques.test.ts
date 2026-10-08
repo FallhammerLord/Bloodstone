@@ -129,8 +129,9 @@ test('Thornscale: attackers landing into Guard take 3', () => {
 });
 
 test('Riposte Talons: a successful Dodge earns a free claw', () => {
-  // A Wyvern dodging (Evasion 9 + 3) beats a True Dragon's Accuracy 6.
+  // A Wyvern dodging (Evasion 9 + 3: 4 dice) against a True Dragon + Water's Bite 9 (3 dice), the dice going its way.
   const bout = newBout(TD_WATER, withTech({ name: 'G', morph: 'wyvern', stone: 'water' }, 'Riposte Talons', 'juvenile'), 4);
+  bout.dice = { mode: 'quantile', u: 0.99 };
   const ev = run(bout, ['bite'], ['dodge']);
   assert.ok(ev.some((e) => e.kind === 'evade'));
   assert.equal(bout.fighters.A.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
