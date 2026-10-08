@@ -111,10 +111,10 @@ test('Serpentine: a strafing Wyrm evades like a dodge; a retreating one does not
   assert.equal(hits(ev).length, 1);
 });
 
-test('the True Dragon\'s Aspect, Stalwart: 42 base Wounds (its peak), and its Breath keeps the usual timing', () => {
+test('the True Dragon\'s Aspect, Stalwart: 66 base Wounds (its peak), and its Breath keeps the usual timing', () => {
   const td = newBout(TD_WATER, TD_WATER, 5);
   assert.equal(td.fighters.A.sheet.aspect, 'stalwart');
-  assert.equal(td.fighters.A.sheet.wounds, 42);
+  assert.equal(td.fighters.A.sheet.wounds, 66);
   assert.equal(hits(run(td, ['breath'], ['hold']))[0].tick, 12);
 });
 
@@ -568,7 +568,7 @@ const DRAKE: FighterSetup = { name: 'D', morph: 'drake', stone: 'earth' };
 
 test('the Drake: wingless and four-legged, peak Evasion, valley Wounds; it prefers Earth', () => {
   const d = newBout(DRAKE, TD_WATER, 6).fighters.A.sheet;
-  assert.deepEqual([d.wounds, d.evasion, d.scales, d.flies, d.aspect, d.preference], [30, 9, 6, false, 'ravener', 'preferred']);
+  assert.deepEqual([d.wounds, d.evasion, d.scales, d.flies, d.aspect, d.preference], [54, 9, 6, false, 'ravener', 'preferred']);
   assert.equal(d.accuracy, 3 + 3, 'Claw 9 − Evasion 9 floors at 3; preferred Earth adds 3');
 });
 

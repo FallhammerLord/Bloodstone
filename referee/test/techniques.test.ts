@@ -125,7 +125,7 @@ test('Bounding Haunches: an Approach carries twice as far', () => {
 test('Thornscale: attackers landing into Guard take 3', () => {
   const bout = newBout(TD_WATER, withTech(TD_WATER, 'Thornscale', 'juvenile'), 2);
   run(bout, ['claw:left'], ['guard']);
-  assert.equal(bout.fighters.A.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
+  assert.equal(bout.fighters.A.wounds, 66 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });
 
 test('Riposte Talons: a successful Dodge earns a free claw', () => {
@@ -134,7 +134,7 @@ test('Riposte Talons: a successful Dodge earns a free claw', () => {
   bout.dice = { mode: 'quantile', u: 0.99 };
   const ev = run(bout, ['bite'], ['dodge']);
   assert.ok(ev.some((e) => e.kind === 'evade'));
-  assert.equal(bout.fighters.A.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
+  assert.equal(bout.fighters.A.wounds, 66 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });
 
 test('Mantle Wings: Guard adds Affinity against breath', () => {
@@ -163,5 +163,5 @@ test('Baleful Eye: intimidating in slot 1 or 2 shows the opponent\'s slot 3 at t
 test('Goading Roar: a Retreat next slot stings for 3', () => {
   const bout = newBout(withTech(TD_WATER, 'Goading Roar', 'juvenile'), TD_WATER, 4);
   run(bout, ['intimidate', 'hold'], ['hold', 'retreat']);
-  assert.equal(bout.fighters.B.wounds, 42 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
+  assert.equal(bout.fighters.B.wounds, 66 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });

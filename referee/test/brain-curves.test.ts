@@ -67,17 +67,16 @@ test('a wounded dragon reaches for its Guard sooner', () => {
   assert.ok(low > full);
 });
 
-test('BASE_WOUNDS moves every pool by the baseline\'s change; morph swings and a disliked stone stay on top', () => {
-  const at60 = R.rulesWith({ BASE_WOUNDS: 60 });
+test('BASE_WOUNDS sets the baseline pool (60); morph swings and a disliked stone\'s −6 stay flat on top', () => {
   const pools = (rules?: R.Rules) => (['true-dragon', 'wyvern', 'wyrm', 'drake'] as const).map((m) => newBout({ name: 'X', morph: m, stone: 'water' }, TD_AIR, 6, 'B', {}, rules).fighters.A.sheet.wounds);
-  assert.deepEqual(pools(), [42, 36, 30, 24], 'Drake + Water is disliked: 30 − 6');
-  assert.deepEqual(pools(at60), [66, 60, 54, 48]);
+  assert.deepEqual(pools(), [66, 60, 54, 48], 'Drake + Water is disliked: 54 − 6');
+  assert.deepEqual(pools(R.rulesWith({ BASE_WOUNDS: 36 })), [42, 36, 30, 24], 'the old baseline');
 });
 
-test('damage counts against a baseline pool: at BASE_WOUNDS 60 a hit keeps its worth against misses and tempo', () => {
-  // The same Bite deals the same points; against a Wyrm's 54 instead of 30 it's a smaller share, counted ×60 ÷ 36.
+test('damage counts against the 36-point pool the brains were tuned on: a hit keeps its worth against misses and tempo', () => {
+  // The same Bite deals the same points; against a Wyrm's 54 (60 baseline) instead of 30 (36), counted ×60 ÷ 36.
   const bite = (rules?: R.Rules) => worth(newBout(TD_AIR, WYRM, 2, 'B', {}, rules), 'A').attack.melee.bite ?? 0;
-  assert.ok(Math.abs(bite(R.rulesWith({ BASE_WOUNDS: 60 })) - bite() * (30 / 54) * (60 / 36)) < 1e-9);
+  assert.ok(Math.abs(bite() - bite(R.rulesWith({ BASE_WOUNDS: 36 })) * (30 / 54) * (60 / 36)) < 1e-9);
 });
 
 test('a brain values an attribute chip by the stack it can still complete, as fully as a Technique', () => {

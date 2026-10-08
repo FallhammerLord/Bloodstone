@@ -8,7 +8,7 @@
 
 // ---- Units ----
 /** The baseline Wounds the hatch tables are written against; BASE_WOUNDS moves every pool by its difference. */
-export const WOUNDS_TABLE_BASE = 36;
+export const WOUNDS_TABLE_BASE = 60;
 export const TICKS_PER_SLOT = 30; // [Doc] §4 Timeline: 30 ticks of 100 ms
 export const SLOTS_PER_EXCHANGE = 3; // [Doc] §4 Exchange
 export const HALF = 15; // [Doc] a crunch half runs 15 ticks
@@ -24,7 +24,7 @@ export const METER_MAX = 100;
 
 export const DEFAULT_RULES = {
   // ---- Time ----
-  BASE_WOUNDS: 36, // [Proposed] the baseline Wounds pool; morph swings and a disliked stone's −6 apply on top. Raise it to lengthen fights
+  BASE_WOUNDS: 60, // [Proposed; was 36] the baseline Wounds pool; morph swings (±6) and a disliked stone's −6 apply on top, flat
   EXCHANGE_LIMIT: 8, // [Assumed] the doc estimates six to eight; the last three get rim pulses
   MIN_ACTIVE: 3, // [Proposed] the active window never drops below 3 ticks
   CHARGE_BONUS: 3, // [Assumed] a charged Bite or Breath hits for +3

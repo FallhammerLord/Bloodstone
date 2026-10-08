@@ -66,15 +66,15 @@
 **Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. The base design avoids single-attribute dependence: every derived stat draws on two attributes (Accuracy = Claw − Evasion, Affinity = Breath − Scales), and every morph and stone trades one attribute for another. Shard allocation is free within the array's shape: attribute shards stack, Techniques never duplicate, and min-maxing is allowed. Every defense has an attack that ignores it, which answers concentration. **[Proposed]** Stomp adds Scales ÷ 3, kept small so Scales stacking stays a minor gain; its radius still scales by age only. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
 
 ### Starting Attributes [Proposed]
-A hidden baseline; each morph and each stone takes one peak and one valley off it. Wounds runs on a doubled scale (it moves in 6s) so a baseline hit is about a sixth of a pool. Peaks and valleys may be shared.
+A hidden baseline; each morph and each stone takes one peak and one valley off it. **[Proposed]** Wounds sits at a 60 baseline (was 36), with the morph peaks and valleys and a disliked stone's −6 kept flat, so a baseline hit is about a tenth of a pool and a fight runs toward six to eight exchanges. Peaks and valleys may be shared.
 
 | Morph | Wounds | Evasion | Scales | Peak | Valley | Prefers | Dislikes |
 |---|---|---|---|---|---|---|---|
-| Baseline | 36 | 6 | 6 | | | | |
-| True Dragon | 42 | 3 | 6 | Wounds | Evasion | Fire | Earth |
-| Wyvern | 36 | 9 | 3 | Evasion | Scales | Air | Fire |
-| Wyrm | 30 | 6 | 9 | Scales | Wounds | Water | Air |
-| Drake | 30 | 9 | 6 | Evasion | Wounds | Earth | Water |
+| Baseline | 60 | 6 | 6 | | | | |
+| True Dragon | 66 | 3 | 6 | Wounds | Evasion | Fire | Earth |
+| Wyvern | 60 | 9 | 3 | Evasion | Scales | Air | Fire |
+| Wyrm | 54 | 6 | 9 | Scales | Wounds | Water | Air |
+| Drake | 54 | 9 | 6 | Evasion | Wounds | Earth | Water |
 
 - **True Dragon outlasts:** the most Wounds, paid for in mobility. Its generalism lives in its kit.
 - **Wyvern is never where you aimed:** the highest Evasion, the thinnest hide; and the finest elemental resistance, since Affinity is Breath − Scales.
@@ -110,7 +110,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Aspect** is the player-facing name for that bend ("bend" stays as design shorthand).
 - Morphs offer interesting choices and never overshadow base dragons. A True Dragon stands alongside an Ouroboros proudly. Unlock depth measures cost in lifetimes, never power.
 - No RPS at the egg or morph level.
-- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 45. Its own zones never harm it, and each charging slot widens its released Breath by ½ pace: the master of the charged Breath. (A Breath that wound up 3 ticks sooner was tried and overshot.)
+- Every Aspect has a price. The True Dragon is the generalist and gold standard. **Stalwart [Proposed]:** its old flat +9 Wounds is folded into its base 66 (the 60 baseline and its +6 peak). Its own zones never harm it, and each charging slot widens its released Breath by ½ pace: the master of the charged Breath. (A Breath that wound up 3 ticks sooner was tried and overshot.)
 - **[Proposed]** Readability balances specialists: an Aspect telegraphs through the silhouette.
 - **[Proposed]** Audit rule: an Aspect may change its holder's own actions or respond to generic attack types, never another morph's features.
 - Balance watches pick rate against win rate across every choice. No Aspect should be an obvious best pick.
@@ -269,11 +269,11 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 15 − 9 = 6. **[Proposed]** Affinity derives as Breath − Scales, so a Breath against the same stone deals the target's own Scales: hard hides take more Breath, high-Breath stones resist it.
 - **Stomp:** 3 + Scales ÷ 3 true damage (a Venerable's ÷ 2) plus Staggered.
 - **Floor:** every landed hit deals at least 1 point.
-- A True Dragon's 45 points fall to five landed bites or eight landed breaths.
+- A True Dragon's 66 points fall to about eleven landed baseline Bites (12 through Scales 6).
 
 **Modifiers:** Intimidate +3 to the next attack; +3 on a chain's third link; punish +3, raised by Acumen; graze −3. Crunched actions carry no modifier: the reward is doing the thing twice.
 
-**Ceilings against a True Dragon (45 Wounds):** chained bites 30 (67%); crunched claws through Raking Talons 18 (40%); crunched bites through Gnashing Teeth 54, a full True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs.
+**Ceilings against a True Dragon (66 Wounds):** chained bites 21 (32%); crunched claws through Raking Talons 18 (27%); crunched bites through Gnashing Teeth 54 (82%), most of a True Dragon in one perfect exchange. Crunch-granting shards carry those ceilings in their pips, restrictions, and recovery costs.
 
 ### Chains, Cooldowns, Crunch, Charge
 - **Chains:** repeating an input 2 or 3 times improves efficacy. Each link counts only when it lands. Chains carry across exchanges: other actions in between don't break one, and a different attack starts a new one. A chain lapses only when a whole exchange passes without a landed hit. **[Proposed]** A revised slot 3 caps the bonus. **[Proposed]** Crunched slots don't count toward chains unless a shard says otherwise.
@@ -363,7 +363,7 @@ Dragons don't age naturally; tamers force their growth through dragon magic.
 | Venerable | +14 | 41 | 4 | 5, then rest or ascension |
 
 - Eligibility to grow: full valences. Every dragon passes through every age.
-- Growth rates vary by morph and stone, with the True Dragon as baseline, and lean with elemental preference. **[Proposed]** Each age-up grants points equal to the new pips, weighted toward favored attributes; Wounds grows at double rate to keep time-to-kill near six hits.
+- Growth rates vary by morph and stone, with the True Dragon as baseline, and lean with elemental preference. **[Proposed]** Each age-up grants points equal to the new pips, weighted toward favored attributes; Wounds grows at double rate to keep time-to-kill near its wyrmling share, about ten baseline hits.
 
 ### Spoils
 - Shards are earned only in campaign and ranked. Dragons hatch with none.
