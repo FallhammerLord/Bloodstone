@@ -139,7 +139,10 @@ export function report(bout: Bout, events: Event[]): string[] {
         say(`  ⚡ ${label(e.side)} revises slot 3 at the end of slot ${e.moment}. The opponent sees only the flash. (Replay view: ${e.from} → ${e.to}.)`);
         break;
       case 'pulse':
-        say(`  ◎ Rim pulse ${e.pulse} strikes ${label(e.side)} on the outer rim for ${e.damage}${e.capped ? ' (this pulse can\'t kill)' : ''} → ${Math.max(0, e.woundsLeft)}.`);
+        say(`  ◎ Barrier Pulse ${e.pulse} strikes ${label(e.side)} on the outer rim for ${e.damage}${e.capped ? ' (this pulse can\'t kill)' : ''} → ${Math.max(0, e.woundsLeft)}.`);
+        break;
+      case 'pulseWarning':
+        say(`  ⚠ The Barrier Pulse fires at the end of exchange ${e.at}${e.at === e.exchange ? ' (this one)' : ''}: ${e.lethal === 'never' ? 'it can\'t kill' : e.lethal === 'pulsed' ? 'it kills only a dragon a pulse already hit' : 'it kills anyone on the rim'}.`);
         break;
       case 'ko':
         say(`${inSlot ? at(e.tick) : '  '}${label(e.side)} falls.`);

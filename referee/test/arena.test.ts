@@ -412,7 +412,7 @@ test('a landed Breath fills the breather by its Affinity + the base fill', () =>
   const m0 = bout.fighters.A.meter;
   const ev = run(bout, ['breath'], ['hold']);
   assert.equal(hits(ev).length, 1);
-  assert.equal(bout.fighters.A.meter, m0 + 6 + R.DEFAULT_RULES.METER_BASE_FILL, 'True Dragon + Earth, Affinity 6');
+  assert.equal(bout.fighters.A.meter, m0 + 9 + R.DEFAULT_RULES.METER_BASE_FILL, 'True Dragon + Earth, Affinity 15 − 6 = 9');
 });
 
 test('a full meter makes the next landed hit true damage, then empties; a miss spends nothing', () => {
@@ -492,6 +492,7 @@ test('Serpentine: a strafing Wyrm slips a Breath (Evasion 6 + 3 against Accuracy
   // Earth's cone is wide enough at 5 paces that a short strafe stays inside it: geometry first, then the Evasion test.
   const breathOn = (move: string) => {
     const bout = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5, 'B', {}, R.rulesWith({ HIT_DICE: 0 }));
+    bout.fighters.A.sheet.accuracy = 6; // aim that tracks long enough to keep the strafe in the cone: the test is Serpentine's
     return run(bout, ['breath'], [move]);
   };
   const strafing = breathOn('strafe:cw:short');
@@ -499,6 +500,7 @@ test('Serpentine: a strafing Wyrm slips a Breath (Evasion 6 + 3 against Accuracy
   assert.ok(strafing.some((e) => e.kind === 'evade' && e.action === 'breath' && e.how === 'serpentine'));
   assert.equal(hits(breathOn('hold')).filter((h) => h.attacker === 'A').length, 1);
   const off = newBout({ name: 'E', morph: 'true-dragon', stone: 'earth' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 5, 'B', {}, R.rulesWith({ SERPENTINE_BREATH: 0 }));
+  off.fighters.A.sheet.accuracy = 6;
   assert.equal(hits(run(off, ['breath'], ['strafe:cw:short'])).filter((h) => h.attacker === 'A').length, 1, 'with the dial off, Breath skips Evasion');
 });
 
@@ -569,7 +571,8 @@ const DRAKE: FighterSetup = { name: 'D', morph: 'drake', stone: 'earth' };
 test('the Drake: wingless and four-legged, peak Evasion, valley Wounds; it prefers Earth', () => {
   const d = newBout(DRAKE, TD_WATER, 6).fighters.A.sheet;
   assert.deepEqual([d.wounds, d.evasion, d.scales, d.flies, d.aspect, d.preference], [54, 9, 6, false, 'ravener', 'preferred']);
-  assert.equal(d.accuracy, 3 + 3, 'Claw 9 − Evasion 9 floors at 3; preferred Earth adds 3');
+  assert.equal(d.accuracy, 3 + 3, 'Claw 6 − Evasion 9 floors at 3; preferred Earth adds 3');
+  assert.equal(d.hitDice, 1, 'preferred Earth also rolls one more attack die');
 });
 
 test('the Drake\'s hop arcs up and carries a band forward, landing within the slot; slow to start, quick to recover', () => {
@@ -621,4 +624,26 @@ test('a preferred Air stone adds 3 to every Surge trigger', () => {
   fillMeter(bout.rules, bout.fighters.B, 'test', 0, []);
   assert.equal(bout.fighters.A.meter - a0, R.DEFAULT_RULES.METER_BASE_FILL + 9 + 3);
   assert.equal(bout.fighters.B.meter - b0, R.DEFAULT_RULES.METER_BASE_FILL + 6);
+});
+
+test('Ravener\'s Breath: in the window, a Bite at Melee doesn\'t break the Drake\'s Breath; out of it, it does', () => {
+  // Drake + Water breathes at Melee while a True Dragon bites; both strike at tick 12.
+  const trade = (window: number) => {
+    const bout = newBout({ name: 'D', morph: 'drake', stone: 'water' }, TD_WATER, 2);
+    bout.fighters.A.marks.ravener = window;
+    return run(bout, ['breath'], ['bite']);
+  };
+  const open = trade(3);
+  assert.ok(!open.some((e) => e.kind === 'note' && e.tag === 'breath-broken'));
+  assert.ok(hits(open).some((h) => h.attacker === 'A' && h.action === 'breath'));
+  assert.ok(trade(0).some((e) => e.kind === 'note' && e.tag === 'breath-broken'));
+});
+
+test('an Earth-preferring attacker rolls one more die in the Evasion test', () => {
+  // Drake + Earth's Claw 6 is 2 dice, +1 for its preferred stone; a dodging True Dragon + Water rolls Evasion 3 + 3: 2.
+  const bout = newBout({ name: 'D', morph: 'drake', stone: 'earth' }, TD_WATER, 2);
+  const ev = run(bout, ['claw:left'], ['dodge']);
+  const e = ev.find((x) => x.kind === 'evade');
+  if (e && e.kind === 'evade') assert.match(e.text, /\+1 die \(\d \d \d against \d \d\)/);
+  assert.equal(bout.fighters.A.sheet.hitDice, 1);
 });

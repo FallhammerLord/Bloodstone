@@ -172,16 +172,15 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
         // wider arc cost the attack what they cost Accuracy.
         const stat = p.spec.name === 'bite' ? 'bite' : p.spec.name === 'claw' ? 'claw' : 'breath';
         const strike = eff(att, stat, { opp: def }).value - (att.status.blinded ? bout.rules.BLINDED_ACCURACY : 0) - scythePenalty;
-        // DICE_SCALES [Proposed]: a moving hide turns blows aside, so the defender's Scales join its pool.
-        const hide = bout.rules.DICE_SCALES ? eff(def, 'scales', { opp: att }).value : 0;
-        const roll = rollEvasion(bout.dice, poolOf(strike, bout.rules.DICE_UNIT), poolOf(evasion + hide, bout.rules.DICE_UNIT));
+        // A preferred Earth stone rolls one more die (hitDice).
+        const roll = rollEvasion(bout.dice, poolOf(strike, bout.rules.DICE_UNIT) + att.sheet.hitDice, poolOf(evasion, bout.rules.DICE_UNIT));
         if (roll.result !== 'hit') {
           p.resolved = true;
           defPlan.evaded = true;
           const shown = roll.attack.length || roll.evasion.length ? ` (${roll.attack.join(' ') || 'no dice'} against ${roll.evasion.join(' ') || 'no dice'})` : '';
-          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${how} with Evasion ${evasion}${hide ? ` + Scales ${hide}` : ''} slips ${stat} ${strike}${shown}${roll.result === 'nearMiss' ? ': a matched chain, a near miss' : ''}` });
+          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${how} with Evasion ${evasion} slips ${stat} ${strike}${att.sheet.hitDice ? ` +${att.sheet.hitDice} die` : ''}${shown}${roll.result === 'nearMiss' ? ': a matched chain, a near miss' : ''}` });
           riposte(bout, other(s), p, defPlan, t, ev);
-          // A matched chain is the defender's, but it was close: the attacker's Surge fills as for any near miss.
+          // The attacker's whole pool matched is the defender's, but it was close: the attacker's Surge fills as for any near miss.
           if (roll.result === 'nearMiss') {
             fillMeter(bout.rules, att, 'near miss', t, ev);
             ev.push({ kind: 'nearMiss', tick: t, attacker: s, action: p.spec.name, meter: att.meter });
@@ -207,9 +206,10 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
 /** Damage from the same moment, applied together; then the meters, and the breath verbs once every hit is in. */
 function land(bout: Bout, plans: Record<Side, Plan>, hits: Side[], t: number, ev: Event[]) {
   const F = bout.fighters;
-  // At Melee, a Breath trading with a Bite, Claw or Stomp is lost: Melee belongs to the body [Doc]. A charged release holds.
+  // At Melee, a Breath trading with a Bite, Claw or Stomp is lost: Melee belongs to the body [Doc]. A charged release
+  // holds, and so does a Drake's Breath in its Ravener window [Proposed].
   if (hits.length === 2 && dist(F.A.pos, F.B.pos) <= R.MELEE_EDGE) {
-    const lost = hits.filter((s) => plans[s].spec.name === 'breath' && !plans[s].spec.released && plans[other(s)].spec.name !== 'breath');
+    const lost = hits.filter((s) => plans[s].spec.name === 'breath' && !plans[s].spec.released && !plans[s].ravenerBreath && plans[other(s)].spec.name !== 'breath');
     for (const s of lost) {
       plans[s].interruptedAt = t;
       plans[s].resolved = true;

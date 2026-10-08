@@ -9,7 +9,7 @@ export type Archetype = 'swarmer' | 'out-boxer' | 'slugger' | 'counterpuncher' |
 export const ARCHETYPES: readonly Archetype[] = ['swarmer', 'out-boxer', 'slugger', 'counterpuncher', 'boxer-puncher'];
 
 /** What an imagined exchange produces, each on its own scale (see features.ts). */
-export const FEATURES = ['dealt', 'taken', 'reach', 'exposure', 'misses', 'punish', 'big', 'free', 'pursuit', 'tempo', 'payoff', 'ready', 'surge', 'status', 'ground', 'perch', 'heavy', 'power'] as const;
+export const FEATURES = ['dealt', 'taken', 'reach', 'exposure', 'misses', 'punish', 'big', 'free', 'pursuit', 'tempo', 'payoff', 'ready', 'surge', 'status', 'ground', 'perch', 'heavy', 'power', 'loaded'] as const;
 export type Feature = (typeof FEATURES)[number];
 export type Goals = Record<Feature, number>;
 
@@ -38,6 +38,7 @@ export const SCALE: Goals = {
   perch: 0.05, // a flier aloft over a grounded opponent within stoop reach, net of the opponent
   heavy: 0.04, // per landed hit, (damage ÷ a fifth of a baseline pool)², at most 4: the bigger the hit, the more it counts
   power: 0.05, // per landed hit carrying power: a Surge's true damage, or a cashed Intimidate's +3
+  loaded: 0.1, // ending the exchange loaded: a full Surge, and a held Intimidate, each (with the slugger's goal, about a hit)
 };
 
 /**
@@ -50,11 +51,11 @@ export const SCALE: Goals = {
  *   boxer-puncher   even on everything: the baseline
  */
 export const GOALS: Record<Archetype, Goals> = {
-  swarmer: { dealt: 1, taken: 0.7, reach: 1.4, exposure: 0.3, misses: 0.3, punish: 0.6, big: 0.6, free: 0.6, pursuit: 0.8, tempo: 1.6, payoff: 1.3, ready: 1, surge: 0.8, status: 1, ground: 1, perch: 1, heavy: 0, power: 0.6 },
-  'out-boxer': { dealt: 0.9, taken: 1.4, reach: 0.7, exposure: 1.6, misses: 1.6, punish: 0.8, big: 0.4, free: 1.2, pursuit: 0, tempo: 0.5, payoff: 0.8, ready: 1, surge: 1, status: 1, ground: 1.2, perch: 1, heavy: 0, power: 0.6 },
-  slugger: { dealt: 1.2, taken: 0.7, reach: 1.2, exposure: 0.4, misses: 0.1, punish: 1.3, big: 1, free: 0.5, pursuit: 1.2, tempo: 0.8, payoff: 1, ready: 1, surge: 2.2, status: 1, ground: 0.8, perch: 1, heavy: 1, power: 2.5 },
-  counterpuncher: { dealt: 0.9, taken: 1, reach: 0.8, exposure: 0.9, misses: 2, punish: 1.6, big: 0.6, free: 2.2, pursuit: 0.2, tempo: 0.6, payoff: 0.8, ready: 1, surge: 1.2, status: 1, ground: 1, perch: 1, heavy: 0, power: 0.8 },
-  'boxer-puncher': { dealt: 1, taken: 1, reach: 1, exposure: 1, misses: 1, punish: 1, big: 1, free: 1, pursuit: 1, tempo: 1, payoff: 1, ready: 1, surge: 1, status: 1, ground: 1, perch: 1, heavy: 0, power: 1 },
+  swarmer: { dealt: 1, taken: 0.7, reach: 1.4, exposure: 0.3, misses: 0.3, punish: 0.6, big: 0.6, free: 0.6, pursuit: 0.8, tempo: 1.6, payoff: 1.3, ready: 1, surge: 0.8, status: 1, ground: 1, perch: 1, heavy: 0, power: 0.6, loaded: 0 },
+  'out-boxer': { dealt: 0.9, taken: 1.4, reach: 0.7, exposure: 1.6, misses: 1.6, punish: 0.8, big: 0.4, free: 1.2, pursuit: 0, tempo: 0.5, payoff: 0.8, ready: 1, surge: 1, status: 1, ground: 1.2, perch: 1, heavy: 0, power: 0.6, loaded: 0 },
+  slugger: { dealt: 1.2, taken: 0.7, reach: 1.2, exposure: 0.4, misses: 0.1, punish: 1.3, big: 1, free: 0.5, pursuit: 1.2, tempo: 0.8, payoff: 1, ready: 1, surge: 2.2, status: 1, ground: 0.8, perch: 1, heavy: 1, power: 2.5, loaded: 2 },
+  counterpuncher: { dealt: 0.9, taken: 1, reach: 0.8, exposure: 0.9, misses: 2, punish: 1.6, big: 0.6, free: 2.2, pursuit: 0.2, tempo: 0.6, payoff: 0.8, ready: 1, surge: 1.2, status: 1, ground: 1, perch: 1, heavy: 0, power: 0.8, loaded: 0 },
+  'boxer-puncher': { dealt: 1, taken: 1, reach: 1, exposure: 1, misses: 1, punish: 1, big: 1, free: 1, pursuit: 1, tempo: 1, payoff: 1, ready: 1, surge: 1, status: 1, ground: 1, perch: 1, heavy: 0, power: 1, loaded: 0 },
 };
 
 /**

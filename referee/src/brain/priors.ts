@@ -45,6 +45,8 @@ export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, 
     }
     // A Drake's open Ravener window: its next Bite lunges and tracks, so it reaches for the Bite.
     if (sc.primed && a.name === 'bite') w = 2 * w + 0.3 * g.payoff;
+    // Ravener's Breath: in the window, Melee can't break it, so up close a Drake breathes second only to biting.
+    if (sc.primed && a.name === 'breath' && (band === 'melee' || band === 'close')) w *= 1.5;
     // The strike after a juke (free hits), or after running the opponent down (pursuit).
     if (reach > 0 && sc.prev && EVASIVE.has(sc.prev)) w *= 1 + 0.4 * g.free;
     if (reach > 0 && sc.prev === 'approach') w *= 1 + 0.3 * g.pursuit;

@@ -1,7 +1,7 @@
 // Pair-off dice for the Evasion test [Proposed]: a Bite or Claw against a moving or dodging target rolls its attack
 // stat ÷ 3 in d6 against the target's Evasion ÷ 3. Both pools sort high to low and pair off; the first pair that
-// differs decides, the higher die winning. An unbroken chain goes to the side with dice left; equal pools matched all
-// the way down go to the defender as a near miss.
+// differs decides, the higher die winning. An unbroken chain that runs through the defender's whole pool, with attacker
+// dice left, is a hit; one that runs through the attacker's whole pool is the defender's, as a near miss.
 //
 // A real bout rolls from its own seeded stream. A brain imagining a bout can't see that stream, so it imagines at a
 // luck quantile instead: the attack lands when its chance beats the quantile, and spreading quantiles across guesses
@@ -34,8 +34,7 @@ export function pairOff(attack: number[], evasion: number[]): DiceResult {
   for (let i = 0; i < Math.min(attack.length, evasion.length); i++) {
     if (attack[i] !== evasion[i]) return attack[i] > evasion[i] ? 'hit' : 'evaded';
   }
-  if (attack.length !== evasion.length) return attack.length > evasion.length ? 'hit' : 'evaded';
-  return 'nearMiss';
+  return attack.length > evasion.length ? 'hit' : 'nearMiss';
 }
 
 const choose = (n: number, k: number) => {
@@ -55,10 +54,9 @@ export function odds(a: number, e: number): { hit: number; nearMiss: number } {
   const hit = memo.get(key);
   if (hit) return hit;
   const go = (ra: number, re: number, f: number): [number, number] => {
-    if (ra === 0 && re === 0) return [0, 1];
-    if (ra === 0) return [0, 0];
-    if (re === 0) return [1, 0];
-    if (f === 1) return ra > re ? [1, 0] : ra < re ? [0, 0] : [0, 1]; // every remaining die is a 1: the bigger pool wins
+    if (ra === 0) return [0, 1]; // the attacker's whole pool matched: a near miss, the defender's
+    if (re === 0) return [1, 0]; // the defender's whole pool matched, attacker dice left: a hit
+    if (f === 1) return ra > re ? [1, 0] : [0, 1]; // every remaining die is a 1: the chain runs out on the smaller pool
     let h = 0, n = 0;
     const p = 1 / f;
     for (let i = 0; i <= ra; i++) {

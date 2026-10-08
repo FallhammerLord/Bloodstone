@@ -28,7 +28,7 @@ test('the grid: base adds first (a disliked stone costs 6 Wounds), then the tert
   const td = hatch('true-dragon', 'fire');
   assert.deepEqual([td.breath, td.wounds, td.accuracy, td.affinity], [18, 66, 3, 18 - 6 + 3]);
   const tdE = hatch('true-dragon', 'earth');
-  assert.deepEqual([tdE.bite, tdE.wounds, tdE.accuracy, tdE.affinity], [15, 60, 6, 6]);
+  assert.deepEqual([tdE.bite, tdE.wounds, tdE.accuracy, tdE.affinity], [15, 60, 3, 9]);
   // Air (Claw 12, Bite 12, Breath 12): a preferred Air stone adds +3 to every Surge trigger, not to a derived stat.
   const wa = hatch('wyvern', 'air');
   assert.deepEqual([wa.claw, wa.bite, wa.breath, wa.wounds, wa.evasion, wa.accuracy, wa.affinity, wa.surgeFill], [12, 12, 12, 60, 9, 3, 9, 3]);
@@ -100,11 +100,11 @@ test('a chain needs each link to land', () => {
 });
 
 test('breath skips Evasion and applies the matchup', () => {
-  // Wyrm + Water (Breath 18) against an approaching True Dragon + Earth (Affinity 6): 18 − 6 + 3 + 2. The move's evasive
+  // Wyrm + Water (Breath 18) against an approaching True Dragon + Earth (Affinity 15 − 6 = 9): 18 − 9 + 3 + 2. The move's evasive
   // window has closed by tick 12, so the Breath also catches it in recovery (+3 punish). (A full-band strafe leaves the
   // jet's line by geometry.)
   const { hits } = fight({ name: 'Tide', morph: 'wyrm', stone: 'water' }, { name: 'Clod', morph: 'true-dragon', stone: 'earth' }, 7, ['breath'], ['approach']);
-  assert.equal(hitsBy(hits, 'A')[0].damage, 18 - 6 + R.DEFAULT_RULES.MATCHUP + R.DEFAULT_RULES.ELEMENT_BREATH_MOD.water + R.DEFAULT_RULES.PUNISH_BONUS, 'Potency 18, Affinity 6, +3 matchup, +2 Water, +3 punish');
+  assert.equal(hitsBy(hits, 'A')[0].damage, 18 - 9 + R.DEFAULT_RULES.MATCHUP + R.DEFAULT_RULES.ELEMENT_BREATH_MOD.water + R.DEFAULT_RULES.PUNISH_BONUS, 'Potency 18, Affinity 9, +3 matchup, +2 Water, +3 punish');
 });
 
 test('breath cooldown 2: a second breath in the same exchange holds instead', () => {

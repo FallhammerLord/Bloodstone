@@ -61,7 +61,7 @@
 
 **Units.** 3 points make one combat unit, everywhere. Everything runs on integers and displays as units and thirds. Damage is dealt in points: attack attributes add, Scales and Affinity subtract. Acumen is the exception, mapping through a hidden curve.
 
-**Derivation.** **[Proposed]** Tertiaries derive once at hatching, after every base add (morph, stone, and a disliked stone's Wounds): Accuracy = Claw Sharpness − Evasion, Affinity = Breath Potency − Scales, each at least 3; Acumen = 10 × age category. A preferred stone adds +3 to one derived stat. After hatching, each attribute grows independently, so no attribute buys another.
+**Derivation.** **[Proposed]** Tertiaries derive once at hatching, after every base add (morph, stone, and a disliked stone's Wounds): Accuracy = Claw Sharpness − Evasion, at least 3; Affinity = Breath Potency − Scales (never below 3 on the core grid, so no floor); Acumen = 10 × age category. A preferred stone adds +3 to one derived stat. After hatching, each attribute grows independently, so no attribute buys another.
 
 **Build philosophy.** No bounded-accuracy doctrine and no per-morph caps; pips and baseline attributes bound totals naturally. The base design avoids single-attribute dependence: every derived stat draws on two attributes (Accuracy = Claw − Evasion, Affinity = Breath − Scales), and every morph and stone trades one attribute for another. Shard allocation is free within the array's shape: attribute shards stack, Techniques never duplicate, and min-maxing is allowed. Every defense has an attack that ignores it, which answers concentration. **[Proposed]** Stomp adds Scales ÷ 3, kept small so Scales stacking stays a minor gain; its radius still scales by age only. Evasion, the attribute most at risk, is answered by Breath, Stomp, Claw, and Accuracy.
 
@@ -81,22 +81,22 @@ A hidden baseline; each morph and each stone takes one peak and one valley off i
 - **Wyrm shrugs:** the highest Scales against Claw and Bite, the fewest Wounds, and the poorest elemental resistance.
 - **Drake runs it down:** wingless and four-legged, as quick as a Wyvern on the ground, the hunter's Bite.
 
-| Stone | Claw | Bite | Breath | Peak | Valley | If preferred |
+| Stone | Claw Sharpness | Bite Force | Breath Potency | Peak | Valley | If preferred |
 |---|---|---|---|---|---|---|
 | Baseline | 9 | 12 | 15 | | | |
-| Water | 9 | 9 | 18 | Breath | Bite | +3 Acumen |
-| Earth | 9 | 15 | 12 | Bite | Breath | +3 Accuracy |
-| Fire | 6 | 12 | 18 | Breath | Claw | +3 Affinity |
-| Air | 12 | 12 | 12 | Claw | Breath | +3 Surge per trigger |
+| Water | 9 | 9 | 18 | Breath Potency | Bite Force | +3 Acumen |
+| Earth | 6 | 15 | 15 | Bite Force | Claw Sharpness | +3 Accuracy, +1 attack die |
+| Fire | 6 | 12 | 18 | Breath Potency | Claw Sharpness | +3 Affinity |
+| Air | 12 | 12 | 12 | Claw Sharpness | Breath Potency | +3 Surge per trigger |
 
 - **Water endures, Earth crushes, Fire scorches, Air rakes.**
-- **Derived:** Accuracy = Claw − Evasion (fast dragons swing wild); Affinity = Breath − Scales (hard hides or elemental resistance); each at least 3. Acumen = 10 × age category.
+- **Derived:** Accuracy = Claw Sharpness − Evasion (fast dragons swing wild), at least 3; Affinity = Breath Potency − Scales (hard hides or elemental resistance). Acumen = 10 × age category.
 - Intermediates sum their parents' tilts: Salt +Bite −Claw; Magma +Breath −Affinity; Lightning +Claw −Bite; Storm +Affinity −Breath.
 - Each dragon gets the same allotment, varying only slightly with lineage.
 
 ### Elemental Preference
 Each morph prefers one element and dislikes the element that beats it.
-- **Preferred stone:** +3 to the stone's derived stat (Water Acumen, Earth Accuracy, Fire Affinity); Air's +3 goes to every Surge trigger instead.
+- **Preferred stone:** +3 to the stone's derived stat (Water Acumen, Earth Accuracy, Fire Affinity); Air's +3 goes to every Surge trigger instead. **[Proposed]** Earth also rolls one more attack die in the Evasion test.
 - **Disliked stone:** −6 Wounds.
 - **Neutral stone:** no change.
 - The element wheel's matchup (±3 on Breath and in verb contests) is separate from preference.
@@ -119,7 +119,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - **True Dragon:** four limbs plus wings. The generalist.
 - **Wyvern:** forelimbs are wings; claws come from hind talons on dives. Owns altitude. **Talons:** the Wyvern bends the one-band move rule in its Leap: it climbs up to two bands. A Claw scripted while aloft, against a grounded opponent within Far, is a stoop: it descends to the ground during the wind-up, carrying at most one band forward (stopping 1½ paces short of where the target stood) or one band back, and swipes both left and right. A stoop from Close lands at Melee and connects; from Far it lands at Close and falls short, so the Wyvern closes in aloft first, and a Wyvern hovering at Close is a threat both players can see. The descent takes time: the wind-up grows 2 ticks per pace it falls, so a stoop from one band strikes at tick 12 (it beats a Stomp) and from two bands at tick 18 (a Stomp's quake catches it as it lands). Against an airborne opponent it simply claws. Its price is positional: it must get airborne and close first, and it lands in Bite range. **[Proposed]** A stoop hits harder the farther it falls: +1 per 2 paces of altitude it starts from (+3 from two bands), like a charge paying for its setup. **[Proposed]** It must also have been aloft since the exchange began: no Leap and stoop in the same exchange. Its Claw reaches as any Claw does, from the ground or the air.
 - **Wyrm:** serpentine and grounded. Owns lateral movement and close range. **[Proposed] Serpentine:** its Strafe tests Evasion with Dodge's bonus, against Breath too: a strafing Wyrm can slip a Breath that would otherwise skip Evasion. Its Leap is a hop that lands within the slot; it can't Dive.
-- **Drake:** wingless, four-legged and grounded; the Bite specialist. **[Proposed] Ravener:** an Approach or hop that moves opens a 3-slot window, across an exchange; a Retreat doesn't close it. The Drake's first Bite in it lunges 1 pace, and while the window is live its Bite tracks at Melee and Close (its aim follows to the strike, and it tests no Evasion against a strafe). The window closes at that Bite, landed or not; a landed Bite opens nothing. **The hop** (its Leap): it arcs a band up and carries a full band forward (short or long by Evasion), landing within the slot; slow to wind up, quick to recover. While up it clears floor zones and Stomp's quake; Breath and tracking still catch it, and it never reaches a flier.
+- **Drake:** wingless, four-legged and grounded; the Bite specialist. **[Proposed] Ravener:** an Approach or hop that moves opens a 3-slot window, across an exchange; a Retreat doesn't close it. The Drake's first Bite in it lunges 1 pace, and while the window is live its Bite tracks at Melee and Close (its aim follows to the strike, and it tests no Evasion against a strafe). The window closes at that Bite, landed or not; a landed Bite opens nothing. **[Proposed]** While the window is live, a hit at Melee doesn't break the Drake's Breath, and a Breath doesn't close the window: it runs you down and breathes in your face. **The hop** (its Leap): it arcs a band up and carries a full band forward (short or long by Evasion), landing within the slot; slow to wind up, quick to recover. While up it clears floor zones and Stomp's quake; Breath and tracking still catch it, and it never reaches a flier.
 
 ### Extended Morphs (Aspects **[Proposed]** unless noted)
 - **Chimera:** three heads; a native cruncher.
@@ -195,7 +195,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - Each action opens a menu of sub-actions and directions. A ghost preview shows the first few frames; confirm sends the set.
 - Scripting clock: 30 seconds in PvP, unlimited in campaign.
 - **[Proposed]** Directions are scripted relative to the orbit (clockwise or counterclockwise), so camera swings never flip inputs.
-- **[Proposed]** Pacing: about 40 seconds per exchange; six to eight exchanges per fight, about four to five minutes.
+- **[Proposed]** Pacing: each action resolves in 3 seconds, so an exchange is 9 seconds of resolution (about 40 with scripting). A bout runs at most 30 exchanges, 90 actions; fights tend to end in six to eight.
 
 **Readable information.** Slots 1 and 2 lock, so a wind-up inside a locked slot can't be answered; wind-ups matter for timing, not reading. What players can act on:
 - **Between exchanges:** positions, cooldown rhythms, statuses, Surge meters, silhouettes, the chest stone.
@@ -260,13 +260,13 @@ Each morph prefers one element and dislikes the element that beats it.
 - **Strafe:** pure geometry. A dragon out of coverage is untouched; one still inside during the active window takes the Evasion test.
 - **Dodge:** no invulnerability. Takes the Evasion test with a dodge bonus (+3 Evasion, one die). Holds position.
 - **Breath and Stomp ignore Evasion** inside their active area. Claw doesn't; it catches evasive dragons through timing and coverage.
-- **[Proposed] The Evasion test rolls pair-off dice.** The attacker rolls its attack stat ÷ 3 in d6 (Bite or Claw; Breath against a Serpentine strafe); the defender rolls Evasion ÷ 3. Both pools sort high to low and pair off; the first pair that differs decides, and the higher die wins. An unbroken chain goes to the side with dice left; equal pools matched all the way down go to the defender as a near miss, which fills the attacker's Surge. Equal pools land near even; each extra die moves the odds about a column (exact table: `dice-hit-odds.tsv`). Accuracy still sets aim tracking and the phantom band. The old rule, Evasion against Accuracy with Acumen breaking ties, stays behind `HIT_DICE = 0`.
+- **[Proposed] The Evasion test rolls pair-off dice.** The attacker rolls its attack stat ÷ 3 in d6 (Bite or Claw; Breath against a Serpentine strafe); the defender rolls Evasion ÷ 3. A preferred Earth stone adds one attack die. Both pools sort high to low and pair off; matched pairs are discarded until a pair differs, and the higher die wins. A chain that runs through the defender's whole pool with attacker dice left is a hit; one that runs through the attacker's whole pool is the defender's, as a near miss, which fills the attacker's Surge. Equal pools land near even; each extra die moves the odds about a column (exact table: `dice-hit-odds.tsv`). Accuracy still sets aim tracking and the phantom band. The old rule, Evasion against Accuracy with Acumen breaking ties, stays behind `HIT_DICE = 0`.
 - Strafe is the hedge: clean escapes ignore attributes, and position carries forward. Dodge is the commitment: its bonus answers wide coverage, and it holds range and altitude.
 
 ### Damage [Proposed]
 - **Bite:** Bite Force − Scales. Bite is piercing: it ignores 3 Scales. Baseline 9 − (3 − 3) = 9.
 - **Claw:** one hit, Claw Sharpness − Scales. Baseline 6 − 3 = 3; it earns its keep by landing often, its long active window catching strafes.
-- **Breath:** Breath Potency − Affinity, ±3 for matchup. Baseline 15 − 9 = 6. **[Proposed]** Affinity derives as Breath − Scales, so a Breath against the same stone deals the target's own Scales: hard hides take more Breath, high-Breath stones resist it.
+- **Breath:** Breath Potency − Affinity, ±3 for matchup. For example, Breath Potency 15 against Affinity 9 deals 6. **[Proposed]** Affinity derives as Breath Potency − Scales, so a Breath against the same stone deals the target's own Scales: hard hides take more Breath, high-Breath stones resist it.
 - **Stomp:** 3 + Scales ÷ 3 true damage (a Venerable's ÷ 2) plus Staggered.
 - **Floor:** every landed hit deals at least 1 point.
 - A True Dragon's 66 points fall to about eleven landed baseline Bites (12 through Scales 6).
@@ -297,7 +297,7 @@ Each morph prefers one element and dislikes the element that beats it.
 - Obstacles have 3, 6, or 9 Wounds by size. Overlapping hazards stack.
 - Stomp affects terrain; a pit's ledge doesn't shield a grounded dragon.
 - Starting distance: Far, just outside Bite range.
-- **Late pressure:** at the end of each of the final three exchanges, the rim pillars pulse, dealing ⅓ of maximum Wounds to dragons on the outer rim. Pulse 1 can't kill (it leaves 1 point at worst); pulse 2 kills only a dragon pulse 1 already hit; pulse 3 kills any dragon in range.
+- **Late pressure, the Barrier Pulse [Proposed]:** the rim pillars pulse at the end of exchange 15, every other exchange through 25, then every exchange to 30, dealing ⅓ of maximum Wounds to dragons on the outer rim. The first pulse can't kill (it leaves 1 point at worst); through the every-other run a pulse kills only a dragon an earlier pulse hit; once it fires every exchange it kills any dragon in range. Both players are alerted as scripting opens on the exchange before a pulse and on the exchange it ends; the board always shows when the next one comes and whom it can kill.
 - **Themes:** classic high fantasy, such as a verdant taiga in a mountain crater, each with a threat rating. **[Proposed]** Element themes add flavor and geometry, never a stat edge.
 
 **Flow and camera**

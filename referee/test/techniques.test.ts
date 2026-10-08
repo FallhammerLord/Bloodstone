@@ -165,3 +165,18 @@ test('Goading Roar: a Retreat next slot stings for 3', () => {
   run(bout, ['intimidate', 'hold'], ['hold', 'retreat']);
   assert.equal(bout.fighters.B.wounds, 66 - R.DEFAULT_RULES.TECHNIQUE_POINTS);
 });
+
+test('Bellows Chest crunches the Breath charge: one charging slot draws twice (a full charge), filling Surge twice', () => {
+  const bellows: FighterSetup = { ...TD_WATER, shards: [{ shard: 'Bellows Chest', grade: 'wyrmling', pips: [0, 1] }] };
+  const draws = (setup: FighterSetup) => {
+    const ev = run(newBout(setup, TD_WATER, 4), ['charge:breath', 'breath'], ['hold', 'hold']);
+    return { ev, n: ev.filter((e) => e.kind === 'note' && e.side === 'A' && e.tag === 'meter-fill' && e.text.includes('drawing Breath')).length };
+  };
+  const crunched = draws(bellows), plain = draws(TD_WATER);
+  assert.equal(crunched.n, 2);
+  assert.equal(plain.n, 1);
+  // The release is a full charge: Stalwart widens it a whole pace, as two charging slots would.
+  const released = (ev: Event[]) => ev.find((e) => e.kind === 'note' && e.side === 'A' && e.tag === 'charge-released');
+  assert.ok(released(crunched.ev) && released(plain.ev));
+  assert.ok(crunched.ev.some((e) => e.kind === 'note' && e.text.startsWith('Bellows Chest: draws the Breath twice')));
+});

@@ -13,6 +13,7 @@
 
 | Round | What changed |
 |---|---|
+| [9](#round-9-the-barrier-pulse-earth-ravener-s-breath-bellows-and-the-loaded-slugger) | 30 exchanges and the Barrier Pulse; Earth 6/15/15 with a hit die; Ravener's Breath; the Bellows crunch; the loaded slugger; the table rebuilt |
 | [8](#round-8-brains-that-scale-the-loaded-up-slugger-chips-valued-by-their-stacks-base_wounds) | Brains: pool scaling, per-style nerve, power and the loaded-up slugger; chips valued by their stacks; BASE_WOUNDS; the table rebuilt |
 | [7](#round-7-pair-off-dice-the-wounds-curve-the-heavy-slugger-and-the-table-rebuilt) | Pair-off dice for the Evasion test; brains weigh Wounds on a curve; the slugger's heavy goal; the measured table rebuilt |
 | [6](#round-6-season-3-what-makes-air-strong-and-the-air-regrid) | Season 3; Air's edge is Claw damage, not Accuracy; Air regridded to 12/12/12 with a Surge perk; dice odds for hit resolution |
@@ -21,6 +22,30 @@
 | [3](#round-3-reined-in-gambits-chase-and-juke-priors-meta-memory) | Gambits reined in; chase and juke priors; meta memory, counterpicks, season carry |
 | [2](#round-2-stacking-shards-ravener-payoff-free-hits-and-pursuit) | Shards stack; Ravener payoff, free hits, pursuit; gambits; stack rows in the table |
 | [1](#round-1-the-edition-1-brains) | The edition 1 brains: five goal-driven archetypes and a crude floor; the table rebuilt |
+
+## Round 9: the Barrier Pulse, Earth, Ravener's Breath, Bellows, and the loaded slugger
+
+**Ken's omnibus at 60 Wounds** (master, `--shards`, 1,392 bouts each): at the 8-exchange limit, 5.7 exchanges a bout, 14.6% timeouts and 7% rim-pulse KOs; at 12, 6.3 exchanges, 3.9% timeouts. Air climbs with fight length (52% → 56% → 59% by stone), and attacks land on Air dragons only 35–36% of the time. The slugger guarded in 5% of its slots against 9–14% for the rest: its Surge goals were too small against damage to move it.
+
+**Rules:**
+- **30 exchanges** (90 actions of 3 seconds). **The Barrier Pulse** fires at the end of exchange 15, every other exchange through 25, then every exchange. The first can't kill; the every-other run kills only a dragon an earlier pulse hit; then anyone on the rim. Each side's view names the next pulse and whom it can kill, and an alert opens the exchange before a pulse and the one it ends.
+- **Earth:** Claw Sharpness 6, Bite Force 15, Breath Potency 15 (valley Claw). A preferred Earth stone keeps +3 Accuracy and rolls one more attack die.
+- **Floors:** Affinity has none (Wyrm + Air's 3 is the grid's lowest); Accuracy keeps 3, so every dragon keeps a phantom band and aim tracking.
+- **Near misses:** a chain through the attacker's whole pool is the defender's, as a near miss, whatever the defender has left. `DICE_SCALES` is removed; the Evasion test stays at ÷ 3.
+- **Ravener's Breath:** in the window, a hit at Melee doesn't break the Drake's Breath, and the Breath leaves the window open.
+- **Bellows Chest (Wyrmling):** the Breath charge crunches, one charging slot drawing twice: a full charge, filling Surge twice.
+
+**Brains:** the slugger values ending an exchange loaded (a full Surge, a held Intimidate; each about a hit). A primed Drake breathes second only to biting up close. Rim caution follows the pulse schedule.
+
+**The table** (adept, 48 pairs, 25,440 bouts, 38 min on 4 workers):
+- Sheets span 37–64%: Wyvern + Water 64%, TD + Air and Wyvern + Air 60%, Wyvern + Earth 56%. Bottom: Drake + Fire and Drake + Water 37%, Wyrm + Fire 38%.
+- Shards: stacks still lead: Pebblescale ×2 +22, ×3 +19, Whetted Nail ×3 +18.
+
+**Open:**
+- The Wyvern leads four of the top five sheets; Air leads again in long fights.
+- The Drake's Water and Fire pairings stay at the bottom despite Ravener's Breath.
+- Stacked chips.
+- Ken's omnibus on these rules.
 
 ## Round 8: brains that scale, the loaded-up slugger, chips valued by their stacks, BASE_WOUNDS
 

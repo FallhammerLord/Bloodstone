@@ -1,6 +1,7 @@
 // What an imagined exchange produced, as features on the scales in archetypes.ts, and its value to an archetype.
 
 import { inZone } from '../arena.ts';
+import { pulseAt } from '../bout.ts';
 import { flatLen } from '../geometry.ts';
 import { other, type Bout, type Event, type Fighter, type Side } from '../referee.ts';
 import * as R from '../rules.ts';
@@ -58,11 +59,13 @@ function burdens(f: Fighter): number {
   return n;
 }
 
-/** Standing in the opponent's zones, or on the rim when the pulses come. */
+/**
+ * Standing in the opponent's zones, or on the rim when the Barrier Pulse comes: in full when it fires at the end of
+ * the exchange just played, half when it fires at the end of the next (the alert both sides get).
+ */
 function exposed(b: Bout, f: Fighter): number {
   let n = b.arena.zones.some((z) => z.owner !== f.side && z.lastSlot >= b.globalSlot && inZone(z, f.pos)) ? 1 : 0;
-  const late = b.exchange >= b.rules.EXCHANGE_LIMIT - 3;
-  if (late && flatLen(f.pos) >= b.rules.ARENA_RADIUS - b.rules.RIM_DEPTH) n++;
+  if (flatLen(f.pos) >= b.rules.ARENA_RADIUS - b.rules.RIM_DEPTH) n += pulseAt(b.rules, b.exchange) ? 1 : pulseAt(b.rules, b.exchange + 1) ? 0.5 : 0;
   return n;
 }
 
@@ -135,6 +138,7 @@ export function features(o: Outcome, ctx: Context): Goals {
     perch: perched(o.after, me1, op1) - perched(o.after, op1, me1),
     heavy: mineHits.reduce((n, h) => n + Math.min(4, (h.damage / fifth) ** 2), 0),
     power: mineHits.filter((h) => h.tags.includes('true-damage') || h.tags.includes('intimidate')).length,
+    loaded: (me1.meter >= R.METER_MAX ? 1 : 0) + (me1.intimidateBonus ? 1 : 0),
   };
 }
 

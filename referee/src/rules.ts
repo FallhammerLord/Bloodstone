@@ -25,7 +25,9 @@ export const METER_MAX = 100;
 export const DEFAULT_RULES = {
   // ---- Time ----
   BASE_WOUNDS: 60, // [Proposed; was 36] the baseline Wounds pool; morph swings (±6) and a disliked stone's −6 apply on top, flat
-  EXCHANGE_LIMIT: 8, // [Assumed] the doc estimates six to eight; the last three get rim pulses
+  EXCHANGE_LIMIT: 30, // [Proposed; was 8] 30 exchanges of 3 actions: 90 actions of 3 seconds
+  PULSE_START: 15, // [Proposed] the Barrier Pulse first fires at the end of this exchange
+  PULSE_EVERY_OTHER_UNTIL: 25, // [Proposed] every other exchange from PULSE_START through this one, then every exchange
   MIN_ACTIVE: 3, // [Proposed] the active window never drops below 3 ticks
   CHARGE_BONUS: 3, // [Assumed] a charged Bite or Breath hits for +3
   // ---- Space ----
@@ -89,7 +91,6 @@ export const DEFAULT_RULES = {
   // equal pools matched all the way down are the defender's, as a near miss. 0: Accuracy against Evasion, ties to Acumen.
   HIT_DICE: 1, // [Proposed] pair-off dice for the Evasion test (0: Accuracy against Evasion, ties to Acumen)
   DICE_UNIT: 3, // [Proposed] points per die, on both sides
-  DICE_SCALES: 0, // [Proposed] 1: the defender rolls Evasion + Scales (a hide turns the blow aside); 0: Evasion alone
   // ---- Acumen ---- [Proposed] §4 Surge
   // The Surge [Proposed]: Affinity fuels it. It starts at Acumen (10 × age category, +3 for a Water-preferring dragon), and
   // each trigger (a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds

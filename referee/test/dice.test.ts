@@ -9,13 +9,13 @@ import * as R from '../src/rules.ts';
 
 const near = (a: number, b: number, tol: number) => Math.abs(a - b) <= tol;
 
-test('pair-off: the first pair that differs decides; an unbroken chain goes to the bigger pool, else the defender as a near miss', () => {
+test('pair-off: the first pair that differs decides; a chain through the attacker\'s whole pool is the defender\'s near miss', () => {
   assert.equal(pairOff([6, 5, 2], [6, 4, 4]), 'hit', '5 beats 4 at the second pair');
   assert.equal(pairOff([6, 3], [6, 5, 1]), 'evaded', '5 beats 3 at the second pair');
   assert.equal(pairOff([6, 6, 1], [6, 6]), 'hit', 'the chain holds through the defender\'s pool: the attacker has a die left');
-  assert.equal(pairOff([4], [4, 1]), 'evaded', 'the chain holds through the attacker\'s pool: the defender has a die left');
+  assert.equal(pairOff([4], [4, 1]), 'nearMiss', 'the chain runs through the attacker\'s whole pool: the defender\'s, but close');
   assert.equal(pairOff([5, 2], [5, 2]), 'nearMiss');
-  assert.equal(pairOff([], [3]), 'evaded');
+  assert.equal(pairOff([], [3]), 'nearMiss', 'no dice at all: nothing to match, the defender\'s');
   assert.equal(pairOff([3], []), 'hit');
 });
 
@@ -28,7 +28,8 @@ test('the exact odds: equal pools near even, and every row and column in order',
   assert.ok(near(odds(1, 1).nearMiss, 1 / 6, 1e-9));
   assert.ok(near(odds(4, 3).hit, 0.6197, 1e-4));
   assert.ok(near(odds(2, 1).hit, 0.7454, 1e-4));
-  assert.equal(odds(5, 4).nearMiss, 0, 'unequal pools never end in a near miss');
+  assert.equal(odds(5, 4).nearMiss, 0, 'an attacker with more dice never ends in a near miss');
+  assert.ok(odds(2, 4).nearMiss > 0, 'a smaller attacking pool can be matched die for die');
   for (let a = 1; a <= 8; a++) {
     for (let e = 1; e <= 8; e++) {
       if (a < 8) assert.ok(odds(a + 1, e).hit > odds(a, e).hit, `more attack dice help: ${a}→${a + 1} against ${e}`);
@@ -91,16 +92,3 @@ test('with HIT_DICE off, Accuracy against Evasion decides, as before', () => {
   }
 });
 
-test('with DICE_SCALES, the defender rolls Evasion + Scales: a dodging Wyrm\'s hide turns a Claw at even luck', () => {
-  // True Dragon + Air's Claw 12 (4 dice) on a dodging Wyrm + Earth: Evasion 6 + 3 is 3 dice (62% to hit); with its
-  // Scales 9 it rolls 6 (33%). At an even break (luck ½) the first lands and the second doesn't.
-  const clawAt = (scales: number) => {
-    const bout = newBout({ name: 'A', morph: 'true-dragon', stone: 'air' }, { name: 'C', morph: 'wyrm', stone: 'earth' }, 2, 'B', {}, R.rulesWith({ DICE_SCALES: scales }));
-    bout.dice = { mode: 'quantile', u: 0.5 };
-    return runExchange(bout, { A: ['claw:left'].map(parseAction), B: ['dodge'].map(parseAction) });
-  };
-  assert.ok(clawAt(0).some((e) => e.kind === 'hit' && e.attacker === 'A'));
-  const hide = clawAt(1);
-  assert.ok(!hide.some((e) => e.kind === 'hit' && e.attacker === 'A'));
-  assert.ok(hide.some((e) => e.kind === 'evade' && e.text.includes('+ Scales 9')));
-});
