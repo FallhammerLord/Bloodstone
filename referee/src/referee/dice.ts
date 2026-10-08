@@ -2,6 +2,7 @@
 // stat ÷ 3 in d6 against the target's Evasion ÷ 3. Both pools sort high to low and pair off; the first pair that
 // differs decides, the higher die winning. An unbroken chain that runs through the defender's whole pool, with attacker
 // dice left, is a hit; one that runs through the attacker's whole pool is the defender's, as a near miss.
+// The linear test [Proposed] (HIT_LINEAR) replaces the pools with one die: a dN under N ÷ 2 + attack stat − Evasion.
 //
 // A real bout rolls from its own seeded stream. A brain imagining a bout can't see that stream, so it imagines at a
 // luck quantile instead: the attack lands when its chance beats the quantile, and spreading quantiles across guesses
@@ -23,10 +24,10 @@ export interface Roll {
 export const poolOf = (stat: number, unit: number) => Math.max(0, Math.floor(stat / unit));
 
 /** The next roll from a bout's stream: each draw reseeds from (seed, draw count), so a cloned bout replays it. */
-function draw(d: Extract<Dice, { mode: 'roll' }>, count: number): number[] {
+function draw(d: Extract<Dice, { mode: 'roll' }>, count: number, faces = 6): number[] {
   const rng = seededRandom((d.seed * 2654435761 + d.n * 40503 + 1) >>> 0);
   d.n++;
-  return Array.from({ length: count }, () => 1 + Math.floor(rng() * 6)).sort((x, y) => y - x);
+  return Array.from({ length: count }, () => 1 + Math.floor(rng() * faces)).sort((x, y) => y - x);
 }
 
 /** Pairs two sorted pools off, high to low. */
@@ -89,4 +90,19 @@ export function rollEvasion(d: Dice, attackDice: number, evasionDice: number): R
   const attack = draw(d, attackDice);
   const evasion = draw(d, evasionDice);
   return { result: pairOff(attack, evasion), attack, evasion };
+}
+
+/**
+ * The linear Evasion test's target [Proposed] (HIT_LINEAR): half the die, plus the attack stat, less Evasion, so even
+ * stats land half the time and every point moves it 1/size. Never certain either way.
+ */
+export function linearTarget(size: number, attack: number, evasion: number): number {
+  return Math.min(size - 1, Math.max(1, Math.floor(size / 2) + attack - evasion));
+}
+
+/** Rolls (or imagines) one linear Evasion test: a d`size` that lands on `target` or less. */
+export function rollUnder(d: Dice, size: number, target: number): { hit: boolean; roll: number | null } {
+  if (d.mode === 'quantile') return { hit: d.u < target / size, roll: null };
+  const [roll] = draw(d, 1, size);
+  return { hit: roll <= target, roll };
 }

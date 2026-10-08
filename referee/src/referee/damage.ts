@@ -41,6 +41,19 @@ export function damage(rules: Rules, att: Fighter, def: Fighter, p: Plan, defPla
   return { total: v, parts, tags, bypass };
 }
 
+/**
+ * An attack stat against the defense it meets (Scales, or Affinity for Breath). Flat, attack − defense. Under
+ * DAMAGE_CURVE N [Proposed], each point of defense turns aside 1/N of the attack: attack × (N − defense) ÷ N, rounded
+ * down, keeping at least DAMAGE_CURVE_KEEP Nths. The note says so for the hit's parts.
+ */
+export function against(rules: Rules, attack: number, defense: number): { v: number; note: string | null } {
+  const n = rules.DAMAGE_CURVE;
+  if (!n) return { v: attack - defense, note: null };
+  const keep = Math.max(rules.DAMAGE_CURVE_KEEP, n - Math.max(0, defense));
+  const v = Math.floor((attack * keep) / n);
+  return { v, note: `armor curve: ${keep}/${n} of it, ${v}` };
+}
+
 /** The Scales a hit meets: Guard, corrosion and guard techniques; none at all for a true-damage hit. */
 function scalesFelt(rules: Rules, att: Fighter, def: Fighter, p: Plan, t: number, guarded: boolean, bypass: boolean): { scales: number; label: string } {
   const corroded = def.status.corroded;
@@ -87,8 +100,10 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, scales: n
       // Bite is piercing [Doc]: it ignores some Scales.
       const bite = eff(att, 'bite', {});
       const pierced = Math.max(0, scales - rules.BITE_PIERCE);
-      v = bite.value - pierced;
+      const hit = against(rules, bite.value, pierced);
+      v = hit.v;
       parts.push(`Bite Force ${bite.value}${bite.note}`, `−${scalesLabel}${scales ? ` pierced to ${pierced}` : ''}`);
+      if (hit.note) parts.push(hit.note);
       if (p.spec.released && p.spec.full) {
         v += rules.CHARGE_BONUS;
         parts.push(`+${rules.CHARGE_BONUS} charged`);
@@ -104,8 +119,10 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, scales: n
       // Ratchet Claws (escalate, Venerable): a Claw ratcheted to +3 or more pierces 3 Scales.
       const ratchetPierce = rules.TECH_RATCHET_CLAWS === 'escalate' && rat >= V && att.marks.ratchet >= 3 ? 3 : 0;
       const shown = Math.max(0, felt - ratchetPierce);
-      v = claw.value - shown;
+      const hit = against(rules, claw.value, shown);
+      v = hit.v;
       parts.push(`Claw Sharpness ${claw.value}${claw.note}`, `−${scalesLabel}${p.pounces && scales ? ` pierced to ${felt} (pounce)` : ''}${ratchetPierce && felt ? ` pierced to ${shown} (Ratchet Claws)` : ''}`);
+      if (hit.note) parts.push(hit.note);
       if (p.pounces) tags.push('pounce');
       // Ratchet Claws (escalate): each consecutive landed Claw link adds +1 to the next Claw, up to +3 (+6 from Juvenile).
       if (rules.TECH_RATCHET_CLAWS === 'escalate' && rat >= W && att.marks.ratchet > 0) {
@@ -125,11 +142,13 @@ function baseDamage(rules: Rules, att: Fighter, def: Fighter, p: Plan, scales: n
     case 'breath': {
       const m = matchup(att.sheet.stone, def.sheet.stone) * rules.MATCHUP;
       const breath = eff(att, 'breath', { sep });
-      const against = affinityAgainst(rules, att, def, guarded, sep);
-      const { aff, guardAff, mantleAff, pierce } = against;
-      const affinity = bypass ? 0 : against.affinity;
-      v = breath.value - affinity + m;
+      const felt = affinityAgainst(rules, att, def, guarded, sep);
+      const { aff, guardAff, mantleAff, pierce } = felt;
+      const affinity = bypass ? 0 : felt.affinity;
+      const hit = against(rules, breath.value, affinity);
+      v = hit.v + m;
       parts.push(`Breath Potency ${breath.value}${breath.note}`, `−Affinity ${affinity}${guardAff ? ' (Guard)' : ''}${aff.note}${mantleAff ? ' (Elemental Mantle +3)' : ''}${pierce ? ` (Lance Throat pierces ${pierce})` : ''}`);
+      if (hit.note) parts.push(hit.note);
       const elem = rules.ELEMENT_BREATH_MOD[att.sheet.stone];
       if (elem) {
         v += elem;

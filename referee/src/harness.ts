@@ -3,7 +3,7 @@
 
 import { availableParallelism } from 'node:os';
 import { Worker } from 'node:worker_threads';
-import { DEFAULT_RULES, PACE, rulesWith, TECH_PASS_1, SUITE_V02, SUITE_V03, type Rules } from './rules.ts';
+import { CURVES, DEFAULT_RULES, PACE, rulesWith, TECH_PASS_1, SUITE_V02, SUITE_V03, type Rules } from './rules.ts';
 
 /**
  * Rule overrides from repeated `--rule KEY=VALUE` flags. KEY is a DEFAULT_RULES path (BREATH.blast.radius);
@@ -31,6 +31,12 @@ export function rulesFromArgs(argv: string[]): { rules: Rules; overrides: Record
     if (spec === 'SUITE_V02=on') {
       Object.assign(overrides, SUITE_V02);
       labels.push('SUITE_V02');
+      return;
+    }
+    // CURVES=on turns on proportional armor, the linear Evasion test and proportional Accuracy together.
+    if (spec === 'CURVES=on') {
+      Object.assign(overrides, CURVES);
+      labels.push('CURVES');
       return;
     }
     // A word-valued rule (a Technique variant): KEY=word.

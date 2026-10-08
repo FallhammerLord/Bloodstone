@@ -4,6 +4,7 @@ import { add, dist, len, scaleTo, type Vec } from '../geometry.ts';
 import * as R from '../rules.ts';
 import type { Event, NoteTag } from './events.ts';
 import { type Plan, guarding } from './plan.ts';
+import { against } from './damage.ts';
 import { eff } from './riders.ts';
 import { A, type Bout, E, J, SIDES, type Side, V, W, other, tech } from './state.ts';
 
@@ -94,7 +95,7 @@ export function riposte(bout: Bout, s: Side, attackPlan: Plan, dodgePlan: Plan, 
   const parts: string[] = [];
   let v = bout.rules.TECHNIQUE_POINTS;
   if (rip >= V) {
-    v = Math.max(bout.rules.DAMAGE_FLOOR, eff(f, 'claw', {}).value - eff(target, 'scales', {}).value);
+    v = Math.max(bout.rules.DAMAGE_FLOOR, against(bout.rules, eff(f, 'claw', {}).value, eff(target, 'scales', {}).value).v);
     parts.push(`Riposte Talons: Claw Sharpness against Scales, ${v}`);
   } else parts.push(`Riposte Talons: ${v}`);
   if (rip >= E) {

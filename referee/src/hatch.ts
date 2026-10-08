@@ -73,11 +73,19 @@ export function preference(morph: Morph, stone: CoreStone): Preference {
 }
 
 /**
- * Egg + stone → stat sheet. The base adds come first (morph, stone, and a disliked stone's −6 Wounds); then the
- * tertiaries derive from them: Accuracy = Claw − Evasion (at least 3), Affinity = Breath − Scales, Acumen = 10 ×
- * age category; a preferred stone adds +3 to its own derived stat (Air's goes to every Surge trigger).
+ * Accuracy from Claw and Evasion: Claw − Evasion, at least 3; or, on a curve N [Proposed] (ACCURACY_CURVE),
+ * Claw × (N − Evasion) ÷ N, rounded down, with no floor.
  */
-export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): StatSheet {
+export function deriveAccuracy(claw: number, evasion: number, curve = 0): number {
+  return curve ? Math.floor((claw * Math.max(0, curve - evasion)) / curve) : Math.max(DERIVED_FLOOR, claw - evasion);
+}
+
+/**
+ * Egg + stone → stat sheet. The base adds come first (morph, stone, and a disliked stone's −6 Wounds); then the
+ * tertiaries derive from them: Accuracy (deriveAccuracy), Affinity = Breath − Scales, Acumen = 10 × age category;
+ * a preferred stone adds +3 to its own derived stat (Air's goes to every Surge trigger).
+ */
+export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling', accuracyCurve = 0): StatSheet {
   if (!(morph in MORPHS)) throw new Error(`Unknown morph "${morph}". Core morphs: ${Object.keys(MORPHS).join(', ')}.`);
   if (!(stone in STONES)) throw new Error(`Unknown stone "${stone}". Core stones: ${Object.keys(STONES).join(', ')}.`);
   const m = MORPHS[morph];
@@ -88,7 +96,7 @@ export function hatch(morph: Morph, stone: CoreStone, age: Age = 'wyrmling'): St
     morph, stone, age, preference: pref, flies: FLIERS.includes(morph), aspect: ASPECTS[morph],
     wounds: m.wounds - (pref === 'disliked' ? DISLIKED_WOUNDS : 0), evasion: m.evasion, scales: m.scales,
     claw: s.claw, bite: s.bite, breath: s.breath,
-    accuracy: Math.max(DERIVED_FLOOR, s.claw - m.evasion) + perk('accuracy'),
+    accuracy: deriveAccuracy(s.claw, m.evasion, accuracyCurve) + perk('accuracy'),
     affinity: s.breath - m.scales + perk('affinity'), // never below 3 on the core grid, so no floor
     acumen: 10 * AGE_CATEGORY[age] + perk('acumen'),
     surgeFill: perk('surge'),

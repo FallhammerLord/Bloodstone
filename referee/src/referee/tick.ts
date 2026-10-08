@@ -8,7 +8,7 @@ import { applyHit, damage } from './damage.ts';
 import { breathVerbs, leaveZone, strikeObstacles } from './elements.ts';
 import type { Event } from './events.ts';
 import { checkKO } from './exchange.ts';
-import { poolOf, rollEvasion } from './dice.ts';
+import { linearTarget, poolOf, rollEvasion, rollUnder } from './dice.ts';
 import { fillMeter } from './meter.ts';
 import { beginLunge, beginPounce, beginStoop, carryStep, moveStep, stoopStep } from './movement.ts';
 import { type Plan, category, evasionState, lastActiveTick, phase } from './plan.ts';
@@ -167,11 +167,24 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
       const sw = tech(def, 'sidewinder-spine');
       if (sw >= V && defPlan.spec.name === 'strafe' && bout.history[def.side].at(-1) === 'strafe') evasion += 3; // chained Sidewinders
       const how = serpentine ? 'strafing (Serpentine)' : evading;
-      if (bout.rules.HIT_DICE) {
-        // Pair-off dice [Proposed]: the attack's own stat against Evasion, a die per DICE_UNIT. Blindness and Scything's
-        // wider arc cost the attack what they cost Accuracy.
-        const stat = p.spec.name === 'bite' ? 'bite' : p.spec.name === 'claw' ? 'claw' : 'breath';
-        const strike = eff(att, stat, { opp: def }).value - (att.status.blinded ? bout.rules.BLINDED_ACCURACY : 0) - scythePenalty;
+      // The attack's own stat meets Evasion. Blindness and Scything's wider arc cost the attack what they cost Accuracy.
+      const stat = p.spec.name === 'bite' ? 'bite' : p.spec.name === 'claw' ? 'claw' : 'breath';
+      const strike = eff(att, stat, { opp: def }).value - (att.status.blinded ? bout.rules.BLINDED_ACCURACY : 0) - scythePenalty;
+      if (bout.rules.HIT_LINEAR) {
+        // The linear test [Proposed]: one die, under half its faces + the attack stat − Evasion. A preferred Earth
+        // stone's extra die counts as a die's worth of points. Near misses belong to the phantom band.
+        const size = bout.rules.HIT_LINEAR;
+        const target = linearTarget(size, strike + att.sheet.hitDice * bout.rules.DICE_UNIT, evasion);
+        const roll = rollUnder(bout.dice, size, target);
+        if (!roll.hit) {
+          p.resolved = true;
+          defPlan.evaded = true;
+          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${how} with Evasion ${evasion} slips ${stat} ${strike}${att.sheet.hitDice ? ` +${att.sheet.hitDice} die` : ''} (needs ${target} or less on a d${size}${roll.roll === null ? '' : `, rolls ${roll.roll}`})` });
+          riposte(bout, other(s), p, defPlan, t, ev);
+          return null;
+        }
+      } else if (bout.rules.HIT_DICE) {
+        // Pair-off dice [Proposed]: the attack's own stat against Evasion, a die per DICE_UNIT.
         // A preferred Earth stone rolls one more die (hitDice).
         const roll = rollEvasion(bout.dice, poolOf(strike, bout.rules.DICE_UNIT) + att.sheet.hitDice, poolOf(evasion, bout.rules.DICE_UNIT));
         if (roll.result !== 'hit') {

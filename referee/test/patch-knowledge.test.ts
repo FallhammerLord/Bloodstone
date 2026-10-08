@@ -41,6 +41,12 @@ test('probed worth carries a full Surge: true damage', () => {
   assert.ok((worth(b, 'A').attack.melee.claw ?? 0) > plain);
 });
 
+test('probed worth follows the armor curve: a valley Claw is worth more against a baseline hide (DAMAGE_CURVE)', () => {
+  const earth: FighterSetup = { name: 'E', morph: 'true-dragon', stone: 'earth' };
+  const claw = (rules: R.Rules) => worth(newBout(earth, TD_WATER, 6, 'B', {}, rules), 'A').attack.melee.claw ?? 0;
+  assert.ok(claw(R.rulesWith({ DAMAGE_CURVE: 18 })) > claw(R.DEFAULT_RULES));
+});
+
 test('strafes carry a band, short or long: brains have every landing', () => {
   const seen = new Set<string>();
   for (let i = 1; i <= 40; i++) {

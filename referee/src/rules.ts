@@ -62,6 +62,12 @@ export const DEFAULT_RULES = {
   PUNISH_BONUS: 3, // Acumen scaling of punishes not modeled yet
   MATCHUP: 3,
   DAMAGE_FLOOR: 1,
+  // Proportional armor [Proposed]: 0 is flat (attack − Scales, Potency − Affinity). N: each point of Scales or Affinity
+  // turns aside 1/N of the attack, so a hit deals attack × (N − defense) ÷ N, rounded down, keeping at least
+  // DAMAGE_CURVE_KEEP Nths of it. At 18 a unit of defense takes a sixth. Riders (Intimidate, chains, charges, the
+  // wheel's ±3) stay flat on top.
+  DAMAGE_CURVE: 0, // [Proposed] 18: proportional armor; 0: attack minus defense
+  DAMAGE_CURVE_KEEP: 3, // [Proposed] a hit keeps at least this many Nths of its attack (3 of 18: a sixth)
   STOMP_DAMAGE: 3,
   BITE_PIERCE: 3, // [Doc] Bite is piercing; [Assumed] it ignores 3 Scales
   // The True Dragon's Aspect, Stalwart [Proposed]: its own zones never harm it, and each charging slot widens its
@@ -81,6 +87,10 @@ export const DEFAULT_RULES = {
   // Aim [Proposed]: an attack's aim tracks its target through the wind-up and settles (12 − Accuracy) ticks before the
   // strike, never less than 1 tick and never longer than the wind-up. Movement after that is what a shape must cover.
   AIM_SETTLE_BASE: 12,
+  // Proportional Accuracy [Proposed]: 0 derives Accuracy = Claw − Evasion, at least 3. N: Claw × (N − Evasion) ÷ N,
+  // rounded down, so a fast dragon swings wild on every stone and no floor is needed. A preferred Earth stone's +3
+  // stays on top. Accuracy sets aim tracking and the phantom band.
+  ACCURACY_CURVE: 0, // [Proposed] 18: Claw × (18 − Evasion) ÷ 18; 0: Claw − Evasion, at least 3
   // ---- Guards ----
   GUARD_SCALES: 3, // [Assumed] Scales bonus while Guarding
   GUARD_AFFINITY: 3, // [Assumed] Affinity bonus while Guarding: presenting the hide to the elements
@@ -91,6 +101,10 @@ export const DEFAULT_RULES = {
   // equal pools matched all the way down are the defender's, as a near miss. 0: Accuracy against Evasion, ties to Acumen.
   HIT_DICE: 1, // [Proposed] pair-off dice for the Evasion test (0: Accuracy against Evasion, ties to Acumen)
   DICE_UNIT: 3, // [Proposed] points per die, on both sides
+  // The linear Evasion test [Proposed]: 0 is off. N: the attack rolls a dN and lands on N ÷ 2 + its attack stat −
+  // Evasion or less, never below 1 nor above N − 1. Even stats land half the time and every point moves it 1/N, so a
+  // 2-point chip always counts. No near miss: the phantom band owns them. Takes precedence over HIT_DICE.
+  HIT_LINEAR: 0, // [Proposed] 24: a d24 under 12 + attack − Evasion; 0: HIT_DICE decides
   // ---- Acumen ---- [Proposed] §4 Surge
   // The Surge [Proposed]: Affinity fuels it. It starts at Acumen (10 × age category, +3 for a Water-preferring dragon), and
   // each trigger (a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds
@@ -224,6 +238,9 @@ export const SUITE_V02: Partial<Rules> = {
   TECH_SMOLDERING_MAW: 'base', TECH_STOOPING_PINIONS: 'base', TECH_ASH_GLAND: 'pulled',
   TECH_BALEFUL_EYE: 'pulled', TECH_ELEMENTAL_JAWS: 'pulled', INTIMIDATE_TECH_BONUS: 0, ATTR_SHARD_BONUS: 0,
 };
+
+/** The three curves [Proposed]: proportional armor, the linear Evasion test, proportional Accuracy. `--rule CURVES=on`. */
+export const CURVES: Partial<Rules> = { DAMAGE_CURVE: 18, HIT_LINEAR: 24, ACCURACY_CURVE: 18 };
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
