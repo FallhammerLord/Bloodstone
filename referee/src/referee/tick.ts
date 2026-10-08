@@ -172,12 +172,14 @@ function contact(bout: Bout, plans: Record<Side, Plan>, s: Side, t: number, ev: 
         // wider arc cost the attack what they cost Accuracy.
         const stat = p.spec.name === 'bite' ? 'bite' : p.spec.name === 'claw' ? 'claw' : 'breath';
         const strike = eff(att, stat, { opp: def }).value - (att.status.blinded ? bout.rules.BLINDED_ACCURACY : 0) - scythePenalty;
-        const roll = rollEvasion(bout.dice, poolOf(strike, bout.rules.DICE_UNIT), poolOf(evasion, bout.rules.DICE_UNIT));
+        // DICE_SCALES [Proposed]: a moving hide turns blows aside, so the defender's Scales join its pool.
+        const hide = bout.rules.DICE_SCALES ? eff(def, 'scales', { opp: att }).value : 0;
+        const roll = rollEvasion(bout.dice, poolOf(strike, bout.rules.DICE_UNIT), poolOf(evasion + hide, bout.rules.DICE_UNIT));
         if (roll.result !== 'hit') {
           p.resolved = true;
           defPlan.evaded = true;
           const shown = roll.attack.length || roll.evasion.length ? ` (${roll.attack.join(' ') || 'no dice'} against ${roll.evasion.join(' ') || 'no dice'})` : '';
-          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${how} with Evasion ${evasion} slips ${stat} ${strike}${shown}${roll.result === 'nearMiss' ? ': a matched chain, a near miss' : ''}` });
+          ev.push({ kind: 'evade', tick: t, attacker: s, action: p.spec.name, how: serpentine ? 'serpentine' : evading, text: `${how} with Evasion ${evasion}${hide ? ` + Scales ${hide}` : ''} slips ${stat} ${strike}${shown}${roll.result === 'nearMiss' ? ': a matched chain, a near miss' : ''}` });
           riposte(bout, other(s), p, defPlan, t, ev);
           // A matched chain is the defender's, but it was close: the attacker's Surge fills as for any near miss.
           if (roll.result === 'nearMiss') {

@@ -86,6 +86,7 @@ export const DEFAULT_RULES = {
   // equal pools matched all the way down are the defender's, as a near miss. 0: Accuracy against Evasion, ties to Acumen.
   HIT_DICE: 1, // [Proposed] pair-off dice for the Evasion test (0: Accuracy against Evasion, ties to Acumen)
   DICE_UNIT: 3, // [Proposed] points per die, on both sides
+  DICE_SCALES: 0, // [Proposed] 1: the defender rolls Evasion + Scales (a hide turns the blow aside); 0: Evasion alone
   // ---- Acumen ---- [Proposed] §4 Surge
   // The Surge [Proposed]: Affinity fuels it. It starts at Acumen (10 × age category, +3 for a Water-preferring dragon), and
   // each trigger (a near miss, a Guard or Dodge slot held to the end, a Breath charging slot, a landed Breath) adds
