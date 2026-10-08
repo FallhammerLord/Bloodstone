@@ -16,9 +16,9 @@
  {
   "name": "brains.json",
   "winner": "B",
-  "exchanges": 4,
-  "wounds": "-6/21",
-  "hash": "fe0171d0365a0fcc"
+  "exchanges": 5,
+  "wounds": "-7/2",
+  "hash": "1dd48564a84b034a"
  },
  {
   "name": "breath-effects.json",

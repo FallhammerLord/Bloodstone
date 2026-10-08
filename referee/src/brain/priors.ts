@@ -48,19 +48,27 @@ export function prior(style: Archetype, ctx: Context, band: Band, s: Situation, 
     // The strike after a juke (free hits), or after running the opponent down (pursuit).
     if (reach > 0 && sc.prev && EVASIVE.has(sc.prev)) w *= 1 + 0.4 * g.free;
     if (reach > 0 && sc.prev === 'approach') w *= 1 + 0.3 * g.pursuit;
+    // Cashing in: with a full Surge or a held Intimidate, the next landed blow carries power.
+    if (reach > 0 && a.name !== 'stomp' && (s.f.meter >= R.METER_MAX || s.f.intimidateBonus)) w *= 1 + 0.3 * g.power;
   } else if (a.name === 'approach' || (a.name === 'leap' && s.f.sheet.aspect === 'ravener')) w = move(closer[band]) * (1 + 0.6 * g.pursuit);
   else if (a.name === 'retreat') w = move(farther[band]) * Math.max(0.2, 1 - 0.3 * g.pursuit);
   else if (a.name === 'strafe') w = 0.4 + 0.5 * g.misses + 0.4 * g.free;
-  else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken * risk(s) + 0.5 * g.misses + 0.4 * g.free;
-  else if (a.name === 'guard') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken * risk(s);
-  else if (a.name === 'intimidate') w = 0.2 + 0.15 * (g.punish + g.big);
+  else if (a.name === 'dodge') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken * risk(style, s) + 0.5 * g.misses + 0.4 * g.free;
+  // A Guard held to the end fills Surge: a Surge-chaser raises it to load up.
+  else if (a.name === 'guard') w = 0.2 + 5 * ctx.theirs.best[band] * g.taken * risk(style, s) + 0.15 * (g.surge - 1) * surgeToGo(s);
+  // An Intimidate backs the next blow with +3: worth more to a style that values power.
+  else if (a.name === 'intimidate') w = 0.2 + 0.15 * (g.punish + g.big) + 0.2 * g.power;
   else if (a.name === 'leap' || a.name === 'dive') w = s.f.sheet.flies ? 0.6 : 0.2;
   else w = 0.3;
+  // A charging Breath slot fills Surge: a Surge-chaser charges more readily while its meter has room.
+  if (a.charge && a.name === 'breath') return 0.5 * w * (1 + Math.max(0, g.surge - 1) * surgeToGo(s));
   return a.charge ? 0.5 * w : a.crunch ? 1.3 * w : w;
 }
 
 /** Its own Wounds on the curve (archetypes.ts): a wounded dragon reaches for its defenses sooner. */
-const risk = (s: Situation) => woundsRisk(s.f.wounds / s.f.sheet.wounds);
+const risk = (style: Archetype, s: Situation) => woundsRisk(s.f.wounds / s.f.sheet.wounds, style);
+/** How far its Surge has to go, 0 (full) to 1 (empty). */
+const surgeToGo = (s: Situation) => 1 - Math.min(1, s.f.meter / R.METER_MAX);
 
 /** Where a move leaves the separation, roughly: a band in or out, or nowhere. */
 export function nextSep(sep: number, a: ActionSpec, s: Situation): number {
